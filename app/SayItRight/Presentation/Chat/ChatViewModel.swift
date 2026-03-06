@@ -7,6 +7,10 @@ import Foundation
 /// When no `SessionManager` is provided it falls back to standalone mode
 /// (useful for previews and tests).
 ///
+/// Handles network errors gracefully: classifies errors, retries transient
+/// failures with exponential backoff, preserves unsent input on failure,
+/// and surfaces in-character error messages via `ChatErrorState`.
+///
 /// Observed by `ChatView` for reactive UI updates.
 @MainActor
 @Observable
@@ -30,6 +34,11 @@ final class ChatViewModel {
     /// Replace the message list (used for previews and tests in standalone mode).
     func setMessages(_ newMessages: [ChatMessage]) {
         _localMessages = newMessages
+    }
+
+    /// Set an error state for previews and tests.
+    func setErrorForPreview(_ error: NetworkError) {
+        errorState = ChatErrorState(error: error)
     }
 
     /// The text currently being composed by the learner.
@@ -65,6 +74,12 @@ final class ChatViewModel {
     private var _localIsLoading: Bool = false
     private var _localErrorMessage: String?
 
+    /// Structured error state for the error banner UI.
+    private(set) var errorState = ChatErrorState()
+
+    /// Whether the settings screen should be presented (triggered by invalid API key).
+    var showSettings: Bool = false
+
     // MARK: - Dependencies
 
     /// The session manager driving the conversation. Nil for standalone/preview mode.
@@ -73,6 +88,7 @@ final class ChatViewModel {
     private let anthropicService: AnthropicService
     private let systemPromptAssembler: SystemPromptAssembler
     private let responseParser: ResponseParser
+    private let retryPolicy: RetryPolicy
 
     // MARK: - Session Config (standalone mode fallback)
 
@@ -88,18 +104,28 @@ final class ChatViewModel {
     /// JSON snapshot of the learner profile for prompt injection.
     var profileJSON: String = "{}"
 
+    // MARK: - Private State
+
+    /// The learner's last message text, preserved for retry on failure.
+    private var pendingInputText: String?
+
+    /// Active rate-limit countdown task.
+    private var countdownTask: Task<Void, Never>?
+
     // MARK: - Init
 
     init(
         sessionManager: SessionManager? = nil,
         anthropicService: AnthropicService = .shared,
         systemPromptAssembler: SystemPromptAssembler = SystemPromptAssembler(),
-        responseParser: ResponseParser = ResponseParser()
+        responseParser: ResponseParser = ResponseParser(),
+        retryPolicy: RetryPolicy = .standard
     ) {
         self.sessionManager = sessionManager
         self.anthropicService = anthropicService
         self.systemPromptAssembler = systemPromptAssembler
         self.responseParser = responseParser
+        self.retryPolicy = retryPolicy
     }
 
     // MARK: - Public API
@@ -109,7 +135,9 @@ final class ChatViewModel {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !isLoading else { return }
 
+        pendingInputText = text
         inputText = ""
+        errorState.clear()
 
         if let sm = sessionManager {
             Task {
@@ -126,6 +154,31 @@ final class ChatViewModel {
         }
     }
 
+    /// Retry the last failed request.
+    func retry() {
+        guard !isLoading else { return }
+
+        errorState.clear()
+        _localErrorMessage = nil
+
+        Task {
+            await streamBarbaraResponseStandalone()
+        }
+    }
+
+    /// Dismiss the current error banner without retrying.
+    func dismissError() {
+        errorState.clear()
+        _localErrorMessage = nil
+        countdownTask?.cancel()
+        countdownTask = nil
+    }
+
+    /// Open settings (called when API key is invalid).
+    func openSettings() {
+        showSettings = true
+    }
+
     /// Clear all messages and reset the conversation.
     func clearConversation() {
         if let sm = sessionManager {
@@ -136,6 +189,10 @@ final class ChatViewModel {
             _localErrorMessage = nil
         }
         inputText = ""
+        errorState.clear()
+        pendingInputText = nil
+        countdownTask?.cancel()
+        countdownTask = nil
     }
 
     // MARK: - Private: Standalone streaming (no SessionManager)
@@ -168,31 +225,91 @@ final class ChatViewModel {
                     )
                 }
 
-            let stream = await anthropicService.sendMessage(
-                systemPrompt: systemPrompt,
-                messages: apiMessages
-            )
-
+            // Stream response with automatic retry for transient errors
             var fullText = ""
-            for try await chunk in stream {
-                fullText += chunk
-                _localMessages[streamingIndex].text = fullText
-            }
+
+            try await retryPolicy.execute(
+                operation: { [anthropicService] in
+                    let stream = await anthropicService.sendMessage(
+                        systemPrompt: systemPrompt,
+                        messages: Array(apiMessages)
+                    )
+
+                    for try await chunk in stream {
+                        await MainActor.run {
+                            fullText += chunk
+                            self._localMessages[streamingIndex].text = fullText
+                        }
+                    }
+                },
+                onRetry: { [weak self] attempt, delay in
+                    await MainActor.run {
+                        self?.errorState.retryCount = attempt
+                        self?.errorState.isRetrying = true
+                    }
+                }
+            )
 
             let parsed = responseParser.parse(fullResponse: fullText)
             _localMessages[streamingIndex].text = parsed.visibleText
             _localMessages[streamingIndex].metadata = parsed.metadata
             _localMessages[streamingIndex].isStreaming = false
 
+            // Success — clear pending input
+            pendingInputText = nil
+            errorState.clear()
+
         } catch {
-            if _localMessages[streamingIndex].text.isEmpty {
-                _localMessages.remove(at: streamingIndex)
-            } else {
+            let classifiedError = NetworkErrorClassifier.classify(error)
+
+            // Handle partial response from streaming interruption
+            let hasPartial = !_localMessages[streamingIndex].text.isEmpty
+            if hasPartial {
                 _localMessages[streamingIndex].isStreaming = false
+                _localMessages[streamingIndex].text += "\n\n[...]"
+            } else {
+                _localMessages.remove(at: streamingIndex)
             }
-            _localErrorMessage = error.localizedDescription
+
+            // Preserve the learner's input for retry
+            if let pending = pendingInputText {
+                inputText = pending
+                if let lastLearnerIndex = _localMessages.lastIndex(where: { $0.role == .learner && $0.text == pending }) {
+                    _localMessages.remove(at: lastLearnerIndex)
+                }
+            }
+
+            // Set error state for the banner
+            errorState.error = classifiedError
+            errorState.hasPartialResponse = hasPartial
+            _localErrorMessage = classifiedError.barbaraMessage(language: language)
+
+            // Start countdown for rate-limited errors
+            if case .rateLimited(let seconds) = classifiedError, let s = seconds {
+                startRateLimitCountdown(seconds: s)
+            }
         }
 
         _localIsLoading = false
+        errorState.isRetrying = false
+    }
+
+    /// Start a countdown timer for rate-limited errors.
+    private func startRateLimitCountdown(seconds: Int) {
+        countdownTask?.cancel()
+        errorState.rateLimitCountdown = seconds
+
+        countdownTask = Task { [weak self] in
+            for remaining in stride(from: seconds - 1, through: 0, by: -1) {
+                try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    self?.errorState.rateLimitCountdown = remaining
+                }
+            }
+            await MainActor.run {
+                self?.errorState.rateLimitCountdown = nil
+            }
+        }
     }
 }
