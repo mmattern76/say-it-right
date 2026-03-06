@@ -39,6 +39,7 @@ struct ScriptConfig {
     var domains: [String] = ["technology", "school", "society", "everyday"]
     var countPerCombination: Int = 2
     var idStart: Int = 100
+    var useUUID: Bool = true
     var outputDir: String = "content/practice-texts/staging"
     var model: String = "claude-sonnet-4-5-20250514"
     var apiKey: String = ""
@@ -83,6 +84,10 @@ func parseArgs() -> ScriptConfig {
         case "--id-start":
             i += 1
             if i < args.count { config.idStart = Int(args[i]) ?? 100 }
+        case "--uuid":
+            config.useUUID = true
+        case "--no-uuid":
+            config.useUUID = false
         case "--output":
             i += 1
             if i < args.count { config.outputDir = args[i] }
@@ -116,7 +121,9 @@ func printUsage() {
       --level <n>           Target learner level 1-4 (default: 1)
       --domain <domain>     technology, school, society, everyday, or all (default: all)
       --count <n>           Texts per quality/language/domain combo (default: 2)
-      --id-start <n>        Starting ID number (default: 100)
+      --id-start <n>        Starting ID number (default: 100, ignored with --uuid)
+      --uuid                Use UUID-based IDs (default, collision-free)
+      --no-uuid             Use sequential numeric IDs (pt-NNN-lang)
       --output <dir>        Output directory (default: content/practice-texts/staging)
       --model <model>       Claude model (default: claude-sonnet-4-5-20250514)
     """)
@@ -381,7 +388,10 @@ func main() async {
     print("Total texts to generate: \(totalTexts)")
     print("Output: \(config.outputDir)")
     print("Model: \(config.model)")
-    print("ID range: \(config.idStart) - \(config.idStart + totalTexts - 1)")
+    print("ID format: \(config.useUUID ? "UUID" : "sequential (pt-NNN)")")
+    if !config.useUUID {
+        print("ID range: \(config.idStart) - \(config.idStart + totalTexts - 1)")
+    }
     print("")
 
     var currentID = config.idStart
@@ -392,7 +402,12 @@ func main() async {
         for domain in config.domains {
             for language in config.languages {
                 for n in 1...config.countPerCombination {
-                    let id = String(format: "pt-%03d-%@", currentID, language)
+                    let id: String
+                    if config.useUUID {
+                        id = "pt-\(UUID().uuidString.lowercased())-\(language)"
+                    } else {
+                        id = String(format: "pt-%03d-%@", currentID, language)
+                    }
                     print("[\(currentID)] Generating \(quality.rawValue) / \(domain) / \(language) (\(n)/\(config.countPerCombination))...", terminator: " ")
 
                     do {
