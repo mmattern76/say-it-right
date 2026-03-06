@@ -1,6 +1,7 @@
 # Xcode
 DerivedData/
 build/
+*.xcodeproj
 *.xcuserdata
 *.xcworkspace
 !*.xcworkspace/contents.xcworkspacedata
@@ -26,6 +27,9 @@ backend/src/generated/
 .claude/MEMORY.md
 .claude/settings.json
 logs/
+
+# Generated practice texts staging (review before committing)
+content/practice-texts/staging/*.json
 
 # OS
 .DS_Store
