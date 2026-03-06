@@ -14,11 +14,28 @@ struct ChatView: View {
     var body: some View {
         VStack(spacing: 0) {
             messageList
+
+            if viewModel.errorState.isShowingError, let error = viewModel.errorState.error {
+                ErrorBannerView(
+                    error: error,
+                    language: viewModel.language,
+                    retryCount: viewModel.errorState.retryCount,
+                    rateLimitCountdown: viewModel.errorState.rateLimitCountdown,
+                    hasPartialResponse: viewModel.errorState.hasPartialResponse,
+                    onRetry: { viewModel.retry() },
+                    onOpenSettings: { viewModel.openSettings() },
+                    onDismiss: { viewModel.dismissError() }
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .padding(.vertical, 4)
+            }
+
             Divider()
             inputBar
         }
         .frame(maxWidth: maxContentWidth)
         .frame(maxWidth: .infinity)
+        .animation(.easeInOut(duration: 0.25), value: viewModel.errorState.isShowingError)
     }
 
     // MARK: - Message List
@@ -213,6 +230,11 @@ struct ChatView: View {
         .preferredColorScheme(.dark)
 }
 
+#Preview("iPhone - Error Banner") {
+    ChatView(viewModel: .previewWithError)
+        .environment(\.horizontalSizeClass, .compact)
+}
+
 // MARK: - Preview Helpers
 
 extension ChatViewModel {
@@ -234,6 +256,21 @@ extension ChatViewModel {
                 text: "Better. You led with your position and gave three supporting reasons. But \"more focused\" is vague. What does focus look like? Give me a concrete measure."
             ),
         ])
+        return vm
+    }
+
+    /// A view model with an active error state for previews.
+    @MainActor
+    static var previewWithError: ChatViewModel {
+        let vm = ChatViewModel()
+        vm.setMessages([
+            ChatMessage(
+                role: .barbara,
+                text: "Good. Let's practise structuring your argument."
+            ),
+        ])
+        vm.inputText = "I think schools should switch to a four-day week"
+        vm.setErrorForPreview(.noConnection)
         return vm
     }
 }
