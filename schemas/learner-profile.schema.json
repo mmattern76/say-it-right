@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://say-it-right.io/schemas/learner-profile.schema.json",
+  "title": "Learner Profile",
+  "description": "The learner profile injected into Barbara's system prompt for personalised coaching. Also used for local persistence and backend sync.",
+  "type": "object",
+  "required": ["id", "displayName", "language", "currentLevel"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique learner identifier (device-generated UUID)"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "description": "Learner's name — Barbara uses this in conversation"
+    },
+    "avatarName": {
+      "type": "string",
+      "enum": ["maxi", "alex"],
+      "description": "Selected learner avatar"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["de", "en"],
+      "description": "Content and coaching language"
+    },
+    "currentLevel": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "Current progression level (1=Klartext, 2=Ordnung, 3=Architektur, 4=Meisterschaft)"
+    },
+    "strengths": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/structuralSkillTag" },
+      "description": "Structural skills the learner has consistently demonstrated"
+    },
+    "developmentAreas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/structuralSkillTag" },
+      "description": "Structural skills the learner is still working on"
+    },
+    "sessionsCompleted": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Total number of completed sessions"
+    },
+    "lastSessionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date of the most recent session"
+    },
+    "recentScores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sessionType": { "type": "string" },
+          "totalScore": { "type": "number" },
+          "date": { "type": "string", "format": "date" }
+        },
+        "required": ["sessionType", "totalScore", "date"]
+      },
+      "maxItems": 5,
+      "description": "Last 5 session scores for trend detection"
+    },
+    "streakDays": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Current consecutive practice days"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Barbara's free-text observations about this learner"
+    }
+  },
+  "$defs": {
+    "structuralSkillTag": {
+      "type": "string",
+      "enum": [
+        "governing_thought",
+        "governing_thought_position",
+        "support_grouping",
+        "single_idea_per_block",
+        "redundancy_avoidance",
+        "clarity",
+        "filler_elimination",
+        "mece_grouping",
+        "deductive_ordering",
+        "inductive_ordering",
+        "scq_framing",
+        "horizontal_logic",
+        "vertical_logic",
+        "issue_tree",
+        "synthesis",
+        "governing_vs_summary"
+      ],
+      "description": "Structural skill tag tied to rubric dimensions. L1: governing_thought through filler_elimination. L2: mece_grouping through horizontal_logic. L3+: vertical_logic through governing_vs_summary."
+    }
+  }
+}
