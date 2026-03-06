@@ -92,15 +92,23 @@ struct ChatView: View {
 
     private var inputBar: some View {
         HStack(alignment: .bottom, spacing: 8) {
+            #if os(macOS)
+            MacChatInputView(
+                text: $viewModel.inputText,
+                onSend: { sendIfReady() }
+            )
+            .frame(minHeight: 36, maxHeight: 120)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 4)
+            .background(Color.gray.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            #else
             TextField("Type a message...", text: $viewModel.inputText, axis: .vertical)
                 .textFieldStyle(.plain)
                 .lineLimit(1...6)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-                #if os(macOS)
-                .onSubmit { sendIfReady() }
-                #endif
+            #endif
 
             Button(action: { viewModel.send() }) {
                 Image(systemName: "arrow.up.circle.fill")

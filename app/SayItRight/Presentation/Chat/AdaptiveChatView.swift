@@ -24,6 +24,7 @@ struct AdaptiveChatView: View {
         Group {
             #if os(macOS)
             splitLayout
+                .navigationTitle(windowTitle)
             #else
             if horizontalSizeClass == .regular {
                 splitLayout
@@ -33,6 +34,13 @@ struct AdaptiveChatView: View {
             #endif
         }
         .animation(.easeInOut(duration: 0.3), value: horizontalSizeClass)
+        #if os(macOS)
+        .onChange(of: selectedSessionType) { _, newValue in
+            if let sessionType = newValue {
+                viewModel.sessionType = sessionType.id
+            }
+        }
+        #else
         .sheet(isPresented: $showSettings) {
             SettingsView()
                 .environment(AppSettings.shared)
@@ -42,6 +50,15 @@ struct AdaptiveChatView: View {
                 viewModel.sessionType = sessionType.id
             }
         }
+        #endif
+    }
+
+    /// Window title for macOS: shows current session type or app name.
+    private var windowTitle: String {
+        guard let session = selectedSessionType else {
+            return language == "de" ? "Sag's richtig!" : "Say it right!"
+        }
+        return session.title(language: language)
     }
 
     // MARK: - Split Layout (iPad / Mac)
@@ -51,13 +68,26 @@ struct AdaptiveChatView: View {
             SidebarView(
                 selectedSessionType: $selectedSessionType,
                 language: language,
-                onSettingsTapped: { showSettings = true }
+                onSettingsTapped: {
+                    #if os(macOS)
+                    openSettings()
+                    #else
+                    showSettings = true
+                    #endif
+                }
             )
             .navigationSplitViewColumnWidth(min: 240, ideal: 280, max: 340)
         } detail: {
             chatDetail
         }
     }
+
+    #if os(macOS)
+    /// Opens the macOS Settings window (Cmd+,).
+    private func openSettings() {
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+    }
+    #endif
 
     private var chatDetail: some View {
         ChatView(viewModel: viewModel)
@@ -162,11 +192,39 @@ struct AdaptiveChatView: View {
     .preferredColorScheme(.dark)
 }
 
-#Preview("Mac") {
+#Preview("Mac — English") {
     AdaptiveChatView(
         viewModel: .previewMidConversation,
         language: "en"
     )
     .environment(AppSettings.shared)
-    .frame(width: 1024, height: 700)
+    .frame(width: 800, height: 600)
+}
+
+#Preview("Mac — German") {
+    AdaptiveChatView(
+        viewModel: .previewMidConversation,
+        language: "de"
+    )
+    .environment(AppSettings.shared)
+    .frame(width: 800, height: 600)
+}
+
+#Preview("Mac — Empty State") {
+    AdaptiveChatView(
+        viewModel: ChatViewModel(),
+        language: "en"
+    )
+    .environment(AppSettings.shared)
+    .frame(width: 800, height: 600)
+}
+
+#Preview("Mac — Dark Mode") {
+    AdaptiveChatView(
+        viewModel: .previewMidConversation,
+        language: "en"
+    )
+    .environment(AppSettings.shared)
+    .frame(width: 800, height: 600)
+    .preferredColorScheme(.dark)
 }

@@ -6,29 +6,41 @@ struct SettingsView: View {
     var body: some View {
         @Bindable var settings = settings
 
+        #if os(macOS)
+        settingsForm(settings: settings)
+            .frame(width: 400)
+            .padding()
+        #else
         NavigationStack {
-            Form {
-                Section("Language / Sprache") {
-                    Picker("Content Language", selection: $settings.language) {
-                        ForEach(AppLanguage.allCases, id: \.rawValue) { lang in
-                            Text("\(lang.flag) \(lang.displayName)")
-                                .tag(lang.rawValue)
-                        }
+            settingsForm(settings: settings)
+                .navigationTitle("Settings")
+        }
+        #endif
+    }
+
+    private func settingsForm(settings: AppSettings) -> some View {
+        @Bindable var settings = settings
+
+        return Form {
+            Section("Language / Sprache") {
+                Picker("Content Language", selection: $settings.language) {
+                    ForEach(AppLanguage.allCases, id: \.rawValue) { lang in
+                        Text("\(lang.flag) \(lang.displayName)")
+                            .tag(lang.rawValue)
                     }
-                    .pickerStyle(.segmented)
-
-                    Text(settings.language == "de"
-                         ? "Barbara spricht Deutsch mit dir."
-                         : "Barbara speaks English with you.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
+                .pickerStyle(.segmented)
 
-                Section("Display Name") {
-                    TextField("Your name", text: $settings.displayName)
-                }
+                Text(settings.language == "de"
+                     ? "Barbara spricht Deutsch mit dir."
+                     : "Barbara speaks English with you.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .navigationTitle("Settings")
+
+            Section("Display Name") {
+                TextField("Your name", text: $settings.displayName)
+            }
         }
     }
 }

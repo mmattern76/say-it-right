@@ -50,7 +50,11 @@ struct MessageBubbleView: View {
     }
 
     private var bubbleShape: some Shape {
+        #if os(macOS)
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        #else
         RoundedRectangle(cornerRadius: 16, style: .continuous)
+        #endif
     }
 
     // MARK: - Colors
