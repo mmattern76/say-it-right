@@ -1,0 +1,20 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "displayName": "Maxi",
+  "avatarName": "maxi",
+  "language": "de",
+  "currentLevel": 1,
+  "strengths": ["governing_thought", "governing_thought_position"],
+  "developmentAreas": ["support_grouping", "redundancy_avoidance"],
+  "sessionsCompleted": 12,
+  "lastSessionDate": "2026-03-05",
+  "streakDays": 5,
+  "recentScores": [
+    { "sessionType": "say_it_clearly", "totalScore": 6, "date": "2026-03-05" },
+    { "sessionType": "say_it_clearly", "totalScore": 5, "date": "2026-03-04" },
+    { "sessionType": "say_it_clearly", "totalScore": 7, "date": "2026-03-03" },
+    { "sessionType": "say_it_clearly", "totalScore": 4, "date": "2026-03-01" },
+    { "sessionType": "say_it_clearly", "totalScore": 5, "date": "2026-02-28" }
+  ],
+  "notes": "Leads with conclusion consistently now. Struggles with separating overlapping points."
+}
