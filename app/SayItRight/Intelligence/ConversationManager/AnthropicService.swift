@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Data Types
 
 /// A single message in the Anthropic Messages API conversation format.
-struct ChatMessage: Codable, Sendable {
+struct APIMessage: Codable, Sendable {
     let role: String
     let content: String
 }
@@ -152,12 +152,12 @@ actor AnthropicService {
     ///
     /// - Parameters:
     ///   - systemPrompt: The assembled system prompt (from `SystemPromptAssembler`).
-    ///   - messages: The conversation history as an array of `ChatMessage`.
+    ///   - messages: The conversation history as an array of `APIMessage`.
     ///   - model: Optional model ID override. Defaults to `ModelCatalog.defaultModelID`.
     /// - Returns: An `AsyncThrowingStream` yielding text chunks as they arrive.
     func sendMessage(
         systemPrompt: String,
-        messages: [ChatMessage],
+        messages: [APIMessage],
         model: String? = nil
     ) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
@@ -203,7 +203,7 @@ actor AnthropicService {
     private func buildRequest(
         apiKey: String,
         systemPrompt: String,
-        messages: [ChatMessage],
+        messages: [APIMessage],
         model: String
     ) throws -> URLRequest {
         guard let url = URL(string: apiEndpoint) else {

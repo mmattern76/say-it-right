@@ -250,12 +250,12 @@ final class AnthropicServiceTests: XCTestCase {
         XCTAssertEqual(eventCount, 8) // All events parsed
     }
 
-    // MARK: - ChatMessage
+    // MARK: - APIMessage
 
-    func testChatMessageEncoding() throws {
-        let message = ChatMessage(role: "user", content: "Hello Barbara")
+    func testAPIMessageEncoding() throws {
+        let message = APIMessage(role: "user", content: "Hello Barbara")
         let data = try JSONEncoder().encode(message)
-        let decoded = try JSONDecoder().decode(ChatMessage.self, from: data)
+        let decoded = try JSONDecoder().decode(APIMessage.self, from: data)
         XCTAssertEqual(decoded.role, "user")
         XCTAssertEqual(decoded.content, "Hello Barbara")
     }
