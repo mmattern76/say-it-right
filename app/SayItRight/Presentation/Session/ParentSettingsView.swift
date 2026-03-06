@@ -257,11 +257,15 @@ struct ParentSettingsView: View {
             Form {
                 Section("New PIN") {
                     SecureField("4-digit PIN", text: $newPIN)
+                        #if os(iOS)
                         .keyboardType(.numberPad)
+                        #endif
                 }
                 Section("Confirm PIN") {
                     SecureField("Repeat PIN", text: $confirmPIN)
+                        #if os(iOS)
                         .keyboardType(.numberPad)
+                        #endif
                 }
                 if pinMismatch {
                     Text("PINs don't match")

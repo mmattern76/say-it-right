@@ -6,6 +6,7 @@ import SwiftUI
 /// Parent settings (API key, model, debug mode) are behind this gate.
 /// The gate is unlocked for the duration of the settings session;
 /// navigating away re-locks it.
+@MainActor
 @Observable
 final class ParentGate {
 

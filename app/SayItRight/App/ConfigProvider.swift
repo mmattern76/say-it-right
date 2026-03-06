@@ -7,7 +7,7 @@ import Foundation
 /// can override the bundled API key at runtime (stored in Keychain).
 enum ConfigProvider {
 
-    private static let values: [String: Any] = {
+    nonisolated(unsafe) private static let values: [String: Any] = {
         guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
               let data = try? Data(contentsOf: url),
               let dict = try? PropertyListSerialization.propertyList(
