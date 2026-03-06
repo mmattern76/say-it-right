@@ -1,0 +1,27 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserdata
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+
+# Swift Package Manager
+.build/
+Packages/
+
+# API Keys — NEVER commit
+**/Config.plist
+**/.env
+**/secrets.json
+.secrets
+
+# Claude Code (ephemeral session state)
+.claude/current-story.json
+.claude/sprint-state.json
+.claude/MEMORY.md
+.claude/settings.json
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
