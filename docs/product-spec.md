@@ -38,6 +38,27 @@ For TTS: a warm but authoritative female voice, moderate pace, clear enunciation
 
 Barbara should feel real but stylized — not a cartoon character, not a photorealistic render. An illustrated style that conveys competence and warmth. Glasses optional but on-brand. She gestures when she explains (for animated versions). Her expressions are readable: the raised eyebrow when you're rambling, the slight nod when you get it right, the crossed arms when you're being lazy.
 
+#### Barbara's Mood Artwork
+
+Midjourney-generated illustrations at @2x and @3x scales. Each mood maps to a structural metadata tag from Barbara's hidden response JSON:
+
+| Mood | Asset | When Used |
+|------|-------|-----------|
+| Attentive | `barbara-attentive` | Listening to user input, waiting for response |
+| Skeptical | `barbara-raised-eyebrow` | Spotting structural weakness, vague language |
+| Approving | `barbara-nodding` | User's structure is solid |
+| Waiting | `barbara-crossed-arms` | User is rambling, needs to cut |
+| Proud | `barbara-warm-smile` | Level-up moments, strong improvement |
+| Evaluating | `barbara-thinking` | Processing, analyzing structure |
+| Teaching | `barbara-explaining` | Explaining a concept, giving instruction |
+| Disappointed | `barbara-disappointed` | Repeated same mistake, lazy attempt |
+
+A full-height launch portrait (`launch-barbara`) is used in onboarding and splash screens.
+
+#### Learner Avatars
+
+Profile avatars sourced from the Think app: Maxi and Alex. Used during onboarding selection and in the chat UI alongside the learner's messages.
+
 ---
 
 ## Pedagogical Framework
@@ -340,24 +361,74 @@ The long-term vision may involve cross-app skill recognition ("Your pyramid skil
 
 ## Technical Architecture (V1)
 
-### Lean V1 — No Backend Server
+### App Architecture
 
-Following the portfolio's established pattern:
-
-- **SwiftUI universal app** (iOS, iPadOS, macOS) with platform-adaptive layouts
+- **SwiftUI universal app** (iOS 17+, iPadOS 17+, macOS 14+) with platform-adaptive layouts
 - **Direct Claude API integration** for real-time conversational evaluation
-- **Local storage** for user progression, session history, and settings
-- **Pre-generated text library** bundled with the app (refreshed via app updates; later via a lightweight content API)
-- **Apple Speech Framework** for STT; ElevenLabs or Apple TTS for Barbara's voice
-- **Parent controls** via device-local settings (no account system in V1)
+- **Local storage** for user progression, session history, and settings (Codable JSON)
+- **Pre-generated text library** bundled with the app (refreshed via app updates; later via backend content feed)
+- **Apple Speech Framework** for STT; Apple TTS for Barbara's voice (ElevenLabs as upgrade path)
+- **Parent controls** via PIN + Face ID protected settings section
+- **Distribution:** TestFlight (private, family only)
+
+### Backend (Railway)
+
+Express.js + TypeScript + Prisma ORM, deployed on Railway with PostgreSQL:
+
+- **Cross-device sync** — Pull/push API for learner profiles, session summaries, seen texts
+- **Dynamic model catalog** — Proxies `anthropic.models.list()` with 1-hour cache; app fetches available models from here instead of hardcoding
+- **Debug log collection** — When debug mode is enabled, the app uploads structured JSONL entries to the backend for remote diagnosis
+- **Health endpoint** — `/api/v1/health` for monitoring
+
+All endpoints (except health) require `X-API-Key` header authentication.
+
+### Configuration
+
+`Config.plist` (gitignored, template committed as `Config.template.plist`):
+
+| Key | Purpose |
+|-----|---------|
+| `AnthropicAPIKey` | Bundled Anthropic API key |
+| `BackendURL` | Railway backend URL |
+| `BackendAPIKey` | Backend authentication key |
+| `ElevenLabsAPIKey` | ElevenLabs API key (upgrade path) |
+| `ElevenLabsVoiceID_DE` | ElevenLabs voice ID for German Barbara |
+| `ElevenLabsVoiceID_EN` | ElevenLabs voice ID for English Barbara |
+
+The Anthropic API key can be overridden at runtime via parent settings (stored in iOS Keychain). Resolution order: Keychain override > Config.plist > nil.
+
+### Dynamic Model Selection
+
+The app fetches available Claude models from the backend `/api/v1/models` endpoint, which proxies the Anthropic Models API with a 1-hour cache. A hardcoded fallback list is used when the backend is unreachable.
+
+When the Anthropic API returns an "unknown model" error, the app automatically selects the best-fit replacement using family matching (e.g., sonnet 4.7 replaces defunct sonnet 4.4).
+
+### Onboarding
+
+First-time welcome flow with three phases:
+1. **Welcome** — Barbara introduces herself with character-by-character typing + TTS narration
+2. **Avatar selection** — Pick Maxi or Alex, enter name
+3. **Pep talk** — Barbara delivers a personalized motivational message
+
+The welcome message is replayable from the profile screen after onboarding.
+
+### TestFlight Deployment
+
+Automated via `scripts/testflight-upload.sh`:
+1. Bumps build number in `project.yml`
+2. Regenerates Xcode project via XcodeGen
+3. Archives Release build
+4. Uploads to App Store Connect
+
+Bundle ID: `io.mattern.say-it-right`, Team: `LC9HD3YWNR`
 
 ### Content Pipeline (Post-V1)
 
 When the pre-bundled text library needs to grow beyond what app updates can sustain:
 
-- A batch job (potentially on the MeTube curation pipeline infrastructure) generates new practice texts with answer keys
+- A batch job generates new practice texts with answer keys
 - Content is reviewed (automated quality checks + periodic human review)
-- Delivered to the app via a lightweight content feed
+- Delivered to the app via the backend content feed
 
 ---
 
