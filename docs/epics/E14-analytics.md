@@ -106,6 +106,7 @@ look at you now." The data doesn't just track progress — it makes growth
 10. Insights view layout: platform-adaptive (scrollable on iPhone, dashboard on iPad/Mac)
 11. "Keep practicing" state: minimum session threshold before analytics unlock
 12. Export sharing: share sheet integration, format options
+13. Learner certificate: generate a visually appealing certificate summarizing what the learner has achieved — level reached, skills mastered, hours practiced, Barbara's personal assessment. Suitable for printing, sharing, or adding to a portfolio.
 
 ## References
 - Primer parallel: The Primer remembers everything. At the end of Nell's
