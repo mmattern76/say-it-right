@@ -1,0 +1,646 @@
+[
+  {
+    "id": "pt-001-en",
+    "text": "Smartphones should be banned from classrooms. They are the single biggest distraction in modern education, and the research backing this claim has only grown stronger. First, students who have phones on their desks check notifications an average of every three minutes, making sustained focus impossible. A University of Texas study found that even students who believe they can multitask perform significantly worse on comprehension tests when their phone is within reach. Second, the presence of a phone — even face-down and on silent — reduces cognitive capacity because part of the brain is constantly monitoring it. Researchers call this the 'brain drain' effect: your mind spends energy resisting the urge to check the device, leaving less capacity for actual learning. Third, classrooms without phones show measurably better discussion quality because students actually listen to each other instead of scrolling. Teachers in phone-free schools report that eye contact during discussions has noticeably increased. Some argue that phones are useful learning tools, but a dedicated tablet managed by the school achieves the same educational benefit without the social media trap. The evidence is clear: remove the phones, restore the focus.",
+    "answerKey": {
+      "governingThought": "Smartphones should be banned from classrooms.",
+      "supports": [
+        { "label": "Students check notifications constantly, preventing sustained focus", "evidence": [] },
+        { "label": "Even a face-down phone reduces cognitive capacity", "evidence": [] },
+        { "label": "Classrooms without phones have better discussion quality", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid. Conclusion first, three distinct supporting points, counterargument addressed and dismissed. Each support is specific with evidence. Model text for L1 learners."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 1,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 206,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-002-en",
+    "text": "Every school should have a garden. Growing food teaches students lessons that no textbook can deliver, and the investment required is negligible compared to the return. First, a garden makes abstract science concrete — photosynthesis stops being a diagram and becomes something you watch happen over weeks. Students who grow tomatoes understand nutrient cycles in a way that memorising a textbook chapter never achieves, because they see the cause and effect with their own eyes. Second, students who garden develop patience and responsibility because a plant that isn't watered dies, and no amount of last-minute effort fixes that. Unlike a homework deadline that can be extended, nature enforces its own schedule, and that is a powerful lesson in accountability. Third, school gardens build community: students work together, share the harvest, and take pride in something they created collectively. Schools with garden programmes report fewer disciplinary issues because students feel a sense of ownership over shared space. The cost is minimal — seeds, soil, and a patch of unused ground — while the educational return is enormous.",
+    "answerKey": {
+      "governingThought": "Every school should have a garden.",
+      "supports": [
+        { "label": "Gardens make abstract science concrete", "evidence": [] },
+        { "label": "Gardening develops patience and responsibility", "evidence": [] },
+        { "label": "School gardens build community", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid. Strong governing thought, three parallel supports each with evidence, cost objection preemptively addressed."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 1,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 192,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-003-en",
+    "text": "Public libraries matter more today than ever, not less. Three shifts in society have made them essential, and each one is accelerating. The digital divide means that millions of families cannot afford reliable internet — the library is their only access point for online job applications, government services, and school research. When a teenager needs to submit a university application and there is no Wi-Fi at home, the library is not a luxury — it is infrastructure. The misinformation crisis means that trained librarians are among the few remaining professionals who teach people how to evaluate sources — a skill that algorithms actively undermine. Social media platforms are designed to maximise engagement, not accuracy, and librarians offer a crucial counterweight by showing people how to verify claims before sharing them. And the loneliness epidemic means that libraries serve as rare free public spaces where people of all ages can simply exist together without paying for the privilege. Unlike cafés or shopping centres, a library asks nothing of you except that you respect the space. Cutting library budgets is not a cost saving — it is a transfer of costs to the most vulnerable.",
+    "answerKey": {
+      "governingThought": "Public libraries matter more today than ever.",
+      "supports": [
+        { "label": "Libraries bridge the digital divide for families without internet", "evidence": [] },
+        { "label": "Librarians teach source evaluation amid misinformation", "evidence": [] },
+        { "label": "Libraries are rare free public spaces combating loneliness", "evidence": [] }
+      ],
+      "structuralAssessment": "Strong pyramid with sophisticated framing. Three supports are MECE (access, knowledge, community). Final sentence reinforces governing thought. Good L2 model text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 213,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-004-en",
+    "text": "Video games develop real, transferable skills — and it is time we stopped treating them as the opposite of learning. Three categories of ability improve measurably through regular play. First, strategic thinking: games like Civilization or chess apps force players to weigh trade-offs, allocate scarce resources, and plan several moves ahead under uncertainty — exactly the decision-making muscles that business schools try to build through case studies. Second, teamwork: multiplayer games require real-time coordination with strangers under pressure, clear role assignment, and rapid conflict resolution when a plan falls apart — skills that many adults still struggle with in the workplace. Third, problem-solving: puzzle and sandbox games reward experimentation, pattern recognition, and the willingness to fail repeatedly before finding a solution — a mindset educators call productive failure. None of this means every game teaches something valuable, or that unlimited screen time is harmless. But dismissing gaming wholesale ignores a body of evidence that players are practising competencies the modern world demands. The controller is not the enemy of the classroom — it is an unrecognised extension of it.",
+    "answerKey": {
+      "governingThought": "Video games develop real, transferable skills.",
+      "supports": [
+        { "label": "Games build strategic thinking through resource management and planning under uncertainty", "evidence": [] },
+        { "label": "Multiplayer games develop teamwork through real-time coordination and conflict resolution", "evidence": [] },
+        { "label": "Puzzle and sandbox games strengthen problem-solving through experimentation and productive failure", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid with conclusion first. Three supports are MECE (cognition, collaboration, creativity/resilience). Nuanced qualifier before closing reinforcement. Good L2 model text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 199,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-005-en",
+    "text": "Cooking should be a mandatory subject in every school, from age twelve onward. Three arguments make the case. First, it is a direct investment in public health: students who learn to prepare simple, balanced meals are far less likely to depend on ultra-processed food as adults — and diet-related disease is now the leading cause of preventable death in most Western countries. Second, cooking teaches essential life skills that no other subject covers: budgeting a weekly shop, managing time across parallel tasks, and adapting when ingredients or equipment are not what you expected — a compressed lesson in planning, resource management, and improvisation. Third, shared meals build social competence: cooking for others requires empathy — anticipating tastes, accommodating restrictions, and accepting feedback on something personal you created. Schools already teach students how to analyse a poem and solve a quadratic equation. It is difficult to argue that either of those is more universally useful than the ability to feed yourself and the people around you well. A generation that can cook is a generation that is healthier, more self-sufficient, and better at taking care of each other.",
+    "answerKey": {
+      "governingThought": "Cooking should be a mandatory school subject from age twelve onward.",
+      "supports": [
+        { "label": "Cooking is a direct investment in public health by reducing dependence on ultra-processed food", "evidence": [] },
+        { "label": "Cooking teaches essential life skills: budgeting, time management, and improvisation", "evidence": [] },
+        { "label": "Cooking for others builds social competence through empathy and feedback", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid with clear governing thought up front. Three supports are MECE (health, practical skills, social skills). Closing reframes the argument with a comparison to existing subjects. Good L2 model text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 195,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-016-en",
+    "text": "Sleep should be treated as a school subject, not a personal habit. The evidence is overwhelming that adolescent sleep deprivation is undermining everything else education tries to achieve, and schools are uniquely positioned to fix it. First, teenage brains are biologically wired to fall asleep later and wake later — the shift in circadian rhythm during puberty is not laziness, it is neuroscience. Schools that start before 8:30 am are asking students to learn during their biological night. Second, sleep-deprived students cannot learn effectively regardless of teaching quality. Memory consolidation happens during sleep: a student who studies for three hours and sleeps six will retain less than a student who studies for two hours and sleeps eight. The research on this is not contested. Third, later school start times produce measurable results wherever they are tried. A University of Minnesota study tracking 9,000 students across multiple states found that shifting start times to 8:30 am or later raised average grades, reduced car accidents among teen drivers, and decreased reported depression. The fix is structural, not motivational — telling teenagers to go to bed earlier ignores their biology.",
+    "answerKey": {
+      "governingThought": "Sleep should be treated as a school subject, not a personal habit — schools must adjust start times to match adolescent biology.",
+      "supports": [
+        { "label": "Teenage circadian rhythms shift during puberty, making early starts biologically incompatible with learning", "evidence": [] },
+        { "label": "Sleep deprivation prevents memory consolidation regardless of teaching quality", "evidence": [] },
+        { "label": "Later start times produce measurable improvements in grades, safety, and mental health", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid with a provocative governing thought that reframes a personal issue as institutional. Three supports follow a logical progression: biology explains the problem, neuroscience shows why it matters, and evidence proves the solution works. Good L1 model text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 1,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 203,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-017-en",
+    "text": "Homework in primary school does more harm than good and should be abolished for children under twelve. The case rests on three pillars. First, the research consistently shows no academic benefit: a meta-analysis by Harris Cooper at Duke University, covering decades of studies, found that homework has no measurable impact on achievement in primary school. The correlation between homework and performance only becomes significant in secondary school. Second, homework at a young age damages the relationship with learning. Children who spend their evenings struggling with worksheets after a full day of school learn to associate education with stress and obligation rather than curiosity. Paediatricians and child psychologists increasingly warn that the pressure is contributing to anxiety in children as young as seven. Third, the time homework consumes displaces activities that are genuinely developmental: free play, family conversation, outdoor exploration, reading for pleasure. These are not luxuries — they are how children develop creativity, emotional regulation, and intrinsic motivation. The argument that homework teaches discipline is undermined by the fact that a seven-year-old doing worksheets under parental supervision is practising compliance, not self-regulation.",
+    "answerKey": {
+      "governingThought": "Homework in primary school does more harm than good and should be abolished for children under twelve.",
+      "supports": [
+        { "label": "Research consistently shows no academic benefit from homework in primary school", "evidence": [] },
+        { "label": "Early homework damages children's relationship with learning by creating stress associations", "evidence": [] },
+        { "label": "Homework displaces genuinely developmental activities: free play, family time, and reading for pleasure", "evidence": [] }
+      ],
+      "structuralAssessment": "Clear pyramid with strong governing thought. Three supports are MECE (evidence of no benefit, active harm, opportunity cost). Counterargument about discipline addressed and reframed. Good L1 text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 1,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 196,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-018-en",
+    "text": "Public transport should be free for everyone under twenty-five. The investment would pay for itself within a generation through three reinforcing effects. First, it would permanently reshape transport habits at the age when they form. Research from transport studies consistently shows that people who use public transport in their teens and twenties continue using it as adults, even when they can afford a car. Making it free during those formative years locks in decades of lower car dependency. Second, it would reduce the financial burden on the demographic least able to bear it. Young people are in education, in entry-level jobs, or in apprenticeships — their income is low and their transport needs are high. Forcing them to choose between a bus fare and lunch is not building character; it is creating unnecessary hardship. Third, the climate arithmetic is straightforward: transport is the fastest-growing source of emissions in Europe, and every car journey replaced by a bus or train ride reduces carbon output. Young people are the generation that will live longest with the consequences of climate change — giving them free access to the solution is both practical and fair.",
+    "answerKey": {
+      "governingThought": "Public transport should be free for everyone under twenty-five.",
+      "supports": [
+        { "label": "Free transport during formative years permanently reshapes habits toward lower car dependency", "evidence": [] },
+        { "label": "Young people have high transport needs and low income — charging them creates unnecessary hardship", "evidence": [] },
+        { "label": "Replacing car journeys with public transport directly reduces emissions from the fastest-growing source", "evidence": [] }
+      ],
+      "structuralAssessment": "Strong pyramid with three supports following a habit-equity-climate structure. Each support stands independently while reinforcing the others. The framing of investment rather than cost is persuasive. Good L2 model text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 197,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-019-en",
+    "text": "Every teenager should learn to code, but not for the reason most people think. The value is not in becoming a programmer — most students will never write software professionally. The value is in learning to think in systems. Coding teaches decomposition: breaking a complex problem into small, manageable parts. A student who can look at a messy essay prompt and separate it into subquestions is using the same skill a programmer uses when splitting a feature into functions. Coding teaches abstraction: identifying patterns and building reusable solutions instead of solving every problem from scratch. A student who recognises that three different history essay questions all follow the same cause-effect-consequence structure is practising abstraction. And coding teaches debugging: the disciplined habit of testing your assumptions, finding where your reasoning broke down, and fixing it systematically rather than starting over. These are not programming skills. They are thinking skills that happen to be taught unusually well by programming. Schools that frame coding as career preparation are selling it short. It is a gymnasium for the mind — and like physical exercise, its benefits extend far beyond the activity itself.",
+    "answerKey": {
+      "governingThought": "Every teenager should learn to code because it teaches systematic thinking, not because it prepares them for programming careers.",
+      "supports": [
+        { "label": "Coding teaches decomposition: breaking complex problems into manageable parts", "evidence": [] },
+        { "label": "Coding teaches abstraction: recognising patterns and building reusable approaches", "evidence": [] },
+        { "label": "Coding teaches debugging: systematically testing assumptions and fixing reasoning errors", "evidence": [] }
+      ],
+      "structuralAssessment": "Excellent pyramid with a counterintuitive governing thought that reframes common assumptions. Three supports are MECE (decomposition, abstraction, debugging) and each includes a non-programming analogy to reinforce the thesis. Strong L2 text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 201,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-020-en",
+    "text": "Walking to school should be the default, and schools should be designed to make it possible. Three converging problems make this urgent. First, the school run is one of the most wasteful uses of a car in existence. The average school-related car journey in the UK is under two miles — a distance a child can walk in thirty minutes. Multiplied by millions of families twice a day, this adds up to enormous congestion, pollution, and carbon emissions for journeys that could be made on foot. Second, the decline of walking to school is directly connected to the childhood obesity crisis. Children who walk or cycle to school get thirty to forty-five minutes of moderate exercise daily without needing any equipment, programme, or parental supervision. That alone meets half the recommended daily physical activity. Third, walking builds independence and spatial awareness that car-dependent children never develop. Children who navigate their neighbourhood on foot learn to judge traffic, manage time, and solve small problems autonomously — skills that matter far more than arriving at school five minutes earlier.",
+    "answerKey": {
+      "governingThought": "Walking to school should be the default, and schools should be designed to make it possible.",
+      "supports": [
+        { "label": "School car journeys are short and wasteful, generating enormous unnecessary congestion and emissions", "evidence": [] },
+        { "label": "Walking to school directly combats childhood obesity by providing daily moderate exercise", "evidence": [] },
+        { "label": "Walking builds independence and spatial awareness that car-dependent children never develop", "evidence": [] }
+      ],
+      "structuralAssessment": "Clean pyramid with three MECE supports (environmental, health, developmental). Each support includes specific evidence. Good L1 text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 1,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 191,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-021-en",
+    "text": "Boredom is not a problem to be solved — it is a skill to be cultivated. Parents and educators should stop filling every gap in a child's day and start treating unstructured time as developmental infrastructure. The case is built on three observations. First, boredom is the precondition for creativity. When a child has nothing to do and no screen to turn to, they are forced to generate their own entertainment — building, imagining, combining ideas. Neuroscience research shows that the brain's default mode network, which activates during idle moments, is the same network responsible for creative thinking and self-reflection. Second, the ability to tolerate boredom is a prerequisite for deep work. Any meaningful skill — learning an instrument, mastering a subject, writing well — requires sustained effort through stretches that are not immediately rewarding. A child who has never practised being bored will struggle with any task that does not provide instant feedback. Third, constant stimulation trains dependency. Children who are entertained every waking minute do not learn to regulate their own attention — they outsource it to devices and schedules.",
+    "answerKey": {
+      "governingThought": "Boredom is not a problem to be solved but a skill to be cultivated — unstructured time is developmental infrastructure.",
+      "supports": [
+        { "label": "Boredom is the precondition for creativity, activating the brain's default mode network", "evidence": [] },
+        { "label": "Tolerating boredom is a prerequisite for deep work and sustained effort", "evidence": [] },
+        { "label": "Constant stimulation trains dependency rather than self-regulation", "evidence": [] }
+      ],
+      "structuralAssessment": "Strong pyramid with counterintuitive governing thought. Three supports build logically (creativity, discipline, independence). L2 text with sophisticated reframing."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 198,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-022-en",
+    "text": "Voting age should be lowered to sixteen. The democratic argument is straightforward, and the objections collapse under scrutiny. First, sixteen-year-olds are already deemed responsible enough to work, pay taxes, and in many jurisdictions drive a car or consent to medical treatment. Denying them a voice in the political decisions that affect their wages, their education, and their future is an inconsistency that has no principled justification. Second, lowering the voting age would increase lifelong democratic participation. Research from Austria, which lowered the voting age to sixteen in 2007, shows that first-time voters at sixteen and seventeen turn out at higher rates than first-time voters at eighteen, because they are still living at home, still connected to civic education in school, and still supported by adults who can model the act of voting. Third, the decisions being made today — on climate, debt, housing, pensions — disproportionately affect young people who currently have no democratic recourse. Excluding them from the process while binding them to its consequences is not protection; it is disenfranchisement.",
+    "answerKey": {
+      "governingThought": "Voting age should be lowered to sixteen.",
+      "supports": [
+        { "label": "Sixteen-year-olds already bear adult responsibilities (work, taxes, medical consent) without corresponding political voice", "evidence": [] },
+        { "label": "Research from Austria shows that younger first-time voters have higher turnout, boosting lifelong participation", "evidence": [] },
+        { "label": "Current decisions on climate, debt, and housing disproportionately affect those excluded from voting", "evidence": [] }
+      ],
+      "structuralAssessment": "Clear pyramid with three well-differentiated supports (consistency, evidence, fairness). Each support addresses a different dimension of the argument. Strong L2 text."
+    },
+    "metadata": {
+      "qualityLevel": "well-structured",
+      "difficultyRating": 2,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 195,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-006-en",
+    "text": "Every year, roughly 40,000 young people in the UK alone choose to take a gap year before university. The concept has existed in various forms since the 1960s, when overland travel to Asia became popular among young Europeans. Today, gap year programmes range from structured volunteering abroad to working holiday visas in Australia and New Zealand. The industry around gap years has grown into a multi-billion-pound market, with agencies offering everything from conservation work in Costa Rica to teaching English in Vietnam.\n\nWhat these numbers and programmes obscure, however, is that gap years are one of the most undervalued investments a young person can make in their own development. Students who take a gap year return to education with clearer goals, stronger self-discipline, and a maturity that their peers who went straight to university often lack. Research from the University of Sydney found that gap year students outperformed their predicted grades by an average of 0.2 points on a 4.0 scale. They also reported higher satisfaction with their degree choice and were less likely to drop out.\n\nOf course, gap years are not without risks. Without structure, some students drift, spending a year gaming or scrolling rather than growing. The financial barrier is real as well: not everyone can afford a year without income or with the cost of travel. But these are problems of implementation, not of the concept itself. A well-planned gap year, even one spent working locally and saving money, builds the kind of independence and perspective that no classroom can replicate.",
+    "answerKey": {
+      "governingThought": "Gap years are one of the most undervalued investments a young person can make in their own development.",
+      "supports": [
+        { "label": "Gap year students return with clearer goals, stronger discipline, and greater maturity", "evidence": [] },
+        { "label": "Research shows gap year students outperform predicted grades and report higher degree satisfaction", "evidence": [] },
+        { "label": "Risks like drifting or cost are problems of implementation, not the concept itself", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought ('gap years are one of the most undervalued investments') is buried at the start of paragraph 2. Paragraph 1 is pure background: history, statistics, and industry description. It sets context but delays the point. A restructured version would open with the claim that gap years are undervalued, then use the research evidence and maturity argument as support pillars, and address the risks as a handled objection at the end."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 2,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 237,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-007-en",
+    "text": "Electric vehicles have experienced explosive growth over the past decade. Global EV sales surpassed 14 million units in 2023, up from fewer than 500,000 in 2015. Governments worldwide have embraced the shift: Norway aims to ban combustion engine sales by 2025, the EU by 2035, and California by the same year. Automakers have followed suit, with nearly every major manufacturer announcing full-electric lineups within the next decade. The public narrative is clear: EVs are the green future of transportation, and buying one is among the most impactful things an individual can do for the climate.\n\nBut this narrative is dangerously incomplete. Electric cars are significantly less green than the public believes, and the failure to acknowledge this is distorting both consumer behaviour and climate policy. The environmental cost begins long before an EV reaches the road. Manufacturing a single EV battery requires mining approximately 13,000 kilograms of ore, including lithium, cobalt, and nickel. The extraction process consumes vast quantities of water, devastates local ecosystems, and often relies on labour practices that would be illegal in the countries where the cars are sold. A study by the Swedish Environmental Research Institute found that producing an EV battery generates between 61 and 106 kilograms of CO2 per kilowatt-hour of capacity, meaning a mid-size EV starts its life with a carbon debt of 8 to 14 tonnes.\n\nThen there is the electricity itself. In countries where the grid runs predominantly on coal or natural gas, charging an EV simply moves emissions from the tailpipe to the power plant. A 2023 analysis by the International Council on Clean Transportation showed that in Poland, driving an EV produces only 25% fewer lifecycle emissions than a comparable diesel car. Even in cleaner grids, the advantage is real but far more modest than marketing suggests. None of this means EVs are the wrong direction. But treating them as a solved problem, rather than a partial and imperfect step, leads to complacency where urgency is needed.",
+    "answerKey": {
+      "governingThought": "Electric cars are significantly less green than the public believes, and the failure to acknowledge this is distorting both consumer behaviour and climate policy.",
+      "supports": [
+        { "label": "Battery manufacturing has enormous environmental costs: mining 13,000 kg of ore, water consumption, ecosystem damage, and 8-14 tonnes of embedded CO2", "evidence": [] },
+        { "label": "Grid dependency means EVs in coal-heavy countries produce only modestly fewer emissions than diesel cars", "evidence": [] },
+        { "label": "Treating EVs as a solved problem creates complacency where continued urgency is needed", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought ('electric cars are significantly less green than the public believes') is buried at the start of paragraph 2, introduced with 'But this narrative is dangerously incomplete.' Paragraph 1 is entirely devoted to setting up the popular narrative. A restructured version would open with the critical claim, then deploy the battery manufacturing data and grid-dependency evidence as supporting pillars."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 3,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 310,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-008-en",
+    "text": "In the United States, tipping is deeply embedded in the culture of dining out. Most restaurant servers earn a base wage well below the federal minimum, sometimes as low as $2.13 per hour, with the expectation that tips will bring their total earnings to a livable level. The customary tip has crept upward over the decades: what was once 10% became 15%, then 18%, and now payment terminals routinely suggest 20%, 25%, or even 30%. Tipping has also spread beyond restaurants into coffee shops, takeaway counters, and even self-checkout kiosks, with customers facing a screen that asks them to add a gratuity for a transaction that involved no personal service at all.\n\nThis entire system is fundamentally unfair, and it should be replaced with what most of the developed world already uses: a fair base wage included in the price. Tipping shifts the employer's obligation to pay a living wage onto the customer, creating a subsidy that allows restaurants to advertise artificially low menu prices. It punishes servers for factors beyond their control: studies consistently show that tips correlate more strongly with the customer's mood, the server's appearance, and even their race than with the quality of service provided. A Cornell University analysis found that service quality accounts for less than 2% of the variation in tip amounts.\n\nThe alternative is not hypothetical. In most European and Asian countries, service is included in the price, servers earn a predictable wage, and the dining experience is no less pleasant. Several high-profile restaurants in the United States, including Danny Meyer's Union Square Hospitality Group, eliminated tipping and raised menu prices to compensate. Staff retention improved, pay became more equitable between front-of-house and kitchen workers, and customers reported no decline in service quality. The model works. The only thing missing is the will to adopt it.",
+    "answerKey": {
+      "governingThought": "The tipping system is fundamentally unfair and should be replaced with a fair base wage included in the price.",
+      "supports": [
+        { "label": "Tipping shifts the employer's wage obligation onto customers, subsidising artificially low menu prices", "evidence": [] },
+        { "label": "Tips correlate with customer mood, server appearance, and race more than service quality", "evidence": [] },
+        { "label": "The alternative already works: international models and US restaurants show improved equity without quality decline", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought ('this entire system is fundamentally unfair') is buried at the start of paragraph 2. The entire first paragraph is descriptive background. A restructured version would lead with the claim that tipping is unfair, then use the wage-shifting argument, the research, and alternatives as supporting pillars."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 2,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 290,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-009-en",
+    "text": "It is hard to find a teenager today who regularly writes by hand. A 2023 survey by the Pew Research Center found that only 18% of students aged 13 to 17 use handwriting as their primary method for taking notes, down from over 60% a decade earlier. Schools have accelerated the shift: many no longer teach cursive, and some have replaced handwriting instruction entirely with keyboarding classes starting in primary school. Laptops and tablets are now standard classroom equipment, and most homework is submitted digitally. The practical case for handwriting seems to have evaporated. Why write slowly by hand when you can type three times faster?\n\nBecause handwriting trains the brain in ways that typing cannot replicate, and abandoning it is quietly undermining how students learn. The argument for handwriting is not nostalgic but neurological. When you write by hand, you engage fine motor pathways that connect directly to the brain's language and memory centres. A landmark study by Mueller and Oppenheimer at Princeton found that students who took notes by hand remembered significantly more conceptual material than those who typed, even when both groups had equal study time. The reason: handwriting forces you to process and compress information in real time, because you cannot transcribe everything. Typing, by contrast, encourages verbatim transcription, which is cognitively shallow.\n\nMore recent neuroscience reinforces this. A 2022 study published in Frontiers in Psychology used EEG monitoring to show that handwriting activates brain regions associated with deep encoding and creative thinking that remain dormant during typing. The implications go beyond note-taking. Students who regularly handwrite show stronger performance in essay composition, reading comprehension, and even mathematical reasoning. The tool is slow, yes. But slowness is the mechanism, not the flaw. It forces the kind of deliberate processing that builds durable understanding. In a world obsessed with speed, handwriting is a rare technology that rewards patience.",
+    "answerKey": {
+      "governingThought": "Handwriting trains the brain in ways that typing cannot replicate, and abandoning it is quietly undermining how students learn.",
+      "supports": [
+        { "label": "Handwriting engages fine motor pathways connected to language and memory centres; Princeton study shows better conceptual retention", "evidence": [] },
+        { "label": "EEG research shows handwriting activates deep encoding and creative thinking regions dormant during typing", "evidence": [] },
+        { "label": "Students who handwrite regularly show stronger performance in essays, reading comprehension, and maths", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought is buried at the start of paragraph 2. Paragraph 1 is a scene-setting tour of decline: statistics, curricula changes, rhetorical question. A restructured version would open with the neurological argument and use the studies as supporting pillars."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 3,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 303,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-010-en",
+    "text": "Student mental health has become one of the most discussed topics in education. According to the CDC, more than 40% of American high school students reported persistent feelings of sadness or hopelessness in 2023, nearly double the rate from a decade earlier. Schools have responded with counselling programmes, awareness weeks, and anti-stigma campaigns. Universities have expanded their psychological services. The conversation about student wellbeing has never been louder or more visible.\n\nYet for all this awareness, most school systems still refuse to implement the single most practical measure available to them: allowing students to take mental health days in the same way they take sick days for physical illness. Schools should formally recognise a limited number of mental health days per semester, no doctor's note required, managed through the same absence system used for flu or a broken arm. The logic is straightforward: if a student too anxious to concentrate has no sanctioned option, they either attend and learn nothing, or they skip and face disciplinary consequences. Both outcomes are worse than a structured, dignity-preserving day of rest.\n\nThe evidence supports this. Oregon and Connecticut, which legalised mental health days for students in 2019 and 2021 respectively, saw no increase in overall absenteeism. What changed was the nature of absences: unexcused absences dropped, while excused mental health absences rose modestly. Students reported feeling more trusted and less ashamed. A follow-up study by the Oregon Health Authority found that students who used mental health days were more likely to subsequently seek counselling, suggesting the days function as an entry point to support rather than an escape from it. The fear that students would abuse the system has proven largely unfounded. Trust, it turns out, tends to be met with responsibility.",
+    "answerKey": {
+      "governingThought": "Schools should formally recognise mental health days for students, managed through the same absence system used for physical illness.",
+      "supports": [
+        { "label": "Without a sanctioned option, anxious students either attend and learn nothing or skip and face discipline", "evidence": [] },
+        { "label": "Oregon and Connecticut saw no increase in overall absenteeism after legalising mental health days", "evidence": [] },
+        { "label": "Students who used mental health days were more likely to seek counselling afterward", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought is buried in paragraph 2. Paragraph 1 is entirely statistics and background. A restructured version would open with the proposal, then present the logical argument and evidence."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 3,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 289,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-023-en",
+    "text": "The idea that breakfast is the most important meal of the day has been repeated so often that most people accept it as established science. Cereal commercials, health campaigns, and even school programmes have reinforced the message for decades. Nutritionists have long argued that skipping breakfast leads to poor concentration, weight gain, and worse academic performance. The breakfast-is-essential narrative is one of the most universally accepted pieces of health advice in the Western world.\n\nBut the scientific basis for this advice is far weaker than most people realise, and schools and parents would benefit from a more nuanced approach. The foundational studies on breakfast and performance were mostly observational: they showed that people who eat breakfast tend to be healthier, but they did not prove that breakfast caused the difference. People who skip breakfast are also more likely to smoke, exercise less, and have irregular schedules — confounding factors that the early research rarely controlled for. More rigorous randomised controlled trials, such as the Bath Breakfast Project at the University of Bath, found no significant difference in metabolic health between breakfast eaters and skippers over six weeks. The weight gain claim is similarly fragile: a 2019 BMJ meta-analysis concluded that breakfast eaters actually consumed more total daily calories than those who skipped it. For teenagers, the picture is more complex — some genuinely benefit from morning fuel, while others function well without it. The honest answer is not that breakfast is essential but that individual variation matters more than blanket rules.",
+    "answerKey": {
+      "governingThought": "The scientific basis for breakfast being essential is far weaker than commonly believed, and a more nuanced, individualised approach would serve students better.",
+      "supports": [
+        { "label": "Foundational breakfast studies were observational with major confounding factors, not proof of causation", "evidence": [] },
+        { "label": "Randomised controlled trials show no significant metabolic health difference between eaters and skippers", "evidence": [] },
+        { "label": "Individual variation matters more than blanket rules — some teenagers benefit, others do not", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought is buried at the start of paragraph 2. The entire first paragraph builds up the conventional wisdom before challenging it — classic buried-lead. A restructured version would lead with the claim that breakfast advice needs nuancing, then deploy the evidence hierarchy."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 3,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 270,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-024-en",
+    "text": "The four-day work week is gaining momentum across Europe. Iceland ran the world's largest trial between 2015 and 2019, covering more than 2,500 workers across dozens of workplaces. Spain, Belgium, and the UK have launched their own pilots. Companies from Microsoft Japan to Unilever New Zealand have experimented with reduced hours. The concept is simple: employees work four days instead of five, for the same pay, with the expectation that productivity per hour will rise enough to compensate.\n\nThe results strongly suggest that the four-day week should become the standard model for knowledge work. In Iceland, productivity remained the same or improved in the vast majority of participating workplaces, while employee wellbeing increased dramatically: stress dropped, burnout declined, and workers reported spending more time on exercise, hobbies, and family. The UK trial, coordinated by the University of Cambridge, found that 92% of participating companies chose to continue the four-day week permanently after the six-month pilot. Revenue held steady or grew. Sick days fell by 65%. Staff turnover dropped so sharply that companies saved significant recruitment costs. The pattern is consistent across countries, industries, and company sizes: when people work fewer hours with clear expectations, they waste less time, hold fewer unnecessary meetings, and focus more intensely on what matters.",
+    "answerKey": {
+      "governingThought": "The four-day work week should become the standard model for knowledge work.",
+      "supports": [
+        { "label": "Iceland's large-scale trial showed maintained or improved productivity with dramatically better employee wellbeing", "evidence": [] },
+        { "label": "The UK trial showed 92% of companies continuing permanently, with revenue steady and sick days down 65%", "evidence": [] },
+        { "label": "The pattern is consistent across countries and industries: fewer hours with clear expectations produce more focused work", "evidence": [] }
+      ],
+      "structuralAssessment": "The governing thought is buried at the start of paragraph 2. Paragraph 1 surveys the global trend without stating a position. A restructured version would lead with the recommendation, then use the trial evidence as support."
+    },
+    "metadata": {
+      "qualityLevel": "buried-lead",
+      "difficultyRating": 2,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 245,
+      "targetLevel": 1
+    }
+  },
+  {
+    "id": "pt-011-en",
+    "text": "I've been thinking about curfews for teenagers and honestly there's a lot to say about it. My parents always had me home by ten on school nights and I hated it at the time but looking back I guess it made sense? Though in Spain teenagers are out way later and they seem fine. The thing is, safety is a real concern because most accidents involving teens happen late at night — I read that somewhere, maybe it was a government report. But then you also have to think about the fact that teenagers need to learn responsibility, and how are they going to do that if you never let them make their own decisions about when to come home?\n\nA lot of parents say they can't sleep until their kid is home, which I totally get. That's stressful. And there are some neighborhoods where it genuinely isn't safe to be out late. But also, is a curfew really going to stop a teenager who wants to get into trouble? They'll just do it earlier in the day. Some cities actually have legal curfews for minors, like in parts of the US, and the data on whether those reduce crime is really mixed.\n\nBack to the freedom thing though — in Nordic countries, kids have way more independence from a young age, and their outcomes are generally better on most measures. So maybe it's not about the curfew itself but about the overall parenting approach? My friend's parents never gave her a curfew and she turned out great, but my cousin had no curfew either and he got into all kinds of trouble. So it probably depends on the kid.\n\nI think parents worry too much sometimes, but I also think some structure is good. It's really about balance, you know? Every family is different and there's no one-size-fits-all answer. The safety statistics are concerning though, I'll say that.",
+    "answerKey": {
+      "governingThought": "Curfews for teenagers are less important than the overall parenting approach — rigid time rules matter less than teaching responsibility and adapting to the individual child.",
+      "supports": [
+        { "label": "Safety concerns are real but curfews alone don't prevent risky behavior", "evidence": [] },
+        { "label": "Teenagers need structured opportunities to practice independence and decision-making", "evidence": [] },
+        { "label": "Cross-cultural evidence suggests that parenting philosophy matters more than specific rules", "evidence": [] },
+        { "label": "Effectiveness varies by individual — one-size-fits-all curfews ignore differences", "evidence": [] }
+      ],
+      "structuralAssessment": "The text has no governing thought up front. It oscillates between pro and anti positions without committing. International examples are dropped in randomly. Anecdotal and statistical evidence are mixed without distinction. The conclusion is a vague hedge.",
+      "proposedRestructure": "Lead: Curfews matter less than overall parenting approach. Pillar 1: Safety data supports some structure, but curfews alone don't prevent harm. Pillar 2: Building responsibility requires graduated freedom, not rigid rules. Pillar 3: Cross-cultural comparisons show trust-based parenting produces better outcomes. Pillar 4: Individual differences mean families need flexibility, not universal rules."
+    },
+    "metadata": {
+      "qualityLevel": "rambling",
+      "difficultyRating": 3,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 277,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-012-en",
+    "text": "So there's this whole debate about using AI in hiring and it's really complicated. Companies love it because they can screen thousands of resumes in minutes instead of having HR people spend weeks doing it. That's a real efficiency gain, you can't deny that. But then Amazon had that famous case where their AI hiring tool turned out to be biased against women because it was trained on historical data that reflected past discrimination. That's a huge problem.\n\nAlso, what about privacy? These systems sometimes scrape social media profiles and analyze things like word choice and even facial expressions in video interviews. That feels really invasive. A friend of mine applied somewhere and found out later they'd run her LinkedIn through some kind of personality assessment without telling her. Is that even legal? GDPR probably has something to say about it, but enforcement is spotty.\n\nOn the other hand, human recruiters are biased too. Studies show they favor candidates with familiar-sounding names, people from their own university, people who look like them. At least an AI could theoretically be audited and corrected — you can't really audit a human's unconscious bias. But then again, who audits the AI? The companies selling these tools aren't exactly transparent about how they work.\n\nSome people say AI hiring tools democratize access because they don't care about your network or your family connections. That's a nice idea. But the reality is that if the training data encodes existing inequality, the AI just automates discrimination at scale. Which is arguably worse than individual human bias because it's systematic.\n\nThere's also the candidate experience to think about. People hate talking to chatbots in interviews. It feels dehumanizing. But is a fifteen-minute phone screen with an overworked recruiter who's barely listening really any better? I don't know. The whole system is kind of broken if you ask me. Maybe the real question isn't AI versus human but how we design hiring processes that are actually fair and respectful, regardless of whether a machine is involved.",
+    "answerKey": {
+      "governingThought": "AI hiring tools need transparent governance frameworks before widespread adoption because they risk automating bias, violating privacy, and dehumanising candidates.",
+      "supports": [
+        { "label": "Efficiency benefits are real but insufficient justification on their own", "evidence": [] },
+        { "label": "Algorithmic bias can systematise and scale existing discrimination", "evidence": [] },
+        { "label": "Privacy violations through unauthorised data scraping undermine candidate rights", "evidence": [] },
+        { "label": "The solution requires auditable, transparent processes rather than choosing AI or human", "evidence": [] }
+      ],
+      "structuralAssessment": "The text raises four distinct issues but never establishes a hierarchy. Points are introduced, partially developed, then abandoned. The bias argument appears twice without consolidation. The conclusion introduces a new framing rather than synthesising.",
+      "proposedRestructure": "Lead: AI hiring tools need transparent governance before adoption. Pillar 1: Efficiency gains don't justify bypassing fairness. Pillar 2: Algorithmic bias systematises discrimination at scale. Pillar 3: Privacy practices lack adequate regulation. Pillar 4: Auditable, regulated AI should augment — not replace — human judgment."
+    },
+    "metadata": {
+      "qualityLevel": "rambling",
+      "difficultyRating": 4,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 315,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-013-en",
+    "text": "Fast fashion is honestly one of those topics where the more you learn the worse it gets. Like, you can buy a t-shirt for five euros now. Five euros! My grandmother talks about how clothes used to be expensive and you'd mend them and pass them down. Now people wear something once for an Instagram photo and throw it away. Speaking of which, influencers are a huge part of the problem because they do these massive haul videos where they show off like thirty items from Shein or Temu and it normalizes buying that much stuff.\n\nBut the environmental impact is insane. The fashion industry is one of the biggest polluters in the world — I think it's the second or third biggest, depending on how you measure it. All that synthetic fabric is basically plastic, so when you wash it, microplastics go into the water. And then the clothes end up in landfills. Have you seen those photos of used clothing mountains in Ghana? We ship our unwanted clothes to developing countries and pretend we're being charitable, but really we're just exporting our waste problem.\n\nAnd the workers. People making these clothes earn almost nothing, work insane hours, in buildings that are sometimes literally unsafe — remember Rana Plaza in Bangladesh? Over a thousand people died. That was 2013 and things haven't really gotten that much better. Some brands do those sustainability reports now but most of it is greenwashing if you look closely.\n\nThe crazy thing is that even the cheap clothes aren't really saving consumers money in the long run because they fall apart so fast. You end up buying the same thing over and over. A well-made jacket that costs three times as much lasts ten times as long.\n\nThe pollution thing really bothers me though. Rivers near textile factories in countries like Bangladesh and Vietnam are literally different colors because of the dyes. And we're worried about plastic straws while ignoring the fashion industry? It doesn't make sense. Something needs to change but I don't really know what. Maybe better regulations? Or people could just buy less. But that's hard when everything is so cheap and everyone online is showing off new outfits every day.",
+    "answerKey": {
+      "governingThought": "Fast fashion's artificially low prices hide enormous costs — environmental destruction, worker exploitation, and wasteful consumption — that must be urgently addressed.",
+      "supports": [
+        { "label": "Environmental damage is massive: microplastics, textile waste exports, river pollution", "evidence": [] },
+        { "label": "Worker exploitation persists — poverty wages, unsafe conditions, inadequate reform since Rana Plaza", "evidence": [] },
+        { "label": "The low-price model is an illusion: poor-quality items cost more through constant replacement", "evidence": [] },
+        { "label": "Social media and influencer culture accelerate overconsumption by normalising excessive buying", "evidence": [] }
+      ],
+      "structuralAssessment": "Strong content but no organising principle. Environmental argument split into two separate sections. Influencer point introduced early but never connected to larger argument. Conclusion refuses to commit to a direction.",
+      "proposedRestructure": "Lead: Fast fashion's cheap prices mask costs paid by consumers, workers, and the planet. Pillar 1: Consolidate all environmental damage. Pillar 2: Exploitation as hidden subsidy. Pillar 3: False economy of cheap clothing. Pillar 4: Influencer culture as systemic accelerant."
+    },
+    "metadata": {
+      "qualityLevel": "rambling",
+      "difficultyRating": 3,
+      "topicDomain": "society",
+      "language": "en",
+      "wordCount": 325,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-014-en",
+    "text": "Grading systems are one of those things everyone has an opinion about but nobody seems to agree on. In the US you have letter grades, A through F, which supposedly tell you how well you understood something. But a B in one school might be an A in another because grade inflation is completely out of control at some places. And then there's the stress — teenagers are literally having anxiety attacks over their GPAs because everything rides on getting into a good college.\n\nSome universities have experimented with pass/fail and the students reportedly learned more because they weren't obsessed with the grade. They actually took risks and engaged with difficult material. But employers don't love pass/fail because they want to rank candidates, and how do you do that without grades? It's like the whole system is designed for sorting people, not for learning.\n\nIn Finland they don't give grades until kids are older, and Finnish students consistently rank among the best in the world. Meanwhile in China and South Korea the grading pressure is intense and yes, students perform well on tests, but the mental health costs are enormous. So which system is better? Depends on what you're measuring, I guess.\n\nTeachers hate the current system too, by the way. Grading takes forever and it's incredibly subjective for anything beyond multiple choice. Two teachers can grade the same essay and give completely different marks. And the whole rubric industry that's supposed to fix this just creates its own bureaucracy. Teachers spend more time documenting their grading than actually teaching.\n\nSome people say we should move to competency-based assessment where you demonstrate mastery rather than getting a percentage. That sounds great in theory but scaling it is really hard. How does a teacher with 150 students do individualized competency assessment? And parents want grades because that's what they understand. They want to know if their kid is doing well, and a letter grade gives them a simple answer — even if it's a misleading one.\n\nI think the fundamental problem is that we're trying to use one system to do three completely different things: help students learn, communicate progress to parents, and sort people for college admissions and jobs. No single system can do all three well. But nobody wants to hear that because it means the solution is complicated.",
+    "answerKey": {
+      "governingThought": "Grading systems fail because they try to serve three incompatible purposes — supporting learning, communicating progress, and ranking for selection — and reform requires separating these functions.",
+      "supports": [
+        { "label": "Current systems are inconsistent, subjective, and function primarily as sorting tools", "evidence": [] },
+        { "label": "Alternatives each improve learning but create problems for ranking and communication", "evidence": [] },
+        { "label": "International comparisons reveal a trade-off between pressure and wellbeing", "evidence": [] },
+        { "label": "Teacher burden is unsustainable — grading and rubric compliance consume teaching time", "evidence": [] }
+      ],
+      "structuralAssessment": "The text arrives at a strong governing thought in its final paragraph but buries it at the end. Everything before reads as loosely connected complaints. International comparison dropped in without connecting to central tension. Teacher workload introduced as aside.",
+      "proposedRestructure": "Lead: Grading systems are broken because they try to serve three incompatible purposes. Pillar 1: As learning tool, grades mostly fail. Pillar 2: As communication tool, grades are misleadingly simple. Pillar 3: As ranking tool, grades dominate at everything else's expense. Pillar 4: International models show separating purposes produces better outcomes."
+    },
+    "metadata": {
+      "qualityLevel": "rambling",
+      "difficultyRating": 4,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 350,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-015-en",
+    "text": "Social media and democracy is one of those huge topics that everybody talks about but nobody really has a handle on. On the one hand, platforms like Twitter and Facebook have given ordinary people a voice they never had before. The Arab Spring was partly organized on social media. Activists in authoritarian countries use it to coordinate protests. That's genuinely powerful and democratic.\n\nBut on the other hand, echo chambers. People only see content that confirms what they already believe, and the algorithms are designed to keep it that way because outrage drives engagement. So you end up with people living in completely different realities. My uncle thinks the news is all lies and gets his information from YouTube channels with like five hundred subscribers. How do you have a functioning democracy when people can't even agree on basic facts?\n\nAnd then there's the political advertising thing. Micro-targeted ads mean a politician can say one thing to one group and the opposite to another, and nobody can compare the messages because they only see what's targeted at them. At least with a TV ad everyone sees the same message. Cambridge Analytica showed how this can be weaponized. Some countries have banned political ads on social media, which sounds right, but then you're also limiting political speech, which is a free speech issue.\n\nSpeaking of free speech — should platforms moderate content? If they do, they're accused of censorship. If they don't, they're blamed for spreading misinformation and hate speech. The EU's Digital Services Act is trying to find a middle ground with regulation, but tech moves so fast that regulations are always playing catch-up.\n\nThere's also the fact that social media has made political participation easier in some ways. People can sign petitions, donate, and contact their representatives without leaving their couch. But is that real participation or just slacktivism? Does sharing a post actually change anything? Studies are mixed on this.\n\nHonestly, I think social media is probably both the best and worst thing that's happened to democracy. It's given people tools for genuine participation while simultaneously creating the conditions for manipulation and polarization. Whether the net effect is positive or negative probably depends on the specific context and the regulatory framework. It's complicated.",
+    "answerKey": {
+      "governingThought": "Social media's impact on democracy depends entirely on governance — the same tools that enable participation also enable manipulation, and without regulation the destructive uses dominate.",
+      "supports": [
+        { "label": "Social media genuinely democratizes participation but quality varies enormously", "evidence": [] },
+        { "label": "Algorithmic outrage amplification creates echo chambers undermining shared facts", "evidence": [] },
+        { "label": "Micro-targeted political advertising enables manipulation evading traditional transparency", "evidence": [] },
+        { "label": "Content moderation dilemma requires regulatory frameworks, not platform self-governance", "evidence": [] }
+      ],
+      "structuralAssessment": "The text is structured around 'on the one hand / on the other hand' hedging that prevents it from ever taking a position. Five subtopics are each introduced and immediately undermined. The conclusion ('both the best and worst') is a cop-out.",
+      "proposedRestructure": "Lead: Social media's effect on democracy is determined by governance. Pillar 1: Participation gains are real but shallow. Pillar 2: Algorithmic design undermines democratic prerequisites. Pillar 3: Micro-targeting is a new form of manipulation. Pillar 4: Regulation is necessary despite limitations."
+    },
+    "metadata": {
+      "qualityLevel": "rambling",
+      "difficultyRating": 4,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 340,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-025-en",
+    "text": "Nuclear energy is the safest and most reliable low-carbon energy source available today, and opposing it on environmental grounds is not just misguided — it actively harms the climate. The numbers are unambiguous. First, nuclear power produces fewer deaths per unit of energy generated than any other source, including wind and solar. A comprehensive analysis published in The Lancet found that nuclear causes 0.03 deaths per terawatt-hour, compared to 0.04 for wind and 0.05 for solar — and those figures include Chernobyl and Fukushima. The fear of nuclear accidents, while emotionally powerful, is statistically irrational. Second, nuclear provides continuous baseload power regardless of weather conditions, solving the intermittency problem that makes renewables alone insufficient. Germany's decision to shut down its nuclear plants led to a measurable increase in fossil fuel use and carbon emissions — precisely the outcome that environmentalists should oppose. Third, modern reactor designs have eliminated the failure modes that caused historical accidents. Generation IV reactors are physically incapable of meltdown because they use passive safety systems that require no human intervention or external power.\n\nHowever, this argument contains a significant structural flaw. It cherry-picks the safety comparison by using deaths per terawatt-hour — a metric that favours established, large-scale sources. It omits nuclear's unique risk profile: the low probability but catastrophic consequence of accidents, the unresolved problem of radioactive waste storage spanning thousands of years, and the weapons proliferation risk that accompanies civilian nuclear programmes. Comparing nuclear to renewables on deaths alone is like comparing air travel to cycling on crashes alone — technically accurate but misleading because it ignores fundamentally different risk characteristics.",
+    "answerKey": {
+      "governingThought": "Nuclear energy is the safest and most reliable low-carbon source, and opposing it harms the climate.",
+      "supports": [
+        { "label": "Nuclear produces fewer deaths per terawatt-hour than any other source including renewables", "evidence": [] },
+        { "label": "Nuclear provides continuous baseload power, solving intermittency problems", "evidence": [] },
+        { "label": "Modern reactor designs have eliminated historical failure modes", "evidence": [] }
+      ],
+      "structuralAssessment": "The text appears well-structured with a clear governing thought and three supports. However, it contains a cherry-picking flaw: the safety metric (deaths per TWh) is selectively chosen to favour the conclusion while omitting nuclear's unique risk profile — catastrophic tail risk, unresolved waste storage, and proliferation concerns.",
+      "structuralFlaw": {
+        "type": "cherry_picking",
+        "description": "Uses deaths per terawatt-hour as the sole safety metric, which favours large-scale established sources while ignoring nuclear's unique characteristics: low-probability but catastrophic accident risk, millennia-scale waste storage, and weapons proliferation linkage.",
+        "location": "support pillar 1 and overall framing"
+      }
+    },
+    "metadata": {
+      "qualityLevel": "adversarial",
+      "difficultyRating": 5,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 270,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-026-en",
+    "text": "School uniforms improve academic performance. The evidence is consistent across multiple studies. First, uniforms eliminate the distraction of clothing competition. When students are not comparing brands or worrying about whether their outfit is fashionable enough, they can focus on learning. A study by the University of Houston found that after introducing uniforms, schools saw a 5% increase in average test scores. Second, uniforms reduce bullying related to appearance and socioeconomic status. When everyone wears the same thing, visible markers of wealth disappear, and students interact based on character rather than clothing. Schools with uniform policies consistently report fewer incidents of social exclusion. Third, uniforms create a sense of belonging and institutional identity. Students who wear a uniform report feeling more connected to their school community, and this sense of belonging is positively correlated with engagement and academic effort.\n\nThe structural problem here is a false cause fallacy. The Houston study measured correlation, not causation — schools that introduced uniforms simultaneously implemented other reforms (stricter discipline, new leadership, parental engagement campaigns). Attributing the test score improvement to uniforms alone ignores these confounding interventions. Similarly, reduced bullying in uniform schools may reflect the type of school that chooses to adopt uniforms (typically those with more resources and proactive management) rather than the effect of uniforms themselves. The argument treats correlation as proof of causation throughout.",
+    "answerKey": {
+      "governingThought": "School uniforms improve academic performance.",
+      "supports": [
+        { "label": "Uniforms eliminate clothing competition as a distraction from learning", "evidence": [] },
+        { "label": "Uniforms reduce appearance-based bullying and socioeconomic visibility", "evidence": [] },
+        { "label": "Uniforms create institutional belonging correlated with engagement", "evidence": [] }
+      ],
+      "structuralAssessment": "The argument appears cleanly structured but commits a false cause fallacy throughout. Each support pillar treats a correlation as causal without controlling for confounding variables. The Houston study accompanied broader reforms; the bullying reduction may reflect self-selecting schools rather than uniform effects.",
+      "structuralFlaw": {
+        "type": "false_cause",
+        "description": "Every support pillar treats correlation as causation. The Houston study's improvement coincided with multiple reforms. Bullying reductions in uniform schools may reflect the type of school that adopts uniforms rather than the uniforms themselves. The belonging-engagement link is correlational, not proven causal.",
+        "location": "all three support pillars"
+      }
+    },
+    "metadata": {
+      "qualityLevel": "adversarial",
+      "difficultyRating": 5,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 225,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-027-en",
+    "text": "Social media is either beneficial or harmful for teenagers — there is no middle ground. Supporters claim it builds community, enables self-expression, and connects isolated young people. Critics claim it causes depression, anxiety, and attention disorders. The data clearly shows that the critics are right. A 2023 report from the US Surgeon General warned that social media poses a 'profound risk' to youth mental health. Jonathan Haidt's research demonstrates a clear timeline: teen depression and anxiety spiked precisely when smartphones became ubiquitous around 2012. The correlation is too strong to be coincidental. Therefore, social media is harmful and should be restricted for anyone under sixteen.\n\nThe structural flaw is a false dichotomy combined with a correlation-equals-causation error. The opening premise that social media is 'either beneficial or harmful' with 'no middle ground' eliminates the most evidence-supported position: that effects vary dramatically by usage pattern, platform, and individual vulnerability. The Surgeon General's report actually called for more research, not a ban. Haidt's timeline correlation does not establish causation — the same period saw increases in academic pressure, economic anxiety, and opioid exposure. By forcing a binary frame, the argument makes the conclusion appear inevitable when it actually depends on ignoring nuance and alternative explanations.",
+    "answerKey": {
+      "governingThought": "Social media is harmful for teenagers and should be restricted for under-sixteens.",
+      "supports": [
+        { "label": "The US Surgeon General warned social media poses 'profound risk' to youth mental health", "evidence": [] },
+        { "label": "Teen depression spiked precisely when smartphones became ubiquitous around 2012", "evidence": [] },
+        { "label": "The correlation between social media adoption and mental health decline is too strong to be coincidental", "evidence": [] }
+      ],
+      "structuralAssessment": "The text sets up a false dichotomy (beneficial or harmful, no middle ground) then uses correlation as causation to settle the question. The Surgeon General's report is cited selectively. The timeline argument ignores confounding factors. The binary frame makes the conclusion seem inevitable by eliminating moderate positions.",
+      "structuralFlaw": {
+        "type": "false_dichotomy",
+        "description": "Opens with 'either beneficial or harmful — no middle ground', eliminating the most evidence-supported position that effects vary by usage, platform, and individual. Then uses correlation as causation to resolve the false binary.",
+        "location": "opening premise and support pillar 3"
+      }
+    },
+    "metadata": {
+      "qualityLevel": "adversarial",
+      "difficultyRating": 5,
+      "topicDomain": "technology",
+      "language": "en",
+      "wordCount": 218,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-028-en",
+    "text": "Organic food is healthier than conventionally grown food. This is not just a preference — it is a fact supported by science. First, organic produce contains significantly higher levels of antioxidants. A meta-analysis published in the British Journal of Nutrition, covering 343 studies, found that organic crops have 18-69% higher antioxidant concentrations than conventional equivalents. Antioxidants protect cells from damage and are linked to lower rates of cancer and heart disease. Second, organic food contains fewer pesticide residues. Conventional farming uses over 300 synthetic pesticides, many of which are classified as probable carcinogens by the WHO. Organic certification prohibits synthetic pesticides, meaning organic consumers are exposed to significantly less chemical contamination. Third, organic farming produces food with lower cadmium levels — a toxic heavy metal that accumulates in the body over time. The same British Journal of Nutrition analysis found cadmium concentrations 48% lower in organic crops.\n\nThe structural flaw is a non sequitur between 'contains more of X' and 'is healthier'. Higher antioxidant levels in organic produce have not been shown to produce measurably better health outcomes in humans — the body's ability to absorb and use antioxidants depends on many factors beyond concentration. Lower pesticide residues sound alarming, but conventional residue levels in regulated markets are already far below thresholds associated with health effects. The argument repeatedly conflates 'contains different amounts of a substance' with 'produces different health outcomes' — a gap the cited studies do not bridge.",
+    "answerKey": {
+      "governingThought": "Organic food is healthier than conventionally grown food.",
+      "supports": [
+        { "label": "Organic produce has 18-69% higher antioxidant concentrations", "evidence": [] },
+        { "label": "Organic food has fewer pesticide residues since synthetic pesticides are prohibited", "evidence": [] },
+        { "label": "Organic crops contain 48% lower cadmium levels", "evidence": [] }
+      ],
+      "structuralAssessment": "The argument looks well-evidenced but commits a non sequitur: it equates compositional differences with health outcomes without evidence that these differences produce measurable health benefits in humans. Higher antioxidant levels do not automatically mean better health. Lower pesticide residues below safety thresholds do not mean meaningful risk reduction.",
+      "structuralFlaw": {
+        "type": "non_sequitur",
+        "description": "Repeatedly equates 'contains more/less of a substance' with 'is healthier'. None of the cited studies demonstrate that the compositional differences translate into measurably different health outcomes in humans. The gap between composition and health is asserted, not proven.",
+        "location": "all three support pillars — each makes the same logical leap"
+      }
+    },
+    "metadata": {
+      "qualityLevel": "adversarial",
+      "difficultyRating": 5,
+      "topicDomain": "everyday",
+      "language": "en",
+      "wordCount": 250,
+      "targetLevel": 2
+    }
+  },
+  {
+    "id": "pt-029-en",
+    "text": "University education is a waste of time and money for most students. The evidence is overwhelming. First, university graduates carry an average of $30,000 in student debt in the United States, and many never earn enough to justify this investment. A Federal Reserve study found that 43% of graduates are underemployed — working in jobs that do not require a degree. They could have entered those jobs four years earlier without the debt. Second, the skills that employers actually value — communication, problem-solving, teamwork, adaptability — are not taught in lecture halls. They are developed through real-world experience. Apprenticeships and on-the-job training programmes consistently produce employees who are more productive, more quickly, than recent graduates. Third, many of the wealthiest and most successful people in the world never finished university: Bill Gates, Mark Zuckerberg, Steve Jobs. If the most successful entrepreneurs did not need a degree, why should anyone else?\n\nThe structural flaw is survivorship bias in the third pillar and straw man reasoning throughout. Citing Gates, Zuckerberg, and Jobs ignores the millions of dropouts who did not become billionaires — we only hear about the successes, not the far more numerous failures. The underemployment statistic treats any job not requiring a degree as a waste, ignoring that many graduates choose those jobs temporarily while pursuing other goals. And the apprenticeship argument creates a false comparison: it compares the best apprenticeship outcomes with average university outcomes.",
+    "answerKey": {
+      "governingThought": "University education is a waste of time and money for most students.",
+      "supports": [
+        { "label": "Graduates carry massive debt while 43% work in jobs not requiring a degree", "evidence": [] },
+        { "label": "Employers value skills developed through experience, not lectures", "evidence": [] },
+        { "label": "The most successful entrepreneurs never finished university", "evidence": [] }
+      ],
+      "structuralAssessment": "Appears structured but contains survivorship bias and straw man reasoning. The billionaire dropout argument is classic survivorship bias. The underemployment stat ignores context. The apprenticeship comparison is asymmetric.",
+      "structuralFlaw": {
+        "type": "survivorship_bias",
+        "description": "The third pillar cites billionaire dropouts while ignoring the overwhelming majority of dropouts who did not succeed. This is textbook survivorship bias: selecting visible successes and drawing conclusions while ignoring invisible failures.",
+        "location": "support pillar 3, with straw man elements in pillars 1 and 2"
+      }
+    },
+    "metadata": {
+      "qualityLevel": "adversarial",
+      "difficultyRating": 5,
+      "topicDomain": "school",
+      "language": "en",
+      "wordCount": 235,
+      "targetLevel": 2
+    }
+  }
+]
