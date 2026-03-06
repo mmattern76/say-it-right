@@ -55,3 +55,21 @@ targets:
       base:
         SWIFT_VERSION: "6.0"
         GENERATE_INFOPLIST_FILE: true
+
+schemes:
+  SayItRight_macOS:
+    build:
+      targets:
+        SayItRight_macOS: all
+        SayItRightTests_macOS: [test]
+    test:
+      targets:
+        - SayItRightTests_macOS
+  SayItRight_iOS:
+    build:
+      targets:
+        SayItRight_iOS: all
+        SayItRightTests_iOS: [test]
+    test:
+      targets:
+        - SayItRightTests_iOS
