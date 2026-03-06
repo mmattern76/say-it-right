@@ -1,0 +1,17 @@
+{
+  "id": "pt-002",
+  "language": "de",
+  "qualityType": "well-structured",
+  "difficulty": 1,
+  "topicTags": ["environment", "daily_life"],
+  "text": "Jede Schule sollte einen Garten haben. Pflanzen anzubauen lehrt Schüler Dinge, die kein Lehrbuch vermitteln kann, und der Aufwand ist verschwindend gering im Vergleich zum Ertrag. Erstens macht ein Garten abstrakte Naturwissenschaft greifbar — Photosynthese ist kein Diagramm mehr, sondern etwas, das man über Wochen beobachtet. Schüler, die Tomaten ziehen, verstehen Nährstoffkreisläufe auf eine Weise, die das Auswendiglernen eines Buchkapitels nie erreicht, weil sie Ursache und Wirkung mit eigenen Augen sehen. Zweitens entwickeln Schüler, die gärtnern, Geduld und Verantwortung, denn eine Pflanze, die nicht gegossen wird, stirbt — und keine Last-Minute-Aktion rettet sie. Anders als eine Hausaufgabenfrist, die verlängert werden kann, setzt die Natur ihren eigenen Zeitplan durch — und das ist eine kraftvolle Lektion in Eigenverantwortung. Drittens stärken Schulgärten die Gemeinschaft: Schüler arbeiten zusammen, teilen die Ernte und sind stolz auf etwas, das sie gemeinsam geschaffen haben. Schulen mit Gartenprogrammen berichten von weniger Disziplinproblemen, weil Schüler ein Gefühl der Mitverantwortung für den gemeinsamen Raum entwickeln. Die Kosten sind minimal — Samen, Erde und ein Stück ungenutzter Boden — während der pädagogische Ertrag enorm ist.",
+  "answerKey": {
+    "governingThought": "Jede Schule sollte einen Garten haben.",
+    "supportPillars": [
+      "Gärten machen abstrakte Naturwissenschaft greifbar",
+      "Gärtnern entwickelt Geduld und Verantwortung",
+      "Schulgärten stärken die Gemeinschaft"
+    ],
+    "structuralAssessment": "Saubere Pyramide. Starke Kernaussage, drei parallele Stützpunkte mit Belegen, Kosteneinwand vorbeugend behandelt."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "pt-005",
+  "language": "de",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["health", "daily_life"],
+  "text": "Kochen sollte ab der siebten Klasse ein Pflichtfach an jeder Schule sein. Drei Gründe sprechen dafür. Erstens ist es eine direkte Investition in die Volksgesundheit: Schüler, die lernen, einfache, ausgewogene Mahlzeiten zuzubereiten, greifen als Erwachsene deutlich seltener zu hochverarbeiteten Fertigprodukten — und ernährungsbedingte Krankheiten sind inzwischen die häufigste vermeidbare Todesursache in Deutschland. Zweitens vermittelt Kochen lebenspraktische Fähigkeiten, die kein anderes Fach abdeckt: einen Wocheneinkauf kalkulieren, mehrere Arbeitsschritte zeitlich koordinieren und improvisieren, wenn Zutaten fehlen oder der Herd nicht mitmacht — eine komprimierte Lektion in Planung, Haushalten und Anpassungsfähigkeit. Drittens fördert gemeinsames Kochen soziale Kompetenz: Für andere zu kochen erfordert Einfühlungsvermögen — Geschmäcker vorausahnen, Unverträglichkeiten berücksichtigen und Rückmeldung zu etwas Persönlichem annehmen, das man selbst geschaffen hat. In der Schule lernen wir, Gedichte zu analysieren und quadratische Gleichungen zu lösen. Es fällt schwer zu behaupten, dass eine dieser Fähigkeiten im Alltag nützlicher ist als die Fähigkeit, sich selbst und andere gut zu ernähren. Eine Generation, die kochen kann, ist gesünder, selbstständiger und besser darin, füreinander zu sorgen.",
+  "answerKey": {
+    "governingThought": "Kochen sollte ab der siebten Klasse ein Pflichtfach sein.",
+    "supportPillars": [
+      "Kochen ist eine direkte Investition in die Gesundheit durch weniger Fertigprodukte",
+      "Kochen vermittelt lebenspraktische Fähigkeiten: Budgetplanung, Zeitmanagement und Improvisation",
+      "Gemeinsames Kochen fördert soziale Kompetenz durch Empathie und Feedbackfähigkeit"
+    ],
+    "structuralAssessment": "Saubere Pyramide mit klarer Kernaussage am Anfang. Drei Stützpunkte sind MECE (Gesundheit, Alltagskompetenz, Sozialkompetenz). Abschluss rahmt das Argument durch Vergleich mit bestehenden Schulfächern neu. Guter L2-Modelltext."
+  }
+}

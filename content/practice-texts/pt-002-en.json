@@ -1,0 +1,17 @@
+{
+  "id": "pt-002",
+  "language": "en",
+  "qualityType": "well-structured",
+  "difficulty": 1,
+  "topicTags": ["environment", "daily_life"],
+  "text": "Every school should have a garden. Growing food teaches students lessons that no textbook can deliver, and the investment required is negligible compared to the return. First, a garden makes abstract science concrete — photosynthesis stops being a diagram and becomes something you watch happen over weeks. Students who grow tomatoes understand nutrient cycles in a way that memorising a textbook chapter never achieves, because they see the cause and effect with their own eyes. Second, students who garden develop patience and responsibility because a plant that isn't watered dies, and no amount of last-minute effort fixes that. Unlike a homework deadline that can be extended, nature enforces its own schedule, and that is a powerful lesson in accountability. Third, school gardens build community: students work together, share the harvest, and take pride in something they created collectively. Schools with garden programmes report fewer disciplinary issues because students feel a sense of ownership over shared space. The cost is minimal — seeds, soil, and a patch of unused ground — while the educational return is enormous.",
+  "answerKey": {
+    "governingThought": "Every school should have a garden.",
+    "supportPillars": [
+      "Gardens make abstract science concrete",
+      "Gardening develops patience and responsibility",
+      "School gardens build community"
+    ],
+    "structuralAssessment": "Clean pyramid. Strong governing thought, three parallel supports each with evidence, cost objection preemptively addressed."
+  }
+}

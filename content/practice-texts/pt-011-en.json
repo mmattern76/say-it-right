@@ -1,0 +1,19 @@
+{
+  "id": "pt-011",
+  "language": "en",
+  "qualityType": "rambling",
+  "difficulty": 3,
+  "topicTags": ["society", "daily_life"],
+  "text": "I've been thinking about curfews for teenagers and honestly there's a lot to say about it. My parents always had me home by ten on school nights and I hated it at the time but looking back I guess it made sense? Though in Spain teenagers are out way later and they seem fine. The thing is, safety is a real concern because most accidents involving teens happen late at night — I read that somewhere, maybe it was a government report. But then you also have to think about the fact that teenagers need to learn responsibility, and how are they going to do that if you never let them make their own decisions about when to come home?\n\nA lot of parents say they can't sleep until their kid is home, which I totally get. That's stressful. And there are some neighborhoods where it genuinely isn't safe to be out late. But also, is a curfew really going to stop a teenager who wants to get into trouble? They'll just do it earlier in the day. Some cities actually have legal curfews for minors, like in parts of the US, and the data on whether those reduce crime is really mixed.\n\nBack to the freedom thing though — in Nordic countries, kids have way more independence from a young age, and their outcomes are generally better on most measures. So maybe it's not about the curfew itself but about the overall parenting approach? My friend's parents never gave her a curfew and she turned out great, but my cousin had no curfew either and he got into all kinds of trouble. So it probably depends on the kid.\n\nI think parents worry too much sometimes, but I also think some structure is good. It's really about balance, you know? Every family is different and there's no one-size-fits-all answer. The safety statistics are concerning though, I'll say that.",
+  "answerKey": {
+    "governingThought": "Curfews for teenagers are less important than the overall parenting approach — rigid time rules matter less than teaching responsibility and adapting to the individual child and context.",
+    "supportPillars": [
+      "Safety concerns are real (late-night accident statistics, unsafe neighborhoods) but curfews alone don't prevent risky behavior",
+      "Teenagers need structured opportunities to practice independence and decision-making",
+      "Cross-cultural evidence (Nordic countries, Spain) suggests that parenting philosophy matters more than specific rules like curfews",
+      "Effectiveness varies by individual — one-size-fits-all curfews ignore differences between teenagers"
+    ],
+    "structuralAssessment": "The text has no governing thought up front. It oscillates between pro-curfew and anti-curfew arguments without committing to a position. International examples (Spain, Nordic countries, US) are dropped in randomly rather than used as evidence for a specific claim. Anecdotal evidence (friend, cousin) is mixed in with statistical claims without distinction. The conclusion ('it's about balance') is a vague hedge that could have been the starting point for a structured argument.",
+    "proposedRestructure": "Lead: Curfews matter less than overall parenting approach. Pillar 1: Safety data supports some structure, but curfews alone don't prevent harm. Pillar 2: Building responsibility requires graduated freedom, not rigid rules. Pillar 3: Cross-cultural comparisons show that trust-based parenting cultures produce better outcomes than rule-heavy ones. Pillar 4: Individual differences mean families need flexibility, not universal rules. Conclusion: Parents should focus on the relationship and gradual trust-building, using curfews as one flexible tool rather than a fixed boundary."
+  }
+}

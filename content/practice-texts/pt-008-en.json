@@ -1,0 +1,17 @@
+{
+  "id": "pt-008",
+  "language": "en",
+  "qualityType": "buried-lead",
+  "difficulty": 2,
+  "topicTags": ["society", "fairness"],
+  "text": "In the United States, tipping is deeply embedded in the culture of dining out. Most restaurant servers earn a base wage well below the federal minimum, sometimes as low as $2.13 per hour, with the expectation that tips will bring their total earnings to a livable level. The customary tip has crept upward over the decades: what was once 10% became 15%, then 18%, and now payment terminals routinely suggest 20%, 25%, or even 30%. Tipping has also spread beyond restaurants into coffee shops, takeaway counters, and even self-checkout kiosks, with customers facing a screen that asks them to add a gratuity for a transaction that involved no personal service at all.\n\nThis entire system is fundamentally unfair, and it should be replaced with what most of the developed world already uses: a fair base wage included in the price. Tipping shifts the employer's obligation to pay a living wage onto the customer, creating a subsidy that allows restaurants to advertise artificially low menu prices. It punishes servers for factors beyond their control: studies consistently show that tips correlate more strongly with the customer's mood, the server's appearance, and even their race than with the quality of service provided. A Cornell University analysis found that service quality accounts for less than 2% of the variation in tip amounts.\n\nThe alternative is not hypothetical. In most European and Asian countries, service is included in the price, servers earn a predictable wage, and the dining experience is no less pleasant. Several high-profile restaurants in the United States, including Danny Meyer's Union Square Hospitality Group, eliminated tipping and raised menu prices to compensate. Staff retention improved, pay became more equitable between front-of-house and kitchen workers, and customers reported no decline in service quality. The model works. The only thing missing is the will to adopt it.",
+  "answerKey": {
+    "governingThought": "The tipping system is fundamentally unfair and should be replaced with a fair base wage included in the price.",
+    "supportPillars": [
+      "Tipping shifts the employer's wage obligation onto customers, subsidising artificially low menu prices",
+      "Tips correlate with customer mood, server appearance, and race more than service quality (less than 2% variation explained by quality)",
+      "The alternative already works: European/Asian models and US restaurants that eliminated tipping show improved equity and no decline in service"
+    ],
+    "structuralAssessment": "The governing thought ('this entire system is fundamentally unfair') is buried at the start of paragraph 2. The entire first paragraph is descriptive background: wage structure, tip percentage creep, and the spread of tipping to new contexts. It describes HOW tipping works without stating a position. A restructured version would lead with the claim that tipping is unfair and should be replaced, then use the wage-shifting argument, the research on tip correlation, and the international/domestic alternatives as three supporting pillars. The descriptive material from paragraph 1 could be integrated as evidence rather than standing as an independent preamble."
+  }
+}

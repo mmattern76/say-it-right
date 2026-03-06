@@ -1,0 +1,17 @@
+{
+  "id": "pt-003",
+  "language": "de",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["society", "fairness"],
+  "text": "Öffentliche Bibliotheken sind heute wichtiger als je zuvor, nicht weniger. Drei gesellschaftliche Entwicklungen machen sie unverzichtbar, und jede davon beschleunigt sich. Die digitale Kluft bedeutet, dass Millionen Familien sich keinen zuverlässigen Internetzugang leisten können — die Bibliothek ist ihre einzige Anlaufstelle für Online-Bewerbungen, Behördendienste und Schulrecherche. Wenn ein Jugendlicher eine Universitätsbewerbung einreichen muss und zu Hause kein WLAN hat, ist die Bibliothek kein Luxus — sie ist Infrastruktur. Die Desinformationskrise bedeutet, dass ausgebildete Bibliothekare zu den wenigen Fachleuten gehören, die Menschen beibringen, Quellen zu bewerten — eine Fähigkeit, die Algorithmen aktiv untergraben. Social-Media-Plattformen sind darauf ausgelegt, Aufmerksamkeit zu maximieren, nicht Genauigkeit, und Bibliothekare bieten ein entscheidendes Gegengewicht, indem sie zeigen, wie man Behauptungen überprüft, bevor man sie teilt. Und die Einsamkeitsepidemie bedeutet, dass Bibliotheken als seltene kostenlose öffentliche Räume dienen, in denen Menschen aller Altersgruppen einfach zusammen sein können, ohne dafür zu bezahlen. Anders als Cafés oder Einkaufszentren verlangt eine Bibliothek nichts von dir, außer den Raum zu respektieren. Bibliotheksbudgets zu kürzen ist keine Kostenersparnis — es ist eine Verlagerung der Kosten auf die Schwächsten.",
+  "answerKey": {
+    "governingThought": "Öffentliche Bibliotheken sind heute wichtiger als je zuvor.",
+    "supportPillars": [
+      "Bibliotheken überbrücken die digitale Kluft",
+      "Bibliothekare lehren Quellenbewertung gegen Desinformation",
+      "Bibliotheken sind seltene kostenlose Gemeinschaftsräume"
+    ],
+    "structuralAssessment": "Starke Pyramide mit anspruchsvollem Rahmen. Drei Stützpunkte sind MECE (Zugang, Wissen, Gemeinschaft). Schlusssatz verstärkt die Kernaussage. Guter L2-Modelltext."
+  }
+}

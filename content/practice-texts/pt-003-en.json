@@ -1,0 +1,17 @@
+{
+  "id": "pt-003",
+  "language": "en",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["society", "fairness"],
+  "text": "Public libraries matter more today than ever, not less. Three shifts in society have made them essential, and each one is accelerating. The digital divide means that millions of families cannot afford reliable internet — the library is their only access point for online job applications, government services, and school research. When a teenager needs to submit a university application and there is no Wi-Fi at home, the library is not a luxury — it is infrastructure. The misinformation crisis means that trained librarians are among the few remaining professionals who teach people how to evaluate sources — a skill that algorithms actively undermine. Social media platforms are designed to maximise engagement, not accuracy, and librarians offer a crucial counterweight by showing people how to verify claims before sharing them. And the loneliness epidemic means that libraries serve as rare free public spaces where people of all ages can simply exist together without paying for the privilege. Unlike cafés or shopping centres, a library asks nothing of you except that you respect the space. Cutting library budgets is not a cost saving — it is a transfer of costs to the most vulnerable.",
+  "answerKey": {
+    "governingThought": "Public libraries matter more today than ever.",
+    "supportPillars": [
+      "Libraries bridge the digital divide for families without internet",
+      "Librarians teach source evaluation amid misinformation",
+      "Libraries are rare free public spaces combating loneliness"
+    ],
+    "structuralAssessment": "Strong pyramid with sophisticated framing. Three supports are MECE (access, knowledge, community). Final sentence reinforces governing thought. Good L2 model text."
+  }
+}
