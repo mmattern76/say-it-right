@@ -1,8 +1,11 @@
 import Foundation
 
-/// Drives the chat UI: manages message history, sends learner input to the
-/// Anthropic API via `AnthropicService`, and streams Barbara's response
-/// back token by token.
+/// Drives the chat UI by observing a `SessionManager` for message state.
+///
+/// `ChatViewModel` acts as a thin presentation adapter: it reads messages and
+/// loading state from the `SessionManager` and forwards user input to it.
+/// When no `SessionManager` is provided it falls back to standalone mode
+/// (useful for previews and tests).
 ///
 /// Observed by `ChatView` for reactive UI updates.
 @MainActor
@@ -12,32 +15,68 @@ final class ChatViewModel {
     // MARK: - Published State
 
     /// All messages in the current conversation.
-    /// Use `send()` or `setMessages(_:)` to modify from outside.
-    private(set) var messages: [ChatMessage] = []
+    /// Reads from SessionManager when available, otherwise uses local storage.
+    var messages: [ChatMessage] {
+        get { sessionManager?.messages ?? _localMessages }
+        set {
+            if sessionManager != nil {
+                // SessionManager owns messages; ignore direct sets
+            } else {
+                _localMessages = newValue
+            }
+        }
+    }
 
-    /// Replace the message list (used for previews and tests).
+    /// Replace the message list (used for previews and tests in standalone mode).
     func setMessages(_ newMessages: [ChatMessage]) {
-        messages = newMessages
+        _localMessages = newMessages
     }
 
     /// The text currently being composed by the learner.
     var inputText: String = ""
 
     /// Whether Barbara is currently generating a response.
-    private(set) var isLoading: Bool = false
+    var isLoading: Bool {
+        if let sm = sessionManager {
+            return sm.sessionState == .loading
+        }
+        return _localIsLoading
+    }
 
     /// The most recent error message, if any.
-    private(set) var errorMessage: String?
+    var errorMessage: String? {
+        if let sm = sessionManager {
+            if case .error(let msg) = sm.sessionState {
+                return msg
+            }
+            return nil
+        }
+        return _localErrorMessage
+    }
+
+    /// Whether there is an active session.
+    var hasActiveSession: Bool {
+        sessionManager?.sessionState == .active || sessionManager?.sessionState == .loading
+    }
+
+    // MARK: - Private State (standalone mode)
+
+    private var _localMessages: [ChatMessage] = []
+    private var _localIsLoading: Bool = false
+    private var _localErrorMessage: String?
 
     // MARK: - Dependencies
+
+    /// The session manager driving the conversation. Nil for standalone/preview mode.
+    var sessionManager: SessionManager?
 
     private let anthropicService: AnthropicService
     private let systemPromptAssembler: SystemPromptAssembler
     private let responseParser: ResponseParser
 
-    // MARK: - Session Config
+    // MARK: - Session Config (standalone mode fallback)
 
-    /// Current learner level (1–4).
+    /// Current learner level (1-4).
     var level: Int = 1
 
     /// Session type identifier (e.g. "say-it-clearly").
@@ -52,10 +91,12 @@ final class ChatViewModel {
     // MARK: - Init
 
     init(
+        sessionManager: SessionManager? = nil,
         anthropicService: AnthropicService = .shared,
         systemPromptAssembler: SystemPromptAssembler = SystemPromptAssembler(),
         responseParser: ResponseParser = ResponseParser()
     ) {
+        self.sessionManager = sessionManager
         self.anthropicService = anthropicService
         self.systemPromptAssembler = systemPromptAssembler
         self.responseParser = responseParser
@@ -68,42 +109,49 @@ final class ChatViewModel {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !isLoading else { return }
 
-        // Add learner message
-        let learnerMessage = ChatMessage(role: .learner, text: text)
-        messages.append(learnerMessage)
         inputText = ""
-        errorMessage = nil
 
-        // Start Barbara's response
-        Task {
-            await streamBarbaraResponse()
+        if let sm = sessionManager {
+            Task {
+                await sm.sendMessage(text: text)
+            }
+        } else {
+            // Standalone mode: direct API call
+            let learnerMessage = ChatMessage(role: .learner, text: text)
+            _localMessages.append(learnerMessage)
+            _localErrorMessage = nil
+            Task {
+                await streamBarbaraResponseStandalone()
+            }
         }
     }
 
     /// Clear all messages and reset the conversation.
     func clearConversation() {
-        messages.removeAll()
+        if let sm = sessionManager {
+            sm.endSession()
+        } else {
+            _localMessages.removeAll()
+            _localIsLoading = false
+            _localErrorMessage = nil
+        }
         inputText = ""
-        isLoading = false
-        errorMessage = nil
     }
 
-    // MARK: - Private
+    // MARK: - Private: Standalone streaming (no SessionManager)
 
-    private func streamBarbaraResponse() async {
-        isLoading = true
+    private func streamBarbaraResponseStandalone() async {
+        _localIsLoading = true
 
-        // Create a placeholder streaming message for Barbara
         let streamingMessage = ChatMessage(
             role: .barbara,
             text: "",
             isStreaming: true
         )
-        messages.append(streamingMessage)
-        let streamingIndex = messages.count - 1
+        _localMessages.append(streamingMessage)
+        let streamingIndex = _localMessages.count - 1
 
         do {
-            // Assemble system prompt
             let systemPrompt = systemPromptAssembler.assemble(
                 level: level,
                 sessionType: sessionType,
@@ -111,10 +159,8 @@ final class ChatViewModel {
                 profileJSON: profileJSON
             )
 
-            // Convert UI messages to API messages
-            let apiMessages = messages
+            let apiMessages = _localMessages
                 .filter { !$0.text.isEmpty }
-                .dropLast() // Exclude the empty streaming placeholder
                 .map { message in
                     APIMessage(
                         role: message.role == .barbara ? "assistant" : "user",
@@ -122,34 +168,31 @@ final class ChatViewModel {
                     )
                 }
 
-            // Stream response
             let stream = await anthropicService.sendMessage(
                 systemPrompt: systemPrompt,
-                messages: Array(apiMessages)
+                messages: apiMessages
             )
 
             var fullText = ""
             for try await chunk in stream {
                 fullText += chunk
-                messages[streamingIndex].text = fullText
+                _localMessages[streamingIndex].text = fullText
             }
 
-            // Parse the complete response for hidden metadata
             let parsed = responseParser.parse(fullResponse: fullText)
-            messages[streamingIndex].text = parsed.visibleText
-            messages[streamingIndex].metadata = parsed.metadata
-            messages[streamingIndex].isStreaming = false
+            _localMessages[streamingIndex].text = parsed.visibleText
+            _localMessages[streamingIndex].metadata = parsed.metadata
+            _localMessages[streamingIndex].isStreaming = false
 
         } catch {
-            // Remove the empty streaming message on error
-            if messages[streamingIndex].text.isEmpty {
-                messages.remove(at: streamingIndex)
+            if _localMessages[streamingIndex].text.isEmpty {
+                _localMessages.remove(at: streamingIndex)
             } else {
-                messages[streamingIndex].isStreaming = false
+                _localMessages[streamingIndex].isStreaming = false
             }
-            errorMessage = error.localizedDescription
+            _localErrorMessage = error.localizedDescription
         }
 
-        isLoading = false
+        _localIsLoading = false
     }
 }
