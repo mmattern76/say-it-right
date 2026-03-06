@@ -17,11 +17,8 @@ struct SayItRightApp: App {
 
     private var mainWindow: some Scene {
         WindowGroup {
-            AdaptiveChatView(
-                viewModel: chatViewModel,
-                language: settings.language
-            )
-            .environment(settings)
+            ContentView()
+                .environment(settings)
             #if os(macOS)
             .frame(minWidth: 500, minHeight: 400)
             #endif
@@ -35,18 +32,54 @@ struct SayItRightApp: App {
     }
 }
 
+struct ContentView: View {
+    @Environment(AppSettings.self) private var settings
+    @State private var sessionManager = SessionManager()
+    @State private var coordinator = SayItClearlyCoordinator()
+    @State private var showSayItClearly = false
+
+    private var language: String { settings.language }
+
+    private var profile: LearnerProfile {
+        LearnerProfile.createDefault(
+            displayName: settings.displayName,
+            language: language
+        )
+    }
+
+    var body: some View {
+        NavigationStack {
+            SessionPickerView(
+                sessionManager: sessionManager,
+                profile: profile,
+                language: language,
+                sayItClearlyCoordinator: coordinator
+            ) { sessionType in
+                if sessionType == .sayItClearly {
+                    showSayItClearly = true
+                }
+            }
+            .navigationDestination(isPresented: $showSayItClearly) {
+                SayItClearlyView(
+                    sessionManager: sessionManager,
+                    coordinator: coordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showSayItClearly = false
+                }
+            }
+        }
+    }
+}
+
 // MARK: - macOS Menu Commands
 
 #if os(macOS)
-/// Keyboard shortcut commands for macOS menu bar integration.
-///
-/// Provides standard Mac keyboard shortcuts:
-/// - Cmd+N: New session (clears conversation)
 struct AppCommands: Commands {
     let viewModel: ChatViewModel
 
     var body: some Commands {
-        // Replace the default New Window command with New Session
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
                 Task { @MainActor in
@@ -60,10 +93,7 @@ struct AppCommands: Commands {
 #endif
 
 #Preview {
-    AdaptiveChatView(
-        viewModel: .previewMidConversation,
-        language: "en"
-    )
-    .environment(AppSettings.shared)
-    .frame(width: 800, height: 600)
+    ContentView()
+        .environment(AppSettings.shared)
+        .frame(width: 800, height: 600)
 }

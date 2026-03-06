@@ -27,6 +27,9 @@ final class SessionManager {
     /// The active session type, if any.
     private(set) var activeSessionType: SessionType?
 
+    /// The active "Say it clearly" session state, if any.
+    private(set) var sayItClearlySession: SayItClearlySession?
+
     // MARK: - Dependencies
 
     private let anthropicService: AnthropicService
@@ -69,6 +72,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = type
+        sayItClearlySession = nil
         sessionState = .loading
 
         // Assemble system prompt
@@ -83,6 +87,53 @@ final class SessionManager {
         await streamBarbaraResponse()
     }
 
+    /// Start a "Say it clearly" session with a specific topic.
+    ///
+    /// Assembles the system prompt and injects the topic prompt so Barbara
+    /// greets the learner with the topic question.
+    ///
+    /// - Parameters:
+    ///   - topic: The topic selected from the topic bank.
+    ///   - profile: The learner's current profile.
+    ///   - language: Language code ("en" or "de").
+    func startSayItClearlySession(topic: Topic, profile: LearnerProfile, language: String) async {
+        // Reset any previous session state
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .sayItClearly
+        sayItClearlySession = SayItClearlySession(topic: topic)
+        sessionState = .loading
+
+        // Assemble system prompt with topic directive appended
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.sayItClearly.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let topicDirective = topicDirectiveBlock(topic: topic, language: language)
+        systemPrompt = basePrompt + "\n\n" + topicDirective
+
+        // Request Barbara's greeting (she will present the topic)
+        await streamBarbaraResponse()
+    }
+
+    /// Build the topic directive block injected into the system prompt.
+    private func topicDirectiveBlock(topic: Topic, language: String) -> String {
+        let title = topic.title(for: language)
+        let prompt = topic.prompt(for: language)
+        return """
+        # Topic for This Session
+
+        Present this topic to the learner. Use the prompt text below as Barbara's \
+        question. Do not invent a different topic.
+
+        **Topic:** \(title)
+        **Prompt:** \(prompt)
+        """
+    }
+
     /// Send a learner message and stream Barbara's response.
     ///
     /// - Parameter text: The learner's message text.
@@ -94,6 +145,11 @@ final class SessionManager {
         // Add the learner message
         let learnerMessage = ChatMessage(role: .learner, text: trimmed)
         messages.append(learnerMessage)
+
+        // Track first response in "Say it clearly" session
+        if sayItClearlySession != nil && !sayItClearlySession!.hasResponse {
+            sayItClearlySession?.recordResponse(trimmed)
+        }
 
         // Check context window limits
         if messages.count > Self.contextWindowThreshold {
@@ -110,6 +166,7 @@ final class SessionManager {
     /// (last metadata) remains accessible until a new session starts.
     func endSession() {
         activeSessionType = nil
+        sayItClearlySession = nil
         sessionState = .idle
         messages = []
         systemPrompt = ""
