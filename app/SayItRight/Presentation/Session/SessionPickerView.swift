@@ -57,17 +57,11 @@ struct SessionPickerView: View {
     }
 
     private func handleSessionSelection(_ sessionType: SessionType) {
-        if sessionType == .sayItClearly {
+        switch sessionType {
+        case .sayItClearly:
             onSessionStarted?(.sayItClearly)
-        } else {
-            Task {
-                await sessionManager.startSession(
-                    type: sessionType,
-                    profile: profile,
-                    language: language
-                )
-                onSessionStarted?(sessionType)
-            }
+        case .findThePoint:
+            onSessionStarted?(.findThePoint)
         }
     }
 

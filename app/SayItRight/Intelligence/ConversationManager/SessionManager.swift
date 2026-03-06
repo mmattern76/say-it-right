@@ -30,6 +30,9 @@ final class SessionManager {
     /// The active "Say it clearly" session state, if any.
     private(set) var sayItClearlySession: SayItClearlySession?
 
+    /// The active "Find the point" session state, if any.
+    private(set) var findThePointSession: FindThePointSession?
+
     // MARK: - Dependencies
 
     private let anthropicService: AnthropicService
@@ -73,6 +76,7 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = type
         sayItClearlySession = nil
+        findThePointSession = nil
         sessionState = .loading
 
         // Assemble system prompt
@@ -102,6 +106,7 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = .sayItClearly
         sayItClearlySession = SayItClearlySession(topic: topic)
+        findThePointSession = nil
         sessionState = .loading
 
         // Assemble system prompt with topic directive appended
@@ -119,6 +124,46 @@ final class SessionManager {
         await streamBarbaraResponse()
     }
 
+    /// Start a "Find the point" session with a specific practice text.
+    ///
+    /// Assembles the system prompt and injects the practice text and answer key
+    /// so Barbara presents the text and evaluates the learner's extraction.
+    ///
+    /// - Parameters:
+    ///   - practiceText: The practice text selected from the library.
+    ///   - profile: The learner's current profile.
+    ///   - language: Language code ("en" or "de").
+    func startFindThePointSession(
+        practiceText: PracticeText,
+        profile: LearnerProfile,
+        language: String
+    ) async {
+        // Reset any previous session state
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .findThePoint
+        sayItClearlySession = nil
+        findThePointSession = FindThePointSession(practiceText: practiceText)
+        sessionState = .loading
+
+        // Assemble system prompt with practice text directive appended
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.findThePoint.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let textDirective = practiceTextDirectiveBlock(
+            practiceText: practiceText,
+            language: language
+        )
+        systemPrompt = basePrompt + "\n\n" + textDirective
+
+        // Request Barbara's greeting (she will present the text)
+        await streamBarbaraResponse()
+    }
+
     /// Build the topic directive block injected into the system prompt.
     private func topicDirectiveBlock(topic: Topic, language: String) -> String {
         let title = topic.title(for: language)
@@ -131,6 +176,41 @@ final class SessionManager {
 
         **Topic:** \(title)
         **Prompt:** \(prompt)
+        """
+    }
+
+    /// Build the practice text directive block injected into the system prompt
+    /// for "Find the point" sessions.
+    private func practiceTextDirectiveBlock(
+        practiceText: PracticeText,
+        language: String
+    ) -> String {
+        let qualityNote: String
+        switch practiceText.metadata.qualityLevel {
+        case .wellStructured:
+            qualityNote = "This text is well-structured. The governing thought should be identifiable."
+        case .buriedLead:
+            qualityNote = "This text has a buried lead. The governing thought is hidden deeper in the text."
+        case .rambling:
+            qualityNote = "This text is rambling. The learner may correctly identify that there is no clear governing thought."
+        case .adversarial:
+            qualityNote = "This text appears structured but contains a hidden structural flaw."
+        }
+
+        return """
+        # Practice Text for This Session
+
+        Present this text to the learner. Ask them to identify the governing thought \
+        in one sentence. Do NOT reveal the answer key.
+
+        \(qualityNote)
+
+        **Text:**
+        \(practiceText.text)
+
+        **Answer Key (HIDDEN — do not reveal):**
+        Governing Thought: \(practiceText.answerKey.governingThought)
+        Structural Assessment: \(practiceText.answerKey.structuralAssessment)
         """
     }
 
@@ -151,6 +231,11 @@ final class SessionManager {
             sayItClearlySession?.recordResponse(trimmed)
         }
 
+        // Track extraction attempts in "Find the point" session
+        if findThePointSession != nil && !findThePointSession!.hasUsedRetry {
+            findThePointSession?.recordAttempt(trimmed)
+        }
+
         // Check context window limits
         if messages.count > Self.contextWindowThreshold {
             summarizeOlderMessages()
@@ -167,6 +252,7 @@ final class SessionManager {
     func endSession() {
         activeSessionType = nil
         sayItClearlySession = nil
+        findThePointSession = nil
         sessionState = .idle
         messages = []
         systemPrompt = ""
