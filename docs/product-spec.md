@@ -445,3 +445,133 @@ When the pre-bundled text library needs to grow beyond what app updates can sust
 5. **LLM prompt training (Level 4):** Yes, with live Claude API calls. The user writes a prompt, sends it to Claude, sees the result, and gets Barbara's structural critique of the prompt (not the response). Rate-limited: max 10 prompt-test requests per day, configurable in parent settings. This prevents runaway API costs while allowing meaningful practice.
 
 6. **Monetization:** Deferred. Family-only TestFlight distribution for now. Monetization strategy will be decided portfolio-wide when any app approaches public release.
+
+---
+
+## Roadmap — Epics E7–E14
+
+### E7: Advanced Curriculum (Level 3 + Level 4)
+
+Implements the upper two progression levels: "Architektur" (L3) and "Meisterschaft" (L4).
+
+**Level 3 — Architecture** adds issue trees, vertical/horizontal logic, multi-source synthesis, and spotting false groupings. Barbara's tone shifts to collegial.
+
+**Level 4 — Mastery** covers executive summaries, presentations, and LLM prompt structuring as applied pyramid thinking. Barbara treats the learner as a near-peer professional.
+
+Includes:
+- L3 and L4 evaluation rubrics
+- 40+ advanced topics and 30+ new practice texts
+- Level transition ceremonies with capstone assessments
+- Barbara tone calibration per level
+
+Depends on: E3 (Build mode), E4 (Break mode). Enables: E10 (Prompt Workshop).
+
+### E8: Onboarding & Diagnostic Placement
+
+A conversational 5-minute diagnostic on first launch that assesses structural thinking level and places the learner at Level 1 or 2 (or flags for accelerated L3 path).
+
+Includes:
+- Language selection (German/English)
+- Barbara character introduction establishing personality
+- 3–5 diagnostic questions evaluating structure without feedback
+- Placement algorithm mapping diagnostic scores to levels
+- Skip-diagnostic option with tentative profile and re-evaluation after 3 sessions
+- Voice onboarding if E5 voice mode is available
+
+Depends on: E2 (app shell), E3 (learner profile).
+
+### E9: Daily Drills & Engagement
+
+Barbara becomes a daily habit through push notifications, streaks, and short 2–5 minute exercises targeting learner weaknesses.
+
+Includes:
+- Voice-optimized daily drill format (iPhone-first)
+- Push notifications at configurable times with Barbara-voice text
+- Streak tracking with 7/30/100-day milestone acknowledgements
+- Grace period (miss 1 day OK, miss 3 → reset)
+- 50+ rotating "question of the day" prompts (DE/EN)
+- Home screen and lock screen widgets (iOS 16+)
+- Drill selection algorithm weighted toward profile weaknesses
+
+Depends on: E3 (Build mode, learner profile). Enhanced by: E5 (voice).
+
+### E10: LLM Prompt Workshop
+
+Level 4 capstone: users write prompts, send them to a real Claude API call, see the AI response, then receive Barbara's structural critique of the prompt (not the content).
+
+"Prompt engineering is just clear communication."
+
+Includes:
+- Prompt Workshop session type with 20+ scenarios (DE/EN)
+- Real API calls to a separate Claude context (not Barbara's conversation)
+- Evaluation rubric: context clarity, task specificity, constraints, format, ambiguity
+- Side-by-side before/after comparison of original vs. revised prompts
+- Rate limiting (max 3 iterations per session)
+- Response content filtering for safety
+
+Depends on: E7 (Level 4 rubric), E3 (Build mode infrastructure).
+
+### E11: Content Pipeline
+
+Practice texts evolve from a static bundled library to a living corpus. A batch pipeline generates new texts at calibrated difficulty with answer keys, quality-validated and human-reviewed before delivery.
+
+Includes:
+- Batch generation pipeline using Claude API
+- Inputs: difficulty level, quality type, language, domain, target length
+- Automated quality validation: schema compliance, readability, answer key consistency
+- Human review interface (approve/reject/edit)
+- Content delivery API (lightweight JSON endpoint)
+- App content sync with incremental download and offline fallback
+- Content versioning with deprecation handling
+
+Depends on: E4 (practice text format and answer key schema). Enhanced by: E7 (L3/L4 content).
+
+### E12: Parent Dashboard
+
+Parents see proof that it's working — a PIN/biometric-protected dashboard showing level progression, consistency, strengths, and development areas without exposing the child's actual opinions.
+
+Includes:
+- Parent authentication (PIN + biometric)
+- Level progression timeline
+- Session frequency and duration charts
+- Skill area breakdown (strengths/development areas)
+- Recent session summaries (structural themes, not user text)
+- Parent settings: notification preferences, daily drill time, enable/disable
+- Weekly summary notification with Barbara's voice
+- Privacy boundary enforcement (no access to opinions, specific feedback, or topic choices)
+
+Depends on: E3 (learner profile, session history, progression).
+
+### E13: Duel Mode
+
+Two users structure arguments independently on the same topic, then see pyramids side-by-side while Barbara judges structural quality (not opinion quality).
+
+Includes:
+- Duel session state machine (initiation → P1 → P2 → evaluation → results)
+- Local duels (pass-and-play on same device) with player isolation
+- 30+ debatable topics suitable for same-position or opposite-position duels
+- Barbara's comparative evaluation (structure, not opinion)
+- Side-by-side comparison view with structural analysis
+- Shared time limit (3–5 minutes)
+- Remote duels (stretch goal) via share link/code and CloudKit
+
+Both players can argue the SAME position — pure structure comparison.
+
+Depends on: E3 (evaluation infrastructure), E2 (app shell). Enhanced by: E6 (visual pyramid comparison).
+
+### E14: Analytics & Learning Insights
+
+After months of practice, users see their structural growth journey visualized — plus Barbara's powerful "Then vs. Now" comparison placing an early response next to a recent one.
+
+Includes:
+- Growth timeline (weekly score averages, level markers, annotations)
+- Skill dimension heatmap (dimensions × time, colour-coded)
+- "Then vs. Now" comparison engine with Barbara commentary
+- Session analytics (totals, time trends, revision rates, mode distribution)
+- Exportable progress report (PDF) for portfolios and university applications
+- Barbara's periodic reviews at milestones (every 30 sessions, every level transition)
+- Learner certificate generation summarizing achievements
+- Minimum session threshold before analytics unlock
+- Platform-adaptive insights (scrollable on iPhone, dashboard on iPad/Mac)
+
+Depends on: E3 (session history, structural scores). Enhanced by: E7 (L3/L4 data), E13 (duel results).
