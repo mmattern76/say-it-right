@@ -1,0 +1,17 @@
+{
+  "id": "pt-006",
+  "language": "en",
+  "qualityType": "buried-lead",
+  "difficulty": 2,
+  "topicTags": ["education", "society"],
+  "text": "Every year, roughly 40,000 young people in the UK alone choose to take a gap year before university. The concept has existed in various forms since the 1960s, when overland travel to Asia became popular among young Europeans. Today, gap year programmes range from structured volunteering abroad to working holiday visas in Australia and New Zealand. The industry around gap years has grown into a multi-billion-pound market, with agencies offering everything from conservation work in Costa Rica to teaching English in Vietnam.\n\nWhat these numbers and programmes obscure, however, is that gap years are one of the most undervalued investments a young person can make in their own development. Students who take a gap year return to education with clearer goals, stronger self-discipline, and a maturity that their peers who went straight to university often lack. Research from the University of Sydney found that gap year students outperformed their predicted grades by an average of 0.2 points on a 4.0 scale. They also reported higher satisfaction with their degree choice and were less likely to drop out.\n\nOf course, gap years are not without risks. Without structure, some students drift, spending a year gaming or scrolling rather than growing. The financial barrier is real as well: not everyone can afford a year without income or with the cost of travel. But these are problems of implementation, not of the concept itself. A well-planned gap year, even one spent working locally and saving money, builds the kind of independence and perspective that no classroom can replicate.",
+  "answerKey": {
+    "governingThought": "Gap years are one of the most undervalued investments a young person can make in their own development.",
+    "supportPillars": [
+      "Gap year students return with clearer goals, stronger discipline, and greater maturity",
+      "Research shows gap year students outperform predicted grades and report higher degree satisfaction",
+      "Risks like drifting or cost are problems of implementation, not the concept itself"
+    ],
+    "structuralAssessment": "The governing thought ('gap years are one of the most undervalued investments') is buried at the start of paragraph 2. Paragraph 1 is pure background: history, statistics, and industry description. It sets context but delays the point. A restructured version would open with the claim that gap years are undervalued, then use the research evidence and maturity argument as support pillars, and address the risks as a handled objection at the end. The background statistics could be woven into the supporting evidence rather than standing alone as the opening."
+  }
+}

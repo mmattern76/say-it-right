@@ -1,0 +1,19 @@
+{
+  "id": "pt-011",
+  "language": "de",
+  "qualityType": "rambling",
+  "difficulty": 3,
+  "topicTags": ["society", "daily_life"],
+  "text": "Also das Thema Ausgehzeiten fuer Jugendliche ist echt so eine Sache. Meine Eltern wollten immer, dass ich unter der Woche um zehn zu Hause bin, und ich fand das damals total unfair. Aber wenn man ehrlich ist, passieren die meisten Unfaelle mit Jugendlichen halt spaet abends — das hab ich mal irgendwo gelesen, glaube in einer Studie vom ADAC oder so. Andererseits muss man ja auch irgendwann lernen, Verantwortung zu uebernehmen. Wie soll das gehen, wenn einem immer alles vorgeschrieben wird?\n\nIn Spanien sind Jugendliche viel laenger unterwegs und da funktioniert das auch. Meine Eltern haben immer gesagt, sie koennen nicht schlafen, solange ich nicht da bin. Das versteh ich natuerlich. Und klar, es gibt Gegenden, da will man abends wirklich nicht rumlaufen. Aber mal ehrlich — wenn ein Jugendlicher Mist bauen will, dann macht er das auch um drei Uhr nachmittags. Eine Ausgehzeit aendert daran gar nichts.\n\nIn manchen amerikanischen Staedten gibt es sogar gesetzliche Ausgangssperren fuer Minderjaehrige, und ob die was bringen, ist total umstritten. In Skandinavien dagegen haben Kinder viel frueher viel mehr Freiheiten, und die schneiden bei fast allen Vergleichen besser ab. Vielleicht liegt es also gar nicht an der Uhrzeit, sondern am gesamten Erziehungsstil?\n\nDie Tochter von Freunden meiner Eltern hatte nie eine Ausgehzeit und ist super klargekommen. Mein Cousin hatte auch keine und hat nur Scheiss gebaut. Also haengt es wahrscheinlich vom Kind ab. Ich finde, Eltern machen sich manchmal zu viele Sorgen, aber ein bisschen Struktur schadet auch nicht. Es ist halt alles nicht so einfach. Jede Familie ist anders. Aber die Unfallzahlen geben schon zu denken.",
+  "answerKey": {
+    "governingThought": "Ausgehzeiten fuer Jugendliche sind weniger entscheidend als der gesamte Erziehungsansatz — starre Zeitregeln sind weniger wichtig als Verantwortung beizubringen und individuell auf das Kind einzugehen.",
+    "supportPillars": [
+      "Sicherheitsbedenken sind berechtigt (Unfallstatistiken, unsichere Gegenden), aber Ausgehzeiten allein verhindern kein Risikoverhalten",
+      "Jugendliche brauchen strukturierte Gelegenheiten, Eigenstaendigkeit und Entscheidungsfaehigkeit zu ueben",
+      "Kulturvergleiche (Skandinavien, Spanien) zeigen, dass die Erziehungsphilosophie wichtiger ist als einzelne Regeln",
+      "Die Wirksamkeit haengt vom Einzelfall ab — pauschale Ausgehzeiten ignorieren individuelle Unterschiede"
+    ],
+    "structuralAssessment": "Der Text hat keinen erkennbaren Leitgedanken am Anfang. Er springt zwischen Pro- und Contra-Argumenten hin und her, ohne sich festzulegen. Internationale Beispiele (Spanien, Skandinavien, USA) werden beilaeufig eingestreut, statt als Belege fuer eine klare These zu dienen. Anekdoten (Tochter von Bekannten, Cousin) stehen neben statistischen Behauptungen ohne Einordnung. Das Fazit ('alles nicht so einfach') ist eine vage Ausweichung, die eigentlich der Ausgangspunkt einer strukturierten Argumentation haette sein koennen.",
+    "proposedRestructure": "Leitgedanke: Nicht die Ausgehzeit entscheidet, sondern der gesamte Erziehungsansatz. Stuetze 1: Sicherheitsdaten sprechen fuer gewisse Struktur, aber Ausgehzeiten allein verhindern nichts. Stuetze 2: Verantwortungsbewusstsein entsteht durch schrittweise Freiheit, nicht durch starre Regeln. Stuetze 3: Kulturvergleiche zeigen, dass vertrauensbasierte Erziehung bessere Ergebnisse bringt. Stuetze 4: Individuelle Unterschiede erfordern flexible Loesungen statt pauschaler Regeln. Fazit: Eltern sollten auf Beziehung und schrittweises Vertrauen setzen, statt sich an festen Uhrzeiten festzuhalten."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "pt-008",
+  "language": "de",
+  "qualityType": "buried-lead",
+  "difficulty": 2,
+  "topicTags": ["society", "fairness"],
+  "text": "In Deutschland und Oesterreich gehoert das Trinkgeld fest zur Kultur des Essens ausser Haus. Zwar verdienen Servicekraefte hier einen gesetzlichen Mindestlohn, doch in der Praxis wird das Trinkgeld als selbstverstaendlicher Gehaltsbestandteil betrachtet. Ueblich sind 5 bis 10 Prozent, wobei der soziale Druck steigt: Kartenlesegeraete schlagen inzwischen haeufig 10, 15 oder sogar 20 Prozent vor. Auch jenseits der Gastronomie breitet sich das Trinkgeld aus: Lieferdienste, Friseure, Taxifahrer. Die Grenze zwischen freiwilliger Anerkennung und stiller Erwartung verschwimmt zunehmend.\n\nDieses System ist im Kern ungerecht und sollte durch das ersetzt werden, was eigentlich laengst Standard sein koennte: eine faire Bezahlung, die im Preis enthalten ist. Trinkgeld verlagert die Verantwortung des Arbeitgebers, einen angemessenen Lohn zu zahlen, auf den Gast. Es bestraft Servicekraefte fuer Faktoren, die sie nicht kontrollieren koennen: Studien zeigen durchgehend, dass die Hoehe des Trinkgelds staerker mit der Laune des Gastes, dem Aussehen der Bedienung und sogar deren Herkunft korreliert als mit der tatsaechlichen Servicequalitaet. Eine Analyse der Cornell University ergab, dass die Servicequalitaet weniger als 2 Prozent der Variation bei Trinkgeldbetraegen erklaert.\n\nDie Alternative ist kein Gedankenexperiment. In vielen Laendern ist der Service im Preis enthalten, Servicekraefte verdienen ein planbares Gehalt, und die Gaesterfahrung leidet nicht darunter. Mehrere Restaurants in den USA, darunter Danny Meyers Union Square Hospitality Group, haben das Trinkgeld abgeschafft und die Menupreise entsprechend angehoben. Die Mitarbeiterbindung verbesserte sich, die Bezahlung wurde gerechter zwischen Service und Kueche, und Gaeste berichteten von unveraendert gutem Service. Das Modell funktioniert. Es fehlt nur der Wille, es umzusetzen.",
+  "answerKey": {
+    "governingThought": "Das Trinkgeldsystem ist im Kern ungerecht und sollte durch eine faire, im Preis enthaltene Bezahlung ersetzt werden.",
+    "supportPillars": [
+      "Trinkgeld verlagert die Lohnverantwortung des Arbeitgebers auf den Gast",
+      "Trinkgeldhoehe korreliert mit Laune, Aussehen und Herkunft staerker als mit Servicequalitaet (weniger als 2% der Variation erklaert)",
+      "Die Alternative funktioniert bereits: Internationale Modelle und US-Restaurants ohne Trinkgeld zeigen verbesserte Gerechtigkeit ohne Qualitaetsverlust"
+    ],
+    "structuralAssessment": "Der Kerngedanke ('dieses System ist im Kern ungerecht') ist am Anfang von Absatz 2 vergraben. Der gesamte erste Absatz ist beschreibender Hintergrund: Lohnstruktur, Trinkgeldentwicklung und Ausbreitung in neue Bereiche. Er beschreibt, WIE Trinkgeld funktioniert, ohne eine Position zu beziehen. Eine umstrukturierte Version wuerde mit der These beginnen, dass Trinkgeld ungerecht ist und ersetzt werden sollte, dann die Lohnverlagerung, die Forschungsergebnisse zur Korrelation und die internationalen Alternativen als drei Stuetzpfeiler nutzen. Das beschreibende Material aus Absatz 1 koennte als Evidenz eingebaut werden, statt als eigenstaendige Einleitung zu stehen."
+  }
+}

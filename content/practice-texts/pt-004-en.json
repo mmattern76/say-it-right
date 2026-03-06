@@ -1,0 +1,17 @@
+{
+  "id": "pt-004",
+  "language": "en",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["technology", "society"],
+  "text": "Video games develop real, transferable skills — and it is time we stopped treating them as the opposite of learning. Three categories of ability improve measurably through regular play. First, strategic thinking: games like Civilization or chess apps force players to weigh trade-offs, allocate scarce resources, and plan several moves ahead under uncertainty — exactly the decision-making muscles that business schools try to build through case studies. Second, teamwork: multiplayer games require real-time coordination with strangers under pressure, clear role assignment, and rapid conflict resolution when a plan falls apart — skills that many adults still struggle with in the workplace. Third, problem-solving: puzzle and sandbox games reward experimentation, pattern recognition, and the willingness to fail repeatedly before finding a solution — a mindset educators call productive failure. None of this means every game teaches something valuable, or that unlimited screen time is harmless. But dismissing gaming wholesale ignores a body of evidence that players are practising competencies the modern world demands. The controller is not the enemy of the classroom — it is an unrecognised extension of it.",
+  "answerKey": {
+    "governingThought": "Video games develop real, transferable skills.",
+    "supportPillars": [
+      "Games build strategic thinking through resource management and planning under uncertainty",
+      "Multiplayer games develop teamwork through real-time coordination and conflict resolution",
+      "Puzzle and sandbox games strengthen problem-solving through experimentation and productive failure"
+    ],
+    "structuralAssessment": "Clean pyramid with conclusion first. Three supports are MECE (cognition, collaboration, creativity/resilience). Nuanced qualifier before closing reinforcement. Good L2 model text."
+  }
+}

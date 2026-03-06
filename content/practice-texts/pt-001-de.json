@@ -1,0 +1,17 @@
+{
+  "id": "pt-001",
+  "language": "de",
+  "qualityType": "well-structured",
+  "difficulty": 1,
+  "topicTags": ["technology", "education"],
+  "text": "Smartphones sollten im Unterricht verboten werden. Sie sind die größte Ablenkung in der modernen Bildung, und die Forschung dazu wird immer eindeutiger. Erstens: Schüler, die ihr Handy auf dem Tisch haben, schauen durchschnittlich alle drei Minuten auf Benachrichtigungen — konzentriertes Arbeiten wird unmöglich. Eine Studie der Universität Texas zeigte, dass selbst Schüler, die glauben, multitaskingfähig zu sein, bei Verständnistests deutlich schlechter abschneiden, wenn ihr Handy in Reichweite liegt. Zweitens: Allein die Anwesenheit eines Handys — selbst mit dem Bildschirm nach unten und auf lautlos — verringert die Denkkapazität, weil ein Teil des Gehirns ständig das Gerät überwacht. Forscher nennen das den ‚Brain-Drain-Effekt': Das Gehirn verbraucht Energie, um dem Drang zu widerstehen, aufs Handy zu schauen, und hat dadurch weniger Kapazität für das eigentliche Lernen. Drittens: Klassen ohne Handys zeigen messbar bessere Diskussionsqualität, weil Schüler einander tatsächlich zuhören statt zu scrollen. Lehrkräfte an handyfreien Schulen berichten, dass der Blickkontakt in Diskussionen spürbar zugenommen hat. Manche argumentieren, Handys seien nützliche Lernwerkzeuge — aber ein schulverwaltetes Tablet erreicht denselben Nutzen ohne die Social-Media-Falle. Die Evidenz ist klar: Handys raus, Fokus rein.",
+  "answerKey": {
+    "governingThought": "Smartphones sollten im Unterricht verboten werden.",
+    "supportPillars": [
+      "Schüler prüfen ständig Benachrichtigungen, konzentriertes Arbeiten unmöglich",
+      "Allein die Anwesenheit eines Handys verringert die Denkkapazität",
+      "Klassen ohne Handys haben bessere Diskussionsqualität"
+    ],
+    "structuralAssessment": "Saubere Pyramide. Fazit zuerst, drei eigenständige Stützpunkte, Gegenargument angesprochen und entkräftet. Jeder Stützpunkt ist konkret mit Beleg. Modelltext für L1-Lernende."
+  }
+}

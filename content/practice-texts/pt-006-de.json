@@ -1,0 +1,17 @@
+{
+  "id": "pt-006",
+  "language": "de",
+  "qualityType": "buried-lead",
+  "difficulty": 2,
+  "topicTags": ["education", "society"],
+  "text": "Jedes Jahr entscheiden sich allein in Deutschland rund 200.000 junge Menschen, nach dem Abitur nicht direkt zu studieren, sondern eine Auszeit zu nehmen. Das Konzept des sogenannten Gap Years hat sich seit den 1970er-Jahren verbreitet, als Rucksackreisen durch Asien und Suedamerika populaer wurden. Heute reicht das Angebot von strukturierten Freiwilligendiensten ueber Work-and-Travel-Programme bis hin zu Au-pair-Aufenthalten. Eine ganze Industrie ist um diese Auszeit gewachsen, mit Agenturen, die alles von Naturschutzarbeit in Costa Rica bis Englischunterricht in Vietnam vermitteln.\n\nWas hinter all diesen Zahlen und Programmen jedoch oft untergeht: Ein Gap Year ist eine der am meisten unterschaetzten Investitionen, die junge Menschen in ihre eigene Entwicklung machen koennen. Studierende, die ein solches Jahr einlegen, kehren mit klareren Zielen, staerkerer Selbstdisziplin und einer Reife zurueck, die Kommilitonen ohne diese Erfahrung haeufig fehlt. Eine Studie der Universitaet Tuebingen zeigte, dass Rueckkehrer aus einem Gap Year ihre Studienleistungen im Schnitt um 0,3 Notenpunkte uebertrafen. Sie berichteten ausserdem von hoeherer Zufriedenheit mit ihrer Studienwahl und brachen seltener ab.\n\nNatuerlich sind Gap Years nicht ohne Risiko. Ohne Struktur verbringen manche das Jahr eher mit Nichtstun als mit Wachstum. Auch die finanzielle Huerde ist real: Nicht jeder kann sich ein Jahr ohne Einkommen oder mit Reisekosten leisten. Aber das sind Probleme der Umsetzung, nicht des Konzepts. Ein gut geplantes Gap Year, selbst wenn es lokal und mit Jobben verbracht wird, baut die Art von Eigenstaendigkeit und Perspektive auf, die kein Hoersaal vermitteln kann.",
+  "answerKey": {
+    "governingThought": "Ein Gap Year ist eine der am meisten unterschaetzten Investitionen, die junge Menschen in ihre eigene Entwicklung machen koennen.",
+    "supportPillars": [
+      "Rueckkehrer haben klarere Ziele, staerkere Selbstdisziplin und groessere Reife",
+      "Forschung zeigt bessere Studienleistungen und hoehere Zufriedenheit mit der Studienwahl",
+      "Risiken wie Strukturlosigkeit oder Kosten sind Umsetzungsprobleme, keine Konzeptfehler"
+    ],
+    "structuralAssessment": "Der Kerngedanke ('ein Gap Year ist eine der am meisten unterschaetzten Investitionen') ist am Anfang von Absatz 2 vergraben. Absatz 1 ist reiner Hintergrund: Geschichte, Statistiken und Branchenbeschreibung. Er liefert Kontext, verzoegert aber den Punkt. Eine umstrukturierte Version wuerde mit der These beginnen, dass Gap Years unterschaetzt werden, dann die Forschungsergebnisse und das Reife-Argument als Stuetzpfeiler nutzen und die Risiken als behandelten Einwand am Ende platzieren. Die Hintergrundstatistiken koennten in die Argumentation eingeflochten werden, statt allein als Einstieg zu stehen."
+  }
+}

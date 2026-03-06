@@ -1,0 +1,17 @@
+{
+  "id": "pt-004",
+  "language": "de",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["technology", "society"],
+  "text": "Videospiele vermitteln echte, übertragbare Fähigkeiten — und es wird Zeit, dass wir aufhören, sie als Gegenteil von Lernen zu behandeln. Drei Kompetenzbereiche verbessern sich nachweislich durch regelmäßiges Spielen. Erstens strategisches Denken: Spiele wie Civilization oder Schach-Apps zwingen Spieler dazu, Zielkonflikte abzuwägen, knappe Ressourcen einzuteilen und unter Unsicherheit mehrere Züge vorauszuplanen — genau die Entscheidungskompetenz, die Wirtschaftshochschulen mit Fallstudien trainieren wollen. Zweitens Teamfähigkeit: Mehrspieler-Spiele verlangen Echtzeitkoordination mit Fremden unter Druck, klare Rollenverteilung und schnelle Konfliktlösung, wenn ein Plan scheitert — Fähigkeiten, mit denen viele Erwachsene im Berufsleben noch kämpfen. Drittens Problemlösungskompetenz: Rätsel- und Sandbox-Spiele belohnen Experimentierfreude, Mustererkennung und die Bereitschaft, wiederholt zu scheitern, bevor man eine Lösung findet — eine Haltung, die Pädagogen als produktives Scheitern bezeichnen. Das heißt nicht, dass jedes Spiel etwas Wertvolles lehrt oder dass grenzenlose Bildschirmzeit harmlos ist. Aber Gaming pauschal abzutun ignoriert eine Fülle von Belegen dafür, dass Spieler genau die Kompetenzen üben, die die moderne Welt verlangt. Der Controller ist kein Feind des Klassenzimmers — er ist eine verkannte Erweiterung davon.",
+  "answerKey": {
+    "governingThought": "Videospiele vermitteln echte, übertragbare Fähigkeiten.",
+    "supportPillars": [
+      "Spiele trainieren strategisches Denken durch Ressourcenmanagement und Planung unter Unsicherheit",
+      "Mehrspieler-Spiele fördern Teamfähigkeit durch Echtzeitkoordination und Konfliktlösung",
+      "Rätsel- und Sandbox-Spiele stärken Problemlösungskompetenz durch Experimentieren und produktives Scheitern"
+    ],
+    "structuralAssessment": "Saubere Pyramide mit Kernaussage zuerst. Drei Stützpunkte sind MECE (Kognition, Zusammenarbeit, Kreativität/Resilienz). Differenzierter Einschub vor abschließender Verstärkung. Guter L2-Modelltext."
+  }
+}

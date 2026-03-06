@@ -1,0 +1,17 @@
+{
+  "id": "pt-001",
+  "language": "en",
+  "qualityType": "well-structured",
+  "difficulty": 1,
+  "topicTags": ["technology", "education"],
+  "text": "Smartphones should be banned from classrooms. They are the single biggest distraction in modern education, and the research backing this claim has only grown stronger. First, students who have phones on their desks check notifications an average of every three minutes, making sustained focus impossible. A University of Texas study found that even students who believe they can multitask perform significantly worse on comprehension tests when their phone is within reach. Second, the presence of a phone — even face-down and on silent — reduces cognitive capacity because part of the brain is constantly monitoring it. Researchers call this the 'brain drain' effect: your mind spends energy resisting the urge to check the device, leaving less capacity for actual learning. Third, classrooms without phones show measurably better discussion quality because students actually listen to each other instead of scrolling. Teachers in phone-free schools report that eye contact during discussions has noticeably increased. Some argue that phones are useful learning tools, but a dedicated tablet managed by the school achieves the same educational benefit without the social media trap. The evidence is clear: remove the phones, restore the focus.",
+  "answerKey": {
+    "governingThought": "Smartphones should be banned from classrooms.",
+    "supportPillars": [
+      "Students check notifications constantly, preventing sustained focus",
+      "Even a face-down phone reduces cognitive capacity",
+      "Classrooms without phones have better discussion quality"
+    ],
+    "structuralAssessment": "Clean pyramid. Conclusion first, three distinct supporting points, counterargument addressed and dismissed. Each support is specific with evidence. Model text for L1 learners."
+  }
+}

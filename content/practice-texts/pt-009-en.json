@@ -1,0 +1,17 @@
+{
+  "id": "pt-009",
+  "language": "en",
+  "qualityType": "buried-lead",
+  "difficulty": 3,
+  "topicTags": ["education", "technology"],
+  "text": "It is hard to find a teenager today who regularly writes by hand. A 2023 survey by the Pew Research Center found that only 18% of students aged 13 to 17 use handwriting as their primary method for taking notes, down from over 60% a decade earlier. Schools have accelerated the shift: many no longer teach cursive, and some have replaced handwriting instruction entirely with keyboarding classes starting in primary school. Laptops and tablets are now standard classroom equipment, and most homework is submitted digitally. The practical case for handwriting seems to have evaporated. Why write slowly by hand when you can type three times faster?\n\nBecause handwriting trains the brain in ways that typing cannot replicate, and abandoning it is quietly undermining how students learn. The argument for handwriting is not nostalgic but neurological. When you write by hand, you engage fine motor pathways that connect directly to the brain's language and memory centres. A landmark study by Mueller and Oppenheimer at Princeton found that students who took notes by hand remembered significantly more conceptual material than those who typed, even when both groups had equal study time. The reason: handwriting forces you to process and compress information in real time, because you cannot transcribe everything. Typing, by contrast, encourages verbatim transcription, which is cognitively shallow.\n\nMore recent neuroscience reinforces this. A 2022 study published in Frontiers in Psychology used EEG monitoring to show that handwriting activates brain regions associated with deep encoding and creative thinking that remain dormant during typing. The implications go beyond note-taking. Students who regularly handwrite show stronger performance in essay composition, reading comprehension, and even mathematical reasoning. The tool is slow, yes. But slowness is the mechanism, not the flaw. It forces the kind of deliberate processing that builds durable understanding. In a world obsessed with speed, handwriting is a rare technology that rewards patience.",
+  "answerKey": {
+    "governingThought": "Handwriting trains the brain in ways that typing cannot replicate, and abandoning it is quietly undermining how students learn.",
+    "supportPillars": [
+      "Handwriting engages fine motor pathways connected to language and memory centres; Princeton study shows better conceptual retention than typing",
+      "EEG research shows handwriting activates deep encoding and creative thinking regions that remain dormant during typing",
+      "Students who handwrite regularly show stronger performance in essays, reading comprehension, and mathematical reasoning"
+    ],
+    "structuralAssessment": "The governing thought ('handwriting trains the brain in ways that typing cannot replicate') is buried at the start of paragraph 2. Paragraph 1 is a scene-setting tour of decline: statistics on how few students handwrite, the removal of cursive from curricula, the rise of devices. It asks a rhetorical question ('Why write slowly by hand?') but does not answer it until the next paragraph. A restructured version would open with the neurological argument, use the Princeton and EEG studies as supporting pillars, and fold the decline statistics into a brief contextual framing. The rhetorical question works well but belongs after the thesis, not before it."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "pt-005",
+  "language": "en",
+  "qualityType": "well-structured",
+  "difficulty": 2,
+  "topicTags": ["health", "daily_life"],
+  "text": "Cooking should be a mandatory subject in every school, from age twelve onward. Three arguments make the case. First, it is a direct investment in public health: students who learn to prepare simple, balanced meals are far less likely to depend on ultra-processed food as adults — and diet-related disease is now the leading cause of preventable death in most Western countries. Second, cooking teaches essential life skills that no other subject covers: budgeting a weekly shop, managing time across parallel tasks, and adapting when ingredients or equipment are not what you expected — a compressed lesson in planning, resource management, and improvisation. Third, shared meals build social competence: cooking for others requires empathy — anticipating tastes, accommodating restrictions, and accepting feedback on something personal you created. Schools already teach students how to analyse a poem and solve a quadratic equation. It is difficult to argue that either of those is more universally useful than the ability to feed yourself and the people around you well. A generation that can cook is a generation that is healthier, more self-sufficient, and better at taking care of each other.",
+  "answerKey": {
+    "governingThought": "Cooking should be a mandatory school subject from age twelve onward.",
+    "supportPillars": [
+      "Cooking is a direct investment in public health by reducing dependence on ultra-processed food",
+      "Cooking teaches essential life skills: budgeting, time management, and improvisation",
+      "Cooking for others builds social competence through empathy and feedback"
+    ],
+    "structuralAssessment": "Clean pyramid with clear governing thought up front. Three supports are MECE (health, practical skills, social skills). Closing reframes the argument with a comparison to existing subjects. Good L2 model text."
+  }
+}

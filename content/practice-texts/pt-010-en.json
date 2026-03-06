@@ -1,0 +1,17 @@
+{
+  "id": "pt-010",
+  "language": "en",
+  "qualityType": "buried-lead",
+  "difficulty": 3,
+  "topicTags": ["health", "society"],
+  "text": "Student mental health has become one of the most discussed topics in education. According to the CDC, more than 40% of American high school students reported persistent feelings of sadness or hopelessness in 2023, nearly double the rate from a decade earlier. In Germany, a DAK study found that diagnoses of depression and anxiety among 15- to 17-year-olds increased by 28% between 2019 and 2023. Schools have responded with counselling programmes, awareness weeks, and anti-stigma campaigns. Universities have expanded their psychological services. The conversation about student wellbeing has never been louder or more visible.\n\nYet for all this awareness, most school systems still refuse to implement the single most practical measure available to them: allowing students to take mental health days in the same way they take sick days for physical illness. Schools should formally recognise a limited number of mental health days per semester, no doctor's note required, managed through the same absence system used for flu or a broken arm. The logic is straightforward: if a student too anxious to concentrate has no sanctioned option, they either attend and learn nothing, or they skip and face disciplinary consequences. Both outcomes are worse than a structured, dignity-preserving day of rest.\n\nThe evidence supports this. Oregon and Connecticut, which legalised mental health days for students in 2019 and 2021 respectively, saw no increase in overall absenteeism. What changed was the nature of absences: unexcused absences dropped, while excused mental health absences rose modestly. Students reported feeling more trusted and less ashamed. A follow-up study by the Oregon Health Authority found that students who used mental health days were more likely to subsequently seek counselling, suggesting the days function as an entry point to support rather than an escape from it. The fear that students would abuse the system has proven largely unfounded. Trust, it turns out, tends to be met with responsibility.",
+  "answerKey": {
+    "governingThought": "Schools should formally recognise mental health days for students, managed through the same absence system used for physical illness.",
+    "supportPillars": [
+      "Without a sanctioned option, anxious students either attend and learn nothing or skip and face discipline -- both outcomes are worse than structured rest",
+      "Oregon and Connecticut saw no increase in overall absenteeism after legalising mental health days; unexcused absences dropped",
+      "Students who used mental health days were more likely to seek counselling afterward, functioning as an entry point to support"
+    ],
+    "structuralAssessment": "The governing thought ('schools should formally recognise mental health days') is buried in paragraph 2, after the transitional phrase 'Yet for all this awareness.' Paragraph 1 is entirely devoted to statistics and background: CDC data, DAK studies, counselling programmes, awareness campaigns. It establishes the severity of the problem but never states what should be done about it. A restructured version would open with the proposal, then present the logical argument (the no-good-alternative reasoning), followed by the Oregon/Connecticut evidence and the counselling-seeking data. The crisis statistics from paragraph 1 would serve as contextual motivation woven into the opening, not as a standalone preamble."
+  }
+}
