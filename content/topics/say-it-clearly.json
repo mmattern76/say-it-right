@@ -1,0 +1,179 @@
+{
+  "topics": [
+    {
+      "id": "sic-001",
+      "en": "Should homework be abolished?",
+      "de": "Sollten Hausaufgaben abgeschafft werden?",
+      "complexity": "simple",
+      "tags": ["education", "daily_life"]
+    },
+    {
+      "id": "sic-002",
+      "en": "Should schools start later in the morning?",
+      "de": "Sollte die Schule später am Morgen anfangen?",
+      "complexity": "simple",
+      "tags": ["education", "daily_life"]
+    },
+    {
+      "id": "sic-003",
+      "en": "Should students be allowed to use their phones in class?",
+      "de": "Sollten Schüler ihr Handy im Unterricht benutzen dürfen?",
+      "complexity": "simple",
+      "tags": ["education", "technology"]
+    },
+    {
+      "id": "sic-004",
+      "en": "Is social media more harmful or helpful for teenagers?",
+      "de": "Sind soziale Medien für Jugendliche eher schädlich oder nützlich?",
+      "complexity": "simple",
+      "tags": ["technology", "society"]
+    },
+    {
+      "id": "sic-005",
+      "en": "Should school uniforms be mandatory?",
+      "de": "Sollte eine Schuluniform Pflicht sein?",
+      "complexity": "simple",
+      "tags": ["education", "daily_life"]
+    },
+    {
+      "id": "sic-006",
+      "en": "Should voting age be lowered to 16?",
+      "de": "Sollte das Wahlalter auf 16 gesenkt werden?",
+      "complexity": "simple",
+      "tags": ["politics", "society"]
+    },
+    {
+      "id": "sic-007",
+      "en": "Should zoos still exist?",
+      "de": "Sollte es Zoos noch geben?",
+      "complexity": "simple",
+      "tags": ["environment", "ethics"]
+    },
+    {
+      "id": "sic-008",
+      "en": "Is it better to read books or listen to audiobooks?",
+      "de": "Ist es besser, Bücher zu lesen oder Hörbücher zu hören?",
+      "complexity": "simple",
+      "tags": ["education", "culture"]
+    },
+    {
+      "id": "sic-009",
+      "en": "Should professional athletes earn as much as they do?",
+      "de": "Sollten Profisportler so viel verdienen wie sie es tun?",
+      "complexity": "medium",
+      "tags": ["economy", "society"]
+    },
+    {
+      "id": "sic-010",
+      "en": "Should AI be used to grade student essays?",
+      "de": "Sollte KI zum Bewerten von Schüleraufsätzen eingesetzt werden?",
+      "complexity": "medium",
+      "tags": ["technology", "education"]
+    },
+    {
+      "id": "sic-011",
+      "en": "Should public transport be free for everyone?",
+      "de": "Sollte der öffentliche Nahverkehr für alle kostenlos sein?",
+      "complexity": "medium",
+      "tags": ["economy", "environment"]
+    },
+    {
+      "id": "sic-012",
+      "en": "Is remote learning as effective as in-person school?",
+      "de": "Ist Fernunterricht genauso effektiv wie Präsenzunterricht?",
+      "complexity": "medium",
+      "tags": ["education", "technology"]
+    },
+    {
+      "id": "sic-013",
+      "en": "Should fast food advertising aimed at children be banned?",
+      "de": "Sollte Fast-Food-Werbung, die sich an Kinder richtet, verboten werden?",
+      "complexity": "medium",
+      "tags": ["health", "society"]
+    },
+    {
+      "id": "sic-014",
+      "en": "Should there be a maximum age for driving?",
+      "de": "Sollte es eine Altersgrenze nach oben für den Führerschein geben?",
+      "complexity": "medium",
+      "tags": ["society", "safety"]
+    },
+    {
+      "id": "sic-015",
+      "en": "Is space exploration worth the cost?",
+      "de": "Lohnt sich Weltraumforschung trotz der Kosten?",
+      "complexity": "medium",
+      "tags": ["science", "economy"]
+    },
+    {
+      "id": "sic-016",
+      "en": "Should companies be required to offer four-day work weeks?",
+      "de": "Sollten Unternehmen verpflichtet sein, eine Vier-Tage-Woche anzubieten?",
+      "complexity": "complex",
+      "tags": ["economy", "society"]
+    },
+    {
+      "id": "sic-017",
+      "en": "Should governments regulate social media content?",
+      "de": "Sollten Regierungen Inhalte in sozialen Medien regulieren?",
+      "complexity": "complex",
+      "tags": ["politics", "technology"]
+    },
+    {
+      "id": "sic-018",
+      "en": "Is it ethical to use animals for medical research?",
+      "de": "Ist es ethisch vertretbar, Tiere für medizinische Forschung zu nutzen?",
+      "complexity": "complex",
+      "tags": ["ethics", "science"]
+    },
+    {
+      "id": "sic-019",
+      "en": "Should university education be free?",
+      "de": "Sollte ein Studium kostenlos sein?",
+      "complexity": "complex",
+      "tags": ["education", "economy"]
+    },
+    {
+      "id": "sic-020",
+      "en": "Is nuclear energy the best solution for climate change?",
+      "de": "Ist Kernenergie die beste Lösung für den Klimawandel?",
+      "complexity": "complex",
+      "tags": ["environment", "science"]
+    },
+    {
+      "id": "sic-021",
+      "en": "Should influencers be regulated like advertisers?",
+      "de": "Sollten Influencer wie Werbetreibende reguliert werden?",
+      "complexity": "medium",
+      "tags": ["technology", "society"]
+    },
+    {
+      "id": "sic-022",
+      "en": "Is competition or cooperation more important in education?",
+      "de": "Ist Wettbewerb oder Zusammenarbeit wichtiger in der Bildung?",
+      "complexity": "complex",
+      "tags": ["education", "society"]
+    },
+    {
+      "id": "sic-023",
+      "en": "Should plastic packaging be completely banned?",
+      "de": "Sollte Plastikverpackung komplett verboten werden?",
+      "complexity": "medium",
+      "tags": ["environment", "economy"]
+    },
+    {
+      "id": "sic-024",
+      "en": "Is it better to save money or spend it while young?",
+      "de": "Ist es besser, Geld zu sparen oder es in jungen Jahren auszugeben?",
+      "complexity": "simple",
+      "tags": ["economy", "daily_life"]
+    },
+    {
+      "id": "sic-025",
+      "en": "Should parents limit screen time for teenagers?",
+      "de": "Sollten Eltern die Bildschirmzeit von Jugendlichen begrenzen?",
+      "complexity": "simple",
+      "tags": ["technology", "daily_life"]
+    }
+  ]
+}
