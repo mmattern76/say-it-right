@@ -47,7 +47,9 @@ struct ContentView: View {
     @Environment(AppSettings.self) private var settings
     @State private var sessionManager = SessionManager()
     @State private var coordinator = SayItClearlyCoordinator()
+    @State private var findThePointCoordinator = FindThePointCoordinator()
     @State private var showSayItClearly = false
+    @State private var showFindThePoint = false
 
     private var language: String { settings.language }
 
@@ -66,8 +68,11 @@ struct ContentView: View {
                 language: language,
                 sayItClearlyCoordinator: coordinator
             ) { sessionType in
-                if sessionType == .sayItClearly {
+                switch sessionType {
+                case .sayItClearly:
                     showSayItClearly = true
+                case .findThePoint:
+                    showFindThePoint = true
                 }
             }
             .navigationDestination(isPresented: $showSayItClearly) {
@@ -78,6 +83,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showSayItClearly = false
+                }
+            }
+            .navigationDestination(isPresented: $showFindThePoint) {
+                FindThePointView(
+                    sessionManager: sessionManager,
+                    coordinator: findThePointCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showFindThePoint = false
                 }
             }
         }
