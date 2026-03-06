@@ -124,7 +124,7 @@ struct ChatView: View {
         return 700
         #else
         if horizontalSizeClass == .regular {
-            return 600
+            return 650
         }
         return .infinity
         #endif
