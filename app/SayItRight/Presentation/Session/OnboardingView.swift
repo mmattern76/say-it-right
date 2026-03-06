@@ -49,7 +49,7 @@ struct OnboardingView: View {
         .padding()
         .background(
             LinearGradient(
-                colors: [Color(.systemBackground), Color.blue.opacity(0.05)],
+                colors: [Color.clear, Color.blue.opacity(0.05)],
                 startPoint: .top,
                 endPoint: .bottom
             )

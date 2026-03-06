@@ -33,7 +33,9 @@ struct PINEntryView: View {
 
             // Hidden text field to capture keyboard input
             TextField("", text: $pin)
+                #if os(iOS)
                 .keyboardType(.numberPad)
+                #endif
                 .focused($isFocused)
                 .frame(width: 0, height: 0)
                 .opacity(0)
