@@ -30,14 +30,19 @@ final class SessionManager {
     /// The active "Say it clearly" session state, if any.
     private(set) var sayItClearlySession: SayItClearlySession?
 
+
     /// The active "Find the point" session state, if any.
     private(set) var findThePointSession: FindThePointSession?
+ 
+    /// The latest evaluation result from the structural evaluator.
+    private(set) var lastEvaluationResult: EvaluationResult?
 
     // MARK: - Dependencies
 
     private let anthropicService: AnthropicService
     private let systemPromptAssembler: SystemPromptAssembler
     private let responseParser: ResponseParser
+    let structuralEvaluator: StructuralEvaluator
 
     // MARK: - Configuration
 
@@ -52,11 +57,13 @@ final class SessionManager {
     init(
         anthropicService: AnthropicService = .shared,
         systemPromptAssembler: SystemPromptAssembler = SystemPromptAssembler(),
-        responseParser: ResponseParser = ResponseParser()
+        responseParser: ResponseParser = ResponseParser(),
+        structuralEvaluator: StructuralEvaluator = StructuralEvaluator()
     ) {
         self.anthropicService = anthropicService
         self.systemPromptAssembler = systemPromptAssembler
         self.responseParser = responseParser
+        self.structuralEvaluator = structuralEvaluator
     }
 
     // MARK: - Public API
@@ -76,7 +83,10 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = type
         sayItClearlySession = nil
+
         findThePointSession = nil
+ 
+        lastEvaluationResult = nil
         sessionState = .loading
 
         // Assemble system prompt
@@ -85,6 +95,14 @@ final class SessionManager {
             sessionType: type.rawValue,
             language: language,
             profileJSON: profile.toPromptJSON()
+        )
+
+        // Prepare the structural evaluator with cached prompt for this session
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: type.rawValue,
+            language: language,
+            profile: profile
         )
 
         // Request Barbara's greeting
@@ -106,7 +124,10 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = .sayItClearly
         sayItClearlySession = SayItClearlySession(topic: topic)
+
         findThePointSession = nil
+ 
+        lastEvaluationResult = nil
         sessionState = .loading
 
         // Assemble system prompt with topic directive appended
@@ -119,6 +140,14 @@ final class SessionManager {
 
         let topicDirective = topicDirectiveBlock(topic: topic, language: language)
         systemPrompt = basePrompt + "\n\n" + topicDirective
+
+        // Prepare the structural evaluator for this session
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.sayItClearly.rawValue,
+            language: language,
+            profile: profile
+        )
 
         // Request Barbara's greeting (she will present the topic)
         await streamBarbaraResponse()
@@ -252,11 +281,25 @@ final class SessionManager {
     func endSession() {
         activeSessionType = nil
         sayItClearlySession = nil
+
         findThePointSession = nil
+ 
+        lastEvaluationResult = nil
         sessionState = .idle
         messages = []
         systemPrompt = ""
         // sessionMetadata is preserved until next startSession
+        Task { await structuralEvaluator.reset() }
+    }
+
+    /// The number of remaining evaluation calls in this session.
+    var remainingEvaluations: Int {
+        get async { await structuralEvaluator.remainingCalls }
+    }
+
+    /// The number of evaluation calls made in this session.
+    var evaluationCallCount: Int {
+        get async { await structuralEvaluator.callCount }
     }
 
     // MARK: - Private: Streaming
@@ -304,6 +347,14 @@ final class SessionManager {
             if let metadata = parsed.metadata {
                 messages[streamingIndex].metadata = metadata
                 sessionMetadata.append(metadata)
+
+                // Capture evaluation result when the response contains scores
+                if !metadata.scores.isEmpty {
+                    lastEvaluationResult = EvaluationResult(
+                        feedbackText: parsed.visibleText,
+                        metadata: metadata
+                    )
+                }
             }
 
             sessionState = .active
