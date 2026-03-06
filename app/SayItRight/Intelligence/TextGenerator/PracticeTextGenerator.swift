@@ -50,7 +50,8 @@ struct PracticeTextGenerator: Sendable {
     // MARK: - Public API
 
     /// Generate a single practice text with the given configuration.
-    func generate(config: GenerationConfig, idPrefix: String = "pt-gen") async throws -> PracticeText {
+    func generate(config: GenerationConfig, idPrefix: String? = nil) async throws -> PracticeText {
+        let idPrefix = idPrefix ?? "pt-\(UUID().uuidString.lowercased())"
         let prompt = buildPrompt(for: config)
         let responseJSON = try await callAPI(systemPrompt: systemPrompt(for: config), userPrompt: prompt)
         let practiceText = try parseResponse(responseJSON, config: config, idPrefix: idPrefix)
