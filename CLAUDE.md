@@ -13,7 +13,7 @@ your thinking, not the content of your opinions.
 ## Tech Stack
 - **Platform**: iOS 17+ / iPadOS 17+ / macOS 14+, Swift 6, SwiftUI
 - **AI Backend**: Anthropic API (Claude Sonnet 4.5 — claude-sonnet-4-5-20250929)
-- **Voice**: Apple Speech Framework (STT), ElevenLabs or Apple TTS (Barbara's voice)
+- **Voice**: Apple Speech Framework (STT), Apple TTS for Barbara (try built-in first; ElevenLabs as upgrade path)
 - **State**: Local JSON files (Codable structs), iCloud Drive sync for backup
 - **Distribution**: TestFlight (private, family only)
 - **No backend server.** The app talks directly to the Anthropic API.
@@ -109,6 +109,23 @@ app/SayItRight/
 - **Platform-adaptive UI**: Same codebase, different interaction patterns
   per device class (voice-first on iPhone, visual on iPad, keyboard on Mac)
 
+## Design Decisions (Resolved)
+- **Barbara's visual design**: Midjourney-generated illustrations. Style must feel
+  distinct from the animal characters in the other portfolio apps (Plato, Think).
+  Human-looking, illustrated, not photorealistic. Glasses on-brand.
+- **Voice**: Start with Apple built-in TTS (human review for quality). ElevenLabs
+  is the upgrade path if built-in quality is insufficient. Voice quality is critical
+  on iPhone where voice is the primary interaction mode.
+- **Gamification**: Streaks and progress tracking only. No leaderboards, no points.
+  Barbara's personality is the primary motivator, not extrinsic rewards.
+- **User-submitted text analysis ("Analyse my text")**: Introduce early (E3/E4).
+  Family-only distribution means no content moderation risk for now. AI flags
+  concerning input and logs it for learnings on how to handle this at scale later.
+- **LLM prompt training (Level 4)**: Yes, with live Claude API calls. User writes
+  a prompt, sends it, sees the result alongside Barbara's structural critique.
+  Rate-limited: max 10 requests/day, configurable in parent settings.
+- **Monetization**: Deferred. Family-only TestFlight for now.
+
 ## Session Workflow
 
 Stories follow pattern SIR-NNN. One named session per story.
@@ -132,13 +149,23 @@ story appends a summary there, and each new story reads it.
 /project:start-story next          # pull next unstarted story from backlog
 /project:complete-story            # test, commit, push, create PR, update board
 /project:implement-story next      # fully autonomous: start → implement → complete
-/project:refine-epic E1            # adopt Analyst persona, break epic into stories
+/project:implement-epic E1 E2      # implement all stories in epic(s), any board status
+/project:implement-all             # implement all Todo stories across all epics
+```
+
+### Analyst (in .claude/commands/analyst/)
+
+```bash
+/analyst:analyze-epic E1 E2 E3     # break epic(s) into new stories with acceptance criteria
+/analyst:refine-epic E1 E2         # refine all existing stories in epic(s)
+/analyst:refine-story SIR-001      # refine specific story(ies), or "new: <desc>" to create
 ```
 
 ### QA (in .claude/commands/qa/)
 
 ```bash
-/qa:review-pr 12                   # adopt QA persona, review PR against acceptance criteria
+/qa:review-story SIR-007           # adopt QA persona, review story against acceptance criteria
+/qa:safety-audit                   # full codebase pedagogy & safety sweep
 ```
 
 ### Barbara testing (in .claude/commands/barbara/)

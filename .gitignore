@@ -15,6 +15,11 @@ Packages/
 **/secrets.json
 .secrets
 
+# Backend
+backend/node_modules/
+backend/dist/
+backend/src/generated/
+
 # Claude Code (ephemeral session state)
 .claude/current-story.json
 .claude/sprint-state.json

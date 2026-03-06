@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Copy this file to Config.plist in the same directory and fill in your keys.
+	  Config.plist is gitignored — it will never be committed.
+
+	  cp Config.template.plist Config.plist
+	-->
+	<key>AnthropicAPIKey</key>
+	<string>sk-ant-REPLACE_ME</string>
+
+	<key>BackendURL</key>
+	<string>https://your-app.up.railway.app</string>
+
+	<key>BackendAPIKey</key>
+	<string>REPLACE_ME</string>
+
+	<!-- ElevenLabs voice IDs for Barbara (upgrade path from Apple TTS) -->
+	<key>ElevenLabsAPIKey</key>
+	<string>REPLACE_ME</string>
+
+	<key>ElevenLabsVoiceID_DE</key>
+	<string>REPLACE_ME</string>
+
+	<key>ElevenLabsVoiceID_EN</key>
+	<string>REPLACE_ME</string>
+</dict>
+</plist>

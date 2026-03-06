@@ -1,0 +1,82 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Models ---
+
+model LearnerProfile {
+  id              String   @id @default(uuid())
+  deviceId        String   @unique
+  displayName     String?
+  avatarName      String?
+  currentLevel    Int      @default(1)
+  language        String   @default("de")
+  streakDays      Int      @default(0)
+  lastActiveAt    DateTime?
+  profileData     Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  sessions  SessionSummary[]
+  seenTexts SeenText[]
+  debugLogs DebugLog[]
+
+  @@index([deviceId])
+}
+
+model SessionSummary {
+  id               String   @id @default(uuid())
+  deviceId         String
+  clientSessionId  String   @unique
+  sessionType      String
+  level            Int      @default(1)
+  durationSeconds  Int?
+  structuralScore  Float?
+  barbaraMood      String?
+  completedAt      DateTime?
+  summaryData      Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  learnerProfile LearnerProfile? @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
+
+  @@index([deviceId])
+  @@index([sessionType])
+  @@index([createdAt])
+}
+
+model SeenText {
+  id          String   @id @default(uuid())
+  deviceId    String
+  textId      String
+  sessionType String
+  seenAt      DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  learnerProfile LearnerProfile? @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
+
+  @@unique([deviceId, textId, sessionType])
+  @@index([deviceId])
+}
+
+model DebugLog {
+  id        String   @id @default(uuid())
+  deviceId  String
+  timestamp DateTime
+  kind      String
+  data      Json
+  createdAt DateTime @default(now())
+
+  learnerProfile LearnerProfile? @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
+
+  @@index([deviceId])
+  @@index([timestamp])
+  @@index([kind])
+}
