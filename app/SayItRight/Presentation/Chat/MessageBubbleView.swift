@@ -12,16 +12,27 @@ struct MessageBubbleView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
-            if message.role == .barbara {
-                barbaraAvatar
-                bubbleContent
-                Spacer(minLength: 40)
-            } else {
-                Spacer(minLength: 40)
-                bubbleContent
+        if message.role == .barbara && hasFeedbackScores {
+            FeedbackBubbleView(
+                message: message,
+                barbaraMood: barbaraMood
+            )
+        } else {
+            HStack(alignment: .top, spacing: 8) {
+                if message.role == .barbara {
+                    barbaraAvatar
+                    bubbleContent
+                    Spacer(minLength: 40)
+                } else {
+                    Spacer(minLength: 40)
+                    bubbleContent
+                }
             }
         }
+    }
+
+    private var hasFeedbackScores: Bool {
+        message.metadata != nil && !(message.metadata!.scores.isEmpty)
     }
 
     // MARK: - Subviews
@@ -147,6 +158,26 @@ struct TypingIndicatorView: View {
             role: .barbara,
             text: "Let me look at your argument structure...",
             isStreaming: true
+        )
+    )
+    .padding()
+}
+
+#Preview("Feedback with Scores") {
+    MessageBubbleView(
+        message: ChatMessage(
+            role: .barbara,
+            text: "Better. You led with your position — \"Schools should switch\" — and gave three reasons. But \"more focused\" is vague.",
+            metadata: BarbaraMetadata(
+                scores: ["governingThought": 3, "supportGrouping": 2, "redundancy": 1, "clarity": 1],
+                totalScore: 7,
+                mood: .approving,
+                progressionSignal: .improving,
+                revisionRound: 1,
+                sessionPhase: .evaluation,
+                feedbackFocus: "clarity",
+                language: "en"
+            )
         )
     )
     .padding()

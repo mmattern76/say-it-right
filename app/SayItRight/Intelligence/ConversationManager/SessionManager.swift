@@ -33,7 +33,7 @@ final class SessionManager {
 
     /// The active "Find the point" session state, if any.
     private(set) var findThePointSession: FindThePointSession?
- 
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -83,9 +83,8 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = type
         sayItClearlySession = nil
-
         findThePointSession = nil
- 
+
         lastEvaluationResult = nil
         sessionState = .loading
 
@@ -124,9 +123,8 @@ final class SessionManager {
         sessionMetadata = []
         activeSessionType = .sayItClearly
         sayItClearlySession = SayItClearlySession(topic: topic)
-
         findThePointSession = nil
- 
+
         lastEvaluationResult = nil
         sessionState = .loading
 
@@ -173,6 +171,7 @@ final class SessionManager {
         activeSessionType = .findThePoint
         sayItClearlySession = nil
         findThePointSession = FindThePointSession(practiceText: practiceText)
+
         sessionState = .loading
 
         // Assemble system prompt with practice text directive appended
