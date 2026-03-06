@@ -27,4 +27,18 @@ enum BarbaraMood: String, CaseIterable, Codable, Sendable {
         case .disappointed: "barbara-disappointed"
         }
     }
+
+    /// Human-readable description for VoiceOver.
+    var accessibilityLabel: String {
+        switch self {
+        case .attentive:     "listening"
+        case .skeptical:     "raising an eyebrow"
+        case .approving:     "nodding approvingly"
+        case .waiting:       "arms crossed, waiting"
+        case .proud:         "smiling warmly"
+        case .evaluating:    "thinking"
+        case .teaching:      "explaining"
+        case .disappointed:  "looking disappointed"
+        }
+    }
 }
