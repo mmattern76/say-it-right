@@ -15,13 +15,24 @@ struct SayItRightApp: App {
         #endif
     }
 
+    /// Whether the app needs first-launch setup (no API key or onboarding incomplete).
+    private var needsFirstLaunchSetup: Bool {
+        settings.effectiveAPIKey == nil || !settings.hasCompletedOnboarding
+    }
+
     private var mainWindow: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(settings)
-            #if os(macOS)
-            .frame(minWidth: 500, minHeight: 400)
-            #endif
+            if needsFirstLaunchSetup {
+                FirstLaunchSetupView(settings: settings) {
+                    // Setup complete — main UI will show automatically
+                }
+            } else {
+                ContentView()
+                    .environment(settings)
+                #if os(macOS)
+                .frame(minWidth: 500, minHeight: 400)
+                #endif
+            }
         }
         #if os(macOS)
         .defaultSize(width: 800, height: 600)

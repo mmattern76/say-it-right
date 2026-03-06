@@ -41,6 +41,15 @@ struct SettingsView: View {
             Section("Display Name") {
                 TextField("Your name", text: $settings.displayName)
             }
+
+            Section("About") {
+                HStack {
+                    Text("Version")
+                    Spacer()
+                    Text(AppVersion.displayString)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
     }
 }
