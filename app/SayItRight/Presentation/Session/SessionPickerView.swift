@@ -2,13 +2,15 @@ import SwiftUI
 
 /// Session type selection screen shown before starting a coaching session.
 ///
-/// Displays available session types as tappable cards. On selection,
-/// starts a new session via the `SessionManager`.
+/// Displays available session types as tappable cards. For "Say it clearly",
+/// navigates to the dedicated session view with topic selection. Other session
+/// types start directly via the `SessionManager`.
 struct SessionPickerView: View {
     let sessionManager: SessionManager
     let profile: LearnerProfile
     let language: String
-    var onSessionStarted: (() -> Void)?
+    var sayItClearlyCoordinator: SayItClearlyCoordinator?
+    var onSessionStarted: ((SessionType) -> Void)?
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -48,15 +50,23 @@ struct SessionPickerView: View {
                     sessionType: sessionType,
                     language: language
                 ) {
-                    Task {
-                        await sessionManager.startSession(
-                            type: sessionType,
-                            profile: profile,
-                            language: language
-                        )
-                        onSessionStarted?()
-                    }
+                    handleSessionSelection(sessionType)
                 }
+            }
+        }
+    }
+
+    private func handleSessionSelection(_ sessionType: SessionType) {
+        if sessionType == .sayItClearly {
+            onSessionStarted?(.sayItClearly)
+        } else {
+            Task {
+                await sessionManager.startSession(
+                    type: sessionType,
+                    profile: profile,
+                    language: language
+                )
+                onSessionStarted?(sessionType)
             }
         }
     }
@@ -132,7 +142,8 @@ struct SessionCardView: View {
     SessionPickerView(
         sessionManager: SessionManager(),
         profile: .createDefault(),
-        language: "en"
+        language: "en",
+        sayItClearlyCoordinator: SayItClearlyCoordinator(topics: [])
     )
 }
 
@@ -140,7 +151,8 @@ struct SessionCardView: View {
     SessionPickerView(
         sessionManager: SessionManager(),
         profile: .createDefault(language: "de"),
-        language: "de"
+        language: "de",
+        sayItClearlyCoordinator: SayItClearlyCoordinator(topics: [])
     )
 }
 
@@ -148,7 +160,8 @@ struct SessionCardView: View {
     SessionPickerView(
         sessionManager: SessionManager(),
         profile: .createDefault(),
-        language: "en"
+        language: "en",
+        sayItClearlyCoordinator: SayItClearlyCoordinator(topics: [])
     )
     .environment(\.horizontalSizeClass, .regular)
 }
@@ -157,7 +170,8 @@ struct SessionCardView: View {
     SessionPickerView(
         sessionManager: SessionManager(),
         profile: .createDefault(),
-        language: "en"
+        language: "en",
+        sayItClearlyCoordinator: SayItClearlyCoordinator(topics: [])
     )
     .preferredColorScheme(.dark)
 }
