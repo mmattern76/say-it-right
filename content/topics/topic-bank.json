@@ -1,0 +1,332 @@
+[
+  {
+    "id": "t-001",
+    "titleEN": "Should homework be abolished?",
+    "titleDE": "Sollten Hausaufgaben abgeschafft werden?",
+    "promptEN": "Should homework be abolished? Tell me what you think — conclusion first, then your reasons.",
+    "promptDE": "Sollten Hausaufgaben abgeschafft werden? Sag mir was du denkst — Fazit zuerst, dann deine Gründe.",
+    "domain": "school",
+    "level": 1,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-002",
+    "titleEN": "Should schools start later?",
+    "titleDE": "Sollte die Schule später anfangen?",
+    "promptEN": "Should schools start later in the morning? Take a position and support it.",
+    "promptDE": "Sollte die Schule später am Morgen anfangen? Nimm eine Position ein und begründe sie.",
+    "domain": "school",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-003",
+    "titleEN": "Phones in the classroom",
+    "titleDE": "Handys im Unterricht",
+    "promptEN": "Should students be allowed to use phones in class? Give me your answer and your strongest reasons.",
+    "promptDE": "Sollten Schüler ihr Handy im Unterricht benutzen dürfen? Gib mir deine Antwort und deine stärksten Gründe.",
+    "domain": "school",
+    "level": 1,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-004",
+    "titleEN": "School uniforms",
+    "titleDE": "Schuluniformen",
+    "promptEN": "Should all schools require uniforms? State your position clearly.",
+    "promptDE": "Sollten alle Schulen Uniformen vorschreiben? Sag klar, was du denkst.",
+    "domain": "school",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-005",
+    "titleEN": "Grading systems",
+    "titleDE": "Notensystem",
+    "promptEN": "Are traditional grades (1-6 / A-F) a good way to measure learning? Make your case.",
+    "promptDE": "Sind klassische Noten (1-6) ein guter Weg, Lernen zu messen? Argumentiere.",
+    "domain": "school",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-006",
+    "titleEN": "AI in education",
+    "titleDE": "KI in der Schule",
+    "promptEN": "Should students be allowed to use AI tools like ChatGPT for schoolwork? Structure your argument.",
+    "promptDE": "Sollten Schüler KI-Tools wie ChatGPT für Schularbeiten nutzen dürfen? Strukturiere dein Argument.",
+    "domain": "school",
+    "level": 2,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-007",
+    "titleEN": "Year-round school",
+    "titleDE": "Schule das ganze Jahr",
+    "promptEN": "Should schools switch to year-round calendars with shorter, more frequent breaks?",
+    "promptDE": "Sollten Schulen auf Ganzjahreskalender mit kürzeren, häufigeren Ferien umsteigen?",
+    "domain": "school",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-008",
+    "titleEN": "Gap year value",
+    "titleDE": "Wert eines Auslandsjahres",
+    "promptEN": "Is taking a gap year before university a good idea? Argue your position with grouped reasons.",
+    "promptDE": "Ist ein Auslandsjahr vor dem Studium eine gute Idee? Argumentiere mit gruppierten Gründen.",
+    "domain": "school",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-009",
+    "titleEN": "Social media age limits",
+    "titleDE": "Altersgrenze für Social Media",
+    "promptEN": "Should there be a minimum age for social media accounts? What's your position?",
+    "promptDE": "Sollte es ein Mindestalter für Social-Media-Konten geben? Was ist deine Position?",
+    "domain": "technology",
+    "level": 1,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-010",
+    "titleEN": "Screen time limits",
+    "titleDE": "Bildschirmzeit begrenzen",
+    "promptEN": "Should parents limit screen time for teenagers? Tell me what you think.",
+    "promptDE": "Sollten Eltern die Bildschirmzeit von Teenagern begrenzen? Sag was du denkst.",
+    "domain": "technology",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-011",
+    "titleEN": "Video games and violence",
+    "titleDE": "Videospiele und Gewalt",
+    "promptEN": "Do violent video games make people more aggressive? State your conclusion first.",
+    "promptDE": "Machen gewalttätige Videospiele Menschen aggressiver? Fazit zuerst.",
+    "domain": "technology",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-012",
+    "titleEN": "Online privacy",
+    "titleDE": "Online-Privatsphäre",
+    "promptEN": "Is online privacy dead? Or can individuals still protect themselves? Argue your position.",
+    "promptDE": "Ist Online-Privatsphäre tot? Oder können Einzelne sich noch schützen? Argumentiere.",
+    "domain": "technology",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-013",
+    "titleEN": "AI replacing jobs",
+    "titleDE": "KI ersetzt Arbeitsplätze",
+    "promptEN": "Will AI replace most human jobs within 20 years? Structure your argument with distinct supporting points.",
+    "promptDE": "Wird KI die meisten menschlichen Jobs in 20 Jahren ersetzen? Strukturiere dein Argument mit eigenständigen Stützpunkten.",
+    "domain": "technology",
+    "level": 2,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-014",
+    "titleEN": "Cryptocurrencies",
+    "titleDE": "Kryptowährungen",
+    "promptEN": "Are cryptocurrencies the future of money or a speculative bubble? Take a clear position.",
+    "promptDE": "Sind Kryptowährungen die Zukunft des Geldes oder eine Spekulationsblase? Nimm eine klare Position ein.",
+    "domain": "technology",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-015",
+    "titleEN": "Self-driving cars",
+    "titleDE": "Selbstfahrende Autos",
+    "promptEN": "Should self-driving cars be allowed on public roads now? Give your answer and group your reasons.",
+    "promptDE": "Sollten selbstfahrende Autos jetzt auf öffentlichen Straßen erlaubt werden? Gib deine Antwort und gruppiere deine Gründe.",
+    "domain": "technology",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-033",
+    "titleEN": "Streaming vs. cinema",
+    "titleDE": "Streaming vs. Kino",
+    "promptEN": "Will streaming services replace cinemas entirely? Take a position.",
+    "promptDE": "Werden Streamingdienste Kinos komplett ersetzen? Nimm eine Position ein.",
+    "domain": "technology",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-016",
+    "titleEN": "Eating meat",
+    "titleDE": "Fleisch essen",
+    "promptEN": "Should everyone become vegetarian? What's your position — and why?",
+    "promptDE": "Sollte jeder Vegetarier werden? Was ist deine Position — und warum?",
+    "domain": "everyday",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-017",
+    "titleEN": "Public transport vs. cars",
+    "titleDE": "Öffentliche Verkehrsmittel vs. Autos",
+    "promptEN": "Should cities invest more in public transport and less in roads? Tell me what you think.",
+    "promptDE": "Sollten Städte mehr in den ÖPNV investieren und weniger in Straßen? Sag was du denkst.",
+    "domain": "everyday",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-018",
+    "titleEN": "Pocket money",
+    "titleDE": "Taschengeld",
+    "promptEN": "Should teenagers earn their pocket money through chores, or receive it unconditionally?",
+    "promptDE": "Sollten Jugendliche ihr Taschengeld durch Aufgaben verdienen oder es bedingungslos bekommen?",
+    "domain": "everyday",
+    "level": 1,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-019",
+    "titleEN": "Pets in apartments",
+    "titleDE": "Haustiere in Wohnungen",
+    "promptEN": "Should apartment buildings allow pets? Give me your conclusion and your reasons.",
+    "promptDE": "Sollten Mehrfamilienhäuser Haustiere erlauben? Gib mir dein Fazit und deine Gründe.",
+    "domain": "everyday",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-020",
+    "titleEN": "Fast fashion",
+    "titleDE": "Fast Fashion",
+    "promptEN": "Should fast fashion brands be held responsible for their environmental impact? Structure your argument.",
+    "promptDE": "Sollten Fast-Fashion-Marken für ihre Umweltauswirkungen verantwortlich gemacht werden? Strukturiere dein Argument.",
+    "domain": "everyday",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-021",
+    "titleEN": "Tipping culture",
+    "titleDE": "Trinkgeld-Kultur",
+    "promptEN": "Should tipping be abolished in favour of higher wages? Group your arguments clearly.",
+    "promptDE": "Sollte Trinkgeld zugunsten höherer Löhne abgeschafft werden? Gruppiere deine Argumente klar.",
+    "domain": "everyday",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-022",
+    "titleEN": "Remote work",
+    "titleDE": "Homeoffice",
+    "promptEN": "Is working from home better or worse than working in an office? Take a clear position.",
+    "promptDE": "Ist Homeoffice besser oder schlechter als Arbeit im Büro? Nimm eine klare Position ein.",
+    "domain": "everyday",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-023",
+    "titleEN": "Four-day work week",
+    "titleDE": "Vier-Tage-Woche",
+    "promptEN": "Should companies switch to a four-day work week? Argue with three distinct reasons.",
+    "promptDE": "Sollten Unternehmen auf eine Vier-Tage-Woche umstellen? Argumentiere mit drei eigenständigen Gründen.",
+    "domain": "everyday",
+    "level": 2,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-024",
+    "titleEN": "Voting at 16",
+    "titleDE": "Wählen ab 16",
+    "promptEN": "Should the voting age be lowered to 16? What's your position?",
+    "promptDE": "Sollte das Wahlalter auf 16 gesenkt werden? Was ist deine Position?",
+    "domain": "society",
+    "level": 1,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-025",
+    "titleEN": "Free public transport",
+    "titleDE": "Kostenloser ÖPNV",
+    "promptEN": "Should public transport be free for everyone? Conclusion first, reasons after.",
+    "promptDE": "Sollte der ÖPNV für alle kostenlos sein? Fazit zuerst, Gründe danach.",
+    "domain": "society",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-026",
+    "titleEN": "Mandatory community service",
+    "titleDE": "Pflichtdienst für die Gemeinschaft",
+    "promptEN": "Should every young person complete a year of community service? Tell me your position.",
+    "promptDE": "Sollte jeder junge Mensch ein Jahr Gemeinschaftsdienst leisten? Sag mir deine Position.",
+    "domain": "society",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-027",
+    "titleEN": "Climate protests",
+    "titleDE": "Klimaproteste",
+    "promptEN": "Are climate protests like Fridays for Future an effective way to create change?",
+    "promptDE": "Sind Klimaproteste wie Fridays for Future ein wirksamer Weg, Veränderung zu schaffen?",
+    "domain": "society",
+    "level": 1,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-028",
+    "titleEN": "Universal basic income",
+    "titleDE": "Bedingungsloses Grundeinkommen",
+    "promptEN": "Should governments introduce a universal basic income? Structure your argument with clear grouping.",
+    "promptDE": "Sollten Regierungen ein bedingungsloses Grundeinkommen einführen? Strukturiere dein Argument mit klarer Gruppierung.",
+    "domain": "society",
+    "level": 2,
+    "barbaraFavorite": true
+  },
+  {
+    "id": "t-029",
+    "titleEN": "Immigration policy",
+    "titleDE": "Einwanderungspolitik",
+    "promptEN": "Should countries have open borders, or is controlled immigration necessary? Present your argument structurally.",
+    "promptDE": "Sollten Länder offene Grenzen haben, oder ist kontrollierte Einwanderung nötig? Präsentiere dein Argument strukturell.",
+    "domain": "society",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-030",
+    "titleEN": "Wealth inequality",
+    "titleDE": "Vermögensungleichheit",
+    "promptEN": "Should billionaires exist? Take a position and group your supporting points.",
+    "promptDE": "Sollte es Milliardäre geben? Nimm eine Position ein und gruppiere deine Stützpunkte.",
+    "domain": "society",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-031",
+    "titleEN": "Space exploration funding",
+    "titleDE": "Finanzierung der Raumfahrt",
+    "promptEN": "Should governments spend billions on space exploration while problems exist on Earth?",
+    "promptDE": "Sollten Regierungen Milliarden für die Raumfahrt ausgeben, während es Probleme auf der Erde gibt?",
+    "domain": "society",
+    "level": 2,
+    "barbaraFavorite": false
+  },
+  {
+    "id": "t-032",
+    "titleEN": "Cancel culture",
+    "titleDE": "Cancel Culture",
+    "promptEN": "Is cancel culture a form of accountability or mob justice? Present your argument clearly.",
+    "promptDE": "Ist Cancel Culture eine Form von Verantwortlichkeit oder Mob-Justiz? Präsentiere dein Argument klar.",
+    "domain": "society",
+    "level": 2,
+    "barbaraFavorite": false
+  }
+]
