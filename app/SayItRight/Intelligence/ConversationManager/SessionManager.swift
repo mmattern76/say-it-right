@@ -46,6 +46,10 @@ final class SessionManager {
     private let systemPromptAssembler: SystemPromptAssembler
     private let responseParser: ResponseParser
     let structuralEvaluator: StructuralEvaluator
+    private let profileUpdater: ProfileUpdater
+
+    /// Optional profile store for persisting session results.
+    var profileStore: LearnerProfileStore?
 
     // MARK: - Configuration
 
@@ -61,12 +65,14 @@ final class SessionManager {
         anthropicService: AnthropicService = .shared,
         systemPromptAssembler: SystemPromptAssembler = SystemPromptAssembler(),
         responseParser: ResponseParser = ResponseParser(),
-        structuralEvaluator: StructuralEvaluator = StructuralEvaluator()
+        structuralEvaluator: StructuralEvaluator = StructuralEvaluator(),
+        profileUpdater: ProfileUpdater = ProfileUpdater()
     ) {
         self.anthropicService = anthropicService
         self.systemPromptAssembler = systemPromptAssembler
         self.responseParser = responseParser
         self.structuralEvaluator = structuralEvaluator
+        self.profileUpdater = profileUpdater
     }
 
     // MARK: - Public API
@@ -399,6 +405,19 @@ final class SessionManager {
     /// Clears conversation state and returns to idle. The session summary
     /// (last metadata) remains accessible until a new session starts.
     func endSession() {
+        // Apply profile updates from this session's metadata before clearing
+        let metadata = sessionMetadata
+        let sessionType = activeSessionType?.rawValue ?? ""
+        if let store = profileStore, !metadata.isEmpty {
+            Task {
+                try? await profileUpdater.applySessionResults(
+                    store: store,
+                    metadataList: metadata,
+                    sessionType: sessionType
+                )
+            }
+        }
+
         activeSessionType = nil
         sayItClearlySession = nil
 
