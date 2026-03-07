@@ -11,6 +11,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
     case analyseMyText = "analyse-my-text"
     case fixThisMess = "fix-this-mess"
     case spotTheGap = "spot-the-gap"
+    case buildThePyramid = "build-the-pyramid"
     case decodeAndRebuild = "decode-and-rebuild"
 
     var id: String { rawValue }
@@ -30,6 +31,8 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de" ? "Räum das auf" : "Fix this mess"
         case .spotTheGap:
             language == "de" ? "Finde die Lücke" : "Spot the gap"
+        case .buildThePyramid:
+            language == "de" ? "Bau die Pyramide" : "Build the pyramid"
         case .decodeAndRebuild:
             language == "de" ? "Entschlüsseln und Neubauen" : "Decode and rebuild"
         }
@@ -54,6 +57,10 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de"
                 ? "F\u{00FC}g deinen eigenen Text ein. Barbara bewertet die Struktur."
                 : "Paste your own text. Barbara evaluates the structure."
+        case .buildThePyramid:
+            language == "de"
+                ? "Ordne Bausteine in eine Pyramide. Barbara pr\u{00FC}ft ob sie MECE ist."
+                : "Arrange blocks into a pyramid. Barbara checks if it is MECE."
         case .fixThisMess:
             language == "de"
                 ? "Bringe Ordnung in ein schlecht strukturiertes Argument."
@@ -76,6 +83,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
         case .findThePoint: "magnifyingglass"
         case .elevatorPitch: "timer"
         case .analyseMyText: "doc.text"
+        case .buildThePyramid: "rectangle.3.group"
         case .fixThisMess: "arrow.up.and.down.text.horizontal"
         case .spotTheGap: "eye.trianglebadge.exclamationmark"
         case .decodeAndRebuild: "arrow.triangle.2.circlepath"

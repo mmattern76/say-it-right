@@ -51,6 +51,7 @@ struct ContentView: View {
     @State private var elevatorPitchCoordinator = ElevatorPitchCoordinator()
     @State private var fixThisMessCoordinator = FixThisMessCoordinator()
     @State private var spotTheGapCoordinator = SpotTheGapCoordinator()
+    @State private var buildThePyramidCoordinator = BuildThePyramidCoordinator()
     @State private var decodeAndRebuildCoordinator = DecodeAndRebuildCoordinator()
     @State private var showSayItClearly = false
     @State private var showVoiceSayItClearly = false
@@ -58,6 +59,7 @@ struct ContentView: View {
     @State private var showVoiceFindThePoint = false
     @State private var showElevatorPitch = false
     @State private var showVoiceElevatorPitch = false
+    @State private var showBuildThePyramid = false
     @State private var showAnalyseMyText = false
     @State private var showFixThisMess = false
     @State private var showSpotTheGap = false
@@ -114,6 +116,8 @@ struct ContentView: View {
                     #else
                     showElevatorPitch = true
                     #endif
+                case .buildThePyramid:
+                    showBuildThePyramid = true
                 case .analyseMyText:
                     showAnalyseMyText = true
                 case .fixThisMess:
@@ -182,6 +186,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showVoiceElevatorPitch = false
+                }
+            }
+            .navigationDestination(isPresented: $showBuildThePyramid) {
+                BuildThePyramidView(
+                    sessionManager: sessionManager,
+                    coordinator: buildThePyramidCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showBuildThePyramid = false
                 }
             }
             .navigationDestination(isPresented: $showAnalyseMyText) {

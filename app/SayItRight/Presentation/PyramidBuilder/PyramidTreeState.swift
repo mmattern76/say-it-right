@@ -72,6 +72,11 @@ final class PyramidTreeState {
         self.unplacedBlocks = blocks
     }
 
+    /// Add a block to the unplaced pool.
+    func addToUnplacedPool(_ block: PyramidBlock) {
+        unplacedBlocks.append(block)
+    }
+
     // MARK: - Tree Construction
 
     /// Build a TreeNode hierarchy from placed blocks, starting at the given root.
