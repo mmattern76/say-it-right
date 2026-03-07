@@ -7,6 +7,7 @@ enum ComparisonSessionType: String, Sendable {
     case findThePoint = "find_the_point"
     case fixThisMess = "fix_this_mess"
     case spotTheGap = "spot_the_gap"
+    case decodeAndRebuild = "decode_and_rebuild"
 }
 
 // MARK: - Match Quality

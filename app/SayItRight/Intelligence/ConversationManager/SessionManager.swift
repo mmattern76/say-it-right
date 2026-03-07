@@ -46,6 +46,9 @@ final class SessionManager {
     /// The active "Spot the gap" session state, if any.
     private(set) var spotTheGapSession: SpotTheGapSession?
 
+    /// The active "Decode and rebuild" session state, if any.
+    private(set) var decodeAndRebuildSession: DecodeAndRebuildSession?
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -106,6 +109,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -150,6 +154,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -201,6 +206,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        decodeAndRebuildSession = nil
 
         sessionState = .loading
 
@@ -284,6 +290,10 @@ final class SessionManager {
         activeSessionType = .elevatorPitch
         sayItClearlySession = nil
         findThePointSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = nil
+        decodeAndRebuildSession = nil
 
         let duration = ElevatorPitchSession.duration(for: profile.currentLevel)
         elevatorPitchSession = ElevatorPitchSession(topic: topic, durationSeconds: duration)
@@ -365,6 +375,9 @@ final class SessionManager {
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = nil
+        decodeAndRebuildSession = nil
         analyseMyTextSession = AnalyseMyTextSession()
 
         lastEvaluationResult = nil
@@ -439,6 +452,8 @@ final class SessionManager {
         findThePointSession = nil
         elevatorPitchSession = nil
         analyseMyTextSession = nil
+        spotTheGapSession = nil
+        decodeAndRebuildSession = nil
         fixThisMessSession = FixThisMessSession(practiceText: practiceText)
 
         lastEvaluationResult = nil
@@ -509,6 +524,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        decodeAndRebuildSession = nil
         spotTheGapSession = SpotTheGapSession(practiceText: practiceText)
 
         lastEvaluationResult = nil
@@ -575,6 +591,101 @@ final class SessionManager {
         just the structural concept.
         - Hints teach the NARROWING methodology: area → element → specific. \
         This narrowing process IS the skill being taught.
+        """
+    }
+
+    // MARK: - Decode and Rebuild
+
+    /// Start a "Decode and rebuild" session.
+    ///
+    /// Two-phase capstone: Phase 1 extracts structure, Phase 2 rebuilds.
+    func startDecodeAndRebuildSession(practiceText: PracticeText, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .decodeAndRebuild
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = nil
+        decodeAndRebuildSession = DecodeAndRebuildSession(practiceText: practiceText)
+
+        lastEvaluationResult = nil
+        sessionState = .loading
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.decodeAndRebuild.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = decodeAndRebuildDirectiveBlock(practiceText: practiceText, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.decodeAndRebuild.rawValue,
+            language: language,
+            profile: profile
+        )
+
+        await streamBarbaraResponse()
+    }
+
+    /// Build the directive block for "Decode and rebuild" sessions.
+    private func decodeAndRebuildDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+        let answerKey = practiceText.answerKey
+        return """
+        # Decode and Rebuild Session
+
+        This is a TWO-PHASE capstone exercise. Guide the learner through both phases.
+
+        ## Phase 1: Extract the Structure (Break mode)
+        Present this text and ask: "What is this text really saying? Extract the \
+        governing thought and identify the key support groups."
+
+        ### The Text
+        \(practiceText.text)
+
+        ### Answer Key (HIDDEN — do not reveal)
+        Governing Thought: \(answerKey.governingThought)
+        Support Groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }.joined(separator: "; "))
+        Structural Assessment: \(answerKey.structuralAssessment)
+
+        ### Phase 1 Evaluation
+        - Compare the learner's extraction against the answer key.
+        - Did they find the governing thought (or correctly note its absence)?
+        - Did they identify the main support groups?
+        - Multiple valid groupings are acceptable.
+        - Provide specific feedback: "You found the main point, but you missed \
+        the economic argument as a separate support group."
+
+        ## Transition to Phase 2
+        After evaluating Phase 1, explicitly connect the two phases:
+        "You found the key point. Now present it the way it SHOULD have been written."
+        Or if they struggled: "Let me show you the structure. Now rebuild it \
+        properly — conclusion first, then your grouped supports."
+        Set sessionPhase to "phase2_prompt" during transition.
+
+        ## Phase 2: Rebuild the Argument (Build mode)
+        The learner rewrites the argument in their own words with clean pyramid structure.
+
+        ### Phase 2 Evaluation
+        - Evaluate the STRUCTURE of their rewrite, not content accuracy.
+        - Did they lead with a clear governing thought?
+        - Are supports logically grouped?
+        - Is the overall structure an improvement on the original?
+        - One revision is allowed after feedback.
+        - Word count hint: similar length to the original (\(practiceText.metadata.wordCount) words).
+
+        ## Session Summary
+        After Phase 2 evaluation, provide a combined summary:
+        - Phase 1 score: how well they extracted the structure
+        - Phase 2 score: how well they rebuilt it
+        - Key insight connecting both phases
+        Set sessionPhase to "summary" for the final message.
         """
     }
 
@@ -673,6 +784,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
         sessionState = .idle
