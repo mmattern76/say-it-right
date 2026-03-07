@@ -150,7 +150,7 @@ struct TextDifficultyCalibrator: Sendable {
         case .decodeAndRebuild:
             // Only buried-lead and rambling texts (there must be structural work to do)
             return texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
-        case .sayItClearly, .elevatorPitch, .analyseMyText:
+        case .sayItClearly, .elevatorPitch, .analyseMyText, .buildThePyramid:
             // Build mode — no text selection needed, but if called, return all
             return texts
         }

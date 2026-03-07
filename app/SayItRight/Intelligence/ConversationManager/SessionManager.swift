@@ -46,6 +46,9 @@ final class SessionManager {
     /// The active "Spot the gap" session state, if any.
     private(set) var spotTheGapSession: SpotTheGapSession?
 
+    /// The active "Build the pyramid" session state, if any.
+    private(set) var buildThePyramidSession: BuildThePyramidSession?
+
     /// The active "Decode and rebuild" session state, if any.
     private(set) var decodeAndRebuildSession: DecodeAndRebuildSession?
 
@@ -109,6 +112,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
@@ -154,6 +158,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
@@ -206,6 +211,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
 
         sessionState = .loading
@@ -353,6 +359,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
 
         let duration = ElevatorPitchSession.duration(for: profile.currentLevel)
@@ -437,6 +444,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
         analyseMyTextSession = AnalyseMyTextSession()
 
@@ -513,6 +521,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
         fixThisMessSession = FixThisMessSession(practiceText: practiceText)
 
@@ -584,6 +593,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
         spotTheGapSession = SpotTheGapSession(practiceText: practiceText)
 
@@ -651,6 +661,99 @@ final class SessionManager {
         just the structural concept.
         - Hints teach the NARROWING methodology: area → element → specific. \
         This narrowing process IS the skill being taught.
+        """
+    }
+
+    // MARK: - Build the Pyramid
+
+    /// Start a "Build the Pyramid" session with a selected exercise.
+    func startBuildThePyramidSession(exercise: PyramidExercise, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .buildThePyramid
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = nil
+        decodeAndRebuildSession = nil
+        buildThePyramidSession = BuildThePyramidSession(exercise: exercise)
+
+        lastEvaluationResult = nil
+        sessionState = .active
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.buildThePyramid.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = pyramidDirectiveBlock(exercise: exercise, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.buildThePyramid.rawValue,
+            language: language,
+            profile: profile
+        )
+    }
+
+    /// Send Barbara's evaluation of the user's pyramid arrangement.
+    func evaluatePyramidArrangement(description: String) async {
+        guard sessionState == .active else { return }
+
+        let learnerMessage = ChatMessage(role: .learner, text: description)
+        messages.append(learnerMessage)
+
+        await streamBarbaraResponse()
+    }
+
+    /// Record an attempt on the current pyramid session.
+    func recordPyramidAttempt(score: Double) {
+        buildThePyramidSession?.recordAttempt(score: score)
+    }
+
+    /// Reveal the answer for the current pyramid session.
+    func revealPyramidAnswer() {
+        buildThePyramidSession?.revealAnswer()
+    }
+
+    /// Build the directive block for pyramid exercises.
+    private func pyramidDirectiveBlock(exercise: PyramidExercise, language: String) -> String {
+        let blockList = exercise.blocks.map { "- [\($0.id)] \($0.text) (\($0.type.rawValue))" }.joined(separator: "\n")
+        let answerKey = exercise.answerKey
+        let groupsDesc = answerKey.validGroupings.first.map { grouping in
+            grouping.groups.map { group in
+                "Parent: \(group.parentBlockID) → Children: \(group.memberBlockIDs.sorted().joined(separator: ", "))"
+            }.joined(separator: "\n")
+        } ?? "No groupings defined"
+
+        return """
+        # Build the Pyramid Session
+
+        The learner is arranging blocks into a pyramid structure using drag-and-drop. \
+        You can see the exercise structure below.
+
+        **Governing Thought (fixed at top):** \(exercise.governingThought.text)
+
+        **Available Blocks:**
+        \(blockList)
+
+        **Answer Key (HIDDEN — do not reveal directly):**
+        Governing Thought ID: \(answerKey.governingThoughtID)
+        Valid Grouping:
+        \(groupsDesc)
+
+        When the learner submits their arrangement for evaluation:
+        - Explain WHY groupings are right or wrong, not just that they are
+        - Use structural vocabulary: "These two points overlap — they are not MECE" \
+        or "This evidence does not support this claim"
+        - First attempt: give hints. Second attempt: more specific guidance. \
+        Third attempt: reveal the answer with full explanation.
+        - Praise correct groupings even if the order within a group differs from the answer key.
         """
     }
 
@@ -844,6 +947,7 @@ final class SessionManager {
         analyseMyTextSession = nil
         fixThisMessSession = nil
         spotTheGapSession = nil
+        buildThePyramidSession = nil
         decodeAndRebuildSession = nil
 
         lastEvaluationResult = nil
