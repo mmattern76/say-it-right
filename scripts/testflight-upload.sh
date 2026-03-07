@@ -16,7 +16,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 APP_DIR="app/SayItRight"
 PROJECT="${APP_DIR}/SayItRight.xcodeproj"
-SCHEME="SayItRight"
+SCHEME="SayItRight_iOS"
 ARCHIVE_PATH="${APP_DIR}/build/SayItRight.xcarchive"
 EXPORT_PATH="${APP_DIR}/build/export"
 EXPORT_OPTIONS="${APP_DIR}/ExportOptions.plist"

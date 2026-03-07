@@ -14,7 +14,7 @@ struct FirstLaunchSetupView: View {
     @Bindable var settings: AppSettings
     var onComplete: () -> Void
 
-    @State private var step: SetupStep = .apiKey
+    @State private var step: SetupStep = ConfigProvider.anthropicAPIKey != nil ? .language : .apiKey
     @State private var apiKeyInput = ""
     @State private var showKey = false
     @State private var isValidating = false
