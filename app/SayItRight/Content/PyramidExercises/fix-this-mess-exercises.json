@@ -1,0 +1,224 @@
+[
+  {
+    "id": "ftm-001-en",
+    "titleEN": "School Uniforms (Broken)",
+    "titleDE": "Schuluniformen (Kaputt)",
+    "level": 1,
+    "language": "en",
+    "governingThought": {
+      "id": "gt-001",
+      "text": "Schools should adopt uniforms because they reduce social pressure and improve focus.",
+      "type": "governing_thought"
+    },
+    "blocks": [
+      {
+        "id": "sp-001",
+        "text": "Uniforms reduce visible economic differences",
+        "type": "support_point"
+      },
+      {
+        "id": "sp-002",
+        "text": "Students focus more on learning",
+        "type": "support_point"
+      },
+      {
+        "id": "ev-001",
+        "text": "23% reduction in bullying incidents in pilot schools",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-002",
+        "text": "Students no longer compete over brand-name clothing",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-003",
+        "text": "Teacher surveys report fewer distractions in class",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-004",
+        "text": "Homework completion rates rose 15% after uniform adoption",
+        "type": "evidence"
+      }
+    ],
+    "answerKey": {
+      "governingThoughtID": "gt-001",
+      "validGroupings": [
+        {
+          "groups": [
+            {
+              "parentBlockID": "sp-001",
+              "memberBlockIDs": ["ev-001", "ev-002"]
+            },
+            {
+              "parentBlockID": "sp-002",
+              "memberBlockIDs": ["ev-003", "ev-004"]
+            }
+          ]
+        }
+      ]
+    },
+    "wrongArrangement": {
+      "groups": [
+        {
+          "parentBlockID": "sp-001",
+          "childBlockIDs": ["ev-001", "ev-003"]
+        },
+        {
+          "parentBlockID": "sp-002",
+          "childBlockIDs": ["ev-002", "ev-004"]
+        }
+      ]
+    },
+    "structuralFlawDescription": "Evidence is assigned to the wrong support points. 'Teacher surveys report fewer distractions' supports 'focus on learning', not 'economic differences'. Similarly, 'competing over brand-name clothing' supports 'economic differences', not 'focus'."
+  },
+  {
+    "id": "ftm-002-en",
+    "titleEN": "Homework Debate (Broken)",
+    "titleDE": "Hausaufgaben-Debatte (Kaputt)",
+    "level": 1,
+    "language": "en",
+    "governingThought": {
+      "id": "gt-002",
+      "text": "Homework should be reduced because it causes stress without improving learning outcomes.",
+      "type": "governing_thought"
+    },
+    "blocks": [
+      {
+        "id": "sp-003",
+        "text": "Excessive homework causes student burnout",
+        "type": "support_point"
+      },
+      {
+        "id": "sp-004",
+        "text": "Research shows diminishing returns beyond 1 hour",
+        "type": "support_point"
+      },
+      {
+        "id": "ev-005",
+        "text": "40% of students report homework-related anxiety",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-006",
+        "text": "Sleep deprivation linked to heavy homework loads",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-007",
+        "text": "Stanford study: no correlation between homework volume and test scores after 90 minutes",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-008",
+        "text": "Finland assigns minimal homework and ranks top in PISA",
+        "type": "evidence"
+      }
+    ],
+    "answerKey": {
+      "governingThoughtID": "gt-002",
+      "validGroupings": [
+        {
+          "groups": [
+            {
+              "parentBlockID": "sp-003",
+              "memberBlockIDs": ["ev-005", "ev-006"]
+            },
+            {
+              "parentBlockID": "sp-004",
+              "memberBlockIDs": ["ev-007", "ev-008"]
+            }
+          ]
+        }
+      ]
+    },
+    "wrongArrangement": {
+      "groups": [
+        {
+          "parentBlockID": "sp-003",
+          "childBlockIDs": ["ev-005", "ev-007"]
+        },
+        {
+          "parentBlockID": "sp-004",
+          "childBlockIDs": ["ev-006", "ev-008"]
+        }
+      ]
+    },
+    "structuralFlawDescription": "Evidence is swapped between groups. The Stanford study about homework volume and test scores supports 'diminishing returns', not 'burnout'. Sleep deprivation supports 'burnout', not 'research results'."
+  },
+  {
+    "id": "ftm-001-de",
+    "titleEN": "School Uniforms (Broken)",
+    "titleDE": "Schuluniformen (Kaputt)",
+    "level": 1,
+    "language": "de",
+    "governingThought": {
+      "id": "gt-de-001",
+      "text": "Schulen sollten Uniformen einf\u00fchren, weil sie sozialen Druck reduzieren und die Konzentration verbessern.",
+      "type": "governing_thought"
+    },
+    "blocks": [
+      {
+        "id": "sp-de-001",
+        "text": "Uniformen reduzieren sichtbare wirtschaftliche Unterschiede",
+        "type": "support_point"
+      },
+      {
+        "id": "sp-de-002",
+        "text": "Sch\u00fcler konzentrieren sich mehr aufs Lernen",
+        "type": "support_point"
+      },
+      {
+        "id": "ev-de-001",
+        "text": "23% weniger Mobbing-Vorf\u00e4lle in Pilotschulen",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-de-002",
+        "text": "Sch\u00fcler konkurrieren nicht mehr um Markenkleidung",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-de-003",
+        "text": "Lehrer berichten von weniger Ablenkungen im Unterricht",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-de-004",
+        "text": "Hausaufgaben-Abschlussrate stieg um 15% nach Uniform-Einf\u00fchrung",
+        "type": "evidence"
+      }
+    ],
+    "answerKey": {
+      "governingThoughtID": "gt-de-001",
+      "validGroupings": [
+        {
+          "groups": [
+            {
+              "parentBlockID": "sp-de-001",
+              "memberBlockIDs": ["ev-de-001", "ev-de-002"]
+            },
+            {
+              "parentBlockID": "sp-de-002",
+              "memberBlockIDs": ["ev-de-003", "ev-de-004"]
+            }
+          ]
+        }
+      ]
+    },
+    "wrongArrangement": {
+      "groups": [
+        {
+          "parentBlockID": "sp-de-001",
+          "childBlockIDs": ["ev-de-001", "ev-de-003"]
+        },
+        {
+          "parentBlockID": "sp-de-002",
+          "childBlockIDs": ["ev-de-002", "ev-de-004"]
+        }
+      ]
+    },
+    "structuralFlawDescription": "Belege sind den falschen St\u00fctzpunkten zugeordnet. 'Lehrer berichten von weniger Ablenkungen' geh\u00f6rt zu 'Konzentration aufs Lernen', nicht zu 'wirtschaftliche Unterschiede'."
+  }
+]

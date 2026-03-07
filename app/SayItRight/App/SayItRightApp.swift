@@ -53,6 +53,7 @@ struct ContentView: View {
     @State private var spotTheGapCoordinator = SpotTheGapCoordinator()
     @State private var buildThePyramidCoordinator = BuildThePyramidCoordinator()
     @State private var decodeAndRebuildCoordinator = DecodeAndRebuildCoordinator()
+    @State private var fixThisMessVisualCoordinator = FixThisMessVisualCoordinator()
     @State private var showSayItClearly = false
     @State private var showVoiceSayItClearly = false
     @State private var showFindThePoint = false
@@ -62,6 +63,7 @@ struct ContentView: View {
     @State private var showBuildThePyramid = false
     @State private var showAnalyseMyText = false
     @State private var showFixThisMess = false
+    @State private var showFixThisMessVisual = false
     @State private var showSpotTheGap = false
     @State private var showDecodeAndRebuild = false
     @State private var showDashboard = false
@@ -121,7 +123,15 @@ struct ContentView: View {
                 case .analyseMyText:
                     showAnalyseMyText = true
                 case .fixThisMess:
-                    showFixThisMess = true
+                    #if os(iOS)
+                    if horizontalSizeClass == .regular {
+                        showFixThisMessVisual = true
+                    } else {
+                        showFixThisMess = true
+                    }
+                    #else
+                    showFixThisMessVisual = true
+                    #endif
                 case .spotTheGap:
                     showSpotTheGap = true
                 case .decodeAndRebuild:
@@ -215,6 +225,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showFixThisMess = false
+                }
+            }
+            .navigationDestination(isPresented: $showFixThisMessVisual) {
+                FixThisMessVisualView(
+                    sessionManager: sessionManager,
+                    coordinator: fixThisMessVisualCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showFixThisMessVisual = false
                 }
             }
             .navigationDestination(isPresented: $showSpotTheGap) {

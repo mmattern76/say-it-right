@@ -757,6 +757,85 @@ final class SessionManager {
         """
     }
 
+    // MARK: - Fix This Mess (Visual)
+
+    /// Start a visual "Fix this mess" session with a broken pyramid arrangement.
+    func startFixThisMessVisualSession(exercise: FixThisMessExercise, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .fixThisMess
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = nil
+        buildThePyramidSession = nil
+        decodeAndRebuildSession = nil
+
+        lastEvaluationResult = nil
+        sessionState = .active
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.fixThisMess.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = fixThisMessVisualDirectiveBlock(exercise: exercise, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.fixThisMess.rawValue,
+            language: language,
+            profile: profile
+        )
+    }
+
+    /// Build the directive block for visual fix-this-mess exercises.
+    private func fixThisMessVisualDirectiveBlock(exercise: FixThisMessExercise, language: String) -> String {
+        let blockList = exercise.blocks.map { "- [\($0.id)] \($0.text) (\($0.type.rawValue))" }.joined(separator: "\n")
+        let answerKey = exercise.answerKey
+        let groupsDesc = answerKey.validGroupings.first.map { grouping in
+            grouping.groups.map { group in
+                "Parent: \(group.parentBlockID) → Children: \(group.memberBlockIDs.sorted().joined(separator: ", "))"
+            }.joined(separator: "\n")
+        } ?? "No groupings defined"
+
+        let wrongDesc = exercise.wrongArrangement.groups.map { group in
+            "Parent: \(group.parentBlockID) → Children: \(group.childBlockIDs.joined(separator: ", "))"
+        }.joined(separator: "\n")
+
+        return """
+        # Fix This Mess — Visual Session
+
+        The learner sees a BROKEN pyramid arrangement and must fix it by \
+        dragging blocks to the correct positions. This is a diagnosis + correction exercise.
+
+        **Governing Thought (fixed at top):** \(exercise.governingThought.text)
+
+        **All Blocks:**
+        \(blockList)
+
+        **Wrong Initial Arrangement (what the learner sees):**
+        \(wrongDesc)
+
+        **What is wrong:** \(exercise.structuralFlawDescription)
+
+        **Correct Answer Key (HIDDEN — do not reveal directly):**
+        \(groupsDesc)
+
+        When the learner checks their arrangement:
+        - First distinguish between DIAGNOSIS and CORRECTION: "You found the problem" vs "You fixed it"
+        - Credit partial fixes: "You fixed the grouping but moved the wrong block"
+        - Explain the original structural flaw in your feedback
+        - Use structural vocabulary: MECE violations, misplaced evidence, wrong grouping
+        - First attempt: hints about what is wrong. Second: more specific. Third: reveal.
+        """
+    }
+
     // MARK: - Decode and Rebuild
 
     /// Start a "Decode and rebuild" session.
