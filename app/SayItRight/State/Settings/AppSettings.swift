@@ -58,8 +58,13 @@ final class AppSettings: @unchecked Sendable {
         }
     }
 
-    /// The effective API key: override > Config.plist > nil.
+    /// The effective API key: environment override > Keychain override > Config.plist > nil.
     var effectiveAPIKey: String? {
+        // UI test override via launch environment
+        if let envKey = ProcessInfo.processInfo.environment["ANTHROPIC_API_KEY_OVERRIDE"],
+           !envKey.isEmpty {
+            return envKey
+        }
         if let override = apiKeyOverride, !override.isEmpty {
             return override
         }

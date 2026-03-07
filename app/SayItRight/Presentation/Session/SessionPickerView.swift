@@ -122,6 +122,7 @@ struct SessionCardView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("sessionCard_\(sessionType.rawValue)")
     }
 }
 

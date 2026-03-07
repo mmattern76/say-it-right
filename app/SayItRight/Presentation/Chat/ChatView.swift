@@ -125,6 +125,7 @@ struct ChatView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .accessibilityIdentifier("chatInputField")
             #endif
 
             Button(action: { viewModel.send() }) {
@@ -136,6 +137,7 @@ struct ChatView: View {
             .disabled(!canSend)
             .buttonStyle(.plain)
             .accessibilityLabel("Send message")
+            .accessibilityIdentifier("sendButton")
         }
         .padding(.horizontal, contentHorizontalPadding)
         .padding(.vertical, 8)

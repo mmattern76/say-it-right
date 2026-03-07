@@ -92,6 +92,7 @@ struct OnboardingView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .transition(.opacity)
+                .accessibilityIdentifier("letsGoButton")
             }
 
         case .pickAvatar:
@@ -119,6 +120,7 @@ struct OnboardingView: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(maxWidth: 200)
                         .multilineTextAlignment(.center)
+                        .accessibilityIdentifier("nameField")
 
                     if selectedAvatar != nil && !nameInput.isEmpty {
                         Button(settings.language == "de" ? "Weiter" : "Continue") {
@@ -129,6 +131,7 @@ struct OnboardingView: View {
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
                         .transition(.opacity)
+                        .accessibilityIdentifier("avatarContinueButton")
                     }
                 }
             }
@@ -142,6 +145,7 @@ struct OnboardingView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .transition(.opacity)
+                .accessibilityIdentifier("letsStartButton")
             }
         }
     }

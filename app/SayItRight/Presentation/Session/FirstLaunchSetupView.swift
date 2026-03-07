@@ -106,6 +106,7 @@ struct FirstLaunchSetupView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(apiKeyInput.trimmingCharacters(in: .whitespaces).isEmpty || isValidating)
+                .accessibilityIdentifier("apiKeyContinueButton")
             }
 
             Spacer()
@@ -165,6 +166,7 @@ struct FirstLaunchSetupView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+                .accessibilityIdentifier("languageContinueButton")
             }
 
             Spacer()

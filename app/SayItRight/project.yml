@@ -19,6 +19,7 @@ targets:
           - ExportOptions.plist
           - build/
           - Tests/
+          - UITests/
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.mattern.say-it-right
@@ -56,20 +57,38 @@ targets:
         SWIFT_VERSION: "6.0"
         GENERATE_INFOPLIST_FILE: true
 
+  SayItRightUITests:
+    type: bundle.ui-testing
+    platform: [iOS, macOS]
+    sources:
+      - path: UITests
+        excludes:
+          - "**/.DS_Store"
+    dependencies:
+      - target: SayItRight_${platform}
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: true
+
 schemes:
   SayItRight_macOS:
     build:
       targets:
         SayItRight_macOS: all
         SayItRightTests_macOS: [test]
+        SayItRightUITests_macOS: [test]
     test:
       targets:
         - SayItRightTests_macOS
+        - SayItRightUITests_macOS
   SayItRight_iOS:
     build:
       targets:
         SayItRight_iOS: all
         SayItRightTests_iOS: [test]
+        SayItRightUITests_iOS: [test]
     test:
       targets:
         - SayItRightTests_iOS
+        - SayItRightUITests_iOS

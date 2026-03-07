@@ -179,6 +179,7 @@ struct ContentView: View {
                             language == "de" ? "Fortschritt" : "Progress",
                             systemImage: "chart.bar.fill"
                         )
+                        .accessibilityIdentifier("progressButton")
                     }
                 }
             }

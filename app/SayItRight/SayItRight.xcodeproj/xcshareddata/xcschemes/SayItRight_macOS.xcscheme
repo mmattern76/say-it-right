@@ -23,6 +23,20 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "100CBE31E5FC7EC6D4A42538"
+               BuildableName = "SayItRightUITests.xctest"
+               BlueprintName = "SayItRightUITests_macOS"
+               ReferencedContainer = "container:SayItRight.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "C1B7E7143015CF3AEB4A1F75"
                BuildableName = "SayItRightTests.xctest"
                BlueprintName = "SayItRightTests_macOS"
+               ReferencedContainer = "container:SayItRight.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "100CBE31E5FC7EC6D4A42538"
+               BuildableName = "SayItRightUITests.xctest"
+               BlueprintName = "SayItRightUITests_macOS"
                ReferencedContainer = "container:SayItRight.xcodeproj">
             </BuildableReference>
          </TestableReference>
