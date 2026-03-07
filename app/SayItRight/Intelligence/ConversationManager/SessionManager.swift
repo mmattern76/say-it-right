@@ -228,6 +228,39 @@ final class SessionManager {
         await streamBarbaraResponse()
     }
 
+    /// Start a voice-first "Say it clearly" session with a specific topic.
+    ///
+    /// Identical to `startSayItClearlySession` but appends a voice mode
+    /// directive instructing Barbara to keep spoken feedback concise.
+    func startVoiceSayItClearlySession(topic: Topic, profile: LearnerProfile, language: String) async {
+        // Reuse the text session setup
+        await startSayItClearlySession(topic: topic, profile: profile, language: language)
+
+        // Append voice mode directive for shorter spoken feedback
+        systemPrompt += "\n\n" + voiceModeDirective(language: language)
+    }
+
+    /// Directive appended to the system prompt for voice sessions.
+    ///
+    /// Instructs Barbara to keep feedback concise for spoken delivery:
+    /// 2-3 sentences max per turn, punchier phrasing.
+    func voiceModeDirective(language: String) -> String {
+        """
+        # Voice Mode
+
+        This session uses voice interaction. The learner speaks their response \
+        and your feedback is read aloud. Adapt your output for spoken delivery:
+
+        - Keep each feedback turn to 2-3 sentences maximum.
+        - Lead with your verdict, then give one specific structural critique.
+        - Use short, punchy sentences. No preamble, no filler.
+        - When praising, one sentence is enough: "That structure holds."
+        - Avoid bullet points or numbered lists — speak in natural sentences.
+        - Do NOT reduce structural rigour. The bar stays the same; the words \
+        get fewer.
+        """
+    }
+
     /// Build the topic directive block injected into the system prompt.
     private func topicDirectiveBlock(topic: Topic, language: String) -> String {
         let title = topic.title(for: language)

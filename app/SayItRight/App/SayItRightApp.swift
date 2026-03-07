@@ -53,6 +53,7 @@ struct ContentView: View {
     @State private var spotTheGapCoordinator = SpotTheGapCoordinator()
     @State private var decodeAndRebuildCoordinator = DecodeAndRebuildCoordinator()
     @State private var showSayItClearly = false
+    @State private var showVoiceSayItClearly = false
     @State private var showFindThePoint = false
     @State private var showElevatorPitch = false
     @State private var showAnalyseMyText = false
@@ -60,6 +61,8 @@ struct ContentView: View {
     @State private var showSpotTheGap = false
     @State private var showDecodeAndRebuild = false
     @State private var showDashboard = false
+
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private var language: String { settings.language }
 
@@ -80,7 +83,15 @@ struct ContentView: View {
             ) { sessionType in
                 switch sessionType {
                 case .sayItClearly:
+                    #if os(iOS)
+                    if horizontalSizeClass == .compact {
+                        showVoiceSayItClearly = true
+                    } else {
+                        showSayItClearly = true
+                    }
+                    #else
                     showSayItClearly = true
+                    #endif
                 case .findThePoint:
                     showFindThePoint = true
                 case .elevatorPitch:
@@ -103,6 +114,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showSayItClearly = false
+                }
+            }
+            .navigationDestination(isPresented: $showVoiceSayItClearly) {
+                VoiceSayItClearlyView(
+                    sessionManager: sessionManager,
+                    coordinator: coordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showVoiceSayItClearly = false
                 }
             }
             .navigationDestination(isPresented: $showFindThePoint) {

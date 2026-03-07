@@ -9,6 +9,13 @@ import SwiftUI
 struct ChatView: View {
     @Bindable var viewModel: ChatViewModel
 
+    /// Optional voice input view model. When set, replaces the text input bar
+    /// with voice input controls. The message list remains the same.
+    var voiceInputViewModel: VoiceInputViewModel?
+
+    /// Called when the user submits a voice transcription.
+    var onVoiceSubmit: ((String) -> Void)?
+
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
@@ -31,7 +38,14 @@ struct ChatView: View {
             }
 
             Divider()
-            inputBar
+
+            if let voiceVM = voiceInputViewModel {
+                VoiceInputView(viewModel: voiceVM) { text in
+                    onVoiceSubmit?(text)
+                }
+            } else {
+                inputBar
+            }
         }
         .frame(maxWidth: maxContentWidth)
         .frame(maxWidth: .infinity)
