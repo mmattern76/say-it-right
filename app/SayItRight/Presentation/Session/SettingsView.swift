@@ -42,12 +42,31 @@ struct SettingsView: View {
                 TextField("Your name", text: $settings.displayName)
             }
 
+            Section {
+                NavigationLink {
+                    ParentSettingsView(settings: settings)
+                } label: {
+                    Label(
+                        settings.language == "de" ? "Eltern-Einstellungen" : "Parent Settings",
+                        systemImage: "lock.shield"
+                    )
+                }
+            } footer: {
+                Text(settings.language == "de"
+                     ? "API-Key, KI-Modell und Debug-Optionen"
+                     : "API key, AI model, and debug options")
+            }
+
             Section("About") {
                 HStack {
                     Text("Version")
                     Spacer()
                     Text(AppVersion.displayString)
                         .foregroundStyle(.secondary)
+                }
+
+                Button(settings.language == "de" ? "Onboarding wiederholen" : "Replay Onboarding", role: .destructive) {
+                    settings.hasCompletedOnboarding = false
                 }
             }
         }

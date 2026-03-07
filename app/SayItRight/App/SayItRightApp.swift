@@ -67,6 +67,7 @@ struct ContentView: View {
     @State private var showSpotTheGap = false
     @State private var showDecodeAndRebuild = false
     @State private var showDashboard = false
+    @State private var showSettings = false
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -275,6 +276,21 @@ struct ContentView: View {
                         .accessibilityIdentifier("progressButton")
                     }
                 }
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Label(
+                            language == "de" ? "Einstellungen" : "Settings",
+                            systemImage: "gearshape"
+                        )
+                        .accessibilityIdentifier("settingsButton")
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+                    .environment(settings)
             }
         }
     }
