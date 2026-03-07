@@ -126,6 +126,49 @@ final class AppSettings: @unchecked Sendable {
         set { UserDefaults.standard.set(newValue, forKey: "displayName") }
     }
 
+    // MARK: - Voice Preferences
+
+    /// Preferred input mode. Platform defaults: iPhone = voice, iPad/Mac = text.
+    var preferredInputMode: String {
+        get {
+            UserDefaults.standard.string(forKey: "preferredInputMode")
+                ?? Self.platformDefaultInputMode
+        }
+        set { UserDefaults.standard.set(newValue, forKey: "preferredInputMode") }
+    }
+
+    /// Whether TTS auto-plays Barbara's responses. iPhone = true, iPad/Mac = false.
+    var ttsAutoPlay: Bool {
+        get {
+            if UserDefaults.standard.object(forKey: "ttsAutoPlay") != nil {
+                return UserDefaults.standard.bool(forKey: "ttsAutoPlay")
+            }
+            return Self.platformDefaultTTSAutoPlay
+        }
+        set { UserDefaults.standard.set(newValue, forKey: "ttsAutoPlay") }
+    }
+
+    /// Platform default for input mode.
+    static var platformDefaultInputMode: String {
+        #if os(macOS)
+        return "text"
+        #else
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return "voice"
+        }
+        return "text"
+        #endif
+    }
+
+    /// Platform default for TTS auto-play.
+    static var platformDefaultTTSAutoPlay: Bool {
+        #if os(macOS)
+        return false
+        #else
+        return UIDevice.current.userInterfaceIdiom == .phone
+        #endif
+    }
+
     // MARK: - Private
 
     private func loadOverrideKey() {

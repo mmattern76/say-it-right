@@ -22,6 +22,7 @@ struct VoiceElevatorPitchView: View {
     @State private var sessionStarted = false
     @State private var noTopicsAvailable = false
     @State private var isTTSSpeaking = false
+    @State private var ttsEnabled: Bool = AppSettings.shared.ttsAutoPlay
     @State private var lastSpokenMessageCount = 0
     @State private var timerState = VoiceTimerState()
     @State private var timerStartedAfterTTS = false
@@ -77,6 +78,9 @@ struct VoiceElevatorPitchView: View {
         .navigationBarTitleDisplayMode(.inline)
         #endif
         .toolbar {
+            ToolbarItem(placement: .automatic) {
+                TTSToggleButton(isEnabled: $ttsEnabled, language: language)
+            }
             ToolbarItem(placement: .automatic) {
                 Button(action: endSessionAndDismiss) {
                     Label(
@@ -262,7 +266,8 @@ struct VoiceElevatorPitchView: View {
     }
 
     private func speakLatestBarbaraMessage() {
-        guard let lastMessage = viewModel.messages.last,
+        guard ttsEnabled,
+              let lastMessage = viewModel.messages.last,
               lastMessage.role == .barbara,
               !lastMessage.text.isEmpty,
               !lastMessage.isStreaming else { return }
