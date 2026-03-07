@@ -17,8 +17,9 @@ cd "$(dirname "$0")/.."
 APP_DIR="app/SayItRight"
 PROJECT="${APP_DIR}/SayItRight.xcodeproj"
 SCHEME="SayItRight_iOS"
-ARCHIVE_PATH="${APP_DIR}/build/SayItRight.xcarchive"
-EXPORT_PATH="${APP_DIR}/build/export"
+BUILD_DIR="/tmp/say-it-right-build"
+ARCHIVE_PATH="${BUILD_DIR}/SayItRight.xcarchive"
+EXPORT_PATH="${BUILD_DIR}/export"
 EXPORT_OPTIONS="${APP_DIR}/ExportOptions.plist"
 SKIP_UPLOAD=false
 
