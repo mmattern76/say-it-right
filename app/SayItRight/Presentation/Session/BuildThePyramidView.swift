@@ -150,6 +150,9 @@ struct BuildThePyramidView: View {
                                 }
                             )
                             .validationFeedback(blockFeedbackStates[placed.id.uuidString] ?? .none)
+                            .pyramidBlockContextMenu(blockID: placed.id) {
+                                treeState.removeBlock(placed.id)
+                            }
                             .position(layout.center)
                         }
                     }
