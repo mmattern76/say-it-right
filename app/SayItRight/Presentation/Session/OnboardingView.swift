@@ -112,7 +112,10 @@ struct OnboardingView: View {
                                 Text(avatar.displayName)
                                     .font(.subheadline)
                             }
-                            .onTapGesture { selectedAvatar = avatar }
+                            .onTapGesture {
+                                        selectedAvatar = avatar
+                                        nameInput = avatar.displayName
+                                    }
                         }
                     }
 

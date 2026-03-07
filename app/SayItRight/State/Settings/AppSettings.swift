@@ -6,20 +6,42 @@ import SwiftUI
 /// 1. Override key from parent settings (stored in Keychain)
 /// 2. Bundled key from Config.plist
 ///
-/// The Anthropic model, debug mode, and parent PIN are stored in UserDefaults
-/// via @AppStorage. The API key override is in Keychain (sensitive).
+/// All settings use backing stored properties so `@Observable` tracking works.
+/// Each setter also persists to UserDefaults for cross-launch persistence.
 @Observable
 final class AppSettings: @unchecked Sendable {
 
     static let shared = AppSettings()
 
+    // MARK: - Init (load from UserDefaults)
+
+    init() {
+        let defaults = UserDefaults.standard
+        _selectedModelID = defaults.string(forKey: "selectedModelID") ?? ModelCatalog.defaultModelID
+        _isDebugModeEnabled = defaults.bool(forKey: "isDebugModeEnabled")
+        _isParentPINEnabled = defaults.bool(forKey: "isParentPINEnabled")
+        _isBiometricEnabled = defaults.bool(forKey: "isBiometricEnabled")
+        _language = defaults.string(forKey: "appLanguage") ?? "en"
+        _hasCompletedOnboarding = defaults.bool(forKey: "hasCompletedOnboarding")
+        _selectedAvatar = defaults.string(forKey: "selectedAvatar")
+        _displayName = defaults.string(forKey: "displayName") ?? ""
+        _preferredInputMode = defaults.string(forKey: "preferredInputMode") ?? Self.platformDefaultInputMode
+        if defaults.object(forKey: "ttsAutoPlay") != nil {
+            _ttsAutoPlay = defaults.bool(forKey: "ttsAutoPlay")
+        } else {
+            _ttsAutoPlay = Self.platformDefaultTTSAutoPlay
+        }
+    }
+
     // MARK: - Anthropic Model
 
-    /// Raw model ID stored in UserDefaults.
+    private var _selectedModelID: String
     var selectedModelID: String {
-        get { UserDefaults.standard.string(forKey: "selectedModelID")
-              ?? ModelCatalog.defaultModelID }
-        set { UserDefaults.standard.set(newValue, forKey: "selectedModelID") }
+        get { _selectedModelID }
+        set {
+            _selectedModelID = newValue
+            UserDefaults.standard.set(newValue, forKey: "selectedModelID")
+        }
     }
 
     /// Resolve the selected model from the catalog, with automatic fallback.
@@ -28,7 +50,6 @@ final class AppSettings: @unchecked Sendable {
         if let exact = catalog.models.first(where: { $0.id == selectedModelID }) {
             return exact
         }
-        // Model no longer exists — find best replacement
         return catalog.bestFallback(for: selectedModelID)
     }
 
@@ -41,8 +62,6 @@ final class AppSettings: @unchecked Sendable {
 
     // MARK: - API Key Resolution
 
-    /// The API key override entered in parent settings, if any.
-    /// Loaded from Keychain on first access, cached in memory.
     private var _cachedOverrideKey: String?
     private var _overrideKeyLoaded = false
 
@@ -60,7 +79,6 @@ final class AppSettings: @unchecked Sendable {
 
     /// The effective API key: environment override > Keychain override > Config.plist > nil.
     var effectiveAPIKey: String? {
-        // UI test override via launch environment
         if let envKey = ProcessInfo.processInfo.environment["ANTHROPIC_API_KEY_OVERRIDE"],
            !envKey.isEmpty {
             return envKey
@@ -73,79 +91,103 @@ final class AppSettings: @unchecked Sendable {
 
     // MARK: - Backend
 
-    /// Backend URL from Config.plist.
     var backendURL: String? {
         ConfigProvider.backendURL
     }
 
-    /// Backend API key from Config.plist.
     var backendAPIKey: String? {
         ConfigProvider.backendAPIKey
     }
 
     // MARK: - Debug Mode
 
+    private var _isDebugModeEnabled: Bool
     var isDebugModeEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: "isDebugModeEnabled") }
-        set { UserDefaults.standard.set(newValue, forKey: "isDebugModeEnabled") }
+        get { _isDebugModeEnabled }
+        set {
+            _isDebugModeEnabled = newValue
+            UserDefaults.standard.set(newValue, forKey: "isDebugModeEnabled")
+        }
     }
 
     // MARK: - Parent Gate
 
+    private var _isParentPINEnabled: Bool
     var isParentPINEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: "isParentPINEnabled") }
-        set { UserDefaults.standard.set(newValue, forKey: "isParentPINEnabled") }
+        get { _isParentPINEnabled }
+        set {
+            _isParentPINEnabled = newValue
+            UserDefaults.standard.set(newValue, forKey: "isParentPINEnabled")
+        }
     }
 
+    private var _isBiometricEnabled: Bool
     var isBiometricEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: "isBiometricEnabled") }
-        set { UserDefaults.standard.set(newValue, forKey: "isBiometricEnabled") }
+        get { _isBiometricEnabled }
+        set {
+            _isBiometricEnabled = newValue
+            UserDefaults.standard.set(newValue, forKey: "isBiometricEnabled")
+        }
     }
 
     // MARK: - Language
 
+    private var _language: String
     var language: String {
-        get { UserDefaults.standard.string(forKey: "appLanguage") ?? "en" }
-        set { UserDefaults.standard.set(newValue, forKey: "appLanguage") }
+        get { _language }
+        set {
+            _language = newValue
+            UserDefaults.standard.set(newValue, forKey: "appLanguage")
+        }
     }
 
     // MARK: - Onboarding
 
+    private var _hasCompletedOnboarding: Bool
     var hasCompletedOnboarding: Bool {
-        get { UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") }
-        set { UserDefaults.standard.set(newValue, forKey: "hasCompletedOnboarding") }
+        get { _hasCompletedOnboarding }
+        set {
+            _hasCompletedOnboarding = newValue
+            UserDefaults.standard.set(newValue, forKey: "hasCompletedOnboarding")
+        }
     }
 
+    private var _selectedAvatar: String?
     var selectedAvatar: String? {
-        get { UserDefaults.standard.string(forKey: "selectedAvatar") }
-        set { UserDefaults.standard.set(newValue, forKey: "selectedAvatar") }
+        get { _selectedAvatar }
+        set {
+            _selectedAvatar = newValue
+            UserDefaults.standard.set(newValue, forKey: "selectedAvatar")
+        }
     }
 
+    private var _displayName: String
     var displayName: String {
-        get { UserDefaults.standard.string(forKey: "displayName") ?? "" }
-        set { UserDefaults.standard.set(newValue, forKey: "displayName") }
+        get { _displayName }
+        set {
+            _displayName = newValue
+            UserDefaults.standard.set(newValue, forKey: "displayName")
+        }
     }
 
     // MARK: - Voice Preferences
 
-    /// Preferred input mode. Platform defaults: iPhone = voice, iPad/Mac = text.
+    private var _preferredInputMode: String
     var preferredInputMode: String {
-        get {
-            UserDefaults.standard.string(forKey: "preferredInputMode")
-                ?? Self.platformDefaultInputMode
+        get { _preferredInputMode }
+        set {
+            _preferredInputMode = newValue
+            UserDefaults.standard.set(newValue, forKey: "preferredInputMode")
         }
-        set { UserDefaults.standard.set(newValue, forKey: "preferredInputMode") }
     }
 
-    /// Whether TTS auto-plays Barbara's responses. iPhone = true, iPad/Mac = false.
+    private var _ttsAutoPlay: Bool
     var ttsAutoPlay: Bool {
-        get {
-            if UserDefaults.standard.object(forKey: "ttsAutoPlay") != nil {
-                return UserDefaults.standard.bool(forKey: "ttsAutoPlay")
-            }
-            return Self.platformDefaultTTSAutoPlay
+        get { _ttsAutoPlay }
+        set {
+            _ttsAutoPlay = newValue
+            UserDefaults.standard.set(newValue, forKey: "ttsAutoPlay")
         }
-        set { UserDefaults.standard.set(newValue, forKey: "ttsAutoPlay") }
     }
 
     /// Platform default for input mode.
