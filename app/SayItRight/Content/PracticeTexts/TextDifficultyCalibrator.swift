@@ -143,7 +143,7 @@ struct TextDifficultyCalibrator: Sendable {
         case .findThePoint:
             // "Find the point" works with all allowed quality levels
             return texts
-        case .sayItClearly, .elevatorPitch:
+        case .sayItClearly, .elevatorPitch, .analyseMyText:
             // Build mode — no text selection needed, but if called, return all
             return texts
         }

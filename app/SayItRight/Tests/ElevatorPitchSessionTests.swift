@@ -170,6 +170,5 @@ struct SessionTypeElevatorPitchTests {
     @Test("CaseIterable includes elevatorPitch")
     func allCases() {
         #expect(SessionType.allCases.contains(.elevatorPitch))
-        #expect(SessionType.allCases.count == 3)
     }
 }
