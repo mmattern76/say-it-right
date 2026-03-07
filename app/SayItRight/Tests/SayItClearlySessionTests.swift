@@ -30,6 +30,10 @@ struct SayItClearlySessionTests {
         #expect(!session.hasResponse)
         #expect(session.responseText == nil)
         #expect(session.respondedAt == nil)
+        #expect(session.currentRevisionRound == 0)
+        #expect(!session.isRevisionComplete)
+        #expect(session.canRevise == false)
+        #expect(session.maxRevisions == 2)
     }
 
     @Test("recordResponse captures text and timestamp")
@@ -46,17 +50,99 @@ struct SayItClearlySessionTests {
         #expect(session.respondedAt! >= before)
     }
 
-    @Test("recordResponse only records once — first response wins")
-    func firstResponseWins() {
+    @Test("recordAttempt tracks multiple attempts")
+    func multipleAttempts() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic)
+
+        session.recordAttempt("First draft")
+        #expect(session.attempts.count == 1)
+        #expect(session.currentRevisionRound == 0)
+        #expect(session.responseText == "First draft")
+        #expect(session.canRevise == true)
+
+        session.recordAttempt("Revision 1")
+        #expect(session.attempts.count == 2)
+        #expect(session.currentRevisionRound == 1)
+        #expect(session.responseText == "First draft") // first draft preserved
+        #expect(session.latestAttemptText == "Revision 1")
+        #expect(session.canRevise == true)
+
+        session.recordAttempt("Revision 2")
+        #expect(session.attempts.count == 3)
+        #expect(session.currentRevisionRound == 2)
+        #expect(session.isRevisionComplete == true)
+        #expect(session.canRevise == false)
+    }
+
+    @Test("isLatestAttemptUnchanged detects identical text")
+    func unchangedDetection() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic)
+
+        session.recordAttempt("My argument is clear.")
+        // Only one attempt — can't be unchanged
+        #expect(!session.isLatestAttemptUnchanged)
+
+        // Submit identical text
+        session.recordAttempt("My argument is clear.")
+        #expect(session.isLatestAttemptUnchanged)
+    }
+
+    @Test("isLatestAttemptUnchanged normalises whitespace")
+    func unchangedWithWhitespace() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic)
+
+        session.recordAttempt("My argument  is   clear.")
+        session.recordAttempt("  My argument is clear.  ")
+        #expect(session.isLatestAttemptUnchanged)
+    }
+
+    @Test("isLatestAttemptUnchanged detects real changes")
+    func changedText() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic)
+
+        session.recordAttempt("Schools should switch.")
+        session.recordAttempt("Schools should switch to a four-day week.")
+        #expect(!session.isLatestAttemptUnchanged)
+    }
+
+    @Test("custom maxRevisions is respected")
+    func customMaxRevisions() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic, maxRevisions: 1)
+
+        session.recordAttempt("Draft")
+        #expect(session.canRevise == true)
+
+        session.recordAttempt("Revision 1")
+        #expect(session.isRevisionComplete == true)
+        #expect(session.canRevise == false)
+    }
+
+    @Test("summaryRequested starts false and can be set")
+    func summaryTracking() {
+        let topic = Self.makeTopic()
+        var session = SayItClearlySession(topic: topic)
+
+        #expect(!session.summaryRequested)
+        session.markSummaryRequested()
+        #expect(session.summaryRequested)
+    }
+
+    @Test("recordResponse delegates to recordAttempt for backward compatibility")
+    func backwardCompatibility() {
         let topic = Self.makeTopic()
         var session = SayItClearlySession(topic: topic)
 
         session.recordResponse("First answer")
         session.recordResponse("Second answer")
 
-        // SayItClearlySession.recordResponse sets unconditionally,
-        // but SessionManager guards with hasResponse check
-        #expect(session.responseText == "Second answer")
+        #expect(session.attempts.count == 2)
+        #expect(session.responseText == "First answer")
+        #expect(session.latestAttemptText == "Second answer")
     }
 }
 

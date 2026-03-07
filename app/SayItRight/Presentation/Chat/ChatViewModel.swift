@@ -68,6 +68,21 @@ final class ChatViewModel {
         sessionManager?.sessionState == .active || sessionManager?.sessionState == .loading
     }
 
+    /// Whether the revision loop is complete and a summary should be shown.
+    var isRevisionComplete: Bool {
+        sessionManager?.sayItClearlySession?.isRevisionComplete ?? false
+    }
+
+    /// Whether the session summary has already been requested.
+    var isSummaryRequested: Bool {
+        sessionManager?.sayItClearlySession?.summaryRequested ?? false
+    }
+
+    /// The current revision round (0 = first draft awaiting, 1+ = revision N).
+    var currentRevisionRound: Int {
+        sessionManager?.sayItClearlySession?.currentRevisionRound ?? 0
+    }
+
     // MARK: - Private State (standalone mode)
 
     private var _localMessages: [ChatMessage] = []
@@ -142,6 +157,8 @@ final class ChatViewModel {
         if let sm = sessionManager {
             Task {
                 await sm.sendMessage(text: text)
+                // After Barbara responds, pre-load revision text if applicable
+                preloadRevisionTextIfNeeded()
             }
         } else {
             // Standalone mode: direct API call
@@ -193,6 +210,25 @@ final class ChatViewModel {
         pendingInputText = nil
         countdownTask?.cancel()
         countdownTask = nil
+    }
+
+    /// Request the session summary after the revision loop completes.
+    func requestSummary() {
+        guard let sm = sessionManager else { return }
+        Task {
+            await sm.requestSessionSummary()
+        }
+    }
+
+    /// Pre-load the learner's last response into the input field for revision editing.
+    private func preloadRevisionTextIfNeeded() {
+        guard let sm = sessionManager,
+              let preloadText = sm.revisionPreloadText,
+              sm.sayItClearlySession?.canRevise == true else { return }
+        // Only pre-load if input is currently empty
+        if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            inputText = preloadText
+        }
     }
 
     // MARK: - Private: Standalone streaming (no SessionManager)
