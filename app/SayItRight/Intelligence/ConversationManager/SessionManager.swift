@@ -40,6 +40,9 @@ final class SessionManager {
     /// The active "Analyse my text" session state, if any.
     private(set) var analyseMyTextSession: AnalyseMyTextSession?
 
+    /// The active "Fix this mess" session state, if any.
+    private(set) var fixThisMessSession: FixThisMessSession?
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -98,6 +101,7 @@ final class SessionManager {
         findThePointSession = nil
         elevatorPitchSession = nil
         analyseMyTextSession = nil
+        fixThisMessSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -140,6 +144,7 @@ final class SessionManager {
         findThePointSession = nil
         elevatorPitchSession = nil
         analyseMyTextSession = nil
+        fixThisMessSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -189,6 +194,7 @@ final class SessionManager {
         findThePointSession = FindThePointSession(practiceText: practiceText)
         elevatorPitchSession = nil
         analyseMyTextSession = nil
+        fixThisMessSession = nil
 
         sessionState = .loading
 
@@ -414,6 +420,75 @@ final class SessionManager {
         """
     }
 
+    // MARK: - Fix This Mess
+
+    /// Start a "Fix this mess" session.
+    ///
+    /// Presents a poorly structured text and asks the learner to restructure it.
+    func startFixThisMessSession(practiceText: PracticeText, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .fixThisMess
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = FixThisMessSession(practiceText: practiceText)
+
+        lastEvaluationResult = nil
+        sessionState = .loading
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.fixThisMess.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = fixThisMessDirectiveBlock(practiceText: practiceText, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.fixThisMess.rawValue,
+            language: language,
+            profile: profile
+        )
+
+        await streamBarbaraResponse()
+    }
+
+    /// Build the directive block for "Fix this mess" sessions.
+    private func fixThisMessDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+        let answerKey = practiceText.answerKey
+        return """
+        # Fix This Mess Session
+
+        Present this text to the learner and ask them to restructure it \
+        with proper pyramid structure — conclusion first, then grouped supports.
+
+        ## Original Text
+        \(practiceText.text)
+
+        ## Answer Key (hidden from learner)
+        Governing thought: \(answerKey.governingThought)
+        Support groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }.joined(separator: "; "))
+        \(answerKey.proposedRestructure.map { "Proposed restructure: \($0)" } ?? "")
+
+        ## Evaluation Guidelines
+        - The learner's restructuring does NOT need to match the answer key exactly.
+        - Multiple valid restructurings are acceptable.
+        - Evaluate: Did they find the conclusion? Did they group correctly? \
+        Did they eliminate redundancy?
+        - Reference specific parts of their restructuring in feedback.
+        - One revision is allowed after feedback.
+        - Be specific: "You found the main point but your second group mixes \
+        two ideas — split them."
+        - Word count hint: the restructured version should be similar length \
+        to the original (\(practiceText.metadata.wordCount) words).
+        """
+    }
+
     /// Send a learner message and stream Barbara's response.
     ///
     /// - Parameter text: The learner's message text.
@@ -507,6 +582,7 @@ final class SessionManager {
         findThePointSession = nil
         elevatorPitchSession = nil
         analyseMyTextSession = nil
+        fixThisMessSession = nil
 
         lastEvaluationResult = nil
         sessionState = .idle
