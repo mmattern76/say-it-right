@@ -240,6 +240,15 @@ final class SessionManager {
         systemPrompt += "\n\n" + voiceModeDirective(language: language)
     }
 
+    /// Start a voice-first "Elevator Pitch" session with a specific topic.
+    ///
+    /// Identical to `startElevatorPitchSession` but appends a voice mode
+    /// directive instructing Barbara to keep spoken feedback concise.
+    func startVoiceElevatorPitchSession(topic: Topic, profile: LearnerProfile, language: String) async {
+        await startElevatorPitchSession(topic: topic, profile: profile, language: language)
+        systemPrompt += "\n\n" + voiceModeDirective(language: language)
+    }
+
     /// Directive appended to the system prompt for voice sessions.
     ///
     /// Instructs Barbara to keep feedback concise for spoken delivery:
