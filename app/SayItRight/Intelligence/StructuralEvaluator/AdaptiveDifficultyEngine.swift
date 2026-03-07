@@ -143,16 +143,16 @@ struct AdaptiveDifficultyEngine: Sendable {
 
     // MARK: - Private Helpers
 
-    /// Key dimensions evaluated at each level.
+    /// Key dimensions evaluated at each level (Build + Break).
     static func dimensionsForLevel(_ level: Int) -> [String] {
         switch level {
         case 1:
-            return ["governingThought", "supportGrouping", "redundancy", "clarity"]
+            return ProfileUpdater.buildDimensionsL1
         case 2:
-            return ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"]
+            return ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
         default:
-            // L3+ includes all L2 dimensions (L3-specific dimensions not yet implemented)
-            return ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"]
+            // L3+ includes all L2 Build + Break dimensions
+            return ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
         }
     }
 

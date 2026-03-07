@@ -15,17 +15,38 @@ struct ProfileUpdater: Sendable {
     /// Rolling average below this marks a dimension as a development area.
     static let developmentThreshold: Double = 0.5
 
-    /// Maximum scores per dimension (L1 rubric).
+    /// Maximum scores per dimension (Build + Break rubrics).
     static let maxScores: [String: Int] = [
+        // Build mode (L1 rubric)
         "governingThought": 3,
         "supportGrouping": 2,
         "redundancy": 2,
         "clarity": 3,
+        // Build mode (L2 rubric)
         "l1Gate": 3,
         "meceQuality": 3,
         "orderingLogic": 3,
         "scqApplication": 2,
-        "horizontalLogic": 2
+        "horizontalLogic": 2,
+        // Break mode dimensions
+        "extractionAccuracy": 3,
+        "flawIdentification": 3,
+        "restructuringQuality": 3,
+    ]
+
+    /// Break mode dimension keys.
+    static let breakDimensions: [String] = [
+        "extractionAccuracy", "flawIdentification", "restructuringQuality"
+    ]
+
+    /// Build mode dimension keys (L1).
+    static let buildDimensionsL1: [String] = [
+        "governingThought", "supportGrouping", "redundancy", "clarity"
+    ]
+
+    /// Build mode dimension keys (L2+).
+    static let buildDimensionsL2: [String] = [
+        "l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"
     ]
 
     // MARK: - Public API

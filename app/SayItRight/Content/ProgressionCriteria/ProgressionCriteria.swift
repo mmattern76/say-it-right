@@ -31,14 +31,16 @@ struct ProgressionCriteria: Sendable {
         LevelCriteria(
             fromLevel: 2,
             minDimensionAverage: 0.75,
-            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"],
+            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
+                                 "extractionAccuracy", "flawIdentification", "restructuringQuality"],
             minConsecutiveQualifying: 5,
             minTotalSessions: 10
         ),
         LevelCriteria(
             fromLevel: 3,
             minDimensionAverage: 0.80,
-            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"],
+            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
+                                 "extractionAccuracy", "flawIdentification", "restructuringQuality"],
             minConsecutiveQualifying: 7,
             minTotalSessions: 15
         ),
