@@ -62,6 +62,7 @@
 		2D80A3F94A0B23AF02D04401 /* EvaluationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238EF463FFDCF9B00EC4123A /* EvaluationResult.swift */; };
 		2DDE080F3029A0750773ED22 /* BarbaraVoiceProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6B15AE1ED645EEDFCA7DF5 /* BarbaraVoiceProfileTests.swift */; };
 		2F52829C24DE0D1E7D980EB2 /* FirstLaunchSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E1B347AC7D15C639949F /* FirstLaunchSetupView.swift */; };
+		32A7C946EE1DBD9A38776B96 /* SentenceDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F5A6679EC9EA0FDF699347 /* SentenceDiff.swift */; };
 		32D5314255E68AE513C355B9 /* StreamingTTSCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0427FCB8E6843FA1E136B /* StreamingTTSCoordinatorTests.swift */; };
 		33274CD62BE5B41D80760AC0 /* SystemPromptAssemblerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A78B634A6D6F9D4CD57BC7 /* SystemPromptAssemblerTests.swift */; };
 		33D64B1F80E3DC6DAB7F372D /* AnswerKeyComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1910976EBE55B2D0A2B347CA /* AnswerKeyComparison.swift */; };
@@ -152,6 +153,7 @@
 		8D0594B48254C2F95AB7F9F3 /* LearnerAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE528A4BB6F7C58BD0CC3708 /* LearnerAvatar.swift */; };
 		8DE0054F17D7F85924AFAA02 /* SeenTextsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3D288AEDB1EF42A2CF3455 /* SeenTextsTracker.swift */; };
 		8E8D202555A73B2756F2EBB0 /* TTSPlaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F296F432E8A069994E5167 /* TTSPlaybackService.swift */; };
+		8F2A3431111B3072FE14DE79 /* RevisionDiffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92030535097EE61AEB0991D5 /* RevisionDiffView.swift */; };
 		901D104DC385EA8F6044D909 /* DraggableBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4373E47CEF1B184CF62920CB /* DraggableBlockView.swift */; };
 		908ED70F336A90E3DBF4E198 /* AnthropicServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77568CC779F6818DEF9ADCC /* AnthropicServiceTests.swift */; };
 		93FD1F354940149B9002ABA4 /* StreamingTTSCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B930A94D3E14C1EBF3EDBB7 /* StreamingTTSCoordinator.swift */; };
@@ -170,6 +172,7 @@
 		A21F3D22008E858CE7D1DE45 /* PracticeTextLibrary_de.json in Resources */ = {isa = PBXBuildFile; fileRef = BEE1CAA3817E82AA6D53AF15 /* PracticeTextLibrary_de.json */; };
 		A4A0DD5041F5926F318A2BB6 /* AnalyseMyTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9386A4C1CF530878ECC12755 /* AnalyseMyTextView.swift */; };
 		A4A5E4A6E927A6FF4AE200B1 /* AnswerKeyComparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEAE8216CAB132332EE8012 /* AnswerKeyComparer.swift */; };
+		A537EB5EBAE43CD551E1157D /* SentenceDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897590D408780860448C0A3D /* SentenceDiffTests.swift */; };
 		A5F6092C5DBADDBDC55A732F /* FeedbackBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A30E1A80DC1D1B71AF67390 /* FeedbackBubbleView.swift */; };
 		A632A75DC9C01E1B20BFD9B0 /* SessionHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96E00792CE206BD08DE44C1 /* SessionHistoryStore.swift */; };
 		A6AC757407E2F30AB816970C /* MECEValidationEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D07B7B9E84CD6DF8BC6ACCF /* MECEValidationEngineTests.swift */; };
@@ -232,6 +235,7 @@
 		CFD488522376107A7697D0ED /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79103E672E97A7B33767ED30 /* SessionHistoryView.swift */; };
 		D18F59F6E50DE4B10D1B6929 /* SayItClearlySessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9512DE8E01F6C1AB4E4B8C /* SayItClearlySessionTests.swift */; };
 		D3070A5C5100B0857F8ACA4B /* AdaptiveDifficultyEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D136B15681796D9B441FCE /* AdaptiveDifficultyEngine.swift */; };
+		D321D148DA9BEB7DF0CB1209 /* SentenceDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897590D408780860448C0A3D /* SentenceDiffTests.swift */; };
 		D3A1BF1A3B70AAF52594F570 /* NetworkErrorHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F95CF0998D962402B03233 /* NetworkErrorHandlerTests.swift */; };
 		D43F8B89B23167F2FA4EE2A2 /* MockSpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A734FF80156849AAC5CD69 /* MockSpeechRecognitionService.swift */; };
 		D55641BDCB16A06138C8F443 /* SeenTextsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3D288AEDB1EF42A2CF3455 /* SeenTextsTracker.swift */; };
@@ -239,6 +243,8 @@
 		D694E416EBC8627305D26DF2 /* TextDifficultyCalibrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF3E7C70F0FAB82378322A /* TextDifficultyCalibrator.swift */; };
 		D6A8A7F9EE4233595988BFA7 /* SayItClearlyCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F909A7D8C8D301AFFA580B6 /* SayItClearlyCoordinator.swift */; };
 		D6CD1F94E1C2E57A0888230E /* FirstLaunchSetupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C278322C149174D648ECF14 /* FirstLaunchSetupTests.swift */; };
+		D74B3E49DCE283F274B0FAE0 /* SentenceDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F5A6679EC9EA0FDF699347 /* SentenceDiff.swift */; };
+		D895EB4DE625E96EF1AC8F4F /* RevisionDiffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92030535097EE61AEB0991D5 /* RevisionDiffView.swift */; };
 		DC8CB9656F62B3F2E9C313EE /* FeedbackBubbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A92CDDC30DF529F4F6E693B /* FeedbackBubbleTests.swift */; };
 		DD46000474FB0168BB12A02E /* AnalyseMyTextSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652143071B4E57A9035FE43B /* AnalyseMyTextSessionTests.swift */; };
 		DDD2F11F3AD9916F6E39F996 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1607A6E887C79A834F460459 /* AppLanguage.swift */; };
@@ -394,9 +400,11 @@
 		8309BF4EE774FABE588555F4 /* MicrophoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneButton.swift; sourceTree = "<group>"; };
 		86E2D821520E6552AE4B65B7 /* SayItRightTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SayItRightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C3E174CED5835D593C922D /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Config.plist; sourceTree = "<group>"; };
+		897590D408780860448C0A3D /* SentenceDiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceDiffTests.swift; sourceTree = "<group>"; };
 		8AB92388718B19A2E45FBDC1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8D20FDE7D46349EC7346DA67 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		91ECF5F1EF7623373F5BBD2C /* NetworkErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorHandler.swift; sourceTree = "<group>"; };
+		92030535097EE61AEB0991D5 /* RevisionDiffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisionDiffView.swift; sourceTree = "<group>"; };
 		9386A4C1CF530878ECC12755 /* AnalyseMyTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyseMyTextView.swift; sourceTree = "<group>"; };
 		942B7D62D7DC6CDF6EE5C3AD /* BarbaraMood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbaraMood.swift; sourceTree = "<group>"; };
 		95D3FAF0967C63A54E2C6E51 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -432,6 +440,7 @@
 		C28CC98EB4FCDC9137D15433 /* AnthropicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicService.swift; sourceTree = "<group>"; };
 		C347D7912E827154F7F23208 /* PracticeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTextView.swift; sourceTree = "<group>"; };
 		C3915AE540EBA11321FA76BB /* ConnectionLinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLinesView.swift; sourceTree = "<group>"; };
+		C6F5A6679EC9EA0FDF699347 /* SentenceDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceDiff.swift; sourceTree = "<group>"; };
 		C70ADBF790944D3353F4FA32 /* PracticeTextLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTextLibraryTests.swift; sourceTree = "<group>"; };
 		C7729E7948C0195AF7F2023B /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		C7A0D6917A3C05487B814E35 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
@@ -670,6 +679,7 @@
 				C8D179C236AD14B5C8076627 /* ResponseParserTests.swift */,
 				2C9512DE8E01F6C1AB4E4B8C /* SayItClearlySessionTests.swift */,
 				E399297963E1A59A4C958BFA /* SeenTextsTests.swift */,
+				897590D408780860448C0A3D /* SentenceDiffTests.swift */,
 				D693A9655797CEF326A8BA1C /* SessionHistoryTests.swift */,
 				57ACC716C56B7F8E16DBDFB3 /* SessionManagerTests.swift */,
 				1161CE00FACCF6715D7034A1 /* SidebarViewTests.swift */,
@@ -724,6 +734,7 @@
 				DC11499E66D1CCC6F0EDB5EE /* ComparisonResponseParser.swift */,
 				238EF463FFDCF9B00EC4123A /* EvaluationResult.swift */,
 				64BCF114772DA58597F6EC7A /* MECEValidationEngine.swift */,
+				C6F5A6679EC9EA0FDF699347 /* SentenceDiff.swift */,
 				11A375822F278D205A1F9090 /* StructuralEvaluator.swift */,
 			);
 			path = StructuralEvaluator;
@@ -862,6 +873,7 @@
 				1B08B6C7C928249161C6C0AC /* ParentSettingsView.swift */,
 				9A0B8EDE7E53601DCAC1DB42 /* PINEntryView.swift */,
 				C347D7912E827154F7F23208 /* PracticeTextView.swift */,
+				92030535097EE61AEB0991D5 /* RevisionDiffView.swift */,
 				47BCCF7B7169BFF3B4722C58 /* SayItClearlyView.swift */,
 				9A466760C86E7CBA8E140814 /* SessionPickerView.swift */,
 				8AB92388718B19A2E45FBDC1 /* SettingsView.swift */,
@@ -1048,6 +1060,7 @@
 				812AC213EB49FEC705555E09 /* ResponseParserTests.swift in Sources */,
 				1851700C174060BC3AC3208C /* SayItClearlySessionTests.swift in Sources */,
 				EC8D5C128F51D0CCF602CE9D /* SeenTextsTests.swift in Sources */,
+				A537EB5EBAE43CD551E1157D /* SentenceDiffTests.swift in Sources */,
 				00A617235833FE856DAFE447 /* SessionHistoryTests.swift in Sources */,
 				37C28646E0EEDAC5D185ADC7 /* SessionManagerTests.swift in Sources */,
 				25C8BCA79939B0F44945A97F /* SidebarViewTests.swift in Sources */,
@@ -1093,6 +1106,7 @@
 				E2E771E2E6E4B969403D183A /* ResponseParserTests.swift in Sources */,
 				D18F59F6E50DE4B10D1B6929 /* SayItClearlySessionTests.swift in Sources */,
 				3C3D496429C02F2A19997126 /* SeenTextsTests.swift in Sources */,
+				D321D148DA9BEB7DF0CB1209 /* SentenceDiffTests.swift in Sources */,
 				2C83ABF0241F42C8239A5DB3 /* SessionHistoryTests.swift in Sources */,
 				3D30DF4F7A2D515EBD37FF5F /* SessionManagerTests.swift in Sources */,
 				BC6395CBB992EB5D23FEB685 /* SidebarViewTests.swift in Sources */,
@@ -1179,12 +1193,14 @@
 				531F7C8788BD0D599A7E8D04 /* PyramidFeedbackOverlay.swift in Sources */,
 				CE49D1EC9F14EE85575FA236 /* PyramidTreeState.swift in Sources */,
 				033B5DE1A4166D33D74334B9 /* ResponseParser.swift in Sources */,
+				D895EB4DE625E96EF1AC8F4F /* RevisionDiffView.swift in Sources */,
 				CBA2E68B2CD7D99D6220EB03 /* SayItClearlyCoordinator.swift in Sources */,
 				1FD2F0E1A94E7F60D96B6601 /* SayItClearlySession.swift in Sources */,
 				803EEA750EBA59009E814F7C /* SayItClearlyView.swift in Sources */,
 				3A691C0923E2348327202674 /* SayItRightApp.swift in Sources */,
 				17805A9B8E4E6A4F93F3D8A5 /* SeenTextsStore.swift in Sources */,
 				D55641BDCB16A06138C8F443 /* SeenTextsTracker.swift in Sources */,
+				32A7C946EE1DBD9A38776B96 /* SentenceDiff.swift in Sources */,
 				5065401FEFC87872EDCF1B5F /* SessionHistoryStore.swift in Sources */,
 				CE5B36B251DCE97CBA0D847C /* SessionHistoryView.swift in Sources */,
 				E4C81D76331F3F76AE3D62DC /* SessionManager.swift in Sources */,
@@ -1281,12 +1297,14 @@
 				C7AD8CE9CD5E3BC3C1568459 /* PyramidFeedbackOverlay.swift in Sources */,
 				FC483FFC26C8467FF1807413 /* PyramidTreeState.swift in Sources */,
 				5F51449B08403989803DD749 /* ResponseParser.swift in Sources */,
+				8F2A3431111B3072FE14DE79 /* RevisionDiffView.swift in Sources */,
 				D6A8A7F9EE4233595988BFA7 /* SayItClearlyCoordinator.swift in Sources */,
 				CBB14ED4FCF8AF6C0D25CA19 /* SayItClearlySession.swift in Sources */,
 				1460EBA977EDC2340452180C /* SayItClearlyView.swift in Sources */,
 				75AE4B49A8AA6C07DFCFE084 /* SayItRightApp.swift in Sources */,
 				81E23FA9C56B29B66E3ECD13 /* SeenTextsStore.swift in Sources */,
 				8DE0054F17D7F85924AFAA02 /* SeenTextsTracker.swift in Sources */,
+				D74B3E49DCE283F274B0FAE0 /* SentenceDiff.swift in Sources */,
 				A632A75DC9C01E1B20BFD9B0 /* SessionHistoryStore.swift in Sources */,
 				CFD488522376107A7697D0ED /* SessionHistoryView.swift in Sources */,
 				E30210DD8492DB766516661E /* SessionManager.swift in Sources */,
