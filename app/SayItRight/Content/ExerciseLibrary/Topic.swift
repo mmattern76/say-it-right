@@ -36,7 +36,7 @@ struct TopicBank: Sendable {
     }
 
     static func loadFromBundle() -> TopicBank {
-        guard let url = Bundle.main.url(forResource: "TopicBank", withExtension: "json", subdirectory: "ExerciseLibrary"),
+        guard let url = Bundle.main.url(forResource: "TopicBank", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let topics = try? JSONDecoder().decode([Topic].self, from: data)
         else {

@@ -25,8 +25,7 @@ struct PracticeTextLibrary: Sendable {
             let filename = "PracticeTextLibrary_\(language)"
             guard let url = Bundle.main.url(
                 forResource: filename,
-                withExtension: "json",
-                subdirectory: "PracticeTexts"
+                withExtension: "json"
             ) else {
                 continue
             }

@@ -81,7 +81,7 @@ struct SystemPromptAssembler {
         guard let url = bundle.url(
             forResource: name,
             withExtension: "md",
-            subdirectory: "PromptBlocks"
+            subdirectory: "blocks"
         ) else {
             return nil
         }
@@ -92,7 +92,7 @@ struct SystemPromptAssembler {
         guard let url = bundle.url(
             forResource: name,
             withExtension: "md",
-            subdirectory: "PromptSessions"
+            subdirectory: "sessions"
         ) else {
             return nil
         }

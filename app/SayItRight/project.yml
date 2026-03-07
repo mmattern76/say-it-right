@@ -20,6 +20,12 @@ targets:
           - build/
           - Tests/
           - UITests/
+      - path: ../../prompts/blocks
+        buildPhase: resources
+        type: file
+      - path: ../../prompts/sessions
+        buildPhase: resources
+        type: file
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.mattern.say-it-right
