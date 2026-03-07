@@ -12,6 +12,9 @@ struct PyramidAnswerKey: Sendable, Equatable, Codable {
     /// to its expected evidence children. Multiple alternative groupings can
     /// be provided — the engine picks the best match.
     let validGroupings: [ValidGrouping]
+    /// Block IDs that are red herrings — they should NOT be placed in the pyramid.
+    /// Empty for exercises without red herrings.
+    var redHerringBlockIDs: Set<String> = []
 }
 
 /// One complete valid arrangement of the pyramid.
@@ -58,6 +61,10 @@ enum BlockValidationStatus: Sendable, Equatable {
     case ungrouped
     /// Block is not placed at all but should be.
     case missing
+    /// Block is a red herring that was incorrectly placed in the tree.
+    case redHerringPlaced
+    /// Block is a red herring that was correctly discarded.
+    case redHerringDiscarded
 }
 
 /// MECE assessment for a single group in the user's pyramid.
@@ -256,10 +263,21 @@ struct MECEValidationEngine: Sendable {
             .subtracting(userTree.rootBlockID.map { Set([$0]) } ?? [])
 
         for blockID in ungroupedBlockIDs {
-            if let correctGroup = findCorrectGroup(for: blockID, in: grouping) {
+            if answerKey.redHerringBlockIDs.contains(blockID) {
+                blockStatuses[blockID] = .redHerringPlaced
+            } else if let correctGroup = findCorrectGroup(for: blockID, in: grouping) {
                 blockStatuses[blockID] = .wrongGroup(expectedGroupParentID: correctGroup.parentBlockID)
             } else {
                 blockStatuses[blockID] = .ungrouped
+            }
+        }
+
+        // Flag red herrings placed in valid groups (they shouldn't be there).
+        for redHerringID in answerKey.redHerringBlockIDs {
+            if userTree.allPlacedBlockIDs.contains(redHerringID) {
+                blockStatuses[redHerringID] = .redHerringPlaced
+            } else {
+                blockStatuses[redHerringID] = .redHerringDiscarded
             }
         }
 

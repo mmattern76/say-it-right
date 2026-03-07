@@ -101,6 +101,11 @@ struct ValidationFeedbackMapper: Sendable {
             case .missing:
                 // Missing blocks are shown as gap placeholders, not block feedback.
                 break
+            case .redHerringPlaced:
+                states[blockID] = .misplaced
+            case .redHerringDiscarded:
+                // Correctly discarded — no visual feedback on the canvas.
+                break
             }
         }
 

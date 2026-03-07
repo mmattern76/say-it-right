@@ -77,6 +77,13 @@ final class PyramidTreeState {
         unplacedBlocks.append(block)
     }
 
+    /// Remove a block from the unplaced pool by ID.
+    @discardableResult
+    func removeFromUnplacedPool(_ blockID: UUID) -> PyramidBlock? {
+        guard let index = unplacedBlocks.firstIndex(where: { $0.id == blockID }) else { return nil }
+        return unplacedBlocks.remove(at: index)
+    }
+
     // MARK: - Tree Construction
 
     /// Build a TreeNode hierarchy from placed blocks, starting at the given root.
