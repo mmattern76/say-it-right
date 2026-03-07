@@ -127,43 +127,75 @@ struct ConnectionLinesView: View {
 /// Wraps ``ConnectionLinesView`` with appear/disappear animations
 /// for individual connections.
 ///
-/// When connections are added, they fade and scale in.
-/// When connections are removed, they fade out before removal.
+/// New connections animate in using a `trim(from:to:)` grow effect
+/// (or simple fade when reduce motion is enabled).
+/// Removed connections fade out before removal.
 struct AnimatedConnectionLinesView: View {
     let nodeLayouts: [String: NodeLayout]
     let connections: [PyramidConnection]
     var dragOverrides: [String: CGPoint] = [:]
 
     @State private var visibleConnectionIDs: Set<String> = []
+    @State private var trimProgress: [String: CGFloat] = [:]
 
     var body: some View {
-        ConnectionLinesView(
-            nodeLayouts: nodeLayouts,
-            connections: connections,
-            dragOverrides: dragOverrides
-        )
-        .opacity(visibleConnectionIDs.isEmpty && !connections.isEmpty ? 0 : 1)
-        .animation(.easeInOut(duration: 0.3), value: visibleConnectionIDs)
+        ZStack {
+            // Draw each connection individually for per-line trim animation.
+            ForEach(connections) { connection in
+                if let parentLayout = nodeLayouts[connection.parentID],
+                   let childLayout = nodeLayouts[connection.childID] {
+                    let parentCenter = dragOverrides[connection.parentID] ?? parentLayout.center
+                    let childCenter = dragOverrides[connection.childID] ?? childLayout.center
+
+                    let startPoint = CGPoint(
+                        x: parentCenter.x,
+                        y: parentCenter.y + parentLayout.size.height / 2
+                    )
+                    let endPoint = CGPoint(
+                        x: childCenter.x,
+                        y: childCenter.y - childLayout.size.height / 2
+                    )
+
+                    ConnectionLinesView.bezierPath(from: startPoint, to: endPoint)
+                        .trim(from: 0, to: trimProgress[connection.id] ?? 1.0)
+                        .stroke(
+                            ConnectionLineStyle.normal.color,
+                            lineWidth: ConnectionLineStyle.normal.lineWidth
+                        )
+                }
+            }
+        }
+        .allowsHitTesting(false)
         .onChange(of: connections) { oldValue, newValue in
             let newIDs = Set(newValue.map(\.id))
             let oldIDs = Set(oldValue.map(\.id))
             let added = newIDs.subtracting(oldIDs)
 
-            if !added.isEmpty {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    visibleConnectionIDs.formUnion(added)
+            for id in added {
+                if shouldReduceMotion {
+                    trimProgress[id] = 1.0
+                } else {
+                    trimProgress[id] = 0.0
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        trimProgress[id] = 1.0
+                    }
                 }
             }
 
             let removed = oldIDs.subtracting(newIDs)
-            if !removed.isEmpty {
-                withAnimation(.easeOut(duration: 0.25)) {
-                    visibleConnectionIDs.subtract(removed)
+            for id in removed {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    trimProgress[id] = 0.0
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    trimProgress.removeValue(forKey: id)
                 }
             }
         }
         .onAppear {
-            visibleConnectionIDs = Set(connections.map(\.id))
+            for connection in connections {
+                trimProgress[connection.id] = 1.0
+            }
         }
     }
 }

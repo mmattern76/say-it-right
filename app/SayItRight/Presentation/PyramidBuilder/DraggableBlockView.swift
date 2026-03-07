@@ -22,6 +22,7 @@ struct DraggableBlockView: View {
     @State private var dragOffset: CGSize = .zero
     @State private var isDragging: Bool = false
     @State private var isHovering: Bool = false
+    @State private var currentHaptic: PyramidHaptic?
 
     // MARK: - Body
 
@@ -37,8 +38,19 @@ struct DraggableBlockView: View {
             )
             .zIndex(isDragging ? 1000 : 0)
             .gesture(dragGesture)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isDragging)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: dragOffset)
+            .pyramidHaptic(currentHaptic)
+            .animation(
+                shouldReduceMotion
+                    ? .linear(duration: 0.15)
+                    : .spring(response: 0.3, dampingFraction: 0.7),
+                value: isDragging
+            )
+            .animation(
+                shouldReduceMotion
+                    ? .linear(duration: 0.15)
+                    : .spring(response: 0.3, dampingFraction: 0.7),
+                value: dragOffset
+            )
             .onHover { hovering in
                 isHovering = hovering
             }
@@ -85,6 +97,9 @@ struct DraggableBlockView: View {
     private var dragGesture: some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
+                if !isDragging {
+                    currentHaptic = .blockPickup
+                }
                 isDragging = true
                 dragOffset = value.translation
                 onDragChanged?(value)
@@ -93,7 +108,13 @@ struct DraggableBlockView: View {
                 isDragging = false
                 onDragEnded?(value)
                 // Snap back — parent can override position if dropped in valid zone.
-                dragOffset = .zero
+                withAnimation(
+                    shouldReduceMotion
+                        ? .linear(duration: 0.15)
+                        : .spring(response: 0.3, dampingFraction: 0.6)
+                ) {
+                    dragOffset = .zero
+                }
             }
     }
 

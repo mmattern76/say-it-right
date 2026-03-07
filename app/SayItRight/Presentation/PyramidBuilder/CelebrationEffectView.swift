@@ -13,6 +13,7 @@ struct CelebrationEffectView: View {
     @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0.0
     @State private var innerOpacity: Double = 0.0
+    @State private var hapticTrigger: PyramidHaptic?
 
     var body: some View {
         ZStack {
@@ -41,6 +42,7 @@ struct CelebrationEffectView: View {
                 .opacity(innerOpacity)
         }
         .allowsHitTesting(false)
+        .pyramidHaptic(hapticTrigger)
         .onChange(of: isActive) { _, newValue in
             if newValue {
                 playCelebration()
@@ -50,6 +52,28 @@ struct CelebrationEffectView: View {
     }
 
     private func playCelebration() {
+        hapticTrigger = .pyramidComplete
+
+        if shouldReduceMotion {
+            // Simplified: just fade in and out, no spring/bounce.
+            withAnimation(.linear(duration: 0.2)) {
+                scale = 1.0
+                opacity = 1.0
+                innerOpacity = 1.0
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                withAnimation(.linear(duration: 0.3)) {
+                    opacity = 0.0
+                    innerOpacity = 0.0
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                scale = 0.5
+                isActive = false
+            }
+            return
+        }
+
         // Phase 1: Scale up and fade in.
         withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
             scale = 1.2

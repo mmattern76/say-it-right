@@ -31,13 +31,17 @@ struct GapPlaceholderView: View {
                 width: BlockDimensions.minWidth + 20,
                 height: BlockDimensions.minHeight
             )
-            .opacity(isPulsing ? 0.5 : 1.0)
+            .opacity(shouldReduceMotion ? 0.8 : (isPulsing ? 0.5 : 1.0))
             .animation(
-                .easeInOut(duration: 1.2).repeatForever(autoreverses: true),
+                shouldReduceMotion
+                    ? nil
+                    : .easeInOut(duration: 1.2).repeatForever(autoreverses: true),
                 value: isPulsing
             )
             .onAppear {
-                isPulsing = true
+                if !shouldReduceMotion {
+                    isPulsing = true
+                }
             }
             .accessibilityLabel("Missing block")
             .accessibilityHint("A block is needed here to complete the group")
