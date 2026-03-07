@@ -165,12 +165,29 @@ struct MECEValidationEngine: Sendable {
         var accountedBlocks: Set<String> = []
 
         // Track which answer groups have been matched.
-        var matchedAnswerGroups: Set<String> = Set(mapping.values.map { $0.parentBlockID })
+        let matchedAnswerGroups: Set<String> = Set(mapping.values.map { $0.parentBlockID })
+
+        // Collect all answer-key group parent IDs for quick lookup.
+        let answerGroupParentIDs = Set(grouping.groups.map { $0.parentBlockID })
 
         // Evaluate each user group (each parent node with children).
         for (userParentID, userChildren) in userTree.parentToChildren {
-            // Skip root's own entry if root is governing thought — it's not a "group" in MECE sense.
-            // We evaluate root separately.
+            // If this is the governing thought's entry, its children should be
+            // the group parents — not evidence members. Handle separately.
+            if governingThoughtCorrect && userParentID == answerKey.governingThoughtID {
+                for childID in userChildren {
+                    if answerGroupParentIDs.contains(childID) {
+                        blockStatuses[childID] = .correct
+                    } else if let correctGroup = findCorrectGroup(for: childID, in: grouping) {
+                        blockStatuses[childID] = .wrongGroup(expectedGroupParentID: correctGroup.parentBlockID)
+                    } else {
+                        blockStatuses[childID] = .ungrouped
+                    }
+                    accountedBlocks.insert(childID)
+                }
+                accountedBlocks.insert(userParentID)
+                continue
+            }
 
             let matchedAnswerGroup = mapping[userParentID]
             let expectedMembers = matchedAnswerGroup.map { Set($0.memberBlockIDs) } ?? Set()
@@ -249,16 +266,17 @@ struct MECEValidationEngine: Sendable {
         // Handle governing thought block status.
         if governingThoughtCorrect {
             blockStatuses[answerKey.governingThoughtID] = .correct
-        } else if let rootID = userTree.rootBlockID {
-            // Wrong block is at root.
-            if let correctGroup = findCorrectGroup(for: rootID, in: grouping) {
-                blockStatuses[rootID] = .wrongGroup(expectedGroupParentID: correctGroup.parentBlockID)
+        } else {
+            if let rootID = userTree.rootBlockID {
+                // Wrong block is at root.
+                if let correctGroup = findCorrectGroup(for: rootID, in: grouping) {
+                    blockStatuses[rootID] = .wrongGroup(expectedGroupParentID: correctGroup.parentBlockID)
+                }
             }
             // The correct governing thought is misplaced or missing.
             if blockStatuses[answerKey.governingThoughtID] == nil {
                 if userTree.allPlacedBlockIDs.contains(answerKey.governingThoughtID) {
-                    // It's placed but not as root — it might have been marked in a group already.
-                    // Keep existing status if any; otherwise mark as wrongParent.
+                    // It's placed but not as root — keep existing status.
                 } else {
                     blockStatuses[answerKey.governingThoughtID] = .missing
                 }
