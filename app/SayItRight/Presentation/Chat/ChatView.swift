@@ -55,9 +55,9 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorState.isShowingError)
         .onAppear {
-            // Default to voice mode when voice VM is available
+            // Default input mode based on platform preference
             if voiceInputViewModel != nil {
-                inputMode = .voice
+                inputMode = AppSettings.shared.preferredInputMode == "voice" ? .voice : .text
             }
         }
     }

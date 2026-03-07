@@ -26,6 +26,7 @@ struct VoiceFindThePointView: View {
     @State private var noTextsAvailable = false
     @State private var selectedText: PracticeText?
     @State private var isTTSSpeaking = false
+    @State private var ttsEnabled: Bool = AppSettings.shared.ttsAutoPlay
     @State private var lastSpokenMessageCount = 0
 
     init(
@@ -92,6 +93,9 @@ struct VoiceFindThePointView: View {
         #endif
         .toolbar {
             ToolbarItem(placement: .automatic) {
+                TTSToggleButton(isEnabled: $ttsEnabled, language: language)
+            }
+            ToolbarItem(placement: .automatic) {
                 Button(action: endSessionAndDismiss) {
                     Label(
                         language == "de" ? "Beenden" : "End Session",
@@ -145,7 +149,8 @@ struct VoiceFindThePointView: View {
     }
 
     private func speakLatestBarbaraMessage() {
-        guard let lastMessage = viewModel.messages.last,
+        guard ttsEnabled,
+              let lastMessage = viewModel.messages.last,
               lastMessage.role == .barbara,
               !lastMessage.text.isEmpty,
               !lastMessage.isStreaming else { return }
