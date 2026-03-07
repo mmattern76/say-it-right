@@ -51,12 +51,14 @@ struct ContentView: View {
     @State private var elevatorPitchCoordinator = ElevatorPitchCoordinator()
     @State private var fixThisMessCoordinator = FixThisMessCoordinator()
     @State private var spotTheGapCoordinator = SpotTheGapCoordinator()
+    @State private var decodeAndRebuildCoordinator = DecodeAndRebuildCoordinator()
     @State private var showSayItClearly = false
     @State private var showFindThePoint = false
     @State private var showElevatorPitch = false
     @State private var showAnalyseMyText = false
     @State private var showFixThisMess = false
     @State private var showSpotTheGap = false
+    @State private var showDecodeAndRebuild = false
     @State private var showDashboard = false
 
     private var language: String { settings.language }
@@ -89,6 +91,8 @@ struct ContentView: View {
                     showFixThisMess = true
                 case .spotTheGap:
                     showSpotTheGap = true
+                case .decodeAndRebuild:
+                    showDecodeAndRebuild = true
                 }
             }
             .navigationDestination(isPresented: $showSayItClearly) {
@@ -148,6 +152,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showSpotTheGap = false
+                }
+            }
+            .navigationDestination(isPresented: $showDecodeAndRebuild) {
+                DecodeAndRebuildView(
+                    sessionManager: sessionManager,
+                    coordinator: decodeAndRebuildCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showDecodeAndRebuild = false
                 }
             }
             .navigationDestination(isPresented: $showDashboard) {

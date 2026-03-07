@@ -61,6 +61,8 @@ struct ComparisonPromptBuilder: Sendable {
             return fixThisMessRubric(language: language)
         case .spotTheGap:
             return spotTheGapRubric(language: language)
+        case .decodeAndRebuild:
+            return decodeAndRebuildRubric(language: language)
         }
     }
 
@@ -187,6 +189,45 @@ struct ComparisonPromptBuilder: Sendable {
         """
     }
 
+    private func decodeAndRebuildRubric(language: String) -> String {
+        if language == "de" {
+            return """
+            # Bewertungskriterien: Entschlüsseln und Neubauen
+
+            Bewerte, wie gut der Lernende die Struktur des Textes erkannt hat \
+            und ob die Neuformulierung eine strukturelle Verbesserung darstellt.
+
+            ## Dimensionen (jeweils 0–3)
+            - **governingThoughtAccuracy**: Hat der Lernende den Kerngedanken korrekt identifiziert?
+            - **supportIdentification**: Hat der Lernende die wichtigsten Stützgruppen erkannt?
+            - **structuralImprovement**: Ist die Neuformulierung strukturell besser als das Original? \
+            (Klare Führung mit dem Kerngedanken, logische Gruppierung der Stützen)
+
+            ## Bewertungsmaßstab
+            - **high**: Kerngedanke korrekt, Stützen erkannt, deutliche strukturelle Verbesserung.
+            - **partial**: Kerngedanke teilweise korrekt oder einige Stützen übersehen, moderate Verbesserung.
+            - **low**: Kerngedanke falsch oder keine strukturelle Verbesserung gegenüber dem Original.
+            """
+        }
+        return """
+        # Evaluation Criteria: Decode and Rebuild
+
+        Evaluate how well the learner extracted the text's structure \
+        and whether their rewrite represents a structural improvement.
+
+        ## Dimensions (0–3 each)
+        - **governingThoughtAccuracy**: Did the learner correctly identify the governing thought?
+        - **supportIdentification**: Did the learner identify the key support groups?
+        - **structuralImprovement**: Is the rewrite structurally better than the original? \
+        (Clear lead with governing thought, logical grouping of supports)
+
+        ## Match Quality Scale
+        - **high**: Correct governing thought, supports identified, clear structural improvement.
+        - **partial**: Governing thought partially correct or some supports missed, moderate improvement.
+        - **low**: Wrong governing thought or no structural improvement over the original.
+        """
+    }
+
     // MARK: - Output Format
 
     private func outputFormatBlock(for sessionType: ComparisonSessionType, language: String) -> String {
@@ -239,6 +280,8 @@ struct ComparisonPromptBuilder: Sendable {
             return ["pyramidValidity", "groupingQuality", "orderingLogic", "completeness"]
         case .spotTheGap:
             return ["flawIdentification", "locationAccuracy", "explanationClarity"]
+        case .decodeAndRebuild:
+            return ["governingThoughtAccuracy", "supportIdentification", "structuralImprovement"]
         }
     }
 

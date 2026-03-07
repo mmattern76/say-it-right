@@ -11,6 +11,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
     case analyseMyText = "analyse-my-text"
     case fixThisMess = "fix-this-mess"
     case spotTheGap = "spot-the-gap"
+    case decodeAndRebuild = "decode-and-rebuild"
 
     var id: String { rawValue }
 
@@ -29,6 +30,8 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de" ? "Räum das auf" : "Fix this mess"
         case .spotTheGap:
             language == "de" ? "Finde die Lücke" : "Spot the gap"
+        case .decodeAndRebuild:
+            language == "de" ? "Entschlüsseln und Neubauen" : "Decode and rebuild"
         }
     }
 
@@ -59,6 +62,10 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de"
                 ? "Finde die versteckte strukturelle Schwäche in einem überzeugend wirkenden Argument."
                 : "Find the hidden structural weakness in a convincing-looking argument."
+        case .decodeAndRebuild:
+            language == "de"
+                ? "Lies einen Text, erkenne die Struktur, und schreibe ihn besser."
+                : "Read a text, extract the structure, and rewrite it better."
         }
     }
 
@@ -71,6 +78,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
         case .analyseMyText: "doc.text"
         case .fixThisMess: "arrow.up.and.down.text.horizontal"
         case .spotTheGap: "eye.trianglebadge.exclamationmark"
+        case .decodeAndRebuild: "arrow.triangle.2.circlepath"
         }
     }
 }
