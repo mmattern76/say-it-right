@@ -30,6 +30,11 @@ struct SystemPromptAssembler {
     ///   - profileJSON: JSON string of the learner profile
     /// - Returns: The assembled system prompt string
     func assemble(level: Int, sessionType: String, language: String, profileJSON: String) -> String {
+        assemble(level: level, sessionType: sessionType, language: language, profileJSON: profileJSON, difficultyContext: nil)
+    }
+
+    /// Assemble a system prompt with optional adaptive difficulty context.
+    func assemble(level: Int, sessionType: String, language: String, profileJSON: String, difficultyContext: String?) -> String {
         var parts: [String] = []
 
         // 1–3: Identity, Pedagogy, Rubric
@@ -56,6 +61,11 @@ struct SystemPromptAssembler {
 
         // 6: Learner profile
         parts.append("# Learner Profile\n\n```json\n\(profileJSON)\n```")
+
+        // 6b: Difficulty context (adaptive)
+        if let context = difficultyContext, !context.isEmpty {
+            parts.append("# Adaptive Difficulty\n\n\(context)")
+        }
 
         // 7: Output format
         if let outputFormat = loadBlock("output-format-\(language)") {

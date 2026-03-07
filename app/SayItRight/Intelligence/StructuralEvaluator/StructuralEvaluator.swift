@@ -42,8 +42,11 @@ actor StructuralEvaluator {
 
     func prepareSession(level: Int, sessionType: String, language: String, profile: LearnerProfile) {
         callCount = 0
+        let difficultyContext = AdaptiveDifficultyEngine.difficultyContext(for: profile)
         cachedSystemPrompt = systemPromptAssembler.assemble(
-            level: level, sessionType: sessionType, language: language, profileJSON: profile.toPromptJSON()
+            level: level, sessionType: sessionType, language: language,
+            profileJSON: profile.toPromptJSON(),
+            difficultyContext: difficultyContext
         )
     }
 

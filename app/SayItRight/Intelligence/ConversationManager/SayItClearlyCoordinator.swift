@@ -48,7 +48,7 @@ final class SayItClearlyCoordinator {
         profile: LearnerProfile,
         language: String
     ) async -> Topic? {
-        guard let topic = selectTopic(for: profile.currentLevel, language: language) else {
+        guard let topic = selectAdaptiveTopic(for: profile, language: language) else {
             return nil
         }
 
@@ -74,6 +74,15 @@ final class SayItClearlyCoordinator {
         // All topics seen — reset and try again
         recentTopicIDs.removeAll()
         return topicBank.randomTopic(for: level, excluding: recentTopicIDs)
+    }
+
+    /// Select a topic using adaptive difficulty based on the learner's profile.
+    ///
+    /// Uses `AdaptiveDifficultyEngine` to determine whether to consolidate
+    /// or stretch, then selects an appropriately levelled topic.
+    func selectAdaptiveTopic(for profile: LearnerProfile, language: String) -> Topic? {
+        let adaptiveLevel = AdaptiveDifficultyEngine.topicLevel(for: profile)
+        return selectTopic(for: adaptiveLevel, language: language)
     }
 
     /// Mark a topic as recently seen.
