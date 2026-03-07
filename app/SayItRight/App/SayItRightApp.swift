@@ -53,6 +53,7 @@ struct ContentView: View {
     @State private var showFindThePoint = false
     @State private var showElevatorPitch = false
     @State private var showAnalyseMyText = false
+    @State private var showDashboard = false
 
     private var language: String { settings.language }
 
@@ -119,6 +120,24 @@ struct ContentView: View {
                     language: language
                 ) {
                     showAnalyseMyText = false
+                }
+            }
+            .navigationDestination(isPresented: $showDashboard) {
+                ProgressDashboardView(
+                    profile: profile,
+                    language: language
+                )
+            }
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        showDashboard = true
+                    } label: {
+                        Label(
+                            language == "de" ? "Fortschritt" : "Progress",
+                            systemImage: "chart.bar.fill"
+                        )
+                    }
                 }
             }
         }
