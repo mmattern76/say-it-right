@@ -249,6 +249,24 @@ final class SessionManager {
         systemPrompt += "\n\n" + voiceModeDirective(language: language)
     }
 
+    /// Start a voice-first "Find the Point" session with a practice text.
+    ///
+    /// Identical to `startFindThePointSession` but appends a voice mode
+    /// directive instructing Barbara to keep spoken feedback concise.
+    func startVoiceFindThePointSession(practiceText: PracticeText, profile: LearnerProfile, language: String) async {
+        await startFindThePointSession(practiceText: practiceText, profile: profile, language: language)
+        systemPrompt += "\n\n" + voiceModeDirective(language: language)
+    }
+
+    /// Append the voice mode directive to the current system prompt.
+    ///
+    /// Call after a session is started via a coordinator to add concise
+    /// spoken-feedback instructions. Safe to call multiple times (idempotent
+    /// in practice since sessions reset the prompt).
+    func appendVoiceDirective(language: String) {
+        systemPrompt += "\n\n" + voiceModeDirective(language: language)
+    }
+
     /// Directive appended to the system prompt for voice sessions.
     ///
     /// Instructs Barbara to keep feedback concise for spoken delivery:
