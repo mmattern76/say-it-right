@@ -1,5 +1,11 @@
 import SwiftUI
 
+/// Input mode for the chat interface.
+enum ChatInputMode: Sendable, Equatable {
+    case text
+    case voice
+}
+
 /// The core chat interface where learners interact with Barbara.
 ///
 /// Layout adapts per platform:
@@ -9,12 +15,16 @@ import SwiftUI
 struct ChatView: View {
     @Bindable var viewModel: ChatViewModel
 
-    /// Optional voice input view model. When set, replaces the text input bar
-    /// with voice input controls. The message list remains the same.
+    /// Optional voice input view model. When set, enables voice input mode
+    /// and a toggle button to switch between voice and text input.
     var voiceInputViewModel: VoiceInputViewModel?
 
     /// Called when the user submits a voice transcription.
     var onVoiceSubmit: ((String) -> Void)?
+
+    /// The current input mode. Defaults to `.voice` when a voice view model
+    /// is provided, `.text` otherwise. Users can toggle mid-session.
+    @State private var inputMode: ChatInputMode = .text
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -39,17 +49,94 @@ struct ChatView: View {
 
             Divider()
 
-            if let voiceVM = voiceInputViewModel {
-                VoiceInputView(viewModel: voiceVM) { text in
-                    onVoiceSubmit?(text)
-                }
-            } else {
-                inputBar
-            }
+            inputArea
         }
         .frame(maxWidth: maxContentWidth)
         .frame(maxWidth: .infinity)
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorState.isShowingError)
+        .onAppear {
+            // Default to voice mode when voice VM is available
+            if voiceInputViewModel != nil {
+                inputMode = .voice
+            }
+        }
+    }
+
+    // MARK: - Input Area
+
+    @ViewBuilder
+    private var inputArea: some View {
+        if let voiceVM = voiceInputViewModel {
+            // Voice-capable: show current mode with toggle
+            VStack(spacing: 0) {
+                if inputMode == .voice {
+                    VoiceInputView(viewModel: voiceVM) { text in
+                        onVoiceSubmit?(text)
+                    }
+                } else {
+                    inputBar
+                }
+
+                inputModeToggle
+            }
+            .animation(.easeInOut(duration: 0.2), value: inputMode)
+        } else {
+            // Text-only: no toggle available
+            inputBar
+        }
+    }
+
+    /// Toggle button to switch between voice and text input.
+    private var inputModeToggle: some View {
+        HStack {
+            Spacer()
+            Button {
+                switchInputMode()
+            } label: {
+                HStack(spacing: 4) {
+                    Image(systemName: inputMode == .voice ? "keyboard" : "mic.fill")
+                        .font(.caption)
+                    Text(inputMode == .voice
+                         ? (viewModel.language == "de" ? "Tippen" : "Type")
+                         : (viewModel.language == "de" ? "Sprechen" : "Speak"))
+                        .font(.caption2)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(.ultraThinMaterial, in: Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(inputMode == .voice ? "Switch to text input" : "Switch to voice input")
+            .accessibilityIdentifier("inputModeToggle")
+            Spacer()
+        }
+        .padding(.bottom, 4)
+    }
+
+    /// Switch between voice and text input, preserving partial transcription.
+    private func switchInputMode() {
+        if inputMode == .voice, let voiceVM = voiceInputViewModel {
+            // Voice → Text: preserve any partial transcription
+            let partial: String
+            if voiceVM.state == .review {
+                partial = voiceVM.editableText
+            } else if voiceVM.state == .recording {
+                partial = voiceVM.transcriptionText
+            } else {
+                partial = ""
+            }
+            voiceVM.reset()
+
+            if !partial.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                viewModel.inputText = partial
+            }
+
+            inputMode = .text
+        } else {
+            // Text → Voice: keep any typed text in inputText (user can switch back)
+            inputMode = .voice
+        }
     }
 
     // MARK: - Message List
