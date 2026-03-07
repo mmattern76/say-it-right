@@ -27,6 +27,7 @@ struct BuildThePyramidView: View {
     @State private var isDiscardHighlighted = false
     @State private var canvasScale: CGFloat = 1.0
     @State private var shouldAutoFit = false
+    @State private var sessionHaptic: PyramidHaptic?
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -181,9 +182,12 @@ struct BuildThePyramidView: View {
                 onDragEnded: { block, value in
                     // endDrag handles placement from unplaced pool internally
                     let zone = treeState.endDrag(position: value.location)
-                    if zone == nil {
+                    if zone != nil {
+                        sessionHaptic = .validDrop
+                    } else {
                         // Dropped outside any zone — place under root as fallback
                         placeBlockInTree(block)
+                        sessionHaptic = .validDrop
                     }
                 }
             )
@@ -227,6 +231,7 @@ struct BuildThePyramidView: View {
             }
             .padding(.bottom, 12)
         }
+        .pyramidHaptic(sessionHaptic)
     }
 
     /// Whether the current exercise has red herring blocks.
@@ -290,6 +295,13 @@ struct BuildThePyramidView: View {
         isPyramidComplete = ValidationFeedbackMapper.isPyramidComplete(result)
         feedbackConfig.isEnabled = true
         shouldAutoFit = true
+
+        // Haptic feedback based on result
+        if isPyramidComplete {
+            sessionHaptic = .pyramidComplete
+        } else {
+            sessionHaptic = .invalidDrop
+        }
 
         // Send description to Barbara for textual feedback
         let description = buildArrangementDescription(result: result)

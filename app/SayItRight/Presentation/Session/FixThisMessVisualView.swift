@@ -27,6 +27,7 @@ struct FixThisMessVisualView: View {
     @State private var movedBlockIDs: Set<String> = []
     /// Original wrong positions for change tracking.
     @State private var originalParentMap: [String: String] = [:]
+    @State private var sessionHaptic: PyramidHaptic?
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -156,6 +157,7 @@ struct FixThisMessVisualView: View {
                                     if let zone = treeState.endDrag(position: value.location) {
                                         treeState.reparentBlock(placed.id, toParent: UUID(uuidString: zone.parentID)!, atIndex: zone.childIndex)
                                         trackMove(blockID: placed.id.uuidString)
+                                        sessionHaptic = .validDrop
                                     }
                                 }
                             )
@@ -200,6 +202,7 @@ struct FixThisMessVisualView: View {
                             placeBlockInTree(block)
                         }
                         trackMove(blockID: block.id.uuidString)
+                        sessionHaptic = .validDrop
                     }
                 )
                 .padding(.horizontal, 12)
@@ -239,6 +242,7 @@ struct FixThisMessVisualView: View {
                     .padding(.bottom, 8)
             }
         }
+        .pyramidHaptic(sessionHaptic)
     }
 
     // MARK: - Exercise Setup
@@ -323,6 +327,12 @@ struct FixThisMessVisualView: View {
         gapPlacements = ValidationFeedbackMapper.gapPlacements(from: result)
         isPyramidComplete = ValidationFeedbackMapper.isPyramidComplete(result)
         feedbackConfig.isEnabled = true
+
+        if isPyramidComplete {
+            sessionHaptic = .pyramidComplete
+        } else {
+            sessionHaptic = .invalidDrop
+        }
 
         // Build description including change tracking for Barbara
         let description = buildArrangementDescription(result: result)

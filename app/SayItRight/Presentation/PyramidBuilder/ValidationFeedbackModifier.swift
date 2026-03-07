@@ -41,9 +41,11 @@ struct FeedbackGlowModifier: ViewModifier {
         case .meceOverlap:
             RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
                 .strokeBorder(FeedbackPalette.overlap, lineWidth: 3)
-                .opacity(isPulsing ? 0.6 : 1.0)
+                .opacity(shouldReduceMotion ? 1.0 : (isPulsing ? 0.6 : 1.0))
                 .animation(
-                    .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                    shouldReduceMotion
+                        ? nil
+                        : .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
                     value: isPulsing
                 )
         case .none:
@@ -92,7 +94,7 @@ struct ShakeModifier: ViewModifier {
         content
             .offset(x: shakeOffset)
             .onChange(of: feedbackState) { _, newValue in
-                if newValue == .misplaced {
+                if newValue == .misplaced && !shouldReduceMotion {
                     triggerShake()
                 }
             }
