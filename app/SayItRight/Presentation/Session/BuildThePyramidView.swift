@@ -25,6 +25,8 @@ struct BuildThePyramidView: View {
     @State private var attempts = 0
     @State private var discardedBlocks: [PyramidBlock] = []
     @State private var isDiscardHighlighted = false
+    @State private var canvasScale: CGFloat = 1.0
+    @State private var shouldAutoFit = false
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -89,42 +91,10 @@ struct BuildThePyramidView: View {
 
     @ViewBuilder
     private var sessionContent: some View {
-        #if os(macOS)
-        splitLayout
-        #else
-        if horizontalSizeClass == .regular {
-            splitLayout
-        } else {
-            compactLayout
-        }
-        #endif
-    }
-
-    /// iPad/Mac: pyramid left, chat right.
-    private var splitLayout: some View {
-        HStack(spacing: 0) {
+        AdaptivePyramidLayout {
             pyramidCanvas
-                .frame(maxWidth: .infinity)
-
-            Divider()
-
-            VStack(spacing: 0) {
-                ChatView(viewModel: viewModel)
-                    .frame(maxWidth: .infinity)
-            }
-            .frame(width: 320)
-        }
-    }
-
-    /// iPhone: pyramid above, feedback below.
-    private var compactLayout: some View {
-        VStack(spacing: 0) {
-            pyramidCanvas
-
-            Divider()
-
+        } sidebar: {
             ChatView(viewModel: viewModel)
-                .frame(maxHeight: 200)
         }
     }
 
@@ -144,8 +114,8 @@ struct BuildThePyramidView: View {
                     .padding(.top, 12)
             }
 
-            // Pyramid tree area
-            GeometryReader { geo in
+            // Pyramid tree area (zoomable on iPad)
+            ZoomablePyramidCanvas(scale: $canvasScale, shouldAutoFit: $shouldAutoFit) {
                 ZStack {
                     // Connection lines
                     if let rootID = treeState.rootBlockID,
@@ -316,6 +286,7 @@ struct BuildThePyramidView: View {
         gapPlacements = ValidationFeedbackMapper.gapPlacements(from: result)
         isPyramidComplete = ValidationFeedbackMapper.isPyramidComplete(result)
         feedbackConfig.isEnabled = true
+        shouldAutoFit = true
 
         // Send description to Barbara for textual feedback
         let description = buildArrangementDescription(result: result)

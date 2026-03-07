@@ -91,40 +91,10 @@ struct FixThisMessVisualView: View {
 
     @ViewBuilder
     private var sessionContent: some View {
-        #if os(macOS)
-        splitLayout
-        #else
-        if horizontalSizeClass == .regular {
-            splitLayout
-        } else {
-            compactLayout
-        }
-        #endif
-    }
-
-    private var splitLayout: some View {
-        HStack(spacing: 0) {
+        AdaptivePyramidLayout {
             pyramidCanvas
-                .frame(maxWidth: .infinity)
-
-            Divider()
-
-            VStack(spacing: 0) {
-                ChatView(viewModel: viewModel)
-                    .frame(maxWidth: .infinity)
-            }
-            .frame(width: 320)
-        }
-    }
-
-    private var compactLayout: some View {
-        VStack(spacing: 0) {
-            pyramidCanvas
-
-            Divider()
-
+        } sidebar: {
             ChatView(viewModel: viewModel)
-                .frame(maxHeight: 200)
         }
     }
 
