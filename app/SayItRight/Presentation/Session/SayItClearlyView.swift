@@ -41,7 +41,13 @@ struct SayItClearlyView: View {
             if noTopicsAvailable {
                 noTopicsView
             } else {
-                ChatView(viewModel: viewModel)
+                VStack(spacing: 0) {
+                    ChatView(viewModel: viewModel)
+
+                    if viewModel.isRevisionComplete && !viewModel.isSummaryRequested {
+                        summaryPromptBar
+                    }
+                }
             }
         }
         .navigationTitle(SessionType.sayItClearly.displayName(language: language))
@@ -70,6 +76,30 @@ struct SayItClearlyView: View {
                 noTopicsAvailable = true
             }
         }
+    }
+
+    // MARK: - Summary Prompt
+
+    private var summaryPromptBar: some View {
+        VStack(spacing: 8) {
+            Divider()
+            Text(language == "de"
+                 ? "Revision abgeschlossen"
+                 : "Revision complete")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Button(action: { viewModel.requestSummary() }) {
+                Label(
+                    language == "de" ? "Zusammenfassung anzeigen" : "Show Session Summary",
+                    systemImage: "doc.text"
+                )
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.bottom, 8)
+        }
+        .padding(.horizontal, 16)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
 
     // MARK: - No Topics Available

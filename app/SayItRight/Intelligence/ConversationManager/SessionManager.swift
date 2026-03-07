@@ -254,9 +254,14 @@ final class SessionManager {
         let learnerMessage = ChatMessage(role: .learner, text: trimmed)
         messages.append(learnerMessage)
 
-        // Track first response in "Say it clearly" session
-        if sayItClearlySession != nil && !sayItClearlySession!.hasResponse {
-            sayItClearlySession?.recordResponse(trimmed)
+        // Track response attempts in "Say it clearly" session
+        if sayItClearlySession != nil {
+            sayItClearlySession?.recordAttempt(trimmed)
+
+            // Inject revision context if this is a revision
+            if sayItClearlySession!.currentRevisionRound > 0 {
+                injectRevisionContext()
+            }
         }
 
         // Track extraction attempts in "Find the point" session
@@ -270,6 +275,34 @@ final class SessionManager {
         }
 
         // Stream Barbara's response
+        await streamBarbaraResponse()
+    }
+
+    /// Whether the learner's input should be pre-loaded with their previous
+    /// response for revision editing.
+    var revisionPreloadText: String? {
+        guard let session = sayItClearlySession else { return nil }
+        // Only pre-load after feedback has been given (we have a response and
+        // the last message is from Barbara with scores) and revisions remain.
+        guard session.hasResponse, session.canRevise else { return nil }
+        guard let lastBarbaraMsg = messages.last(where: { $0.role == .barbara }),
+              lastBarbaraMsg.metadata != nil,
+              !lastBarbaraMsg.metadata!.scores.isEmpty else { return nil }
+        // Only pre-load if the learner hasn't already typed something new
+        return session.latestAttemptText
+    }
+
+    /// Request the session summary after the revision loop completes.
+    func requestSessionSummary() async {
+        guard var session = sayItClearlySession, !session.summaryRequested else { return }
+        session.markSummaryRequested()
+        sayItClearlySession = session
+
+        // Inject a summary directive as a system-level user message
+        let summaryDirective = buildSummaryDirective()
+        let directiveMessage = ChatMessage(role: .learner, text: summaryDirective)
+        messages.append(directiveMessage)
+
         await streamBarbaraResponse()
     }
 
@@ -299,6 +332,89 @@ final class SessionManager {
     /// The number of evaluation calls made in this session.
     var evaluationCallCount: Int {
         get async { await structuralEvaluator.callCount }
+    }
+
+    // MARK: - Private: Revision Loop
+
+    /// Inject a hidden system message with revision context so Barbara can
+    /// compare the original and revised responses.
+    private func injectRevisionContext() {
+        guard let session = sayItClearlySession, session.attempts.count >= 2 else { return }
+
+        let originalText = session.attempts[0].text
+        let revisedText = session.attempts.last!.text
+
+        // Check if unchanged
+        if session.isLatestAttemptUnchanged {
+            // Barbara will see the flag and call it out
+            let context = """
+            [SYSTEM: The learner has resubmitted their response WITHOUT changes. \
+            The text is identical to their previous attempt. Call this out — \
+            ask them to read your feedback and make specific changes.]
+            """
+            let contextMsg = ChatMessage(role: .learner, text: context)
+            // Insert before the learner's latest message
+            let insertIndex = max(0, messages.count - 1)
+            messages.insert(contextMsg, at: insertIndex)
+            return
+        }
+
+        let revisionRound = session.currentRevisionRound
+        let maxRevisions = session.maxRevisions
+        let isLastRevision = revisionRound >= maxRevisions
+
+        var context = """
+        [SYSTEM: This is revision \(revisionRound) of \(maxRevisions). \
+        Compare the revised response against the original and note what \
+        improved, what stayed the same, and what regressed. \
+        Focus on structural changes, not content changes.
+
+        ORIGINAL RESPONSE:
+        \(originalText)
+
+        REVISED RESPONSE:
+        \(revisedText)
+        """
+
+        if isLastRevision {
+            context += """
+
+            This is the FINAL revision. After your evaluation, provide a brief \
+            session summary: what was practiced, what improved across revisions, \
+            and one key structural takeaway. Set sessionPhase to "summary".]
+            """
+        } else {
+            context += """
+
+            After evaluation, prompt the learner to revise again if there is \
+            room for structural improvement. Even strong revisions should get \
+            a push for tighter structure.]
+            """
+        }
+
+        let contextMsg = ChatMessage(role: .learner, text: context)
+        // Insert before the learner's latest message
+        let insertIndex = max(0, messages.count - 1)
+        messages.insert(contextMsg, at: insertIndex)
+    }
+
+    /// Build a directive for Barbara to summarise the session.
+    private func buildSummaryDirective() -> String {
+        guard let session = sayItClearlySession else { return "" }
+
+        var parts = ["[SYSTEM: The revision loop is complete. Summarise this session:"]
+        for (index, attempt) in session.attempts.enumerated() {
+            let label = index == 0 ? "FIRST DRAFT" : "REVISION \(index)"
+            parts.append("\(label):\n\(attempt.text)")
+        }
+        parts.append("""
+        Provide a brief session summary covering:
+        1. What structural skill was practiced
+        2. What improved across revisions
+        3. One key takeaway for the learner
+        Set sessionPhase to "summary" and mood to "teaching".]
+        """)
+        return parts.joined(separator: "\n\n")
     }
 
     // MARK: - Private: Streaming
