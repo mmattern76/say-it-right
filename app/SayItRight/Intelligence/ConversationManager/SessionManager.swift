@@ -551,15 +551,30 @@ final class SessionManager {
         Description: \(flaw?.description ?? "No flaw description")
         Location: \(flaw?.location ?? "unspecified")
 
+        ## Progressive Hint System (3 tiers)
+        When the learner misidentifies the flaw, provide progressively specific hints:
+
+        ### After attempt 1 (Tier 1 — general area):
+        \(flaw?.hints?.tier1 ?? "Hint: identify the general structural area (grouping, evidence, conclusion) where the problem lies. Do NOT name the specific flaw.")
+
+        ### After attempt 2 (Tier 2 — specific element):
+        \(flaw?.hints?.tier2 ?? "Hint: narrow to the specific support group or evidence item. Compare specific elements.")
+
+        ### After attempt 3 (Tier 3 — full reveal):
+        \(flaw?.hints?.tier3 ?? "Reveal the flaw with a full structural explanation. Explain WHY it's a flaw and what correct structure would look like.")
+
         ## Evaluation Guidelines
         - The learner has up to 3 attempts to identify the flaw.
-        - If they identify it correctly: confirm with a detailed explanation.
-        - If they misidentify: acknowledge any valid observations but redirect. \
-        Say "Good eye, but that's not the main problem. Keep looking."
-        - After 3 failed attempts: reveal the flaw with a teaching explanation.
+        - If they identify it correctly at any point: confirm with a detailed explanation.
+        - If they misidentify: acknowledge any valid observations, then deliver the \
+        appropriate tier hint. Say "Good eye, but that's not the main problem." then \
+        give the hint for their current tier.
+        - After 3 failed attempts: use Tier 3 to reveal the flaw with a teaching explanation.
         - Only evaluate STRUCTURAL flaws — not content disagreements.
         - Valid flaw identifications don't need to match the exact wording, \
         just the structural concept.
+        - Hints teach the NARROWING methodology: area → element → specific. \
+        This narrowing process IS the skill being taught.
         """
     }
 
