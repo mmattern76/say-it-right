@@ -146,6 +146,9 @@ struct TextDifficultyCalibrator: Sendable {
         case .fixThisMess:
             // Only rambling and buried-lead texts
             return texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
+        case .spotTheGap:
+            // Only adversarial texts with structural flaws
+            return texts.filter { $0.metadata.qualityLevel == .adversarial && $0.answerKey.structuralFlaw != nil }
         case .sayItClearly, .elevatorPitch, .analyseMyText:
             // Build mode — no text selection needed, but if called, return all
             return texts

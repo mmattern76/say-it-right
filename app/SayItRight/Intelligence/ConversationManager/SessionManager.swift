@@ -43,6 +43,9 @@ final class SessionManager {
     /// The active "Fix this mess" session state, if any.
     private(set) var fixThisMessSession: FixThisMessSession?
 
+    /// The active "Spot the gap" session state, if any.
+    private(set) var spotTheGapSession: SpotTheGapSession?
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -102,6 +105,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        spotTheGapSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -145,6 +149,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        spotTheGapSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -195,6 +200,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        spotTheGapSession = nil
 
         sessionState = .loading
 
@@ -489,6 +495,74 @@ final class SessionManager {
         """
     }
 
+    // MARK: - Spot The Gap
+
+    /// Start a "Spot the gap" session.
+    ///
+    /// Presents a seemingly solid argument with a hidden structural flaw.
+    func startSpotTheGapSession(practiceText: PracticeText, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .spotTheGap
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = nil
+        fixThisMessSession = nil
+        spotTheGapSession = SpotTheGapSession(practiceText: practiceText)
+
+        lastEvaluationResult = nil
+        sessionState = .loading
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.spotTheGap.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = spotTheGapDirectiveBlock(practiceText: practiceText, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.spotTheGap.rawValue,
+            language: language,
+            profile: profile
+        )
+
+        await streamBarbaraResponse()
+    }
+
+    /// Build the directive block for "Spot the gap" sessions.
+    private func spotTheGapDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+        let flaw = practiceText.answerKey.structuralFlaw
+        return """
+        # Spot The Gap Session
+
+        Present this argument to the learner. It LOOKS solid but has a hidden \
+        structural weakness. Ask them to find it.
+
+        ## The Argument
+        \(practiceText.text)
+
+        ## Hidden Structural Flaw (DO NOT reveal to the learner)
+        Type: \(flaw?.type ?? "unknown")
+        Description: \(flaw?.description ?? "No flaw description")
+        Location: \(flaw?.location ?? "unspecified")
+
+        ## Evaluation Guidelines
+        - The learner has up to 3 attempts to identify the flaw.
+        - If they identify it correctly: confirm with a detailed explanation.
+        - If they misidentify: acknowledge any valid observations but redirect. \
+        Say "Good eye, but that's not the main problem. Keep looking."
+        - After 3 failed attempts: reveal the flaw with a teaching explanation.
+        - Only evaluate STRUCTURAL flaws — not content disagreements.
+        - Valid flaw identifications don't need to match the exact wording, \
+        just the structural concept.
+        """
+    }
+
     /// Send a learner message and stream Barbara's response.
     ///
     /// - Parameter text: The learner's message text.
@@ -583,6 +657,7 @@ final class SessionManager {
         elevatorPitchSession = nil
         analyseMyTextSession = nil
         fixThisMessSession = nil
+        spotTheGapSession = nil
 
         lastEvaluationResult = nil
         sessionState = .idle
