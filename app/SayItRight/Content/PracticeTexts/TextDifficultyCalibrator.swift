@@ -11,10 +11,8 @@ struct TextDifficultyCalibrator: Sendable {
     /// Rolling average threshold above which L2 users unlock adversarial texts.
     static let highScoreThreshold: Double = 0.75
 
-    /// Break-mode dimension keys used to compute the rolling average.
-    static let breakDimensions: [String] = [
-        "governing_thought", "support_grouping", "clarity"
-    ]
+    /// Break-mode dimension keys used to compute the rolling average for adversarial unlocking.
+    static let breakDimensions: [String] = ProfileUpdater.breakDimensions
 
     /// Fraction of results that should be at the learner's current difficulty band.
     static let currentDifficultyWeight: Double = 0.60

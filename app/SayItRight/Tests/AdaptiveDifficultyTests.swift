@@ -181,11 +181,14 @@ struct AdaptiveDifficultyTests {
         #expect(dims.contains("clarity"))
     }
 
-    @Test("L2 has 5 dimensions")
+    @Test("L2 has 8 dimensions (5 Build + 3 Break)")
     func l2Dimensions() {
         let dims = AdaptiveDifficultyEngine.dimensionsForLevel(2)
-        #expect(dims.count == 5)
+        #expect(dims.count == 8)
         #expect(dims.contains("meceQuality"))
         #expect(dims.contains("horizontalLogic"))
+        #expect(dims.contains("extractionAccuracy"))
+        #expect(dims.contains("flawIdentification"))
+        #expect(dims.contains("restructuringQuality"))
     }
 }

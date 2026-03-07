@@ -80,6 +80,10 @@ struct DimensionBarChartView: View {
             "orderingLogic": ("Ordering logic", "Ordnungslogik"),
             "scqApplication": ("SCQ framing", "SCQ-Rahmen"),
             "horizontalLogic": ("Horizontal logic", "Horizontale Logik"),
+            // Break mode dimensions
+            "extractionAccuracy": ("Extracting structure", "Struktur erkennen"),
+            "flawIdentification": ("Finding structural flaws", "Strukturelle Fehler finden"),
+            "restructuringQuality": ("Restructuring quality", "Qualität der Umstrukturierung"),
         ]
 
         if let name = names[dimension] {
