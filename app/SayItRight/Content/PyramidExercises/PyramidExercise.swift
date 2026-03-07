@@ -37,6 +37,7 @@ enum ExerciseBlockType: String, Codable, Sendable {
     case governingThought = "governing_thought"
     case supportPoint = "support_point"
     case evidence = "evidence"
+    case redHerring = "red_herring"
 
     /// Convert to the presentation-layer BlockType.
     var blockType: BlockType {
@@ -44,6 +45,7 @@ enum ExerciseBlockType: String, Codable, Sendable {
         case .governingThought: .governingThought
         case .supportPoint: .supportPoint
         case .evidence: .evidence
+        case .redHerring: .redHerring
         }
     }
 }

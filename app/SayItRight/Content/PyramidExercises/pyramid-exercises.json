@@ -181,5 +181,72 @@
         }
       ]
     }
+  },
+  {
+    "id": "pe-003-en",
+    "titleEN": "Remote Work (with Red Herrings)",
+    "titleDE": "Homeoffice (mit Ablenkern)",
+    "level": 2,
+    "language": "en",
+    "governingThought": {
+      "id": "gt-003",
+      "text": "Companies should offer remote work options because they increase productivity and reduce costs.",
+      "type": "governing_thought"
+    },
+    "blocks": [
+      {
+        "id": "sp-005",
+        "text": "Remote workers report higher productivity",
+        "type": "support_point"
+      },
+      {
+        "id": "sp-006",
+        "text": "Companies save on office costs",
+        "type": "support_point"
+      },
+      {
+        "id": "ev-009",
+        "text": "Stanford study: 13% productivity increase in remote workers",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-010",
+        "text": "Fewer interruptions from colleagues during focus work",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-011",
+        "text": "Average company saves $11,000 per remote worker annually",
+        "type": "evidence"
+      },
+      {
+        "id": "ev-012",
+        "text": "Reduced need for large office space in expensive city centres",
+        "type": "evidence"
+      },
+      {
+        "id": "rh-001",
+        "text": "Many employees prefer working in their pyjamas",
+        "type": "red_herring"
+      }
+    ],
+    "answerKey": {
+      "governingThoughtID": "gt-003",
+      "validGroupings": [
+        {
+          "groups": [
+            {
+              "parentBlockID": "sp-005",
+              "memberBlockIDs": ["ev-009", "ev-010"]
+            },
+            {
+              "parentBlockID": "sp-006",
+              "memberBlockIDs": ["ev-011", "ev-012"]
+            }
+          ]
+        }
+      ],
+      "redHerringBlockIDs": ["rh-001"]
+    }
   }
 ]

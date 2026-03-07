@@ -23,6 +23,8 @@ struct BuildThePyramidView: View {
     @State private var isPyramidComplete = false
     @State private var feedbackConfig = FeedbackConfiguration()
     @State private var attempts = 0
+    @State private var discardedBlocks: [PyramidBlock] = []
+    @State private var isDiscardHighlighted = false
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -215,6 +217,20 @@ struct BuildThePyramidView: View {
             .padding(.horizontal, 12)
             .padding(.bottom, 8)
 
+            // Discard zone (only for exercises with red herrings)
+            if hasRedHerrings {
+                DiscardZoneView(
+                    isHighlighted: isDiscardHighlighted,
+                    discardedBlocks: discardedBlocks,
+                    onRetrieve: { block in
+                        discardedBlocks.removeAll { $0.id == block.id }
+                        treeState.addToUnplacedPool(block)
+                    }
+                )
+                .padding(.horizontal, 12)
+                .padding(.bottom, 4)
+            }
+
             // Action buttons
             HStack(spacing: 16) {
                 Button(action: checkArrangement) {
@@ -224,7 +240,7 @@ struct BuildThePyramidView: View {
                     )
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(treeState.unplacedBlocks.count > 0)
+                .disabled(!treeState.unplacedBlocks.isEmpty)
 
                 if sessionManager.buildThePyramidSession?.canShowAnswer == true {
                     Button(action: showAnswer) {
@@ -237,6 +253,18 @@ struct BuildThePyramidView: View {
                 }
             }
             .padding(.bottom, 12)
+        }
+    }
+
+    /// Whether the current exercise has red herring blocks.
+    private var hasRedHerrings: Bool {
+        exercise?.answerKey.redHerringBlockIDs.isEmpty == false
+    }
+
+    /// Discard a block from the unplaced pool.
+    private func discardBlock(_ block: PyramidBlock) {
+        if treeState.removeFromUnplacedPool(block.id) != nil {
+            discardedBlocks.append(block)
         }
     }
 
@@ -314,7 +342,17 @@ struct BuildThePyramidView: View {
             }
         }
 
-        if result.score >= 1.0 {
+        // Red herring tracking
+        let redHerringPlaced = result.blockStatuses.values.filter { if case .redHerringPlaced = $0 { return true } else { return false } }.count
+        let redHerringDiscarded = result.blockStatuses.values.filter { if case .redHerringDiscarded = $0 { return true } else { return false } }.count
+        if redHerringPlaced > 0 {
+            desc += "RED HERRINGS: \(redHerringPlaced) red herring(s) incorrectly placed in the pyramid\n"
+        }
+        if redHerringDiscarded > 0 {
+            desc += "GOOD: \(redHerringDiscarded) red herring(s) correctly discarded\n"
+        }
+
+        if result.score >= 1.0 && redHerringPlaced == 0 {
             desc += "PYRAMID COMPLETE — all blocks correctly placed."
         }
 

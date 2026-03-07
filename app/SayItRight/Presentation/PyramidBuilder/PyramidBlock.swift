@@ -8,13 +8,15 @@ enum BlockType: String, Sendable, CaseIterable, Codable {
     case governingThought
     case supportPoint
     case evidence
+    case redHerring
 
     /// Display colour for each block type.
+    /// Red herrings look identical to evidence blocks — no visual cheating.
     var color: Color {
         switch self {
         case .governingThought: Color(red: 0.20, green: 0.45, blue: 0.75) // deep blue
         case .supportPoint: Color(red: 0.30, green: 0.65, blue: 0.50)     // teal green
-        case .evidence: Color(red: 0.55, green: 0.55, blue: 0.65)         // slate grey
+        case .evidence, .redHerring: Color(red: 0.55, green: 0.55, blue: 0.65) // slate grey
         }
     }
 
@@ -24,6 +26,7 @@ enum BlockType: String, Sendable, CaseIterable, Codable {
         case .governingThought: "Governing Thought"
         case .supportPoint: "Support Point"
         case .evidence: "Evidence"
+        case .redHerring: "Evidence" // Appears as evidence to the user
         }
     }
 }
