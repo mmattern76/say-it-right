@@ -8,6 +8,7 @@ import SwiftUI
 struct ProgressDashboardView: View {
     let profile: LearnerProfile
     let language: String
+    var recentSessions: [SessionSummary] = []
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -70,6 +71,7 @@ struct ProgressDashboardView: View {
             levelCard
             streakCard
             dimensionSection
+            recentSessionsSection
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 20)
@@ -84,6 +86,7 @@ struct ProgressDashboardView: View {
                 streakCard
             }
             dimensionSection
+            recentSessionsSection
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
@@ -184,6 +187,56 @@ struct ProgressDashboardView: View {
                     dimensionScores: profile.dimensionScores,
                     language: language
                 )
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(.background)
+                .shadow(color: .black.opacity(0.06), radius: 6, y: 2)
+        )
+    }
+
+    // MARK: - Recent Sessions
+
+    private var recentSessionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(language == "de" ? "Letzte Sitzungen" : "Recent Sessions")
+                    .font(.headline)
+                Spacer()
+                if recentSessions.count > 5 {
+                    NavigationLink {
+                        SessionHistoryView(sessions: recentSessions, language: language)
+                    } label: {
+                        Text(language == "de" ? "Alle anzeigen" : "View all")
+                            .font(.caption)
+                    }
+                }
+            }
+
+            if recentSessions.isEmpty {
+                Text(language == "de"
+                    ? "Noch keine abgeschlossenen Sitzungen."
+                    : "No completed sessions yet.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(recentSessions.prefix(5))) { session in
+                        NavigationLink {
+                            SessionDetailView(session: session, language: language)
+                        } label: {
+                            SessionHistoryRow(session: session, language: language)
+                        }
+                        .buttonStyle(.plain)
+
+                        if session.id != recentSessions.prefix(5).last?.id {
+                            Divider().padding(.leading, 44)
+                        }
+                    }
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
