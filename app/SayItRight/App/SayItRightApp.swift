@@ -56,6 +56,7 @@ struct ContentView: View {
     @State private var showVoiceSayItClearly = false
     @State private var showFindThePoint = false
     @State private var showElevatorPitch = false
+    @State private var showVoiceElevatorPitch = false
     @State private var showAnalyseMyText = false
     @State private var showFixThisMess = false
     @State private var showSpotTheGap = false
@@ -95,7 +96,15 @@ struct ContentView: View {
                 case .findThePoint:
                     showFindThePoint = true
                 case .elevatorPitch:
+                    #if os(iOS)
+                    if horizontalSizeClass == .compact {
+                        showVoiceElevatorPitch = true
+                    } else {
+                        showElevatorPitch = true
+                    }
+                    #else
                     showElevatorPitch = true
+                    #endif
                 case .analyseMyText:
                     showAnalyseMyText = true
                 case .fixThisMess:
@@ -144,6 +153,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showElevatorPitch = false
+                }
+            }
+            .navigationDestination(isPresented: $showVoiceElevatorPitch) {
+                VoiceElevatorPitchView(
+                    sessionManager: sessionManager,
+                    coordinator: elevatorPitchCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showVoiceElevatorPitch = false
                 }
             }
             .navigationDestination(isPresented: $showAnalyseMyText) {
