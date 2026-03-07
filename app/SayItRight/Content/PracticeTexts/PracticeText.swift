@@ -20,6 +20,25 @@ struct StructuralFlaw: Codable, Sendable, Equatable {
     let description: String
     /// Where in the text the flaw occurs (e.g. "paragraph 2", "support pillar 3").
     let location: String
+    /// Progressive hint tiers for "Spot the gap" exercises.
+    let hints: HintTiers?
+
+    init(type: String, description: String, location: String, hints: HintTiers? = nil) {
+        self.type = type
+        self.description = description
+        self.location = location
+        self.hints = hints
+    }
+}
+
+/// 3-tier progressive hints for structural flaw identification.
+struct HintTiers: Codable, Sendable, Equatable {
+    /// Tier 1: General area hint (e.g., "Look at the grouping").
+    let tier1: String
+    /// Tier 2: Specific element hint (e.g., "Compare support B and C").
+    let tier2: String
+    /// Tier 3: Full reveal with explanation.
+    let tier3: String
 }
 
 /// Answer key for a practice text, describing its pyramid structure.

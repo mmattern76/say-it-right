@@ -49,4 +49,24 @@ struct SpotTheGapSession: Sendable {
 
     /// Whether this text has a known structural flaw.
     var hasKnownFlaw: Bool { structuralFlaw != nil }
+
+    /// Current hint tier (0 = no hints given, 1-3 = tiers given).
+    var currentHintTier: Int { min(attemptCount, 3) }
+
+    /// The hint for the current tier, if pre-generated hints are available.
+    var currentHint: String? {
+        guard let hints = structuralFlaw?.hints else { return nil }
+        switch currentHintTier {
+        case 1: return hints.tier1
+        case 2: return hints.tier2
+        case 3: return hints.tier3
+        default: return nil
+        }
+    }
+
+    /// Whether the flaw has been revealed (tier 3 reached).
+    var isFlawRevealed: Bool { currentHintTier >= 3 }
+
+    /// Whether pre-generated hints are available.
+    var hasPreGeneratedHints: Bool { structuralFlaw?.hints != nil }
 }
