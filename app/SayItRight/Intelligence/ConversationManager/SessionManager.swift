@@ -34,6 +34,9 @@ final class SessionManager {
     /// The active "Find the point" session state, if any.
     private(set) var findThePointSession: FindThePointSession?
 
+    /// The active "Elevator pitch" session state, if any.
+    private(set) var elevatorPitchSession: ElevatorPitchSession?
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -84,6 +87,7 @@ final class SessionManager {
         activeSessionType = type
         sayItClearlySession = nil
         findThePointSession = nil
+        elevatorPitchSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -124,6 +128,7 @@ final class SessionManager {
         activeSessionType = .sayItClearly
         sayItClearlySession = SayItClearlySession(topic: topic)
         findThePointSession = nil
+        elevatorPitchSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -171,6 +176,7 @@ final class SessionManager {
         activeSessionType = .findThePoint
         sayItClearlySession = nil
         findThePointSession = FindThePointSession(practiceText: practiceText)
+        elevatorPitchSession = nil
 
         sessionState = .loading
 
@@ -240,6 +246,88 @@ final class SessionManager {
         Governing Thought: \(practiceText.answerKey.governingThought)
         Structural Assessment: \(practiceText.answerKey.structuralAssessment)
         """
+    }
+
+    /// Start an "Elevator pitch" session with a specific topic.
+    ///
+    /// - Parameters:
+    ///   - topic: The topic selected from the topic bank.
+    ///   - profile: The learner's current profile.
+    ///   - language: Language code ("en" or "de").
+    func startElevatorPitchSession(topic: Topic, profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .elevatorPitch
+        sayItClearlySession = nil
+        findThePointSession = nil
+
+        let duration = ElevatorPitchSession.duration(for: profile.currentLevel)
+        elevatorPitchSession = ElevatorPitchSession(topic: topic, durationSeconds: duration)
+
+        lastEvaluationResult = nil
+        sessionState = .loading
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.elevatorPitch.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = elevatorPitchDirectiveBlock(topic: topic, duration: duration, language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.elevatorPitch.rawValue,
+            language: language,
+            profile: profile
+        )
+
+        await streamBarbaraResponse()
+    }
+
+    /// Build the directive block for elevator pitch sessions.
+    private func elevatorPitchDirectiveBlock(topic: Topic, duration: Int, language: String) -> String {
+        let title = topic.title(for: language)
+        let prompt = topic.prompt(for: language)
+        return """
+        # Elevator Pitch Session
+
+        Present this topic to the learner. They have \(duration) seconds to write \
+        a structured response under time pressure.
+
+        **Topic:** \(title)
+        **Prompt:** \(prompt)
+        **Time limit:** \(duration) seconds
+
+        After presenting the topic, wait for the learner's response. When evaluating:
+        - This response was written under time pressure. Evaluate structural \
+        prioritisation above all else.
+        - Did the conclusion come FIRST? Under time pressure, this is the #1 skill.
+        - Value brevity-with-structure over completeness: "You only made one point, \
+        but it was crystal clear. Better than three muddled points."
+        - Acknowledge the constraint: "In \(duration) seconds you got the key point \
+        across. That's the skill."
+        - No revision loop — give final feedback and a session summary.
+        - Set sessionPhase to "summary" after evaluation.
+        """
+    }
+
+    /// Submit the learner's elevator pitch response (called by timer or early submit).
+    func submitElevatorPitch(text: String, timedOut: Bool) async {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty || timedOut else { return }
+        guard sessionState == .active else { return }
+
+        let responseText = trimmed.isEmpty ? "[No response — time expired]" : trimmed
+        elevatorPitchSession?.recordResponse(responseText, timedOut: timedOut)
+
+        let prefix = timedOut ? "[SYSTEM: Time expired. The learner's response below was auto-submitted.]\n\n" : ""
+        let learnerMessage = ChatMessage(role: .learner, text: prefix + responseText)
+        messages.append(learnerMessage)
+
+        await streamBarbaraResponse()
     }
 
     /// Send a learner message and stream Barbara's response.
@@ -315,7 +403,8 @@ final class SessionManager {
         sayItClearlySession = nil
 
         findThePointSession = nil
- 
+        elevatorPitchSession = nil
+
         lastEvaluationResult = nil
         sessionState = .idle
         messages = []

@@ -48,8 +48,10 @@ struct ContentView: View {
     @State private var sessionManager = SessionManager()
     @State private var coordinator = SayItClearlyCoordinator()
     @State private var findThePointCoordinator = FindThePointCoordinator()
+    @State private var elevatorPitchCoordinator = ElevatorPitchCoordinator()
     @State private var showSayItClearly = false
     @State private var showFindThePoint = false
+    @State private var showElevatorPitch = false
 
     private var language: String { settings.language }
 
@@ -73,6 +75,8 @@ struct ContentView: View {
                     showSayItClearly = true
                 case .findThePoint:
                     showFindThePoint = true
+                case .elevatorPitch:
+                    showElevatorPitch = true
                 }
             }
             .navigationDestination(isPresented: $showSayItClearly) {
@@ -93,6 +97,16 @@ struct ContentView: View {
                     language: language
                 ) {
                     showFindThePoint = false
+                }
+            }
+            .navigationDestination(isPresented: $showElevatorPitch) {
+                ElevatorPitchView(
+                    sessionManager: sessionManager,
+                    coordinator: elevatorPitchCoordinator,
+                    profile: profile,
+                    language: language
+                ) {
+                    showElevatorPitch = false
                 }
             }
         }

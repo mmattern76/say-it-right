@@ -57,12 +57,7 @@ struct SessionPickerView: View {
     }
 
     private func handleSessionSelection(_ sessionType: SessionType) {
-        switch sessionType {
-        case .sayItClearly:
-            onSessionStarted?(.sayItClearly)
-        case .findThePoint:
-            onSessionStarted?(.findThePoint)
-        }
+        onSessionStarted?(sessionType)
     }
 
     // MARK: - Layout
