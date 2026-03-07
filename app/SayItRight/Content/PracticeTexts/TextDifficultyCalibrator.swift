@@ -143,6 +143,9 @@ struct TextDifficultyCalibrator: Sendable {
         case .findThePoint:
             // "Find the point" works with all allowed quality levels
             return texts
+        case .fixThisMess:
+            // Only rambling and buried-lead texts
+            return texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
         case .sayItClearly, .elevatorPitch, .analyseMyText:
             // Build mode — no text selection needed, but if called, return all
             return texts
