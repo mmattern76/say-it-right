@@ -52,6 +52,7 @@ struct ContentView: View {
     @State private var showSayItClearly = false
     @State private var showFindThePoint = false
     @State private var showElevatorPitch = false
+    @State private var showAnalyseMyText = false
 
     private var language: String { settings.language }
 
@@ -77,6 +78,8 @@ struct ContentView: View {
                     showFindThePoint = true
                 case .elevatorPitch:
                     showElevatorPitch = true
+                case .analyseMyText:
+                    showAnalyseMyText = true
                 }
             }
             .navigationDestination(isPresented: $showSayItClearly) {
@@ -107,6 +110,15 @@ struct ContentView: View {
                     language: language
                 ) {
                     showElevatorPitch = false
+                }
+            }
+            .navigationDestination(isPresented: $showAnalyseMyText) {
+                AnalyseMyTextView(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                ) {
+                    showAnalyseMyText = false
                 }
             }
         }

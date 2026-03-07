@@ -8,6 +8,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
     case sayItClearly = "say-it-clearly"
     case findThePoint = "find-the-point"
     case elevatorPitch = "elevator-pitch"
+    case analyseMyText = "analyse-my-text"
 
     var id: String { rawValue }
 
@@ -20,6 +21,8 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de" ? "Finde den Punkt" : "Find the point"
         case .elevatorPitch:
             language == "de" ? "30 Sekunden" : "The elevator pitch"
+        case .analyseMyText:
+            language == "de" ? "Analysiere meinen Text" : "Analyse my text"
         }
     }
 
@@ -38,6 +41,10 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
             language == "de"
                 ? "Schreib unter Zeitdruck. Barbara bewertet, ob du priorisieren kannst."
                 : "Write under time pressure. Barbara evaluates your ability to prioritise."
+        case .analyseMyText:
+            language == "de"
+                ? "F\u{00FC}g deinen eigenen Text ein. Barbara bewertet die Struktur."
+                : "Paste your own text. Barbara evaluates the structure."
         }
     }
 
@@ -47,6 +54,7 @@ enum SessionType: String, CaseIterable, Identifiable, Sendable {
         case .sayItClearly: "text.bubble"
         case .findThePoint: "magnifyingglass"
         case .elevatorPitch: "timer"
+        case .analyseMyText: "doc.text"
         }
     }
 }

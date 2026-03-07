@@ -37,6 +37,9 @@ final class SessionManager {
     /// The active "Elevator pitch" session state, if any.
     private(set) var elevatorPitchSession: ElevatorPitchSession?
 
+    /// The active "Analyse my text" session state, if any.
+    private(set) var analyseMyTextSession: AnalyseMyTextSession?
+
     /// The latest evaluation result from the structural evaluator.
     private(set) var lastEvaluationResult: EvaluationResult?
 
@@ -94,6 +97,7 @@ final class SessionManager {
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
+        analyseMyTextSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -135,6 +139,7 @@ final class SessionManager {
         sayItClearlySession = SayItClearlySession(topic: topic)
         findThePointSession = nil
         elevatorPitchSession = nil
+        analyseMyTextSession = nil
 
         lastEvaluationResult = nil
         sessionState = .loading
@@ -183,6 +188,7 @@ final class SessionManager {
         sayItClearlySession = nil
         findThePointSession = FindThePointSession(practiceText: practiceText)
         elevatorPitchSession = nil
+        analyseMyTextSession = nil
 
         sessionState = .loading
 
@@ -336,6 +342,78 @@ final class SessionManager {
         await streamBarbaraResponse()
     }
 
+    /// Start an "Analyse my text" session.
+    ///
+    /// No topic selection — the user provides their own text. Barbara greets
+    /// the learner and asks them to paste their text.
+    func startAnalyseMyTextSession(profile: LearnerProfile, language: String) async {
+        messages = []
+        sessionMetadata = []
+        activeSessionType = .analyseMyText
+        sayItClearlySession = nil
+        findThePointSession = nil
+        elevatorPitchSession = nil
+        analyseMyTextSession = AnalyseMyTextSession()
+
+        lastEvaluationResult = nil
+        sessionState = .loading
+
+        let basePrompt = systemPromptAssembler.assemble(
+            level: profile.currentLevel,
+            sessionType: SessionType.analyseMyText.rawValue,
+            language: language,
+            profileJSON: profile.toPromptJSON()
+        )
+
+        let directive = analyseMyTextDirectiveBlock(language: language)
+        systemPrompt = basePrompt + "\n\n" + directive
+
+        await structuralEvaluator.prepareSession(
+            level: profile.currentLevel,
+            sessionType: SessionType.analyseMyText.rawValue,
+            language: language,
+            profile: profile
+        )
+
+        await streamBarbaraResponse()
+    }
+
+    /// Build the directive block for "Analyse my text" sessions.
+    private func analyseMyTextDirectiveBlock(language: String) -> String {
+        """
+        # Analyse My Text Session
+
+        The learner will paste their own text (essay, email, article draft) for \
+        structural analysis. Greet them and ask them to paste or type their text.
+
+        When evaluating:
+        - Analyse the STRUCTURE of the text, never the content correctness.
+        - Identify the governing thought (or note its absence).
+        - Evaluate grouping, MECE compliance, and logical flow.
+        - Reference specific sentences from the text in your feedback.
+        - Be exploratory: "What's your main point here? I can see several \
+        candidates — which one did you intend?"
+        - Acknowledge real-world context: "If this is for a school essay, your \
+        teacher will appreciate a clearer lead."
+        - After evaluation, encourage revision: "Now revise with my feedback in \
+        mind. Lead with your key point."
+
+        If the text is too short (less than 2 sentences), ask for more: \
+        "That's not enough to evaluate. Give me at least a paragraph."
+
+        If the text is very long, focus on the overall structure and the first \
+        few paragraphs in detail.
+
+        IMPORTANT: If the text contains distressing, violent, or inappropriate \
+        content, still provide structural feedback but include a content_flag \
+        field in the BARBARA_META block set to true.
+
+        Set sessionPhase to "evaluation" when providing feedback.
+        After revisions are complete, provide a session summary with \
+        sessionPhase "summary".
+        """
+    }
+
     /// Send a learner message and stream Barbara's response.
     ///
     /// - Parameter text: The learner's message text.
@@ -361,6 +439,11 @@ final class SessionManager {
         // Track extraction attempts in "Find the point" session
         if findThePointSession != nil && !findThePointSession!.hasUsedRetry {
             findThePointSession?.recordAttempt(trimmed)
+        }
+
+        // Track submissions in "Analyse my text" session
+        if analyseMyTextSession != nil {
+            analyseMyTextSession?.recordSubmission(trimmed)
         }
 
         // Check context window limits
@@ -423,6 +506,7 @@ final class SessionManager {
 
         findThePointSession = nil
         elevatorPitchSession = nil
+        analyseMyTextSession = nil
 
         lastEvaluationResult = nil
         sessionState = .idle
