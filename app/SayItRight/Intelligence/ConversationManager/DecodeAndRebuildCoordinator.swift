@@ -19,7 +19,7 @@ final class DecodeAndRebuildCoordinator {
     /// Minimum completed Build sessions required to unlock.
     static let minBuildSessions = 3
 
-    init(library: PracticeTextLibrary = PracticeTextLibrary()) {
+    init(library: PracticeTextLibrary = .loadFromBundle()) {
         self.library = library
     }
 

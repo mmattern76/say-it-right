@@ -186,6 +186,27 @@ struct ParentSettingsView: View {
                 Text("Override the bundled Config.plist key. Stored securely in Keychain.")
             }
 
+            // MARK: Level Override
+            Section {
+                Picker("Learner Level", selection: $settings.levelOverride) {
+                    Text("Auto (default)").tag(0)
+                    Text("Level 1 — Klartext").tag(1)
+                    Text("Level 2 — Ordnung").tag(2)
+                    Text("Level 3 — Architektur").tag(3)
+                    Text("Level 4 — Meisterschaft").tag(4)
+                }
+
+                if settings.levelOverride > 0 {
+                    Text("Overriding learner level to \(settings.levelOverride). This unlocks all exercises for that level.")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
+            } header: {
+                Text("Testing")
+            } footer: {
+                Text("Override the learner's level to test exercises that require higher levels (e.g. Spot the Gap requires L2+).")
+            }
+
             // MARK: Debug Mode
             Section {
                 Toggle("Debug Mode", isOn: $settings.isDebugModeEnabled)

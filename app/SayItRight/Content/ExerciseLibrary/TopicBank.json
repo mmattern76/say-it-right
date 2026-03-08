@@ -4,7 +4,7 @@
     "titleEN": "Four-day school week",
     "titleDE": "Vier-Tage-Schulwoche",
     "promptEN": "Should schools switch to a four-day week? Tell me what you think — conclusion first, then your reasons.",
-    "promptDE": "Sollte die Schule auf eine Vier-Tage-Woche umstellen? Sag mir was du denkst — Fazit zuerst, dann deine Gr\u00fcnde.",
+    "promptDE": "Sollte die Schule auf eine Vier-Tage-Woche umstellen? Sag mir was du denkst — Fazit zuerst, dann deine Gründe.",
     "domain": "school",
     "level": 1,
     "barbaraFavorite": true
@@ -22,7 +22,7 @@
   {
     "id": "school-late-start",
     "titleEN": "Later school start",
-    "titleDE": "Sp\u00e4terer Schulbeginn",
+    "titleDE": "Späterer Schulbeginn",
     "promptEN": "Should school start at 9 AM instead of 8? Tell me what you think — conclusion first.",
     "promptDE": "Sollte die Schule erst um 9 Uhr statt um 8 beginnen? Sag mir was du denkst — Fazit zuerst.",
     "domain": "school",
@@ -34,7 +34,7 @@
     "titleEN": "School uniforms",
     "titleDE": "Schuluniformen",
     "promptEN": "Should your school introduce uniforms? Tell me what you think — conclusion first, then your reasons.",
-    "promptDE": "Sollte deine Schule Uniformen einf\u00fchren? Sag mir was du denkst — Fazit zuerst, dann deine Gr\u00fcnde.",
+    "promptDE": "Sollte deine Schule Uniformen einführen? Sag mir was du denkst — Fazit zuerst, dann deine Gründe.",
     "domain": "school",
     "level": 1,
     "barbaraFavorite": false
@@ -52,9 +52,9 @@
   {
     "id": "tech-social-media-age",
     "titleEN": "Social media minimum age",
-    "titleDE": "Mindestalter f\u00fcr Social Media",
+    "titleDE": "Mindestalter für Social Media",
     "promptEN": "Should there be a minimum age of 16 for social media? Tell me what you think — conclusion first.",
-    "promptDE": "Sollte es ein Mindestalter von 16 f\u00fcr Social Media geben? Sag mir was du denkst — Fazit zuerst.",
+    "promptDE": "Sollte es ein Mindestalter von 16 für Social Media geben? Sag mir was du denkst — Fazit zuerst.",
     "domain": "technology",
     "level": 1,
     "barbaraFavorite": false
@@ -64,7 +64,7 @@
     "titleEN": "Weekly allowance",
     "titleDE": "Taschengeld",
     "promptEN": "Should teenagers get a fixed weekly allowance? Tell me what you think — conclusion first.",
-    "promptDE": "Sollten Jugendliche ein festes w\u00f6chentliches Taschengeld bekommen? Sag mir was du denkst — Fazit zuerst.",
+    "promptDE": "Sollten Jugendliche ein festes wöchentliches Taschengeld bekommen? Sag mir was du denkst — Fazit zuerst.",
     "domain": "everyday",
     "level": 1,
     "barbaraFavorite": false
@@ -72,9 +72,9 @@
   {
     "id": "everyday-curfew",
     "titleEN": "Curfew for teenagers",
-    "titleDE": "Ausgehzeiten f\u00fcr Jugendliche",
+    "titleDE": "Ausgehzeiten für Jugendliche",
     "promptEN": "Should parents set a curfew for teenagers? Tell me what you think — conclusion first.",
-    "promptDE": "Sollten Eltern Ausgehzeiten f\u00fcr Jugendliche festlegen? Sag mir was du denkst — Fazit zuerst.",
+    "promptDE": "Sollten Eltern Ausgehzeiten für Jugendliche festlegen? Sag mir was du denkst — Fazit zuerst.",
     "domain": "everyday",
     "level": 1,
     "barbaraFavorite": false
@@ -82,9 +82,9 @@
   {
     "id": "society-voting-age",
     "titleEN": "Voting at 16",
-    "titleDE": "W\u00e4hlen ab 16",
+    "titleDE": "Wählen ab 16",
     "promptEN": "Should 16-year-olds be allowed to vote? Tell me what you think — conclusion first, then your reasons.",
-    "promptDE": "Sollten 16-J\u00e4hrige w\u00e4hlen d\u00fcrfen? Sag mir was du denkst — Fazit zuerst, dann deine Gr\u00fcnde.",
+    "promptDE": "Sollten 16-Jährige wählen dürfen? Sag mir was du denkst — Fazit zuerst, dann deine Gründe.",
     "domain": "society",
     "level": 1,
     "barbaraFavorite": true
@@ -94,7 +94,7 @@
     "titleEN": "Free public transport",
     "titleDE": "Kostenloser Nahverkehr",
     "promptEN": "Should public transport be free for everyone? Tell me what you think — conclusion first.",
-    "promptDE": "Sollte der Nahverkehr f\u00fcr alle kostenlos sein? Sag mir was du denkst — Fazit zuerst.",
+    "promptDE": "Sollte der Nahverkehr für alle kostenlos sein? Sag mir was du denkst — Fazit zuerst.",
     "domain": "society",
     "level": 1,
     "barbaraFavorite": false
@@ -104,7 +104,7 @@
     "titleEN": "Abolish grades",
     "titleDE": "Noten abschaffen",
     "promptEN": "Should schools replace number grades with written feedback? Make your case — start with your position, then group your supporting reasons.",
-    "promptDE": "Sollten Schulen Ziffernnoten durch schriftliches Feedback ersetzen? Argumentiere — beginne mit deiner Position, dann gruppiere deine Gr\u00fcnde.",
+    "promptDE": "Sollten Schulen Ziffernnoten durch schriftliches Feedback ersetzen? Argumentiere — beginne mit deiner Position, dann gruppiere deine Gründe.",
     "domain": "school",
     "level": 2,
     "barbaraFavorite": true
@@ -112,9 +112,9 @@
   {
     "id": "tech-ai-homework",
     "titleEN": "AI for homework",
-    "titleDE": "KI f\u00fcr Hausaufgaben",
+    "titleDE": "KI für Hausaufgaben",
     "promptEN": "Should students be allowed to use AI tools for homework? Make your case — position first, then structured supporting arguments.",
-    "promptDE": "Sollten Sch\u00fcler KI-Tools f\u00fcr Hausaufgaben nutzen d\u00fcrfen? Argumentiere — Position zuerst, dann strukturierte Argumente.",
+    "promptDE": "Sollten Schüler KI-Tools für Hausaufgaben nutzen dürfen? Argumentiere — Position zuerst, dann strukturierte Argumente.",
     "domain": "technology",
     "level": 2,
     "barbaraFavorite": true
@@ -124,7 +124,7 @@
     "titleEN": "Individual climate action",
     "titleDE": "Individueller Klimaschutz",
     "promptEN": "Is individual action or government policy more effective for fighting climate change? Make your case with grouped arguments.",
-    "promptDE": "Ist individuelles Handeln oder Regierungspolitik wirksamer im Kampf gegen den Klimawandel? Argumentiere mit gruppierten Gr\u00fcnden.",
+    "promptDE": "Ist individuelles Handeln oder Regierungspolitik wirksamer im Kampf gegen den Klimawandel? Argumentiere mit gruppierten Gründen.",
     "domain": "society",
     "level": 2,
     "barbaraFavorite": false
@@ -132,9 +132,9 @@
   {
     "id": "everyday-part-time-jobs",
     "titleEN": "Part-time jobs for students",
-    "titleDE": "Nebenjobs f\u00fcr Sch\u00fcler",
+    "titleDE": "Nebenjobs für Schüler",
     "promptEN": "Should students take part-time jobs during the school year? Structure your argument with clear groups of reasons.",
-    "promptDE": "Sollten Sch\u00fcler w\u00e4hrend der Schulzeit Nebenjobs haben? Strukturiere dein Argument mit klaren Gruppen von Gr\u00fcnden.",
+    "promptDE": "Sollten Schüler während der Schulzeit Nebenjobs haben? Strukturiere dein Argument mit klaren Gruppen von Gründen.",
     "domain": "everyday",
     "level": 2,
     "barbaraFavorite": false

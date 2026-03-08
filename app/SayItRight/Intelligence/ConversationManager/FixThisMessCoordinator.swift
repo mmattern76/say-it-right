@@ -13,7 +13,7 @@ final class FixThisMessCoordinator {
     private let library: PracticeTextLibrary
     private let maxRecentTexts = 10
 
-    init(library: PracticeTextLibrary = PracticeTextLibrary()) {
+    init(library: PracticeTextLibrary = .loadFromBundle()) {
         self.library = library
     }
 

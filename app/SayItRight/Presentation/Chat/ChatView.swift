@@ -180,13 +180,14 @@ struct ChatView: View {
         VStack(spacing: 16) {
             BarbaraAvatarView(mood: .attentive, size: .header)
 
-            Text("Ready when you are.")
-                .font(.headline)
-                .foregroundStyle(.secondary)
+            ProgressView()
+                .controlSize(.regular)
 
-            Text("Start a conversation with Barbara.")
+            Text(viewModel.language == "de"
+                 ? "Barbara bereitet die Übung vor..."
+                 : "Barbara is preparing the exercise...")
                 .font(.subheadline)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 60)

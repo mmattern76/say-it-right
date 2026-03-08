@@ -74,10 +74,14 @@ struct ContentView: View {
     private var language: String { settings.language }
 
     private var profile: LearnerProfile {
-        LearnerProfile.createDefault(
+        var p = LearnerProfile.createDefault(
             displayName: settings.displayName,
             language: language
         )
+        if settings.levelOverride > 0 {
+            p.currentLevel = settings.levelOverride
+        }
+        return p
     }
 
     var body: some View {

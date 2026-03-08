@@ -25,6 +25,7 @@ final class AppSettings: @unchecked Sendable {
         _hasCompletedOnboarding = defaults.bool(forKey: "hasCompletedOnboarding")
         _selectedAvatar = defaults.string(forKey: "selectedAvatar")
         _displayName = defaults.string(forKey: "displayName") ?? ""
+        _levelOverride = defaults.integer(forKey: "levelOverride")
         _preferredInputMode = defaults.string(forKey: "preferredInputMode") ?? Self.platformDefaultInputMode
         if defaults.object(forKey: "ttsAutoPlay") != nil {
             _ttsAutoPlay = defaults.bool(forKey: "ttsAutoPlay")
@@ -167,6 +168,17 @@ final class AppSettings: @unchecked Sendable {
         set {
             _displayName = newValue
             UserDefaults.standard.set(newValue, forKey: "displayName")
+        }
+    }
+
+    // MARK: - Level Override (Testing)
+
+    private var _levelOverride: Int
+    var levelOverride: Int {
+        get { _levelOverride }
+        set {
+            _levelOverride = newValue
+            UserDefaults.standard.set(newValue, forKey: "levelOverride")
         }
     }
 

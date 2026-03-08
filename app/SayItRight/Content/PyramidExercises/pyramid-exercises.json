@@ -49,11 +49,17 @@
           "groups": [
             {
               "parentBlockID": "sp-001",
-              "memberBlockIDs": ["ev-001", "ev-002"]
+              "memberBlockIDs": [
+                "ev-001",
+                "ev-002"
+              ]
             },
             {
               "parentBlockID": "sp-002",
-              "memberBlockIDs": ["ev-003", "ev-004"]
+              "memberBlockIDs": [
+                "ev-003",
+                "ev-004"
+              ]
             }
           ]
         }
@@ -110,11 +116,17 @@
           "groups": [
             {
               "parentBlockID": "sp-003",
-              "memberBlockIDs": ["ev-005", "ev-006"]
+              "memberBlockIDs": [
+                "ev-005",
+                "ev-006"
+              ]
             },
             {
               "parentBlockID": "sp-004",
-              "memberBlockIDs": ["ev-007", "ev-008"]
+              "memberBlockIDs": [
+                "ev-007",
+                "ev-008"
+              ]
             }
           ]
         }
@@ -129,7 +141,7 @@
     "language": "de",
     "governingThought": {
       "id": "gt-de-001",
-      "text": "Schulen sollten Uniformen einf\u00fchren, weil sie sozialen Druck reduzieren und die Konzentration verbessern.",
+      "text": "Schulen sollten Uniformen einführen, weil sie sozialen Druck reduzieren und die Konzentration verbessern.",
       "type": "governing_thought"
     },
     "blocks": [
@@ -140,17 +152,17 @@
       },
       {
         "id": "sp-de-002",
-        "text": "Sch\u00fcler konzentrieren sich mehr aufs Lernen",
+        "text": "Schüler konzentrieren sich mehr aufs Lernen",
         "type": "support_point"
       },
       {
         "id": "ev-de-001",
-        "text": "23% weniger Mobbing-Vorf\u00e4lle in Pilotschulen",
+        "text": "23% weniger Mobbing-Vorfälle in Pilotschulen",
         "type": "evidence"
       },
       {
         "id": "ev-de-002",
-        "text": "Sch\u00fcler konkurrieren nicht mehr um Markenkleidung",
+        "text": "Schüler konkurrieren nicht mehr um Markenkleidung",
         "type": "evidence"
       },
       {
@@ -160,7 +172,7 @@
       },
       {
         "id": "ev-de-004",
-        "text": "Hausaufgaben-Abschlussrate stieg um 15% nach Uniform-Einf\u00fchrung",
+        "text": "Hausaufgaben-Abschlussrate stieg um 15% nach Uniform-Einführung",
         "type": "evidence"
       }
     ],
@@ -171,11 +183,17 @@
           "groups": [
             {
               "parentBlockID": "sp-de-001",
-              "memberBlockIDs": ["ev-de-001", "ev-de-002"]
+              "memberBlockIDs": [
+                "ev-de-001",
+                "ev-de-002"
+              ]
             },
             {
               "parentBlockID": "sp-de-002",
-              "memberBlockIDs": ["ev-de-003", "ev-de-004"]
+              "memberBlockIDs": [
+                "ev-de-003",
+                "ev-de-004"
+              ]
             }
           ]
         }
@@ -237,16 +255,24 @@
           "groups": [
             {
               "parentBlockID": "sp-005",
-              "memberBlockIDs": ["ev-009", "ev-010"]
+              "memberBlockIDs": [
+                "ev-009",
+                "ev-010"
+              ]
             },
             {
               "parentBlockID": "sp-006",
-              "memberBlockIDs": ["ev-011", "ev-012"]
+              "memberBlockIDs": [
+                "ev-011",
+                "ev-012"
+              ]
             }
           ]
         }
       ],
-      "redHerringBlockIDs": ["rh-001"]
+      "redHerringBlockIDs": [
+        "rh-001"
+      ]
     }
   }
 ]
