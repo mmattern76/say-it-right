@@ -3,7 +3,7 @@ import AVFoundation
 // MARK: - TTSPlaybackState
 
 /// Observable state of the TTS playback engine.
-enum TTSPlaybackState: Sendable, Equatable {
+enum TTSPlaybackState: Equatable {
     case idle
     case speaking
     case paused
@@ -12,7 +12,7 @@ enum TTSPlaybackState: Sendable, Equatable {
 // MARK: - TTSEvent
 
 /// Events emitted by the TTS engine during speech synthesis.
-enum TTSEvent: Sendable, Equatable {
+enum TTSEvent: Equatable {
     /// Speech started for an utterance.
     case started
     /// Speech finished for an utterance.
@@ -26,7 +26,7 @@ enum TTSEvent: Sendable, Equatable {
 // MARK: - TTSConfiguration
 
 /// Voice tuning parameters for Barbara's speech.
-struct TTSConfiguration: Sendable, Equatable {
+struct TTSConfiguration: Equatable {
     /// Speech rate (0.0–1.0). Default is AVSpeechUtteranceDefaultSpeechRate.
     var rate: Float = AVSpeechUtteranceDefaultSpeechRate
 
@@ -39,7 +39,7 @@ struct TTSConfiguration: Sendable, Equatable {
     /// Specific voice identifier, if any. When nil, uses default for language.
     var voiceIdentifier: String?
 
-    static let `default` = TTSConfiguration()
+    static let `default` = Self()
 }
 
 // MARK: - TTSPlaybackService Protocol
@@ -50,7 +50,6 @@ struct TTSConfiguration: Sendable, Equatable {
 /// speech events (started, finished, word boundary) to enable
 /// synchronized text highlighting in the chat UI.
 protocol TTSPlaybackService: AnyObject, Sendable {
-
     /// Current playback state.
     var state: TTSPlaybackState { get }
 
@@ -101,7 +100,6 @@ protocol TTSPlaybackService: AnyObject, Sendable {
 /// manages utterance queuing, and bridges delegate callbacks into
 /// the `TTSEvent` callback pattern.
 final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Sendable {
-
     // MARK: - Properties
 
     private let synthesizer = AVSpeechSynthesizer()
@@ -126,7 +124,8 @@ final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Se
             lock.unlock()
         }
     }
-    private var _isAutoPlayEnabled: Bool = true
+
+    private var _isAutoPlayEnabled = true
 
     var configuration: TTSConfiguration {
         get {
@@ -140,6 +139,7 @@ final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Se
             lock.unlock()
         }
     }
+
     private var _configuration: TTSConfiguration = .default
 
     /// The last text+language pair that was spoken, for replay.
@@ -272,16 +272,17 @@ final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Se
     func splitIntoSentences(_ text: String) -> [String] {
         var sentences: [String] = []
         text.enumerateSubstrings(
-            in: text.startIndex..<text.endIndex,
+            in: text.startIndex ..< text.endIndex,
             options: [.bySentences, .localized]
         ) { substring, _, _, _ in
             if let sentence = substring?.trimmingCharacters(in: .whitespacesAndNewlines),
-               !sentence.isEmpty {
+               !sentence.isEmpty
+            {
                 sentences.append(sentence)
             }
         }
         // Fallback: if enumeration yields nothing, use the full text.
-        if sentences.isEmpty && !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if sentences.isEmpty, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             sentences.append(text.trimmingCharacters(in: .whitespacesAndNewlines))
         }
         return sentences
@@ -307,28 +308,30 @@ final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Se
     }
 
     #if os(iOS)
-    @objc private func handleAudioInterruption(_ notification: Notification) {
+    @objc
+    private func handleAudioInterruption(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue)
         else { return }
 
         switch type {
-        case .began:
-            lock.lock()
-            let callback = _onEvent
-            _state = .paused
-            lock.unlock()
-            callback?(.interrupted)
-        case .ended:
-            // Optionally resume, but safer to let the user manually resume.
-            break
-        @unknown default:
-            break
+            case .began:
+                lock.lock()
+                let callback = _onEvent
+                _state = .paused
+                lock.unlock()
+                callback?(.interrupted)
+            case .ended:
+                // Optionally resume, but safer to let the user manually resume.
+                break
+            @unknown default:
+                break
         }
     }
 
-    @objc private func handleRouteChange(_ notification: Notification) {
+    @objc
+    private func handleRouteChange(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
               let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue)
@@ -349,10 +352,9 @@ final class AppleTTSPlaybackService: NSObject, TTSPlaybackService, @unchecked Se
 // MARK: - AVSpeechSynthesizerDelegate
 
 extension AppleTTSPlaybackService: AVSpeechSynthesizerDelegate {
-
     func speechSynthesizer(
-        _ synthesizer: AVSpeechSynthesizer,
-        didStart utterance: AVSpeechUtterance
+        _: AVSpeechSynthesizer,
+        didStart _: AVSpeechUtterance
     ) {
         lock.lock()
         _state = .speaking
@@ -389,7 +391,7 @@ extension AppleTTSPlaybackService: AVSpeechSynthesizerDelegate {
     }
 
     func speechSynthesizer(
-        _ synthesizer: AVSpeechSynthesizer,
+        _: AVSpeechSynthesizer,
         willSpeakRangeOfSpeechString characterRange: NSRange,
         utterance: AVSpeechUtterance
     ) {
@@ -404,8 +406,8 @@ extension AppleTTSPlaybackService: AVSpeechSynthesizerDelegate {
     }
 
     func speechSynthesizer(
-        _ synthesizer: AVSpeechSynthesizer,
-        didPause utterance: AVSpeechUtterance
+        _: AVSpeechSynthesizer,
+        didPause _: AVSpeechUtterance
     ) {
         lock.lock()
         _state = .paused
@@ -413,8 +415,8 @@ extension AppleTTSPlaybackService: AVSpeechSynthesizerDelegate {
     }
 
     func speechSynthesizer(
-        _ synthesizer: AVSpeechSynthesizer,
-        didContinue utterance: AVSpeechUtterance
+        _: AVSpeechSynthesizer,
+        didContinue _: AVSpeechUtterance
     ) {
         lock.lock()
         _state = .speaking

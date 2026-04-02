@@ -32,8 +32,8 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
 
                 Text(settings.language == "de"
-                     ? "Barbara spricht Deutsch mit dir."
-                     : "Barbara speaks English with you.")
+                    ? "Barbara spricht Deutsch mit dir."
+                    : "Barbara speaks English with you.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -53,8 +53,8 @@ struct SettingsView: View {
                 }
             } footer: {
                 Text(settings.language == "de"
-                     ? "API-Key, KI-Modell und Debug-Optionen"
-                     : "API key, AI model, and debug options")
+                    ? "API-Key, KI-Modell und Debug-Optionen"
+                    : "API key, AI model, and debug options")
             }
 
             Section("About") {

@@ -4,23 +4,23 @@ import SwiftUI
 ///
 /// Maxi and Alex are sourced from the Think app's character artwork
 /// and serve as default profile pictures in Say it right!
-enum LearnerAvatar: String, CaseIterable, Codable, Sendable {
+enum LearnerAvatar: String, CaseIterable, Codable {
     case maxi
     case alex
 
     /// Asset catalog image name.
     var assetName: String {
         switch self {
-        case .maxi: "avatar-maxi"
-        case .alex: "avatar-alex"
+            case .maxi: "avatar-maxi"
+            case .alex: "avatar-alex"
         }
     }
 
     /// Localized display name.
     var displayName: String {
         switch self {
-        case .maxi: "Maxi"
-        case .alex: "Alex"
+            case .maxi: "Maxi"
+            case .alex: "Alex"
         }
     }
 }

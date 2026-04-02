@@ -4,21 +4,20 @@ import Foundation
 ///
 /// Ensures Break mode exercises are challenging but not overwhelming by filtering
 /// texts based on the learner's current level, scores, and the session type.
-struct TextDifficultyCalibrator: Sendable {
-
+enum TextDifficultyCalibrator {
     // MARK: - Configuration
 
     /// Rolling average threshold above which L2 users unlock adversarial texts.
-    static let highScoreThreshold: Double = 0.75
+    static let highScoreThreshold = 0.75
 
     /// Break-mode dimension keys used to compute the rolling average for adversarial unlocking.
     static let breakDimensions: [String] = ProfileUpdater.breakDimensions
 
     /// Fraction of results that should be at the learner's current difficulty band.
-    static let currentDifficultyWeight: Double = 0.60
+    static let currentDifficultyWeight = 0.60
 
     /// Fraction of results that should stretch the learner slightly.
-    static let stretchDifficultyWeight: Double = 0.40
+    static let stretchDifficultyWeight = 0.40
 
     // MARK: - Public API
 
@@ -61,7 +60,7 @@ struct TextDifficultyCalibrator: Sendable {
 
         // 3. Exclude seen texts; reset if all appropriate texts have been seen
         let unseenCandidates = candidates.filter { !seen.contains($0.id) }
-        if unseenCandidates.isEmpty && !candidates.isEmpty {
+        if unseenCandidates.isEmpty, !candidates.isEmpty {
             // All texts seen — use full candidate set (edge case from issue)
         } else {
             candidates = unseenCandidates
@@ -103,19 +102,19 @@ struct TextDifficultyCalibrator: Sendable {
     /// Determines which quality levels a learner is allowed to see.
     static func allowedQualityLevels(for profile: LearnerProfile) -> Set<QualityLevel> {
         switch profile.currentLevel {
-        case 1:
-            // L1: well-structured and buried-lead only
-            return [.wellStructured, .buriedLead]
-        case 2:
-            // L2: add rambling; adversarial only if high scores
-            var levels: Set<QualityLevel> = [.wellStructured, .buriedLead, .rambling]
-            if hasHighBreakScores(profile) {
-                levels.insert(.adversarial)
-            }
-            return levels
-        default:
-            // L3+: all quality levels
-            return Set(QualityLevel.allCases)
+            case 1:
+                // L1: well-structured and buried-lead only
+                return [.wellStructured, .buriedLead]
+            case 2:
+                // L2: add rambling; adversarial only if high scores
+                var levels: Set<QualityLevel> = [.wellStructured, .buriedLead, .rambling]
+                if hasHighBreakScores(profile) {
+                    levels.insert(.adversarial)
+                }
+                return levels
+            default:
+                // L3+: all quality levels
+                return Set(QualityLevel.allCases)
         }
     }
 
@@ -138,21 +137,21 @@ struct TextDifficultyCalibrator: Sendable {
         sessionType: SessionType
     ) -> [PracticeText] {
         switch sessionType {
-        case .findThePoint:
-            // "Find the point" works with all allowed quality levels
-            return texts
-        case .fixThisMess:
-            // Only rambling and buried-lead texts
-            return texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
-        case .spotTheGap:
-            // Only adversarial texts with structural flaws
-            return texts.filter { $0.metadata.qualityLevel == .adversarial && $0.answerKey.structuralFlaw != nil }
-        case .decodeAndRebuild:
-            // Only buried-lead and rambling texts (there must be structural work to do)
-            return texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
-        case .sayItClearly, .elevatorPitch, .analyseMyText, .buildThePyramid:
-            // Build mode — no text selection needed, but if called, return all
-            return texts
+            case .findThePoint:
+                // "Find the point" works with all allowed quality levels
+                texts
+            case .fixThisMess:
+                // Only rambling and buried-lead texts
+                texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
+            case .spotTheGap:
+                // Only adversarial texts with structural flaws
+                texts.filter { $0.metadata.qualityLevel == .adversarial && $0.answerKey.structuralFlaw != nil }
+            case .decodeAndRebuild:
+                // Only buried-lead and rambling texts (there must be structural work to do)
+                texts.filter { [.buriedLead, .rambling].contains($0.metadata.qualityLevel) }
+            case .sayItClearly, .elevatorPitch, .analyseMyText, .buildThePyramid:
+                // Build mode — no text selection needed, but if called, return all
+                texts
         }
     }
 
@@ -203,9 +202,9 @@ struct TextDifficultyCalibrator: Sendable {
     /// The maximum difficulty rating considered "current" for this learner.
     static func currentDifficultyMax(for profile: LearnerProfile) -> Int {
         switch profile.currentLevel {
-        case 1: return 2   // well-structured territory
-        case 2: return 3   // buried-lead territory
-        default: return 4  // rambling territory
+            case 1: 2 // well-structured territory
+            case 2: 3 // buried-lead territory
+            default: 4 // rambling territory
         }
     }
 
@@ -232,7 +231,7 @@ struct TextDifficultyCalibrator: Sendable {
             let placed = pIdx + sIdx + 1
             let targetPrimary = Int((Double(placed) * primaryRatio).rounded())
 
-            if pIdx < primary.count && (pIdx < targetPrimary || sIdx >= secondary.count) {
+            if pIdx < primary.count, pIdx < targetPrimary || sIdx >= secondary.count {
                 result.append(primary[pIdx])
                 pIdx += 1
             } else if sIdx < secondary.count {
@@ -255,7 +254,7 @@ struct SeededRandomNumberGenerator: RandomNumberGenerator {
     private var state: UInt64
 
     init(seed: UInt64) {
-        state = seed == 0 ? 1 : seed  // Avoid zero state
+        self.state = seed == 0 ? 1 : seed // Avoid zero state
     }
 
     mutating func next() -> UInt64 {

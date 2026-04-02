@@ -11,8 +11,8 @@ struct CelebrationEffectView: View {
     @Binding var isActive: Bool
 
     @State private var scale: CGFloat = 0.5
-    @State private var opacity: Double = 0.0
-    @State private var innerOpacity: Double = 0.0
+    @State private var opacity = 0.0
+    @State private var innerOpacity = 0.0
     @State private var hapticTrigger: PyramidHaptic?
 
     var body: some View {

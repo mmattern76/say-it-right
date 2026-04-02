@@ -7,7 +7,7 @@ import Foundation
 /// Drop zones are computed from the current tree state. Each zone identifies
 /// where a new child block could be inserted — under which parent, at which
 /// child index, and at what canvas position.
-struct DropZone: Identifiable, Sendable, Equatable {
+struct DropZone: Identifiable, Equatable {
     let id: String
     /// The node ID of the parent this zone belongs to.
     let parentID: String
@@ -31,7 +31,7 @@ struct DropZone: Identifiable, Sendable, Equatable {
 // MARK: - Drop Zone State
 
 /// Visual state of a drop zone during drag interaction.
-enum DropZoneVisualState: Sendable, Equatable {
+enum DropZoneVisualState: Equatable {
     /// Zone is visible but not targeted.
     case available
     /// A dragged block is hovering within proximity.
@@ -41,13 +41,13 @@ enum DropZoneVisualState: Sendable, Equatable {
 // MARK: - Drop Zone Configuration
 
 /// Configurable parameters for drop zone proximity detection.
-struct DropZoneConfiguration: Sendable {
+struct DropZoneConfiguration {
     /// Maximum distance (in points) from a dragged block centre to a drop zone
     /// centre for the zone to be considered a valid target.
     var snapDistance: CGFloat = 80
 
     /// Size of drop zone indicator.
-    var zoneSize: CGSize = CGSize(width: 140, height: 50)
+    var zoneSize = CGSize(width: 140, height: 50)
 
-    static let `default` = DropZoneConfiguration()
+    static let `default` = Self()
 }

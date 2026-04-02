@@ -1,10 +1,8 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
-@Suite("ProfileUpdater")
 struct ProfileUpdaterTests {
-
     private static func makeMetadata(
         scores: [String: Int] = ["governingThought": 2, "clarity": 2, "supportGrouping": 1, "redundancy": 1],
         totalScore: Int = 6,
@@ -67,7 +65,7 @@ struct ProfileUpdaterTests {
 
         // Record high scores for governingThought (max 3) — need ≥ 0.8 * 3 = 2.4
         let highMetadata = Self.makeMetadata(scores: ["governingThought": 3, "clarity": 3])
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             updater.updateProfile(&profile, from: highMetadata, sessionType: "say-it-clearly")
         }
 
@@ -82,7 +80,7 @@ struct ProfileUpdaterTests {
 
         // Record low scores for supportGrouping (max 2) — need < 0.5 * 2 = 1.0
         let lowMetadata = Self.makeMetadata(scores: ["supportGrouping": 0, "redundancy": 0])
-        for _ in 0..<3 {
+        for _ in 0 ..< 3 {
             updater.updateProfile(&profile, from: lowMetadata, sessionType: "say-it-clearly")
         }
 

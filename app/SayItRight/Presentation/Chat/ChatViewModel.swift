@@ -15,7 +15,6 @@ import Foundation
 @MainActor
 @Observable
 final class ChatViewModel {
-
     // MARK: - Published State
 
     /// All messages in the current conversation.
@@ -42,7 +41,7 @@ final class ChatViewModel {
     }
 
     /// The text currently being composed by the learner.
-    var inputText: String = ""
+    var inputText = ""
 
     /// Whether Barbara is currently generating a response.
     var isLoading: Bool {
@@ -55,7 +54,7 @@ final class ChatViewModel {
     /// The most recent error message, if any.
     var errorMessage: String? {
         if let sm = sessionManager {
-            if case .error(let msg) = sm.sessionState {
+            if case let .error(msg) = sm.sessionState {
                 return msg
             }
             return nil
@@ -86,14 +85,14 @@ final class ChatViewModel {
     // MARK: - Private State (standalone mode)
 
     private var _localMessages: [ChatMessage] = []
-    private var _localIsLoading: Bool = false
+    private var _localIsLoading = false
     private var _localErrorMessage: String?
 
     /// Structured error state for the error banner UI.
     private(set) var errorState = ChatErrorState()
 
     /// Whether the settings screen should be presented (triggered by invalid API key).
-    var showSettings: Bool = false
+    var showSettings = false
 
     // MARK: - Dependencies
 
@@ -108,16 +107,16 @@ final class ChatViewModel {
     // MARK: - Session Config (standalone mode fallback)
 
     /// Current learner level (1-4).
-    var level: Int = 1
+    var level = 1
 
     /// Session type identifier (e.g. "say-it-clearly").
-    var sessionType: String = "say-it-clearly"
+    var sessionType = "say-it-clearly"
 
     /// Language code ("en" or "de").
-    var language: String = "en"
+    var language = "en"
 
     /// JSON snapshot of the learner profile for prompt injection.
-    var profileJSON: String = "{}"
+    var profileJSON = "{}"
 
     // MARK: - Private State
 
@@ -180,6 +179,14 @@ final class ChatViewModel {
 
         Task {
             await streamBarbaraResponseStandalone()
+        }
+    }
+
+    /// Retry the session when SessionManager failed during initial streaming.
+    func retrySession() {
+        guard let sm = sessionManager else { return }
+        Task {
+            await sm.retryLastResponse()
         }
     }
 
@@ -278,7 +285,7 @@ final class ChatViewModel {
                         }
                     }
                 },
-                onRetry: { [weak self] attempt, delay in
+                onRetry: { [weak self] attempt, _ in
                     await MainActor.run {
                         self?.errorState.retryCount = attempt
                         self?.errorState.isRetrying = true
@@ -294,7 +301,6 @@ final class ChatViewModel {
             // Success — clear pending input
             pendingInputText = nil
             errorState.clear()
-
         } catch {
             let classifiedError = NetworkErrorClassifier.classify(error)
 
@@ -310,7 +316,9 @@ final class ChatViewModel {
             // Preserve the learner's input for retry
             if let pending = pendingInputText {
                 inputText = pending
-                if let lastLearnerIndex = _localMessages.lastIndex(where: { $0.role == .learner && $0.text == pending }) {
+                if let lastLearnerIndex = _localMessages
+                    .lastIndex(where: { $0.role == .learner && $0.text == pending })
+                {
                     _localMessages.remove(at: lastLearnerIndex)
                 }
             }
@@ -321,7 +329,7 @@ final class ChatViewModel {
             _localErrorMessage = classifiedError.barbaraMessage(language: language)
 
             // Start countdown for rate-limited errors
-            if case .rateLimited(let seconds) = classifiedError, let s = seconds {
+            if case let .rateLimited(seconds) = classifiedError, let s = seconds {
                 startRateLimitCountdown(seconds: s)
             }
         }

@@ -12,14 +12,14 @@ struct BarbaraAvatarView: View {
     let mood: BarbaraMood
     var size: AvatarSize = .thumbnail
 
-    enum AvatarSize: Sendable {
+    enum AvatarSize {
         case thumbnail
         case header
 
         var points: CGFloat {
             switch self {
-            case .thumbnail: 40
-            case .header: 80
+                case .thumbnail: 40
+                case .header: 80
             }
         }
     }
@@ -54,7 +54,7 @@ struct BarbaraAvatarView: View {
 
 #Preview("Header — All Moods") {
     LazyVGrid(columns: [
-        GridItem(.adaptive(minimum: 100))
+        GridItem(.adaptive(minimum: 100)),
     ], spacing: 16) {
         ForEach(BarbaraMood.allCases, id: \.self) { mood in
             VStack(spacing: 8) {

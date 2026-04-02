@@ -1,6 +1,6 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
 // MARK: - Test Helpers
 
@@ -33,9 +33,7 @@ private func makeUserTree(
 
 // MARK: - Feedback Mapping Tests
 
-@Suite("ValidationFeedbackMapper")
 struct ValidationFeedbackMapperTests {
-
     let engine = MECEValidationEngine()
 
     // MARK: - Block Feedback States
@@ -331,9 +329,7 @@ struct ValidationFeedbackMapperTests {
 
 // MARK: - Block Feedback State Tests
 
-@Suite("BlockFeedbackState")
 struct BlockFeedbackStateTests {
-
     @Test("All feedback states have accessibility labels")
     func accessibilityLabels() {
         let states: [BlockFeedbackState] = [.correct, .misplaced, .meceOverlap, .none]
@@ -358,9 +354,7 @@ struct BlockFeedbackStateTests {
 
 // MARK: - Feedback Configuration Tests
 
-@Suite("FeedbackConfiguration")
 struct FeedbackConfigurationTests {
-
     @Test("Default configuration has feedback disabled")
     func defaultConfiguration() {
         let config = FeedbackConfiguration.default
@@ -381,9 +375,7 @@ struct FeedbackConfigurationTests {
 
 // MARK: - Gap Placement Tests
 
-@Suite("GapPlacement")
 struct GapPlacementTests {
-
     @Test("Gap placement has deterministic ID")
     func deterministicID() {
         let gap = GapPlacement(parentBlockID: "SP1", missingBlockID: "E2")
@@ -412,16 +404,14 @@ struct GapPlacementTests {
 
 // MARK: - Feedback Palette Tests
 
-@Suite("FeedbackPalette")
 struct FeedbackPaletteTests {
-
     @Test("Palette colours are distinct")
     func distinctColours() {
         // Verify the palette entries exist and are accessible.
-        let _ = FeedbackPalette.correct
-        let _ = FeedbackPalette.misplaced
-        let _ = FeedbackPalette.overlap
-        let _ = FeedbackPalette.gap
-        let _ = FeedbackPalette.celebration
+        _ = FeedbackPalette.correct
+        _ = FeedbackPalette.misplaced
+        _ = FeedbackPalette.overlap
+        _ = FeedbackPalette.gap
+        _ = FeedbackPalette.celebration
     }
 }

@@ -5,7 +5,7 @@ import Foundation
 /// Each message has an author role (Barbara or learner), the visible
 /// text content, and a timestamp. Barbara's messages may also carry
 /// hidden metadata extracted by `ResponseParser`.
-struct ChatMessage: Identifiable, Sendable {
+struct ChatMessage: Identifiable {
     let id: UUID
     let role: ChatRole
     var text: String
@@ -33,7 +33,7 @@ struct ChatMessage: Identifiable, Sendable {
 }
 
 /// Who authored a chat message.
-enum ChatRole: String, Sendable {
+enum ChatRole: String {
     case barbara
     case learner
 }

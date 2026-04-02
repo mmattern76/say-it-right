@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Input mode for the chat interface.
-enum ChatInputMode: Sendable, Equatable {
+enum ChatInputMode: Equatable {
     case text
     case voice
 }
@@ -97,8 +97,8 @@ struct ChatView: View {
                     Image(systemName: inputMode == .voice ? "keyboard" : "mic.fill")
                         .font(.caption)
                     Text(inputMode == .voice
-                         ? (viewModel.language == "de" ? "Tippen" : "Type")
-                         : (viewModel.language == "de" ? "Sprechen" : "Speak"))
+                        ? (viewModel.language == "de" ? "Tippen" : "Type")
+                        : (viewModel.language == "de" ? "Sprechen" : "Speak"))
                         .font(.caption2)
                 }
                 .foregroundStyle(.secondary)
@@ -118,13 +118,12 @@ struct ChatView: View {
     private func switchInputMode() {
         if inputMode == .voice, let voiceVM = voiceInputViewModel {
             // Voice → Text: preserve any partial transcription
-            let partial: String
-            if voiceVM.state == .review {
-                partial = voiceVM.editableText
+            let partial: String = if voiceVM.state == .review {
+                voiceVM.editableText
             } else if voiceVM.state == .recording {
-                partial = voiceVM.transcriptionText
+                voiceVM.transcriptionText
             } else {
-                partial = ""
+                ""
             }
             voiceVM.reset()
 
@@ -157,7 +156,8 @@ struct ChatView: View {
 
                     // Loading indicator when waiting for first token
                     if viewModel.isLoading, let last = viewModel.messages.last,
-                       last.role == .barbara, last.text.isEmpty {
+                       last.role == .barbara, last.text.isEmpty
+                    {
                         loadingIndicator
                             .id("loading")
                             .padding(.horizontal, contentHorizontalPadding)
@@ -178,16 +178,32 @@ struct ChatView: View {
 
     private var emptyState: some View {
         VStack(spacing: 16) {
-            BarbaraAvatarView(mood: .attentive, size: .header)
+            BarbaraAvatarView(mood: viewModel.errorMessage != nil ? .disappointed : .attentive, size: .header)
 
-            ProgressView()
-                .controlSize(.regular)
+            if viewModel.errorMessage != nil {
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.title2)
+                    .foregroundStyle(.orange)
+            } else {
+                ProgressView()
+                    .controlSize(.regular)
+            }
 
-            Text(viewModel.language == "de"
-                 ? "Barbara bereitet die Übung vor..."
-                 : "Barbara is preparing the exercise...")
+            Text(viewModel.errorMessage
+                ?? (viewModel.language == "de"
+                    ? "Barbara bereitet die Übung vor..."
+                    : "Barbara is preparing the exercise..."))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
+
+            if viewModel.errorMessage != nil {
+                Button(viewModel.language == "de" ? "Erneut versuchen" : "Try Again") {
+                    viewModel.retrySession()
+                }
+                .buttonStyle(.bordered)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 60)
@@ -202,7 +218,7 @@ struct ChatView: View {
             TypingIndicatorView()
                 .padding(.vertical, 10)
                 .padding(.horizontal, 14)
-                .background(Color.gray.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(Color.barbaraBubble, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             Spacer(minLength: 40)
         }
     }
@@ -223,7 +239,7 @@ struct ChatView: View {
             #else
             TextField("Type a message...", text: $viewModel.inputText, axis: .vertical)
                 .textFieldStyle(.plain)
-                .lineLimit(1...6)
+                .lineLimit(1 ... 6)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.12), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -291,7 +307,7 @@ struct ChatView: View {
     }
 
     private var sendButtonColor: Color {
-        canSend ? .accentColor : Color.gray.opacity(0.4)
+        canSend ? .barbaraAccent : Color.gray.opacity(0.4)
     }
 
     private func sendIfReady() {

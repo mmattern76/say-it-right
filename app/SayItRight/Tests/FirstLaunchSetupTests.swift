@@ -1,11 +1,9 @@
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - SetupStep Tests
 
-@Suite("SetupStep ordering")
 struct SetupStepTests {
-
     @Test("Steps have correct ordering")
     func stepOrdering() {
         #expect(SetupStep.apiKey < SetupStep.language)
@@ -23,9 +21,7 @@ struct SetupStepTests {
 
 // MARK: - AppVersion Tests
 
-@Suite("AppVersion")
 struct AppVersionTests {
-
     @Test("Display string format is version (build)")
     func displayStringFormat() {
         let display = AppVersion.displayString
@@ -47,9 +43,7 @@ struct AppVersionTests {
 
 // MARK: - First Launch Detection Tests
 
-@Suite("First launch detection")
 struct FirstLaunchDetectionTests {
-
     @Test("App needs setup when no API key configured")
     func needsSetupWithoutAPIKey() {
         let settings = AppSettings.shared

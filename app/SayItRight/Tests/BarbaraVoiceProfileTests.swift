@@ -1,11 +1,9 @@
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - BarbaraVoiceProfile Tests
 
-@Suite("BarbaraVoiceProfile")
 struct BarbaraVoiceProfileTests {
-
     // MARK: - Predefined Profile Tests
 
     @Test("German profile has expected voice identifiers")
@@ -125,8 +123,10 @@ struct BarbaraVoiceProfileTests {
             let profile = BarbaraVoiceProfile.profile(for: language)
             for context: BarbaraVoiceProfile.SpeechContext in [.correction, .praise, .observation] {
                 let rate = profile.rate(for: context)
-                #expect(rate >= 0.0 && rate <= 1.0,
-                        "Rate \(rate) out of range for \(language)/\(context)")
+                #expect(
+                    rate >= 0.0 && rate <= 1.0,
+                    "Rate \(rate) out of range for \(language)/\(context)"
+                )
             }
         }
     }
@@ -137,8 +137,10 @@ struct BarbaraVoiceProfileTests {
             let profile = BarbaraVoiceProfile.profile(for: language)
             for context: BarbaraVoiceProfile.SpeechContext in [.correction, .praise, .observation] {
                 let pitch = profile.pitch(for: context)
-                #expect(pitch >= 0.5 && pitch <= 2.0,
-                        "Pitch \(pitch) out of range for \(language)/\(context)")
+                #expect(
+                    pitch >= 0.5 && pitch <= 2.0,
+                    "Pitch \(pitch) out of range for \(language)/\(context)"
+                )
             }
         }
     }
@@ -150,10 +152,14 @@ struct BarbaraVoiceProfileTests {
             for context: BarbaraVoiceProfile.SpeechContext in [.correction, .praise, .observation] {
                 let rate = profile.rate(for: context)
                 let pitch = profile.pitch(for: context)
-                #expect(abs(rate - profile.baseRate) <= profile.baseRate * 0.1,
-                        "Rate variation too large for \(language)/\(context)")
-                #expect(abs(pitch - profile.basePitch) <= profile.basePitch * 0.1,
-                        "Pitch variation too large for \(language)/\(context)")
+                #expect(
+                    abs(rate - profile.baseRate) <= profile.baseRate * 0.1,
+                    "Rate variation too large for \(language)/\(context)"
+                )
+                #expect(
+                    abs(pitch - profile.basePitch) <= profile.basePitch * 0.1,
+                    "Pitch variation too large for \(language)/\(context)"
+                )
             }
         }
     }
@@ -235,7 +241,7 @@ struct BarbaraVoiceProfileTests {
         if let resolved {
             #expect(
                 resolved == profile.preferredVoiceIdentifier ||
-                resolved == profile.fallbackVoiceIdentifier
+                    resolved == profile.fallbackVoiceIdentifier
             )
         }
     }

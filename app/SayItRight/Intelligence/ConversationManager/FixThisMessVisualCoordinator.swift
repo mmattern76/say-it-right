@@ -7,7 +7,6 @@ import Foundation
 @MainActor
 @Observable
 final class FixThisMessVisualCoordinator {
-
     var recentExerciseIDs: Set<String> = []
 
     private let library: FixThisMessExerciseLibrary

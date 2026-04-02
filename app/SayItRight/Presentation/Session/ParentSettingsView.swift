@@ -21,6 +21,11 @@ struct ParentSettingsView: View {
     @State private var newPIN = ""
     @State private var confirmPIN = ""
     @State private var pinMismatch = false
+    @State private var connectionTestResult: String?
+    @State private var connectionTestError: String?
+    @State private var isTestingConnection = false
+    @State private var elevenLabsKeyInput = ""
+    @State private var showElevenLabsKey = false
 
     init(settings: AppSettings = .shared, catalog: ModelCatalog = .shared) {
         self.settings = settings
@@ -39,9 +44,9 @@ struct ParentSettingsView: View {
         .navigationTitle("Parent Settings")
         .onDisappear { gate.lock() }
         .task {
-            // Refresh model list when settings are opened
-            if let url = settings.backendURL, let key = settings.backendAPIKey {
-                await catalog.refresh(backendURL: url, apiKey: key)
+            // Refresh model list from Anthropic API when settings are opened
+            if let apiKey = settings.effectiveAPIKey {
+                await catalog.refreshFromAPI(apiKey: apiKey)
             }
         }
     }
@@ -95,6 +100,7 @@ struct ParentSettingsView: View {
     private var settingsContent: some View {
         Form {
             // MARK: AI Model
+
             Section {
                 Picker("Claude Model", selection: $settings.selectedModelID) {
                     ForEach(catalog.models) { model in
@@ -131,27 +137,30 @@ struct ParentSettingsView: View {
 
                 Button("Refresh Model List") {
                     Task {
-                        if let url = settings.backendURL, let key = settings.backendAPIKey {
-                            await catalog.refresh(backendURL: url, apiKey: key)
+                        if let apiKey = settings.effectiveAPIKey {
+                            await catalog.refreshFromAPI(apiKey: apiKey)
                         }
                     }
                 }
             } header: {
                 Text("AI Model")
             } footer: {
-                Text("Models are fetched from the Anthropic API. If a selected model becomes unavailable, the app will automatically select the closest replacement.")
+                Text(
+                    "Models are fetched from the Anthropic API. If a selected model becomes unavailable, the app will automatically select the closest replacement."
+                )
             }
 
             // MARK: API Key
+
             Section {
                 HStack {
                     Group {
                         if showAPIKey {
                             TextField("sk-ant-...", text: $apiKeyInput)
                                 .textContentType(.password)
-                                #if os(iOS)
+                            #if os(iOS)
                                 .autocapitalization(.none)
-                                #endif
+                            #endif
                         } else {
                             SecureField("sk-ant-...", text: $apiKeyInput)
                         }
@@ -180,13 +189,127 @@ struct ParentSettingsView: View {
                 }
 
                 apiKeyStatusRow
+
+                Button {
+                    testConnection()
+                } label: {
+                    HStack {
+                        if isTestingConnection {
+                            ProgressView()
+                                .controlSize(.small)
+                            Text("Testing...")
+                        } else {
+                            Image(systemName: "bolt.horizontal.circle")
+                            Text("Test Connection")
+                        }
+                    }
+                }
+                .disabled(isTestingConnection || settings.effectiveAPIKey == nil)
+
+                if let result = connectionTestResult {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                        Text(result)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                if let error = connectionTestError {
+                    HStack {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.red)
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
+                }
             } header: {
                 Text("API Key")
             } footer: {
                 Text("Override the bundled Config.plist key. Stored securely in Keychain.")
             }
 
+            // MARK: Barbara's Voice
+
+            Section {
+                Picker("Voice Engine", selection: $settings.ttsProvider) {
+                    Text("Apple TTS").tag("apple")
+                    Text("ElevenLabs").tag("elevenlabs")
+                }
+
+                if settings.isElevenLabsEnabled {
+                    HStack {
+                        Group {
+                            if showElevenLabsKey {
+                                TextField("xi-...", text: $elevenLabsKeyInput)
+                                #if os(iOS)
+                                    .autocapitalization(.none)
+                                #endif
+                            } else {
+                                SecureField("xi-...", text: $elevenLabsKeyInput)
+                            }
+                        }
+                        .disableAutocorrection(true)
+
+                        Button {
+                            showElevenLabsKey.toggle()
+                        } label: {
+                            Image(systemName: showElevenLabsKey ? "eye.slash" : "eye")
+                        }
+                        .buttonStyle(.borderless)
+                    }
+
+                    if !elevenLabsKeyInput.isEmpty {
+                        Button("Save ElevenLabs Key") {
+                            settings.elevenLabsAPIKey = elevenLabsKeyInput
+                        }
+                    }
+
+                    if settings.elevenLabsAPIKey != nil {
+                        HStack {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundStyle(.green)
+                            Text("Key configured")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Button("Remove Key", role: .destructive) {
+                            settings.elevenLabsAPIKey = nil
+                            elevenLabsKeyInput = ""
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Voice IDs")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("EN: \(ElevenLabsTTSService.defaultVoiceIDs["en"] ?? "—")")
+                            .font(.caption2)
+                            .monospacedDigit()
+                        Text("DE: \(ElevenLabsTTSService.defaultVoiceIDs["de"] ?? "—")")
+                            .font(.caption2)
+                            .monospacedDigit()
+                    }
+                }
+            } header: {
+                Text("Barbara's Voice")
+            } footer: {
+                if settings.isElevenLabsEnabled {
+                    Text(
+                        "ElevenLabs provides a more natural voice. Falls back to Apple TTS if unavailable. Key stored in Keychain."
+                    )
+                } else {
+                    Text(
+                        "Apple TTS uses on-device synthesis. For best quality, download enhanced voices in Settings → Accessibility → Spoken Content → Voices."
+                    )
+                }
+            }
+
             // MARK: Level Override
+
             Section {
                 Picker("Learner Level", selection: $settings.levelOverride) {
                     Text("Auto (default)").tag(0)
@@ -197,17 +320,22 @@ struct ParentSettingsView: View {
                 }
 
                 if settings.levelOverride > 0 {
-                    Text("Overriding learner level to \(settings.levelOverride). This unlocks all exercises for that level.")
-                        .font(.caption)
-                        .foregroundStyle(.orange)
+                    Text(
+                        "Overriding learner level to \(settings.levelOverride). This unlocks all exercises for that level."
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.orange)
                 }
             } header: {
                 Text("Testing")
             } footer: {
-                Text("Override the learner's level to test exercises that require higher levels (e.g. Spot the Gap requires L2+).")
+                Text(
+                    "Override the learner's level to test exercises that require higher levels (e.g. Spot the Gap requires L2+)."
+                )
             }
 
             // MARK: Debug Mode
+
             Section {
                 Toggle("Debug Mode", isOn: $settings.isDebugModeEnabled)
 
@@ -219,10 +347,13 @@ struct ParentSettingsView: View {
             } header: {
                 Text("Diagnostics")
             } footer: {
-                Text("When enabled, collects API request/response timing, metadata, and session events. Data stays on-device.")
+                Text(
+                    "When enabled, collects API request/response timing, metadata, and session events. Data stays on-device."
+                )
             }
 
             // MARK: Parent PIN
+
             Section {
                 if settings.isParentPINEnabled {
                     Button("Change PIN") { showSetPIN = true }
@@ -237,7 +368,10 @@ struct ParentSettingsView: View {
                 Text("A 4-digit PIN protects these settings from learners.")
             }
         }
-        .onAppear { apiKeyInput = settings.apiKeyOverride ?? "" }
+        .onAppear {
+            apiKeyInput = settings.apiKeyOverride ?? ""
+            elevenLabsKeyInput = settings.elevenLabsAPIKey ?? ""
+        }
         .sheet(isPresented: $showSetPIN) { setPINSheet }
         .confirmationDialog("Remove PIN?", isPresented: $showRemovePINConfirm) {
             Button("Remove", role: .destructive) {
@@ -250,7 +384,6 @@ struct ParentSettingsView: View {
 
     // MARK: - API Key Status
 
-    @ViewBuilder
     private var apiKeyStatusRow: some View {
         HStack {
             Image(systemName: settings.effectiveAPIKey != nil ? "checkmark.circle" : "xmark.circle")
@@ -263,11 +396,31 @@ struct ParentSettingsView: View {
 
     private var apiKeyStatusText: String {
         if settings.apiKeyOverride != nil {
-            return "Using override key from settings"
+            "Using override key from settings"
         } else if ConfigProvider.anthropicAPIKey != nil {
-            return "Using bundled key from Config.plist"
+            "Using bundled key from Config.plist"
         } else {
-            return "No API key configured"
+            "No API key configured"
+        }
+    }
+
+    // MARK: - Connection Test
+
+    func testConnection() {
+        isTestingConnection = true
+        connectionTestResult = nil
+        connectionTestError = nil
+
+        Task {
+            do {
+                let result = try await AnthropicService.shared.testConnection()
+                connectionTestResult = result
+                connectionTestError = nil
+            } catch {
+                connectionTestResult = nil
+                connectionTestError = error.localizedDescription
+            }
+            isTestingConnection = false
         }
     }
 
@@ -278,15 +431,15 @@ struct ParentSettingsView: View {
             Form {
                 Section("New PIN") {
                     SecureField("4-digit PIN", text: $newPIN)
-                        #if os(iOS)
+                    #if os(iOS)
                         .keyboardType(.numberPad)
-                        #endif
+                    #endif
                 }
                 Section("Confirm PIN") {
                     SecureField("Repeat PIN", text: $confirmPIN)
-                        #if os(iOS)
+                    #if os(iOS)
                         .keyboardType(.numberPad)
-                        #endif
+                    #endif
                 }
                 if pinMismatch {
                     Text("PINs don't match")

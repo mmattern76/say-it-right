@@ -1,8 +1,7 @@
-import XCTest
 @testable import SayItRight
+import XCTest
 
 final class ResponseParserTests: XCTestCase {
-
     private let parser = ResponseParser()
 
     // MARK: - Helpers
@@ -19,13 +18,19 @@ final class ResponseParserTests: XCTestCase {
         language: String = "en"
     ) -> String {
         """
-        <!-- BARBARA_META: {"scores":{"clarity":\(scores["clarity"]!),"structure":\(scores["structure"]!)},"totalScore":\(totalScore),"mood":"\(mood)","progressionSignal":"\(progressionSignal)","revisionRound":\(revisionRound),"sessionPhase":"\(sessionPhase)","feedbackFocus":"\(feedbackFocus)","language":"\(language)"} -->
+        <!-- BARBARA_META: {"scores":{"clarity":\(scores[
+            "clarity"
+        ]!),"structure":\(scores[
+            "structure"
+        ]!)},"totalScore":\(totalScore),"mood":"\(mood)","progressionSignal":"\(progressionSignal)","revisionRound":\(
+            revisionRound
+        ),"sessionPhase":"\(sessionPhase)","feedbackFocus":"\(feedbackFocus)","language":"\(language)"} -->
         """
     }
 
     // MARK: - 1. Clean extraction of visible text and valid metadata
 
-    func testCleanExtraction() {
+    func testCleanExtraction() throws {
         let visiblePart = "Good structure! Your conclusion leads clearly."
         let fullResponse = "\(visiblePart)\n\n\(metaBlock())"
 
@@ -34,7 +39,7 @@ final class ResponseParserTests: XCTestCase {
         XCTAssertEqual(result.visibleText, visiblePart)
         XCTAssertNotNil(result.metadata)
 
-        let meta = result.metadata!
+        let meta = try XCTUnwrap(result.metadata)
         XCTAssertEqual(meta.scores["clarity"], 3)
         XCTAssertEqual(meta.scores["structure"], 4)
         XCTAssertEqual(meta.totalScore, 7)
@@ -84,8 +89,8 @@ final class ResponseParserTests: XCTestCase {
 
         // Metadata comes from the last block
         XCTAssertNotNil(result.metadata)
-        XCTAssertEqual(result.metadata!.totalScore, 8)
-        XCTAssertEqual(result.metadata!.mood, .proud)
+        XCTAssertEqual(result.metadata?.totalScore, 8)
+        XCTAssertEqual(result.metadata?.mood, .proud)
     }
 
     // MARK: - 5. Metadata in middle of text
@@ -99,7 +104,7 @@ final class ResponseParserTests: XCTestCase {
         XCTAssertTrue(result.visibleText.contains("Before the block."))
         XCTAssertTrue(result.visibleText.contains("After the block."))
         XCTAssertNotNil(result.metadata)
-        XCTAssertEqual(result.metadata!.mood, .approving)
+        XCTAssertEqual(result.metadata?.mood, .approving)
     }
 
     // MARK: - Edge cases

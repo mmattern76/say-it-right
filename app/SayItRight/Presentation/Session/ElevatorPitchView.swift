@@ -50,38 +50,39 @@ struct ElevatorPitchView: View {
         }
         .navigationTitle(SessionType.elevatorPitch.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-            let topic = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if topic == nil {
-                noTopicsAvailable = true
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+                let topic = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if topic == nil {
+                    noTopicsAvailable = true
+                }
             }
-        }
-        .onChange(of: sessionManager.sessionState) { _, newState in
-            // Start timer when Barbara's greeting completes (session becomes active)
-            if case .active = newState,
-               !timerState.hasStarted,
-               let session = sessionManager.elevatorPitchSession {
-                startTimer(duration: session.durationSeconds)
+            .onChange(of: sessionManager.sessionState) { _, newState in
+                // Start timer when Barbara's greeting completes (session becomes active)
+                if case .active = newState,
+                   !timerState.hasStarted,
+                   let session = sessionManager.elevatorPitchSession
+                {
+                    startTimer(duration: session.durationSeconds)
+                }
             }
-        }
     }
 
     // MARK: - Timer Bar
@@ -94,7 +95,7 @@ struct ElevatorPitchView: View {
                 Text(timerText)
                     .font(.system(.title3, design: .monospaced).bold())
                 Spacer()
-                if timerState.isRunning && !viewModel.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                if timerState.isRunning, !viewModel.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Button(action: submitEarly) {
                         Label(
                             language == "de" ? "Abgeben" : "Submit",
@@ -157,7 +158,7 @@ struct ElevatorPitchView: View {
         timerState.hasStarted = true
 
         timerState.timerTask = Task { @MainActor in
-            while timerState.remainingSeconds > 0 && !Task.isCancelled {
+            while timerState.remainingSeconds > 0, !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(1))
                 guard !Task.isCancelled else { return }
                 timerState.remainingSeconds -= 1
@@ -171,7 +172,7 @@ struct ElevatorPitchView: View {
                 #endif
             }
 
-            if !Task.isCancelled && timerState.remainingSeconds <= 0 {
+            if !Task.isCancelled, timerState.remainingSeconds <= 0 {
                 timerState.isRunning = false
                 await autoSubmit()
             }
@@ -205,14 +206,14 @@ struct ElevatorPitchView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine Themen verf\u{00FC}gbar"
-                 : "No topics available")
+                ? "Keine Themen verf\u{00FC}gbar"
+                : "No topics available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
-                 : "There are no matching topics for your current level.")
+                ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
+                : "There are no matching topics for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -242,10 +243,10 @@ struct ElevatorPitchView: View {
 /// Mutable timer state for the elevator pitch countdown.
 @MainActor
 private struct TimerState {
-    var totalSeconds: Int = 0
-    var remainingSeconds: Int = 0
-    var isRunning: Bool = false
-    var hasStarted: Bool = false
+    var totalSeconds = 0
+    var remainingSeconds = 0
+    var isRunning = false
+    var hasStarted = false
     var timerTask: Task<Void, Never>?
 }
 
@@ -265,7 +266,7 @@ private struct TimerState {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: true
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Alex"),
             language: "en"
@@ -298,7 +299,7 @@ private struct TimerState {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: false
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Maxi", language: "de"),
             language: "de"

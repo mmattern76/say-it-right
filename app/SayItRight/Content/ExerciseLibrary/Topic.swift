@@ -1,7 +1,7 @@
 import Foundation
 
 /// A discussion topic for Build-mode sessions.
-struct Topic: Codable, Sendable, Identifiable {
+struct Topic: Codable, Identifiable {
     let id: String
     let titleEN: String
     let titleDE: String
@@ -20,7 +20,7 @@ struct Topic: Codable, Sendable, Identifiable {
     }
 }
 
-enum TopicDomain: String, Codable, Sendable, CaseIterable {
+enum TopicDomain: String, Codable, CaseIterable {
     case everyday
     case school
     case society
@@ -28,21 +28,21 @@ enum TopicDomain: String, Codable, Sendable, CaseIterable {
 }
 
 /// Loads and filters the bundled topic bank.
-struct TopicBank: Sendable {
+struct TopicBank {
     let topics: [Topic]
 
     init(topics: [Topic] = []) {
         self.topics = topics
     }
 
-    static func loadFromBundle() -> TopicBank {
+    static func loadFromBundle() -> Self {
         guard let url = Bundle.main.url(forResource: "TopicBank", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let topics = try? JSONDecoder().decode([Topic].self, from: data)
         else {
-            return TopicBank()
+            return Self()
         }
-        return TopicBank(topics: topics)
+        return Self(topics: topics)
     }
 
     func topics(for level: Int, domain: TopicDomain? = nil) -> [Topic] {

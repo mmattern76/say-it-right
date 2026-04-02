@@ -95,6 +95,14 @@ Append to `.claude/MEMORY.md`:
 - <decision and reasoning>
 ```
 
+## Update test documentation
+
+If this story changed screens, navigation, or UI behavior:
+- Update `docs/testing/01-screen-map.md` — new/changed screens and transitions
+- Update `docs/testing/02-test-cases.md` — new test cases or affected existing ones
+- Update `docs/testing/03-test-automation.md` — new accessibility identifiers
+- Update UI tests in `app/SayItRight/UITests/` to match new behavior
+
 ## Clean up
 
 ```bash

@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Voice Elevator Pitch")
 struct VoiceElevatorPitchTests {
-
     // MARK: - Voice Mode Directive
 
     @Test("Voice mode directive appended for elevator pitch")

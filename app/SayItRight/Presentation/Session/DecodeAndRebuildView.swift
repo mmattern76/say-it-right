@@ -52,31 +52,31 @@ struct DecodeAndRebuildView: View {
         }
         .navigationTitle(SessionType.decodeAndRebuild.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted, coordinator.isUnlocked(for: profile) else { return }
-            sessionStarted = true
+            .task {
+                guard !sessionStarted, coordinator.isUnlocked(for: profile) else { return }
+                sessionStarted = true
 
-            guard let text = coordinator.selectText(for: profile) else { return }
-            selectedText = text
+                guard let text = coordinator.selectText(for: profile) else { return }
+                selectedText = text
 
-            await sessionManager.startDecodeAndRebuildSession(
-                practiceText: text,
-                profile: profile,
-                language: language
-            )
-        }
+                await sessionManager.startDecodeAndRebuildSession(
+                    practiceText: text,
+                    profile: profile,
+                    language: language
+                )
+            }
     }
 
     // MARK: - Layouts

@@ -1,10 +1,8 @@
 import CoreGraphics
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Haptic Feedback and Animation")
 struct HapticAnimationTests {
-
     @Test("PyramidHaptic has all expected cases")
     func hapticCases() {
         let cases: [PyramidHaptic] = [
@@ -34,11 +32,11 @@ struct HapticAnimationTests {
     @Test("FeedbackPalette defines all required colors")
     func feedbackPaletteExists() {
         // Verify all palette colors are accessible (compile-time + runtime).
-        let _ = FeedbackPalette.correct
-        let _ = FeedbackPalette.misplaced
-        let _ = FeedbackPalette.overlap
-        let _ = FeedbackPalette.gap
-        let _ = FeedbackPalette.celebration
+        _ = FeedbackPalette.correct
+        _ = FeedbackPalette.misplaced
+        _ = FeedbackPalette.overlap
+        _ = FeedbackPalette.gap
+        _ = FeedbackPalette.celebration
         #expect(true)
     }
 

@@ -1,7 +1,6 @@
 import Foundation
-import Testing
-
 @testable import SayItRight
+import Testing
 
 /// Creates a temporary bundle directory populated with prompt block fixtures
 /// so that `SystemPromptAssembler` can load them via `Bundle`.
@@ -21,7 +20,7 @@ private func makeTestBundle() throws -> Bundle {
         ("rubric-l1-en", "# Rubric L1 EN\nFoundations criteria."),
         ("rubric-l2-en", "# Rubric L2 EN\nGrouping criteria."),
         ("session-directive-en", "# Session Directive EN\nRules for sessions."),
-        ("output-format-en", "# Output Format EN\nRespond in JSON postscript.")
+        ("output-format-en", "# Output Format EN\nRespond in JSON postscript."),
     ]
 
     // German blocks
@@ -31,7 +30,7 @@ private func makeTestBundle() throws -> Bundle {
         ("rubric-l1-de", "# Rubrik L1 DE\nGrundlagen-Kriterien."),
         ("rubric-l2-de", "# Rubrik L2 DE\nOrdnung-Kriterien."),
         ("session-directive-de", "# Sitzungsanweisung DE\nRegeln fuer Sitzungen."),
-        ("output-format-de", "# Ausgabeformat DE\nAntwort im JSON-Postskript.")
+        ("output-format-de", "# Ausgabeformat DE\nAntwort im JSON-Postskript."),
     ]
 
     for (name, content) in enBlocks + deBlocks {
@@ -44,7 +43,7 @@ private func makeTestBundle() throws -> Bundle {
         ("say-it-clearly-en", "# Say It Clearly EN\nQuick drill instructions."),
         ("say-it-clearly-de", "# Sags Klar DE\nSchnelluebung."),
         ("find-the-point-en", "# Find The Point EN\nExtract governing thought."),
-        ("find-the-point-de", "# Finde Den Punkt DE\nKernaussage extrahieren.")
+        ("find-the-point-de", "# Finde Den Punkt DE\nKernaussage extrahieren."),
     ]
 
     for (name, content) in sessions {
@@ -64,9 +63,7 @@ private struct TestError: Error {
 
 // MARK: - Tests
 
-@Suite("SystemPromptAssembler")
 struct SystemPromptAssemblerTests {
-
     let profileJSON = """
     {"name":"Test User","level":1,"language":"en"}
     """
@@ -108,12 +105,12 @@ struct SystemPromptAssemblerTests {
         #expect(outputRange != nil)
 
         // Verify ordering
-        #expect(identityRange!.lowerBound < pedagogyRange!.lowerBound)
-        #expect(pedagogyRange!.lowerBound < rubricRange!.lowerBound)
-        #expect(rubricRange!.lowerBound < sessionRange!.lowerBound)
-        #expect(sessionRange!.lowerBound < directiveRange!.lowerBound)
-        #expect(directiveRange!.lowerBound < profileRange!.lowerBound)
-        #expect(profileRange!.lowerBound < outputRange!.lowerBound)
+        #expect(try #require(identityRange?.lowerBound) < pedagogyRange!.lowerBound)
+        #expect(try #require(pedagogyRange?.lowerBound) < rubricRange!.lowerBound)
+        #expect(try #require(rubricRange?.lowerBound) < sessionRange!.lowerBound)
+        #expect(try #require(sessionRange?.lowerBound) < directiveRange!.lowerBound)
+        #expect(try #require(directiveRange?.lowerBound) < profileRange!.lowerBound)
+        #expect(try #require(profileRange?.lowerBound) < outputRange!.lowerBound)
     }
 
     @Test("Language selection: English vs German")

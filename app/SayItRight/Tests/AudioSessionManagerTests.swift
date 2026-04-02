@@ -1,13 +1,12 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
-@Suite("AudioSessionManager")
 struct AudioSessionManagerTests {
-
     // MARK: - Initial State
 
-    @Test func initialStateIsIdle() {
+    @Test
+    func initialStateIsIdle() {
         let manager = AudioSessionManager()
         #expect(manager.currentMode == .idle)
         #expect(manager.isSessionActive == false)
@@ -17,7 +16,8 @@ struct AudioSessionManagerTests {
 
     // MARK: - Mode Transitions
 
-    @Test func activateForPlaybackSetsPlaybackOnly() {
+    @Test
+    func activateForPlaybackSetsPlaybackOnly() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         #expect(manager.currentMode == .playbackOnly)
@@ -27,7 +27,8 @@ struct AudioSessionManagerTests {
         #endif
     }
 
-    @Test func activateForRecordingSetsRecordOnly() {
+    @Test
+    func activateForRecordingSetsRecordOnly() {
         let manager = AudioSessionManager()
         manager.activateForRecording()
         #expect(manager.currentMode == .recordOnly)
@@ -36,14 +37,16 @@ struct AudioSessionManagerTests {
         #endif
     }
 
-    @Test func activateBothSetsPlayAndRecord() {
+    @Test
+    func activateBothSetsPlayAndRecord() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         manager.activateForRecording()
         #expect(manager.currentMode == .playAndRecord)
     }
 
-    @Test func deactivatePlaybackWhileRecordingKeepsRecordOnly() {
+    @Test
+    func deactivatePlaybackWhileRecordingKeepsRecordOnly() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         manager.activateForRecording()
@@ -53,7 +56,8 @@ struct AudioSessionManagerTests {
         #expect(manager.currentMode == .recordOnly)
     }
 
-    @Test func deactivateRecordingWhilePlayingKeepsPlaybackOnly() {
+    @Test
+    func deactivateRecordingWhilePlayingKeepsPlaybackOnly() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         manager.activateForRecording()
@@ -63,7 +67,8 @@ struct AudioSessionManagerTests {
         #expect(manager.currentMode == .playbackOnly)
     }
 
-    @Test func deactivateBothReturnsToIdle() {
+    @Test
+    func deactivateBothReturnsToIdle() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         manager.activateForRecording()
@@ -75,7 +80,8 @@ struct AudioSessionManagerTests {
         #endif
     }
 
-    @Test func deactivateSessionForcesIdle() {
+    @Test
+    func deactivateSessionForcesIdle() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         manager.activateForRecording()
@@ -90,7 +96,8 @@ struct AudioSessionManagerTests {
 
     // MARK: - Idempotent Activation
 
-    @Test func doubleActivatePlaybackIsIdempotent() {
+    @Test
+    func doubleActivatePlaybackIsIdempotent() {
         let manager = AudioSessionManager()
         manager.activateForPlayback()
         let mode1 = manager.currentMode
@@ -98,7 +105,8 @@ struct AudioSessionManagerTests {
         #expect(manager.currentMode == mode1)
     }
 
-    @Test func doubleActivateRecordingIsIdempotent() {
+    @Test
+    func doubleActivateRecordingIsIdempotent() {
         let manager = AudioSessionManager()
         manager.activateForRecording()
         let mode1 = manager.currentMode
@@ -108,7 +116,8 @@ struct AudioSessionManagerTests {
 
     // MARK: - Deactivate from Idle is Safe
 
-    @Test func deactivateFromIdleIsSafe() {
+    @Test
+    func deactivateFromIdleIsSafe() {
         let manager = AudioSessionManager()
         manager.deactivatePlayback()
         #expect(manager.currentMode == .idle)
@@ -120,7 +129,8 @@ struct AudioSessionManagerTests {
 
     // MARK: - AudioUsageMode Equatable
 
-    @Test func audioUsageModeEquality() {
+    @Test
+    func audioUsageModeEquality() {
         #expect(AudioUsageMode.idle == AudioUsageMode.idle)
         #expect(AudioUsageMode.playbackOnly == AudioUsageMode.playbackOnly)
         #expect(AudioUsageMode.recordOnly == AudioUsageMode.recordOnly)
@@ -130,17 +140,23 @@ struct AudioSessionManagerTests {
 
     // MARK: - AudioSessionEvent Equatable
 
-    @Test func audioSessionEventEquality() {
+    @Test
+    func audioSessionEventEquality() {
         #expect(AudioSessionEvent.interruptionBegan == AudioSessionEvent.interruptionBegan)
-        #expect(AudioSessionEvent.interruptionEnded(shouldResume: true) == AudioSessionEvent.interruptionEnded(shouldResume: true))
-        #expect(AudioSessionEvent.interruptionEnded(shouldResume: true) != AudioSessionEvent.interruptionEnded(shouldResume: false))
-        #expect(AudioSessionEvent.routeChanged(reason: .newDeviceAvailable) == AudioSessionEvent.routeChanged(reason: .newDeviceAvailable))
-        #expect(AudioSessionEvent.routeChanged(reason: .newDeviceAvailable) != AudioSessionEvent.routeChanged(reason: .oldDeviceUnavailable))
+        #expect(AudioSessionEvent.interruptionEnded(shouldResume: true) == AudioSessionEvent
+            .interruptionEnded(shouldResume: true))
+        #expect(AudioSessionEvent.interruptionEnded(shouldResume: true) != AudioSessionEvent
+            .interruptionEnded(shouldResume: false))
+        #expect(AudioSessionEvent.routeChanged(reason: .newDeviceAvailable) == AudioSessionEvent
+            .routeChanged(reason: .newDeviceAvailable))
+        #expect(AudioSessionEvent.routeChanged(reason: .newDeviceAvailable) != AudioSessionEvent
+            .routeChanged(reason: .oldDeviceUnavailable))
     }
 
     // MARK: - RouteChangeReason Equatable
 
-    @Test func routeChangeReasonEquality() {
+    @Test
+    func routeChangeReasonEquality() {
         #expect(RouteChangeReason.newDeviceAvailable == RouteChangeReason.newDeviceAvailable)
         #expect(RouteChangeReason.oldDeviceUnavailable != RouteChangeReason.newDeviceAvailable)
         #expect(RouteChangeReason.categoryChange == RouteChangeReason.categoryChange)

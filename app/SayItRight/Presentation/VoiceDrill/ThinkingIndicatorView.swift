@@ -13,16 +13,16 @@ import SwiftUI
 /// }
 /// ```
 struct ThinkingIndicatorView: View {
-    @State private var animatingDot: Int = 0
+    @State private var animatingDot = 0
 
     private let dotCount = 3
     private let dotSize: CGFloat = 8
     private let dotSpacing: CGFloat = 6
-    private let animationDuration: Double = 0.4
+    private let animationDuration = 0.4
 
     var body: some View {
         HStack(spacing: dotSpacing) {
-            ForEach(0..<dotCount, id: \.self) { index in
+            ForEach(0 ..< dotCount, id: \.self) { index in
                 Circle()
                     .fill(Color.secondary.opacity(opacity(for: index)))
                     .frame(width: dotSize, height: dotSize)

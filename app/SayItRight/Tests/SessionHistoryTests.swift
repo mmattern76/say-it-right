@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("SessionSummary")
 struct SessionSummaryTests {
-
     @Test("Summary initialises with defaults")
     func initialisation() {
         let summary = SessionSummary(
@@ -57,9 +55,7 @@ struct SessionSummaryTests {
     }
 }
 
-@Suite("SessionHistoryStore")
 struct SessionHistoryStoreTests {
-
     private func makeTempDir() -> URL {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("session-history-test-\(UUID().uuidString)")
@@ -99,7 +95,7 @@ struct SessionHistoryStoreTests {
         let store = await SessionHistoryStore(directory: dir)
 
         let older = SessionSummary(
-            date: Date.now.addingTimeInterval(-3600),
+            date: Date.now.addingTimeInterval(-3_600),
             sessionType: "say-it-clearly",
             topicTitle: "Older"
         )
@@ -142,7 +138,7 @@ struct SessionHistoryStoreTests {
         let dir = makeTempDir()
         let store = await SessionHistoryStore(directory: dir)
 
-        for i in 0..<205 {
+        for i in 0 ..< 205 {
             try await store.append(SessionSummary(
                 date: Date.now.addingTimeInterval(Double(i)),
                 sessionType: "say-it-clearly",

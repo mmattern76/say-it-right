@@ -4,8 +4,7 @@ import Foundation
 ///
 /// Comparison responses use `<!-- COMPARISON_META: {...} -->` to embed structured
 /// evaluation data, similar to the `BARBARA_META` pattern used in coaching sessions.
-struct ComparisonResponseParser: Sendable {
-
+struct ComparisonResponseParser {
     /// Raw decoded JSON from the COMPARISON_META block.
     private struct RawComparisonMeta: Decodable {
         let matchQuality: String
@@ -57,7 +56,8 @@ struct ComparisonResponseParser: Sendable {
         // Decode JSON payload.
         guard let data = jsonString.data(using: .utf8),
               let raw = try? JSONDecoder().decode(RawComparisonMeta.self, from: data),
-              let matchQuality = MatchQuality(rawValue: raw.matchQuality) else {
+              let matchQuality = MatchQuality(rawValue: raw.matchQuality)
+        else {
             return nil
         }
 

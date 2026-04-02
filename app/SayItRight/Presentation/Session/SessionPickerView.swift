@@ -32,8 +32,7 @@ struct SessionPickerView: View {
     private var header: some View {
         VStack(spacing: 8) {
             Text(language == "de" ? "Was m\u{00F6}chtest du \u{00FC}ben?" : "What would you like to practise?")
-                .font(.title2)
-                .fontWeight(.bold)
+                .font(.barbaraTitle)
 
             Text(language == "de" ? "W\u{00E4}hle eine \u{00DC}bung" : "Choose an exercise")
                 .font(.subheadline)
@@ -87,19 +86,23 @@ struct SessionCardView: View {
     let language: String
     let onTap: () -> Void
 
+    private var cardAccent: Color {
+        .sessionAccent(for: sessionType.rawValue)
+    }
+
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 16) {
                 Image(systemName: sessionType.iconName)
                     .font(.title2)
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(cardAccent)
                     .frame(width: 44, height: 44)
-                    .background(Color.accentColor.opacity(0.12))
+                    .background(cardAccent.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(sessionType.displayName(language: language))
-                        .font(.headline)
+                        .font(.barbaraHeadline)
                         .foregroundStyle(.primary)
 
                     Text(sessionType.subtitle(language: language))
@@ -119,6 +122,10 @@ struct SessionCardView: View {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(.background)
                     .shadow(color: .black.opacity(0.06), radius: 6, y: 2)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(cardAccent.opacity(0.15), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

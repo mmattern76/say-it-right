@@ -28,7 +28,7 @@ struct ZoomablePyramidCanvas<Content: View>: View {
                     let newScale = lastScale * value.magnification
                     scale = min(max(newScale, minScale), maxScale)
                 }
-                .onEnded { value in
+                .onEnded { _ in
                     lastScale = scale
                 }
 
@@ -45,7 +45,7 @@ struct ZoomablePyramidCanvas<Content: View>: View {
 
             content()
                 .frame(
-                    width: max(geo.size.width, 1200),
+                    width: max(geo.size.width, 1_200),
                     height: max(geo.size.height, 800)
                 )
                 .scaleEffect(scale)
@@ -164,7 +164,7 @@ private struct ZoomableCanvasPreview: View {
                 ZStack {
                     Color(white: 0.95)
                     VStack(spacing: 20) {
-                        ForEach(0..<5) { i in
+                        ForEach(0 ..< 5) { i in
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.blue.opacity(0.5))
                                 .frame(width: 200, height: 60)
@@ -191,5 +191,5 @@ private struct ZoomableCanvasPreview: View {
         Color.green.opacity(0.2)
             .overlay(Text("Sidebar"))
     }
-    .frame(width: 1024, height: 768)
+    .frame(width: 1_024, height: 768)
 }

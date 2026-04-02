@@ -1,6 +1,6 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - Thread-safe collector for test assertions
 
@@ -10,7 +10,7 @@ private final class SendableBox<T: Sendable>: @unchecked Sendable {
     private var _value: T
 
     init(_ value: T) {
-        _value = value
+        self._value = value
     }
 
     var value: T {
@@ -49,7 +49,7 @@ private final class StreamingMockTTS: TTSPlaybackService, @unchecked Sendable {
     private let lock = NSLock()
 
     var state: TTSPlaybackState = .idle
-    var isAutoPlayEnabled: Bool = true
+    var isAutoPlayEnabled = true
     var configuration: TTSConfiguration = .default
 
     private var _spokenTexts: [String] = []
@@ -61,8 +61,8 @@ private final class StreamingMockTTS: TTSPlaybackService, @unchecked Sendable {
 
     func speak(
         _ text: String,
-        language: String,
-        onEvent: (@Sendable (TTSEvent) -> Void)?
+        language _: String,
+        onEvent _: (@Sendable (TTSEvent) -> Void)?
     ) {
         lock.lock()
         _spokenTexts.append(text)
@@ -70,23 +70,31 @@ private final class StreamingMockTTS: TTSPlaybackService, @unchecked Sendable {
         lock.unlock()
     }
 
-    func pause() { state = .paused }
-    func resume() { state = .speaking }
+    func pause() {
+        state = .paused
+    }
+
+    func resume() {
+        state = .speaking
+    }
+
     func stop() {
         lock.lock()
         state = .idle
         _spokenTexts.removeAll()
         lock.unlock()
     }
-    func replayLast(onEvent: (@Sendable (TTSEvent) -> Void)?) {}
-    func prewarm() {}
+
+    func replayLast(onEvent _: (@Sendable (TTSEvent) -> Void)?) {
+    }
+
+    func prewarm() {
+    }
 }
 
 // MARK: - Tests
 
-@Suite("StreamingTTSCoordinator")
 struct StreamingTTSCoordinatorTests {
-
     @Test("Processes stream and feeds sentences to TTS incrementally")
     func processStreamFeedsSentences() async throws {
         let mockTTS = StreamingMockTTS()
@@ -182,8 +190,8 @@ struct StreamingTTSCoordinatorTests {
 
         #expect(completedText.value == "Part one. Part two.")
         #expect(completedMeasurement.value != nil)
-        #expect(completedMeasurement.value!.sentenceCount >= 1)
-        #expect(completedMeasurement.value!.timeToFirstSpeechMs >= 0)
+        #expect(try #require(completedMeasurement.value?.sentenceCount) >= 1)
+        #expect(try #require(completedMeasurement.value?.timeToFirstSpeechMs) >= 0)
     }
 
     @Test("State transitions through pipeline lifecycle")
@@ -206,7 +214,7 @@ struct StreamingTTSCoordinatorTests {
     }
 
     @Test("Cancel stops TTS and resets state")
-    func cancelResetsState() async throws {
+    func cancelResetsState() async {
         let mockTTS = StreamingMockTTS()
         let coordinator = StreamingTTSCoordinator(ttsService: mockTTS)
 
@@ -238,8 +246,8 @@ struct StreamingTTSCoordinatorTests {
 
         let m = box.value
         #expect(m != nil)
-        #expect(m!.timeToFirstSpeechMs >= 0)
-        #expect(m!.totalDurationMs >= m!.timeToFirstSpeechMs)
-        #expect(m!.sentenceCount >= 1)
+        #expect(try #require(m?.timeToFirstSpeechMs) >= 0)
+        #expect(try #require(m?.totalDurationMs) >= m!.timeToFirstSpeechMs)
+        #expect(try #require(m?.sentenceCount) >= 1)
     }
 }

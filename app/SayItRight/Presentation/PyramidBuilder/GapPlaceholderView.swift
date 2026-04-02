@@ -14,7 +14,7 @@ import SwiftUI
 struct GapPlaceholderView: View {
     let gap: GapPlacement
 
-    @State private var isPulsing: Bool = false
+    @State private var isPulsing = false
 
     var body: some View {
         RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)

@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("FixThisMessSession")
 struct FixThisMessSessionTests {
-
     private static func makePracticeText() -> PracticeText {
         PracticeText(
             id: "pt-test",
@@ -13,7 +11,10 @@ struct FixThisMessSessionTests {
                 governingThought: "School uniforms promote equality among students.",
                 supports: [
                     SupportGroup(label: "Student perspective", evidence: ["Students like them"]),
-                    SupportGroup(label: "Institutional support", evidence: ["Schools want them", "Parents support them"]),
+                    SupportGroup(
+                        label: "Institutional support",
+                        evidence: ["Schools want them", "Parents support them"]
+                    ),
                 ],
                 structuralAssessment: "Buried lead — conclusion is at the end.",
                 proposedRestructure: "School uniforms promote equality. Students, schools, and parents all support them for different reasons."
@@ -71,17 +72,15 @@ struct FixThisMessSessionTests {
     }
 
     @Test("Proposed restructure from answer key")
-    func proposedRestructure() {
+    func proposedRestructure() throws {
         let text = Self.makePracticeText()
         let session = FixThisMessSession(practiceText: text)
         #expect(session.proposedRestructure != nil)
-        #expect(session.proposedRestructure!.contains("equality"))
+        #expect(try #require(session.proposedRestructure?.contains("equality")))
     }
 }
 
-@Suite("SessionType — Fix This Mess")
 struct SessionTypeFixThisMessTests {
-
     @Test("fixThisMess raw value")
     func rawValue() {
         #expect(SessionType.fixThisMess.rawValue == "fix-this-mess")

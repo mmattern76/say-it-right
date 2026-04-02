@@ -8,7 +8,6 @@ import Foundation
 @MainActor
 @Observable
 final class ElevatorPitchCoordinator {
-
     /// Topics the learner has seen recently.
     var recentTopicIDs: Set<String> = []
 
@@ -50,7 +49,7 @@ final class ElevatorPitchCoordinator {
     }
 
     /// Select a topic appropriate for the learner's level.
-    func selectTopic(for level: Int, language: String) -> Topic? {
+    func selectTopic(for level: Int, language _: String) -> Topic? {
         if let topic = topicBank.randomTopic(for: level, excluding: recentTopicIDs) {
             return topic
         }

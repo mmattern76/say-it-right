@@ -27,7 +27,7 @@ struct PyramidFeedbackOverlay: View {
     /// Feedback configuration (on/off, auto/manual).
     @Binding var configuration: FeedbackConfiguration
 
-    @State private var showCelebration: Bool = false
+    @State private var showCelebration = false
 
     var body: some View {
         ZStack {
@@ -48,7 +48,7 @@ struct PyramidFeedbackOverlay: View {
             CelebrationEffectView(isActive: $showCelebration)
         }
         .onChange(of: isPyramidComplete) { _, isComplete in
-            if isComplete && configuration.isEnabled {
+            if isComplete, configuration.isEnabled {
                 showCelebration = true
             }
         }
@@ -125,15 +125,13 @@ private struct FeedbackOverlayPreview: View {
                 // Blocks (simplified).
                 ForEach(Array(layouts.keys.sorted()), id: \.self) { nodeID in
                     if let layout = layouts[nodeID] {
-                        let feedback: BlockFeedbackState = {
-                            switch nodeID {
+                        let feedback: BlockFeedbackState = switch nodeID {
                             case "root": .correct
                             case "sp1": .correct
                             case "e1": .misplaced
                             case "sp2": .meceOverlap
                             default: .none
-                            }
-                        }()
+                        }
 
                         RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
                             .fill(Color.blue.opacity(0.6))

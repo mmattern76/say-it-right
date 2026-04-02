@@ -60,11 +60,11 @@ struct DimensionBarChartView: View {
 
     private func barColor(for normalised: Double) -> Color {
         if normalised >= ProfileUpdater.strengthThreshold {
-            return .green
+            return .scoreStrong
         } else if normalised < ProfileUpdater.developmentThreshold {
-            return .red
+            return .scoreWeak
         }
-        return .blue
+        return .scoreMid
     }
 
     // MARK: - Dimension Display Names

@@ -11,7 +11,6 @@ import Foundation
 /// 6. Learner profile (JSON snapshot)
 /// 7. Output format (response structure specification)
 struct SystemPromptAssembler {
-
     private let bundle: Bundle
 
     /// - Parameter bundle: The bundle containing prompt block resources.
@@ -30,18 +29,30 @@ struct SystemPromptAssembler {
     ///   - profileJSON: JSON string of the learner profile
     /// - Returns: The assembled system prompt string
     func assemble(level: Int, sessionType: String, language: String, profileJSON: String) -> String {
-        assemble(level: level, sessionType: sessionType, language: language, profileJSON: profileJSON, difficultyContext: nil)
+        assemble(
+            level: level,
+            sessionType: sessionType,
+            language: language,
+            profileJSON: profileJSON,
+            difficultyContext: nil
+        )
     }
 
     /// Assemble a system prompt with optional adaptive difficulty context.
-    func assemble(level: Int, sessionType: String, language: String, profileJSON: String, difficultyContext: String?) -> String {
+    func assemble(
+        level: Int,
+        sessionType: String,
+        language: String,
+        profileJSON: String,
+        difficultyContext: String?
+    ) -> String {
         var parts: [String] = []
 
         // 1–3: Identity, Pedagogy, Rubric
         let blockNames = [
             "identity-\(language)",
             "pedagogy-\(language)",
-            "rubric-l\(level)-\(language)"
+            "rubric-l\(level)-\(language)",
         ]
         for name in blockNames {
             if let content = loadBlock(name) {

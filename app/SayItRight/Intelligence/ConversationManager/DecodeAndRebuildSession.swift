@@ -5,13 +5,13 @@ import Foundation
 /// This is a two-phase capstone exercise:
 /// - Phase 1 (Break): Extract the pyramid structure from a text
 /// - Phase 2 (Build): Rewrite the argument with better structure
-struct DecodeAndRebuildSession: Sendable {
+struct DecodeAndRebuildSession {
     /// The practice text to analyse and rebuild.
     let practiceText: PracticeText
 
     let startedAt: Date
 
-    let sessionTypeID: String = "decode-and-rebuild"
+    let sessionTypeID = "decode-and-rebuild"
 
     /// Current phase of the session.
     private(set) var phase: Phase = .extraction
@@ -32,7 +32,7 @@ struct DecodeAndRebuildSession: Sendable {
     }
 
     /// Session phases.
-    enum Phase: String, Sendable {
+    enum Phase: String {
         /// Phase 1: user extracts the structure.
         case extraction
         /// Transition: Barbara gives Phase 1 feedback and prompts Phase 2.
@@ -43,7 +43,7 @@ struct DecodeAndRebuildSession: Sendable {
         case summary
     }
 
-    struct Attempt: Sendable {
+    struct Attempt {
         let text: String
         let submittedAt: Date
     }
@@ -54,9 +54,13 @@ struct DecodeAndRebuildSession: Sendable {
         extractionAttempts.append(Attempt(text: text, submittedAt: date))
     }
 
-    var hasExtraction: Bool { !extractionAttempts.isEmpty }
+    var hasExtraction: Bool {
+        !extractionAttempts.isEmpty
+    }
 
-    var extractionText: String? { extractionAttempts.last?.text }
+    var extractionText: String? {
+        extractionAttempts.last?.text
+    }
 
     // MARK: - Phase Transition
 
@@ -78,34 +82,56 @@ struct DecodeAndRebuildSession: Sendable {
         rebuildAttempts.append(Attempt(text: text, submittedAt: date))
     }
 
-    var hasRebuild: Bool { !rebuildAttempts.isEmpty }
+    var hasRebuild: Bool {
+        !rebuildAttempts.isEmpty
+    }
 
-    var rebuildText: String? { rebuildAttempts.last?.text }
+    var rebuildText: String? {
+        rebuildAttempts.last?.text
+    }
 
-    var currentRebuildRevision: Int { max(0, rebuildAttempts.count - 1) }
+    var currentRebuildRevision: Int {
+        max(0, rebuildAttempts.count - 1)
+    }
 
-    var canReviseRebuild: Bool { hasRebuild && currentRebuildRevision < maxRevisions }
+    var canReviseRebuild: Bool {
+        hasRebuild && currentRebuildRevision < maxRevisions
+    }
 
     // MARK: - Convenience
 
     /// The original text to analyse.
-    var originalText: String { practiceText.text }
+    var originalText: String {
+        practiceText.text
+    }
 
     /// The governing thought from the answer key.
-    var expectedGoverningThought: String { practiceText.answerKey.governingThought }
+    var expectedGoverningThought: String {
+        practiceText.answerKey.governingThought
+    }
 
     /// The support groups from the answer key.
-    var expectedSupports: [SupportGroup] { practiceText.answerKey.supports }
+    var expectedSupports: [SupportGroup] {
+        practiceText.answerKey.supports
+    }
 
     /// Word count of the original text.
-    var originalWordCount: Int { practiceText.metadata.wordCount }
+    var originalWordCount: Int {
+        practiceText.metadata.wordCount
+    }
 
     /// Whether the session is in its Break phase.
-    var isBreakPhase: Bool { phase == .extraction || phase == .transition }
+    var isBreakPhase: Bool {
+        phase == .extraction || phase == .transition
+    }
 
     /// Whether the session is in its Build phase.
-    var isBuildPhase: Bool { phase == .rebuild || phase == .summary }
+    var isBuildPhase: Bool {
+        phase == .rebuild || phase == .summary
+    }
 
     /// Total attempt count across both phases.
-    var totalAttemptCount: Int { extractionAttempts.count + rebuildAttempts.count }
+    var totalAttemptCount: Int {
+        extractionAttempts.count + rebuildAttempts.count
+    }
 }

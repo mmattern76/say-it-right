@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Voice/Text Toggle")
 struct VoiceTextToggleTests {
-
     // MARK: - Input Mode Enum
 
     @Test("ChatInputMode has text and voice cases")
@@ -42,7 +40,7 @@ struct VoiceTextToggleTests {
 
     @Test("VoiceInputViewModel can be reset")
     @MainActor
-    func voiceInputVMReset() async {
+    func voiceInputVMReset() {
         let mock = MockSpeechRecognitionService()
         let voiceVM = VoiceInputViewModel(speechService: mock)
         voiceVM.reset()

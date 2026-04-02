@@ -1,10 +1,8 @@
 import CoreGraphics
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("iPad Pyramid Layout")
 struct iPadPyramidLayoutTests {
-
     @Test("ZoomablePyramidCanvas clamps scale to valid range")
     @MainActor
     func scaleClampedToValidRange() {
@@ -30,8 +28,8 @@ struct iPadPyramidLayoutTests {
     @MainActor
     func canvasSizeConfigurable() {
         let state = PyramidTreeState()
-        state.canvasSize = CGSize(width: 1200, height: 900)
-        #expect(state.canvasSize.width == 1200)
+        state.canvasSize = CGSize(width: 1_200, height: 900)
+        #expect(state.canvasSize.width == 1_200)
         #expect(state.canvasSize.height == 900)
     }
 

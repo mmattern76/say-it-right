@@ -10,7 +10,6 @@ import Foundation
 /// The comparison is STRUCTURAL, not textual — a differently-worded but
 /// structurally equivalent extraction is considered correct.
 actor AnswerKeyComparer {
-
     private let anthropicService: AnthropicService
     private let promptBuilder: ComparisonPromptBuilder
     private let responseParser: ComparisonResponseParser
@@ -70,13 +69,13 @@ actor AnswerKeyComparer {
 // MARK: - Errors
 
 /// Errors specific to answer key comparison.
-enum AnswerKeyComparerError: Error, LocalizedError, Sendable {
+enum AnswerKeyComparerError: Error, LocalizedError {
     case parsingFailed(response: String)
 
     var errorDescription: String? {
         switch self {
-        case .parsingFailed:
-            "Failed to parse the comparison response from Claude."
+            case .parsingFailed:
+                "Failed to parse the comparison response from Claude."
         }
     }
 }

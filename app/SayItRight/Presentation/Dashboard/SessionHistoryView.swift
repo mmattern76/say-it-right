@@ -15,7 +15,7 @@ struct SessionHistoryView: View {
         }
         .navigationTitle(language == "de" ? "Verlauf" : "History")
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
         #endif
     }
 
@@ -88,7 +88,8 @@ struct SessionHistoryView: View {
             if sessionDay == today {
                 todayItems.append(session)
             } else if let weekAgo = calendar.date(byAdding: .day, value: -7, to: today),
-                      sessionDay > weekAgo {
+                      sessionDay > weekAgo
+            {
                 thisWeekItems.append(session)
             } else {
                 earlierItems.append(session)
@@ -153,11 +154,11 @@ struct SessionHistoryRow: View {
 
     private var iconName: String {
         switch session.sessionType {
-        case "say-it-clearly": "text.bubble"
-        case "find-the-point": "magnifyingglass"
-        case "elevator-pitch": "timer"
-        case "analyse-my-text": "doc.text"
-        default: "questionmark.circle"
+            case "say-it-clearly": "text.bubble"
+            case "find-the-point": "magnifyingglass"
+            case "elevator-pitch": "timer"
+            case "analyse-my-text": "doc.text"
+            default: "questionmark.circle"
         }
     }
 
@@ -195,7 +196,7 @@ struct SessionDetailView: View {
         }
         .navigationTitle(session.topicTitle)
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
     }
 
@@ -322,7 +323,7 @@ extension SessionSummary {
                 levelAtSession: 1
             ),
             SessionSummary(
-                date: .now.addingTimeInterval(-86400 * 2),
+                date: .now.addingTimeInterval(-86_400 * 2),
                 sessionType: "find-the-point",
                 topicTitle: "Climate policy priorities",
                 attemptCount: 1,
@@ -332,7 +333,7 @@ extension SessionSummary {
                 levelAtSession: 1
             ),
             SessionSummary(
-                date: .now.addingTimeInterval(-86400 * 10),
+                date: .now.addingTimeInterval(-86_400 * 10),
                 sessionType: "elevator-pitch",
                 topicTitle: "School uniforms",
                 attemptCount: 1,

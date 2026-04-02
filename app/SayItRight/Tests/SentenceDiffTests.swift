@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("SentenceDiff")
 struct SentenceDiffTests {
-
     @Test("Identical texts have no structural changes")
     func identicalTexts() {
         let result = SentenceDiff.compare(

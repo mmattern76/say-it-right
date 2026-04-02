@@ -1,8 +1,8 @@
 import Foundation
 
 /// The learner's structural thinking profile — drives Barbara's coaching behavior.
-struct LearnerProfile: Codable, Sendable {
-    var schemaVersion: Int = 1
+struct LearnerProfile: Codable {
+    var schemaVersion = 1
     var id: String
     var displayName: String
     var currentLevel: Int
@@ -16,15 +16,15 @@ struct LearnerProfile: Codable, Sendable {
     var levelHistory: [LevelTransition]
     var dimensionScores: [String: [Int]]
 
-    struct LevelTransition: Codable, Sendable {
+    struct LevelTransition: Codable {
         let fromLevel: Int
         let toLevel: Int
         let date: Date
     }
 
     /// Create a new default profile for first launch.
-    static func createDefault(displayName: String = "", language: String = "en") -> LearnerProfile {
-        LearnerProfile(
+    static func createDefault(displayName: String = "", language: String = "en") -> Self {
+        Self(
             id: UUID().uuidString,
             displayName: displayName,
             currentLevel: 1,
@@ -80,7 +80,8 @@ struct LearnerProfile: Codable, Sendable {
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         encoder.dateEncodingStrategy = .iso8601
         guard let data = try? encoder.encode(PromptProfile(from: self)),
-              let json = String(data: data, encoding: .utf8) else {
+              let json = String(data: data, encoding: .utf8)
+        else {
             return "{}"
         }
         return json
@@ -99,13 +100,13 @@ private struct PromptProfile: Codable {
     let notes: String
 
     init(from profile: LearnerProfile) {
-        displayName = profile.displayName
-        currentLevel = profile.currentLevel
-        strengths = profile.structuralStrengths
-        developmentAreas = profile.developmentAreas
-        sessionsCompleted = profile.sessionCount
-        streakDays = profile.currentStreak
-        recentScores = profile.dimensionScores
-        notes = ""
+        self.displayName = profile.displayName
+        self.currentLevel = profile.currentLevel
+        self.strengths = profile.structuralStrengths
+        self.developmentAreas = profile.developmentAreas
+        self.sessionsCompleted = profile.sessionCount
+        self.streakDays = profile.currentStreak
+        self.recentScores = profile.dimensionScores
+        self.notes = ""
     }
 }

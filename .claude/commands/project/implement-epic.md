@@ -157,6 +157,10 @@ For each story in order:
   **Key decisions:**
   - <decision and reasoning>
   ```
+- If screens, navigation, or UI behavior changed, update test docs:
+  - `docs/testing/01-screen-map.md` — new/changed screens and transitions
+  - `docs/testing/02-test-cases.md` — new or affected test cases
+  - UI tests in `app/SayItRight/UITests/` — match new behavior
 - Update `.claude/sprint-state.json`:
   - Set current story's `status` to `completed` and `pr` to the PR number
   - Add PR number to `prs_created` array

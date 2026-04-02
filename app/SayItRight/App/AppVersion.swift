@@ -6,7 +6,6 @@ import Foundation
 /// Values come from `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
 /// in the Xcode project settings.
 enum AppVersion {
-
     /// The marketing version string (e.g. "1.0.0").
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"

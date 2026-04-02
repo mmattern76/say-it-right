@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("FeedbackBubbleView Tests")
 struct FeedbackBubbleTests {
-
     // MARK: - FormattedFeedbackText Parsing
 
     @Test("Parses plain text with no quotes")
@@ -94,7 +92,7 @@ struct FeedbackBubbleTests {
     // MARK: - Message Integration
 
     @Test("Message with scores triggers feedback bubble")
-    func messageWithScoresTriggersFeedback() {
+    func messageWithScoresTriggersFeedback() throws {
         let message = ChatMessage(
             role: .barbara,
             text: "Good structure.",
@@ -111,7 +109,7 @@ struct FeedbackBubbleTests {
         )
 
         #expect(message.metadata != nil)
-        #expect(!message.metadata!.scores.isEmpty)
+        #expect(try !#require(message.metadata?.scores.isEmpty))
     }
 
     @Test("Message without scores uses standard bubble")
@@ -125,7 +123,7 @@ struct FeedbackBubbleTests {
     }
 
     @Test("Message with empty scores uses standard bubble")
-    func messageWithEmptyScoresUsesStandard() {
+    func messageWithEmptyScoresUsesStandard() throws {
         let message = ChatMessage(
             role: .barbara,
             text: "Hello there.",
@@ -141,7 +139,7 @@ struct FeedbackBubbleTests {
             )
         )
 
-        #expect(message.metadata!.scores.isEmpty)
+        #expect(try #require(message.metadata?.scores.isEmpty))
     }
 
     // MARK: - Progression Signal Display

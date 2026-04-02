@@ -4,25 +4,24 @@ import Foundation
 ///
 /// Splits texts into sentences and classifies each as kept, added, removed,
 /// or moved. Designed for structural comparison, not character-level precision.
-struct SentenceDiff: Sendable {
-
+enum SentenceDiff {
     /// A single sentence with its diff status.
-    struct DiffEntry: Sendable, Identifiable, Equatable {
+    struct DiffEntry: Identifiable, Equatable {
         let id: Int
         let text: String
         let status: DiffStatus
     }
 
     /// Classification of a sentence in the diff.
-    enum DiffStatus: String, Sendable, Equatable {
-        case kept       // Present in both, same position
-        case added      // Present only in revised version
-        case removed    // Present only in original version
-        case moved      // Present in both, different position
+    enum DiffStatus: String, Equatable {
+        case kept // Present in both, same position
+        case added // Present only in revised version
+        case removed // Present only in original version
+        case moved // Present in both, different position
     }
 
     /// Result of a structural diff comparison.
-    struct DiffResult: Sendable {
+    struct DiffResult {
         /// Entries for the original text.
         let original: [DiffEntry]
         /// Entries for the revised text.
@@ -63,12 +62,12 @@ struct SentenceDiff: Sendable {
 
             if let origIndex = origNormalised.firstIndex(of: norm) {
                 if origIndex == i {
-                    revEntries.append(DiffEntry(id: 1000 + i, text: sentence, status: .kept))
+                    revEntries.append(DiffEntry(id: 1_000 + i, text: sentence, status: .kept))
                 } else {
-                    revEntries.append(DiffEntry(id: 1000 + i, text: sentence, status: .moved))
+                    revEntries.append(DiffEntry(id: 1_000 + i, text: sentence, status: .moved))
                 }
             } else {
-                revEntries.append(DiffEntry(id: 1000 + i, text: sentence, status: .added))
+                revEntries.append(DiffEntry(id: 1_000 + i, text: sentence, status: .added))
             }
         }
 
@@ -92,12 +91,13 @@ struct SentenceDiff: Sendable {
             options: [.bySentences, .localized]
         ) { substring, _, _, _ in
             if let sentence = substring?.trimmingCharacters(in: .whitespacesAndNewlines),
-               !sentence.isEmpty {
+               !sentence.isEmpty
+            {
                 sentences.append(sentence)
             }
         }
         // Fallback: if enumeration yields nothing, split on period
-        if sentences.isEmpty && !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if sentences.isEmpty, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             sentences = text.components(separatedBy: ". ")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }

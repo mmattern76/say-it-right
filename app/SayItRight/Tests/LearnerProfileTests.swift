@@ -1,11 +1,10 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
-@Suite("LearnerProfile")
 struct LearnerProfileTests {
-
-    @Test func createDefault() {
+    @Test
+    func createDefault() {
         let profile = LearnerProfile.createDefault(displayName: "Test", language: "de")
         #expect(profile.currentLevel == 1)
         #expect(profile.displayName == "Test")
@@ -17,18 +16,20 @@ struct LearnerProfileTests {
         #expect(profile.dimensionScores.isEmpty)
     }
 
-    @Test func recordScoreKeepsLast10() {
+    @Test
+    func recordScoreKeepsLast10() throws {
         var profile = LearnerProfile.createDefault()
-        for i in 1...15 {
+        for i in 1 ... 15 {
             profile.recordScore(i, for: "clarity")
         }
-        let scores = profile.dimensionScores["clarity"]!
+        let scores = try #require(profile.dimensionScores["clarity"])
         #expect(scores.count == 10)
         #expect(scores.first == 6)
         #expect(scores.last == 15)
     }
 
-    @Test func rollingAverage() {
+    @Test
+    func rollingAverage() {
         var profile = LearnerProfile.createDefault()
         profile.recordScore(4, for: "grouping_mece")
         profile.recordScore(6, for: "grouping_mece")
@@ -36,12 +37,14 @@ struct LearnerProfileTests {
         #expect(avg == 5.0)
     }
 
-    @Test func rollingAverageNilForMissing() {
+    @Test
+    func rollingAverageNilForMissing() {
         let profile = LearnerProfile.createDefault()
         #expect(profile.rollingAverage(for: "nonexistent") == nil)
     }
 
-    @Test func updateStreakFirstSession() {
+    @Test
+    func updateStreakFirstSession() {
         var profile = LearnerProfile.createDefault()
         profile.updateStreak()
         #expect(profile.currentStreak == 1)
@@ -49,9 +52,10 @@ struct LearnerProfileTests {
         #expect(profile.lastSessionDate != nil)
     }
 
-    @Test func updateStreakConsecutiveDays() {
+    @Test
+    func updateStreakConsecutiveDays() throws {
         var profile = LearnerProfile.createDefault()
-        let yesterday = Calendar.current.date(byAdding: .hour, value: -20, to: .now)!
+        let yesterday = try #require(Calendar.current.date(byAdding: .hour, value: -20, to: .now))
         profile.updateStreak(now: yesterday)
         #expect(profile.currentStreak == 1)
         profile.updateStreak(now: .now)
@@ -59,9 +63,10 @@ struct LearnerProfileTests {
         #expect(profile.longestStreak == 2)
     }
 
-    @Test func updateStreakResetsAfterGap() {
+    @Test
+    func updateStreakResetsAfterGap() throws {
         var profile = LearnerProfile.createDefault()
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: .now)!
+        let threeDaysAgo = try #require(Calendar.current.date(byAdding: .day, value: -3, to: .now))
         profile.updateStreak(now: threeDaysAgo)
         #expect(profile.currentStreak == 1)
         profile.updateStreak(now: .now)
@@ -69,7 +74,8 @@ struct LearnerProfileTests {
         #expect(profile.longestStreak == 1)
     }
 
-    @Test func toPromptJSONExcludesInternalFields() throws {
+    @Test
+    func toPromptJSONExcludesInternalFields() {
         let profile = LearnerProfile.createDefault(displayName: "Alice", language: "en")
         let json = profile.toPromptJSON()
         #expect(json.contains("Alice"))
@@ -78,7 +84,8 @@ struct LearnerProfileTests {
         #expect(!json.contains("levelHistory"))
     }
 
-    @Test func codableRoundTrip() throws {
+    @Test
+    func codableRoundTrip() throws {
         var profile = LearnerProfile.createDefault(displayName: "Bob", language: "de")
         profile.recordScore(7, for: "lead_position")
         profile.updateStreak()
@@ -98,10 +105,9 @@ struct LearnerProfileTests {
     }
 }
 
-@Suite("LearnerProfileStore")
 struct LearnerProfileStoreTests {
-
-    @Test func createAndLoad() async throws {
+    @Test
+    func createAndLoad() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -113,7 +119,8 @@ struct LearnerProfileStoreTests {
         #expect(profile.sessionCount == 0)
     }
 
-    @Test func saveAndReload() async throws {
+    @Test
+    func saveAndReload() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -131,7 +138,8 @@ struct LearnerProfileStoreTests {
         #expect(reloaded.dimensionScores["clarity"] == [8])
     }
 
-    @Test func reset() async throws {
+    @Test
+    func reset() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)

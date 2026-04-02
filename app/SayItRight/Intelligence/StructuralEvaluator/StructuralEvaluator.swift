@@ -1,6 +1,6 @@
 import Foundation
 
-enum EvaluationError: Error, LocalizedError, Sendable, Equatable {
+enum EvaluationError: Error, LocalizedError, Equatable {
     case missingMetadata
     case rateLimitExceeded(limit: Int)
     case evaluationTimeout
@@ -8,14 +8,14 @@ enum EvaluationError: Error, LocalizedError, Sendable, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .missingMetadata:
-            "Barbara's evaluation was incomplete — no scoring data received."
-        case .rateLimitExceeded(let limit):
-            "Session limit reached (\(limit) evaluations). Start a new session to continue."
-        case .evaluationTimeout:
-            "Evaluation took too long. Try again."
-        case .promptAssemblyFailed:
-            "Could not assemble the evaluation prompt. Check that prompt blocks are available."
+            case .missingMetadata:
+                "Barbara's evaluation was incomplete — no scoring data received."
+            case let .rateLimitExceeded(limit):
+                "Session limit reached (\(limit) evaluations). Start a new session to continue."
+            case .evaluationTimeout:
+                "Evaluation took too long. Try again."
+            case .promptAssemblyFailed:
+                "Could not assemble the evaluation prompt. Check that prompt blocks are available."
         }
     }
 }
@@ -25,7 +25,7 @@ actor StructuralEvaluator {
     private let systemPromptAssembler: SystemPromptAssembler
     private let responseParser: ResponseParser
     private let maxCallsPerSession: Int
-    private(set) var callCount: Int = 0
+    private(set) var callCount = 0
     private var cachedSystemPrompt: String?
 
     init(
@@ -66,11 +66,17 @@ actor StructuralEvaluator {
         return StreamingEvaluation(textStream: stream, responseParser: responseParser)
     }
 
-    func reset() { callCount = 0; cachedSystemPrompt = nil }
-    var remainingCalls: Int { max(0, maxCallsPerSession - callCount) }
+    func reset() {
+        callCount = 0
+        cachedSystemPrompt = nil
+    }
+
+    var remainingCalls: Int {
+        max(0, maxCallsPerSession - callCount)
+    }
 }
 
-struct StreamingEvaluation: Sendable {
+struct StreamingEvaluation {
     let textStream: AsyncThrowingStream<String, Error>
     private let responseParser: ResponseParser
 

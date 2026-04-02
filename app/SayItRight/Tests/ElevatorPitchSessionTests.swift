@@ -1,12 +1,10 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - ElevatorPitchSession Tests
 
-@Suite("ElevatorPitchSession")
 struct ElevatorPitchSessionTests {
-
     private static func makeTopic(id: String = "ep-topic") -> Topic {
         Topic(
             id: id,
@@ -34,7 +32,7 @@ struct ElevatorPitchSessionTests {
     }
 
     @Test("recordResponse captures text and timeout status")
-    func recordResponse() {
+    func recordResponse() throws {
         let topic = Self.makeTopic()
         var session = ElevatorPitchSession(topic: topic)
         let before = Date.now
@@ -44,7 +42,7 @@ struct ElevatorPitchSessionTests {
         #expect(session.hasResponse)
         #expect(session.responseText == "Schools should have uniforms because...")
         #expect(session.submittedAt != nil)
-        #expect(session.submittedAt! >= before)
+        #expect(try #require(session.submittedAt) >= before)
         #expect(!session.timedOut)
     }
 
@@ -74,9 +72,7 @@ struct ElevatorPitchSessionTests {
 
 // MARK: - ElevatorPitchCoordinator Tests
 
-@Suite("ElevatorPitchCoordinator")
 struct ElevatorPitchCoordinatorTests {
-
     private static let testTopics: [Topic] = [
         Topic(
             id: "ep-1",
@@ -102,11 +98,11 @@ struct ElevatorPitchCoordinatorTests {
 
     @Test("selectTopic returns a topic for matching level")
     @MainActor
-    func selectTopicForLevel() {
+    func selectTopicForLevel() throws {
         let coordinator = ElevatorPitchCoordinator(topics: Self.testTopics)
         let topic = coordinator.selectTopic(for: 1, language: "en")
         #expect(topic != nil)
-        #expect(topic!.level <= 1)
+        #expect(try #require(topic?.level) <= 1)
     }
 
     @Test("selectTopic returns nil when no topics match")
@@ -119,17 +115,17 @@ struct ElevatorPitchCoordinatorTests {
 
     @Test("selectTopic avoids recently seen topics")
     @MainActor
-    func avoidsRecentTopics() {
+    func avoidsRecentTopics() throws {
         let coordinator = ElevatorPitchCoordinator(topics: Self.testTopics)
 
         let first = coordinator.selectTopic(for: 1, language: "en")
         #expect(first != nil)
 
-        coordinator.recentTopicIDs.insert(first!.id)
+        try coordinator.recentTopicIDs.insert(#require(first?.id))
 
         let second = coordinator.selectTopic(for: 1, language: "en")
         #expect(second != nil)
-        #expect(second!.id != first!.id)
+        #expect(try #require(second?.id) != first!.id)
     }
 
     @Test("clearRecentTopics empties the set")
@@ -144,9 +140,7 @@ struct ElevatorPitchCoordinatorTests {
 
 // MARK: - SessionType Elevator Pitch Tests
 
-@Suite("SessionType — Elevator Pitch")
 struct SessionTypeElevatorPitchTests {
-
     @Test("elevatorPitch has correct raw value")
     func rawValue() {
         #expect(SessionType.elevatorPitch.rawValue == "elevator-pitch")

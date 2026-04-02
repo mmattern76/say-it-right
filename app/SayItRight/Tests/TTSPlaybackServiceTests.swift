@@ -1,12 +1,11 @@
-import XCTest
 @testable import SayItRight
+import XCTest
 
 // MARK: - MockTTSPlaybackService
 
 /// Test double for TTSPlaybackService that records calls and allows
 /// controlled event emission without requiring AVSpeechSynthesizer.
 final class MockTTSPlaybackService: TTSPlaybackService, @unchecked Sendable {
-
     private let lock = NSLock()
 
     // MARK: - Recorded State
@@ -18,7 +17,7 @@ final class MockTTSPlaybackService: TTSPlaybackService, @unchecked Sendable {
         return _state
     }
 
-    var isAutoPlayEnabled: Bool = true
+    var isAutoPlayEnabled = true
     var configuration: TTSConfiguration = .default
 
     private(set) var spokenTexts: [String] = []
@@ -114,7 +113,6 @@ final class MockTTSPlaybackService: TTSPlaybackService, @unchecked Sendable {
 // MARK: - Tests
 
 final class TTSPlaybackServiceTests: XCTestCase {
-
     // MARK: - Mock Service Tests (queue management & configuration)
 
     func testSpeakRecordsTextAndLanguage() {

@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Data Types
 
 /// A single message in the Anthropic Messages API conversation format.
-struct APIMessage: Codable, Sendable {
+struct APIMessage: Codable {
     let role: String
     let content: String
 }
@@ -11,7 +11,7 @@ struct APIMessage: Codable, Sendable {
 // MARK: - Errors
 
 /// Errors that can occur when communicating with the Anthropic API.
-enum AnthropicServiceError: Error, LocalizedError, Sendable {
+enum AnthropicServiceError: Error, LocalizedError {
     case missingAPIKey
     case invalidURL
     case invalidAPIKey
@@ -24,28 +24,28 @@ enum AnthropicServiceError: Error, LocalizedError, Sendable {
 
     var errorDescription: String? {
         switch self {
-        case .missingAPIKey:
-            "No API key configured. Add one in parent settings."
-        case .invalidURL:
-            "Invalid API endpoint URL."
-        case .invalidAPIKey:
-            "Invalid API key. Check your key in parent settings."
-        case .rateLimited(let retryAfter):
-            if let retry = retryAfter {
-                "Rate limited. Try again in \(retry) seconds."
-            } else {
-                "Rate limited. Please wait before trying again."
-            }
-        case .serverError(let code, let message):
-            "Server error (\(code)): \(message)"
-        case .networkTimeout:
-            "Network request timed out. Check your connection."
-        case .unexpectedResponse(let code):
-            "Unexpected response (HTTP \(code))."
-        case .decodingError(let detail):
-            "Failed to decode response: \(detail)"
-        case .streamingError(let detail):
-            "Streaming error: \(detail)"
+            case .missingAPIKey:
+                "No API key configured. Add one in parent settings."
+            case .invalidURL:
+                "Invalid API endpoint URL."
+            case .invalidAPIKey:
+                "Invalid API key. Check your key in parent settings."
+            case let .rateLimited(retryAfter):
+                if let retry = retryAfter {
+                    "Rate limited. Try again in \(retry) seconds."
+                } else {
+                    "Rate limited. Please wait before trying again."
+                }
+            case let .serverError(code, message):
+                "Server error (\(code)): \(message)"
+            case .networkTimeout:
+                "Network request timed out. Check your connection."
+            case let .unexpectedResponse(code):
+                "Unexpected response (HTTP \(code))."
+            case let .decodingError(detail):
+                "Failed to decode response: \(detail)"
+            case let .streamingError(detail):
+                "Streaming error: \(detail)"
         }
     }
 }
@@ -53,7 +53,7 @@ enum AnthropicServiceError: Error, LocalizedError, Sendable {
 // MARK: - SSE Event Types
 
 /// Parsed SSE event from the Anthropic streaming API.
-enum SSEEvent: Sendable {
+enum SSEEvent {
     case messageStart
     case contentBlockStart
     case contentBlockDelta(text: String)
@@ -74,8 +74,7 @@ enum SSEEvent: Sendable {
 /// event: content_block_delta
 /// data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Hello"}}
 /// ```
-struct SSEParser: Sendable {
-
+struct SSEParser {
     /// Parse a single SSE data line (the JSON after `data: `).
     ///
     /// - Parameter dataLine: The raw JSON string from an SSE `data:` field.
@@ -92,35 +91,37 @@ struct SSEParser: Sendable {
         }
 
         guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = json["type"] as? String else {
+              let type = json["type"] as? String
+        else {
             return .error("Failed to parse SSE JSON")
         }
 
         switch type {
-        case "message_start":
-            return .messageStart
-        case "content_block_start":
-            return .contentBlockStart
-        case "content_block_delta":
-            if let delta = json["delta"] as? [String: Any],
-               let text = delta["text"] as? String {
-                return .contentBlockDelta(text: text)
-            }
-            return .contentBlockDelta(text: "")
-        case "content_block_stop":
-            return .contentBlockStop
-        case "message_stop":
-            return .messageStop
-        case "message_delta":
-            return .messageDelta
-        case "ping":
-            return .ping
-        case "error":
-            let errorMsg = (json["error"] as? [String: Any])?["message"] as? String
-                ?? "Unknown streaming error"
-            return .error(errorMsg)
-        default:
-            return .unknown(type: type)
+            case "message_start":
+                return .messageStart
+            case "content_block_start":
+                return .contentBlockStart
+            case "content_block_delta":
+                if let delta = json["delta"] as? [String: Any],
+                   let text = delta["text"] as? String
+                {
+                    return .contentBlockDelta(text: text)
+                }
+                return .contentBlockDelta(text: "")
+            case "content_block_stop":
+                return .contentBlockStop
+            case "message_stop":
+                return .messageStop
+            case "message_delta":
+                return .messageDelta
+            case "ping":
+                return .ping
+            case "error":
+                let errorMsg = (json["error"] as? [String: Any])?["message"] as? String
+                    ?? "Unknown streaming error"
+                return .error(errorMsg)
+            default:
+                return .unknown(type: type)
         }
     }
 }
@@ -134,14 +135,13 @@ struct SSEParser: Sendable {
 /// prompt and returns an `AsyncThrowingStream` of text deltas for progressive
 /// display.
 actor AnthropicService {
-
     static let shared = AnthropicService()
 
     // MARK: - Configuration
 
     private let apiEndpoint = "https://api.anthropic.com/v1/messages"
     private let anthropicVersion = "2023-06-01"
-    private let maxTokens = 1024
+    private let maxTokens = 4_096
     private let requestTimeout: TimeInterval = 60
 
     let sseParser = SSEParser()
@@ -178,6 +178,43 @@ actor AnthropicService {
             continuation.onTermination = { _ in
                 task.cancel()
             }
+        }
+    }
+
+    // MARK: - Connection Test
+
+    /// Test the API connection by sending a minimal request.
+    /// Returns a success message or throws an error describing the problem.
+    func testConnection() async throws -> String {
+        let apiKey = try await resolveAPIKey()
+        let request = try buildRequest(
+            apiKey: apiKey,
+            systemPrompt: "Reply with exactly: OK",
+            messages: [APIMessage(role: "user", content: "Test")],
+            model: ModelCatalog.defaultModelID
+        )
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw AnthropicServiceError.unexpectedResponse(statusCode: 0)
+        }
+
+        switch httpResponse.statusCode {
+            case 200:
+                return "Connected — model \(ModelCatalog.defaultModelID)"
+            case 401:
+                throw AnthropicServiceError.invalidAPIKey
+            case 404:
+                throw AnthropicServiceError.serverError(
+                    statusCode: 404,
+                    message: "Model \"\(ModelCatalog.defaultModelID)\" not found. Check model settings."
+                )
+            case 429:
+                let retryAfter = httpResponse.value(forHTTPHeaderField: "retry-after")
+                throw AnthropicServiceError.rateLimited(retryAfter: retryAfter)
+            default:
+                throw AnthropicServiceError.unexpectedResponse(statusCode: httpResponse.statusCode)
         }
     }
 
@@ -225,7 +262,7 @@ actor AnthropicService {
             "max_tokens": maxTokens,
             "stream": true,
             "system": systemPrompt,
-            "messages": messages.map { ["role": $0.role, "content": $0.content] }
+            "messages": messages.map { ["role": $0.role, "content": $0.content] },
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -244,7 +281,8 @@ actor AnthropicService {
         } catch let error as URLError where error.code == .timedOut {
             throw AnthropicServiceError.networkTimeout
         } catch let error as URLError where error.code == .notConnectedToInternet
-            || error.code == .networkConnectionLost {
+            || error.code == .networkConnectionLost
+        {
             throw AnthropicServiceError.networkTimeout
         }
 
@@ -268,20 +306,20 @@ actor AnthropicService {
 
             if let event = sseParser.parse(dataLine: dataContent) {
                 switch event {
-                case .contentBlockDelta(let text):
-                    if !text.isEmpty {
-                        continuation.yield(text)
-                    }
-                case .error(let message):
-                    continuation.finish(throwing: AnthropicServiceError.streamingError(message))
-                    return
-                case .messageStop:
-                    continuation.finish()
-                    return
-                case .messageStart, .contentBlockStart, .contentBlockStop,
-                     .messageDelta, .ping, .unknown:
-                    // These events don't produce text output
-                    break
+                    case let .contentBlockDelta(text):
+                        if !text.isEmpty {
+                            continuation.yield(text)
+                        }
+                    case let .error(message):
+                        continuation.finish(throwing: AnthropicServiceError.streamingError(message))
+                        return
+                    case .messageStop:
+                        continuation.finish()
+                        return
+                    case .messageStart, .contentBlockStart, .contentBlockStop,
+                         .messageDelta, .ping, .unknown:
+                        // These events don't produce text output
+                        break
                 }
             }
         }
@@ -293,25 +331,25 @@ actor AnthropicService {
     /// Check HTTP status and throw appropriate errors for non-200 responses.
     private func handleHTTPStatus(
         _ response: HTTPURLResponse,
-        bytes: URLSession.AsyncBytes
+        bytes _: URLSession.AsyncBytes
     ) throws {
         switch response.statusCode {
-        case 200:
-            return // Success — proceed to stream
-        case 401:
-            throw AnthropicServiceError.invalidAPIKey
-        case 429:
-            let retryAfter = response.value(forHTTPHeaderField: "retry-after")
-            throw AnthropicServiceError.rateLimited(retryAfter: retryAfter)
-        case 400...499:
-            throw AnthropicServiceError.unexpectedResponse(statusCode: response.statusCode)
-        case 500...599:
-            throw AnthropicServiceError.serverError(
-                statusCode: response.statusCode,
-                message: "Anthropic API server error"
-            )
-        default:
-            throw AnthropicServiceError.unexpectedResponse(statusCode: response.statusCode)
+            case 200:
+                return // Success — proceed to stream
+            case 401:
+                throw AnthropicServiceError.invalidAPIKey
+            case 429:
+                let retryAfter = response.value(forHTTPHeaderField: "retry-after")
+                throw AnthropicServiceError.rateLimited(retryAfter: retryAfter)
+            case 400 ... 499:
+                throw AnthropicServiceError.unexpectedResponse(statusCode: response.statusCode)
+            case 500 ... 599:
+                throw AnthropicServiceError.serverError(
+                    statusCode: response.statusCode,
+                    message: "Anthropic API server error"
+                )
+            default:
+                throw AnthropicServiceError.unexpectedResponse(statusCode: response.statusCode)
         }
     }
 }

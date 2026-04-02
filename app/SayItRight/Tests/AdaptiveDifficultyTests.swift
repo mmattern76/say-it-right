@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("AdaptiveDifficultyEngine")
 struct AdaptiveDifficultyTests {
-
     // MARK: - Helpers
 
     private func makeProfile(

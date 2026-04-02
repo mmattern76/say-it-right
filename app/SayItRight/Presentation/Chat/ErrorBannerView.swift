@@ -10,12 +10,12 @@ import SwiftUI
 struct ErrorBannerView: View {
     let error: NetworkError
     let language: String
-    var retryCount: Int = 0
-    var rateLimitCountdown: Int? = nil
-    var hasPartialResponse: Bool = false
-    var onRetry: (() -> Void)? = nil
-    var onOpenSettings: (() -> Void)? = nil
-    var onDismiss: (() -> Void)? = nil
+    var retryCount = 0
+    var rateLimitCountdown: Int?
+    var hasPartialResponse = false
+    var onRetry: (() -> Void)?
+    var onOpenSettings: (() -> Void)?
+    var onDismiss: (() -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -59,31 +59,31 @@ struct ErrorBannerView: View {
 
     private var iconName: String {
         switch error {
-        case .noConnection:
-            "wifi.slash"
-        case .invalidAPIKey:
-            "key.fill"
-        case .rateLimited:
-            "clock.fill"
-        case .serverError:
-            "exclamationmark.icloud.fill"
-        case .requestTimeout:
-            "hourglass"
-        case .streamingInterrupted:
-            "bolt.horizontal.fill"
-        case .unknown:
-            "exclamationmark.triangle.fill"
+            case .noConnection:
+                "wifi.slash"
+            case .invalidAPIKey:
+                "key.fill"
+            case .rateLimited:
+                "clock.fill"
+            case .serverError:
+                "exclamationmark.icloud.fill"
+            case .requestTimeout:
+                "hourglass"
+            case .streamingInterrupted:
+                "bolt.horizontal.fill"
+            case .unknown:
+                "exclamationmark.triangle.fill"
         }
     }
 
     private var iconColor: Color {
         switch error {
-        case .invalidAPIKey:
-            .red
-        case .rateLimited:
-            .orange
-        default:
-            .yellow
+            case .invalidAPIKey:
+                .red
+            case .rateLimited:
+                .orange
+            default:
+                .yellow
         }
     }
 
@@ -102,8 +102,8 @@ struct ErrorBannerView: View {
             Image(systemName: "text.badge.checkmark")
                 .font(.caption)
             Text(language == "de"
-                 ? "Teilweise Antwort wird angezeigt."
-                 : "Partial response shown above.")
+                ? "Teilweise Antwort wird angezeigt."
+                : "Partial response shown above.")
                 .font(.caption)
         }
         .foregroundStyle(.secondary)
@@ -120,7 +120,6 @@ struct ErrorBannerView: View {
         .accessibilityLabel(language == "de" ? "Schliessen" : "Dismiss")
     }
 
-    @ViewBuilder
     private var actionButtons: some View {
         HStack(spacing: 12) {
             if error.isRetryable {
@@ -180,8 +179,10 @@ struct ErrorBannerView: View {
     ErrorBannerView(
         error: .noConnection,
         language: "en",
-        onRetry: {},
-        onDismiss: {}
+        onRetry: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -190,8 +191,10 @@ struct ErrorBannerView: View {
     ErrorBannerView(
         error: .noConnection,
         language: "de",
-        onRetry: {},
-        onDismiss: {}
+        onRetry: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -200,8 +203,10 @@ struct ErrorBannerView: View {
     ErrorBannerView(
         error: .invalidAPIKey,
         language: "en",
-        onOpenSettings: {},
-        onDismiss: {}
+        onOpenSettings: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -211,7 +216,8 @@ struct ErrorBannerView: View {
         error: .rateLimited(retryAfterSeconds: 30),
         language: "en",
         rateLimitCountdown: 25,
-        onDismiss: {}
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -220,8 +226,10 @@ struct ErrorBannerView: View {
     ErrorBannerView(
         error: .serverError(statusCode: 500),
         language: "en",
-        onRetry: {},
-        onDismiss: {}
+        onRetry: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -231,8 +239,10 @@ struct ErrorBannerView: View {
         error: .streamingInterrupted,
         language: "en",
         hasPartialResponse: true,
-        onRetry: {},
-        onDismiss: {}
+        onRetry: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
 }
@@ -241,8 +251,10 @@ struct ErrorBannerView: View {
     ErrorBannerView(
         error: .noConnection,
         language: "en",
-        onRetry: {},
-        onDismiss: {}
+        onRetry: {
+        },
+        onDismiss: {
+        }
     )
     .padding()
     .preferredColorScheme(.dark)

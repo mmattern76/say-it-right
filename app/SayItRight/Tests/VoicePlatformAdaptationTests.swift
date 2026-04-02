@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Voice Platform Adaptation")
 struct VoicePlatformAdaptationTests {
-
     // MARK: - AppSettings Voice Preferences
 
     @Test("AppSettings has preferredInputMode property")

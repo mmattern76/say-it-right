@@ -54,10 +54,9 @@ import AVFoundation
 ///
 /// Apple TTS has limited expressive control, so these variations are subtle.
 /// The goal is to avoid monotony rather than simulate full emotional range.
-struct BarbaraVoiceProfile: Sendable, Equatable {
-
+struct BarbaraVoiceProfile: Equatable {
     /// The context in which Barbara is speaking, used for subtle voice variation.
-    enum SpeechContext: Sendable, Equatable {
+    enum SpeechContext: Equatable {
         /// A correction or redirect: "That's not a conclusion, that's a preamble."
         case correction
         /// Praise (used sparingly): "Now *that* is how you make a point."
@@ -109,28 +108,26 @@ struct BarbaraVoiceProfile: Sendable, Equatable {
 
     /// Returns the rate for a given speech context, clamped to valid range.
     func rate(for context: SpeechContext) -> Float {
-        let adjustment: Float
-        switch context {
-        case .correction:
-            adjustment = correctionRateAdjustment
-        case .praise:
-            adjustment = praiseRateAdjustment
-        case .observation:
-            adjustment = observationRateAdjustment
+        let adjustment: Float = switch context {
+            case .correction:
+                correctionRateAdjustment
+            case .praise:
+                praiseRateAdjustment
+            case .observation:
+                observationRateAdjustment
         }
         return clamp(baseRate + adjustment, min: 0.0, max: 1.0)
     }
 
     /// Returns the pitch for a given speech context, clamped to valid range.
     func pitch(for context: SpeechContext) -> Float {
-        let adjustment: Float
-        switch context {
-        case .correction:
-            adjustment = correctionPitchAdjustment
-        case .praise:
-            adjustment = praisePitchAdjustment
-        case .observation:
-            adjustment = observationPitchAdjustment
+        let adjustment: Float = switch context {
+            case .correction:
+                correctionPitchAdjustment
+            case .praise:
+                praisePitchAdjustment
+            case .observation:
+                observationPitchAdjustment
         }
         return clamp(basePitch + adjustment, min: 0.5, max: 2.0)
     }
@@ -174,7 +171,6 @@ struct BarbaraVoiceProfile: Sendable, Equatable {
 // MARK: - Predefined Profiles
 
 extension BarbaraVoiceProfile {
-
     /// Barbara's German voice profile.
     ///
     /// Uses Helena (Enhanced) as primary voice — warm, clear, authoritative.
@@ -215,8 +211,8 @@ extension BarbaraVoiceProfile {
     /// Returns the appropriate voice profile for the given app language.
     static func profile(for language: AppLanguage) -> BarbaraVoiceProfile {
         switch language {
-        case .de: .german
-        case .en: .english
+            case .de: .german
+            case .en: .english
         }
     }
 
@@ -231,7 +227,7 @@ extension BarbaraVoiceProfile {
             // Praise
             "Jetzt ja. So macht man einen Punkt.",
             // Structural observation
-            "Deine zweite Gruppe hat keinen leitenden Gedanken. Ohne den fehlt die Richtung."
+            "Deine zweite Gruppe hat keinen leitenden Gedanken. Ohne den fehlt die Richtung.",
         ],
         .en: [
             // Correction
@@ -239,7 +235,7 @@ extension BarbaraVoiceProfile {
             // Praise
             "Now that is how you make a point.",
             // Structural observation
-            "Your second group lacks a governing thought. Without it, the reader has no direction."
-        ]
+            "Your second group lacks a governing thought. Without it, the reader has no direction.",
+        ],
     ]
 }

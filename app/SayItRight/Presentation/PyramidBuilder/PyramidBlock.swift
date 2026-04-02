@@ -4,7 +4,7 @@ import SwiftUI
 // MARK: - Block Type
 
 /// The structural role a block plays in the pyramid.
-enum BlockType: String, Sendable, CaseIterable, Codable {
+enum BlockType: String, CaseIterable, Codable {
     case governingThought
     case supportPoint
     case evidence
@@ -14,19 +14,19 @@ enum BlockType: String, Sendable, CaseIterable, Codable {
     /// Red herrings look identical to evidence blocks — no visual cheating.
     var color: Color {
         switch self {
-        case .governingThought: Color(red: 0.20, green: 0.45, blue: 0.75) // deep blue
-        case .supportPoint: Color(red: 0.30, green: 0.65, blue: 0.50)     // teal green
-        case .evidence, .redHerring: Color(red: 0.55, green: 0.55, blue: 0.65) // slate grey
+            case .governingThought: Color(red: 0.20, green: 0.45, blue: 0.75) // deep blue
+            case .supportPoint: Color(red: 0.30, green: 0.65, blue: 0.50) // teal green
+            case .evidence, .redHerring: Color(red: 0.55, green: 0.55, blue: 0.65) // slate grey
         }
     }
 
     /// Human-readable label.
     var label: String {
         switch self {
-        case .governingThought: "Governing Thought"
-        case .supportPoint: "Support Point"
-        case .evidence: "Evidence"
-        case .redHerring: "Evidence" // Appears as evidence to the user
+            case .governingThought: "Governing Thought"
+            case .supportPoint: "Support Point"
+            case .evidence: "Evidence"
+            case .redHerring: "Evidence" // Appears as evidence to the user
         }
     }
 }
@@ -34,7 +34,7 @@ enum BlockType: String, Sendable, CaseIterable, Codable {
 // MARK: - Block Visual State
 
 /// Visual state of a draggable block.
-enum BlockVisualState: Sendable, Equatable {
+enum BlockVisualState: Equatable {
     case idle
     case hovering
     case dragging
@@ -48,7 +48,7 @@ enum BlockVisualState: Sendable, Equatable {
 ///
 /// Each block holds a text snippet (claim, support point, or evidence)
 /// and metadata about its type and assigned level in the pyramid.
-struct PyramidBlock: Identifiable, Sendable, Equatable, Codable {
+struct PyramidBlock: Identifiable, Equatable, Codable {
     let id: UUID
     let text: String
     let type: BlockType

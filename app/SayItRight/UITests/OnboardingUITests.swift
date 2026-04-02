@@ -25,25 +25,29 @@ final class OnboardingUITests: XCTestCase {
         super.tearDown()
     }
 
-    func testOnboardingShowsBarbaraName() throws {
+    func testOnboardingShowsBarbaraName() {
         app.launch()
 
         // Barbara's name should appear in the speech bubble
         let barbaraLabel = app.staticTexts["Barbara"]
-        XCTAssertTrue(barbaraLabel.waitForExistence(timeout: 5),
-                     "Should show Barbara's name in onboarding")
+        XCTAssertTrue(
+            barbaraLabel.waitForExistence(timeout: 5),
+            "Should show Barbara's name in onboarding"
+        )
     }
 
-    func testOnboardingShowsLetsGoButton() throws {
+    func testOnboardingShowsLetsGoButton() {
         app.launch()
 
         // "Let's go!" button should appear after the typing animation
         let letsGoButton = app.buttons["letsGoButton"]
-        XCTAssertTrue(letsGoButton.waitForExistence(timeout: 15),
-                     "Let's go button should appear after welcome message")
+        XCTAssertTrue(
+            letsGoButton.waitForExistence(timeout: 15),
+            "Let's go button should appear after welcome message"
+        )
     }
 
-    func testLetsGoAdvancesToAvatarPicker() throws {
+    func testLetsGoAdvancesToAvatarPicker() {
         app.launch()
 
         let letsGoButton = app.buttons["letsGoButton"]
@@ -52,11 +56,13 @@ final class OnboardingUITests: XCTestCase {
 
         // Should show the avatar picker with a name field
         let nameField = app.textFields["nameField"]
-        XCTAssertTrue(nameField.waitForExistence(timeout: 10),
-                     "Should show name field in avatar picker phase")
+        XCTAssertTrue(
+            nameField.waitForExistence(timeout: 10),
+            "Should show name field in avatar picker phase"
+        )
     }
 
-    func testAvatarPickerRequiresNameAndAvatar() throws {
+    func testAvatarPickerRequiresNameAndAvatar() {
         app.launch()
 
         let letsGoButton = app.buttons["letsGoButton"]
@@ -68,15 +74,19 @@ final class OnboardingUITests: XCTestCase {
 
         // Continue button should NOT exist yet (no avatar selected, no name)
         let continueButton = app.buttons["avatarContinueButton"]
-        XCTAssertFalse(continueButton.exists,
-                      "Continue button should not appear without name and avatar")
+        XCTAssertFalse(
+            continueButton.exists,
+            "Continue button should not appear without name and avatar"
+        )
 
         // Type a name
         nameField.tap()
         nameField.typeText("TestUser")
 
         // Still no continue button (no avatar selected)
-        XCTAssertFalse(continueButton.exists,
-                      "Continue button should not appear without avatar")
+        XCTAssertFalse(
+            continueButton.exists,
+            "Continue button should not appear without avatar"
+        )
     }
 }

@@ -1,12 +1,10 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - Error Classification Tests
 
-@Suite("NetworkErrorClassifier")
 struct NetworkErrorClassifierTests {
-
     @Test("Classifies missing API key as invalidAPIKey")
     func classifyMissingAPIKey() {
         let result = NetworkErrorClassifier.classify(AnthropicServiceError.missingAPIKey)
@@ -90,7 +88,7 @@ struct NetworkErrorClassifierTests {
         let result = NetworkErrorClassifier.classify(
             AnthropicServiceError.decodingError("bad JSON")
         )
-        if case .unknown(let detail) = result {
+        if case let .unknown(detail) = result {
             #expect(detail.contains("Decoding"))
         } else {
             Issue.record("Expected .unknown, got \(result)")
@@ -127,7 +125,8 @@ struct NetworkErrorClassifierTests {
 
     @Test("Classifies unknown Error type as unknown")
     func classifyGenericError() {
-        struct SomeError: Error {}
+        struct SomeError: Error {
+        }
         let result = NetworkErrorClassifier.classify(SomeError())
         if case .unknown = result {
             // Expected
@@ -139,9 +138,7 @@ struct NetworkErrorClassifierTests {
 
 // MARK: - NetworkError Property Tests
 
-@Suite("NetworkError Properties")
 struct NetworkErrorPropertyTests {
-
     @Test("noConnection is retryable")
     func noConnectionRetryable() {
         #expect(NetworkError.noConnection.isRetryable == true)
@@ -201,9 +198,7 @@ struct NetworkErrorPropertyTests {
 
 // MARK: - Barbara Message Tests
 
-@Suite("NetworkError Barbara Messages")
 struct NetworkErrorBarbaraMessageTests {
-
     @Test("English messages are non-empty for all error types")
     func englishMessages() {
         let errors: [NetworkError] = [
@@ -264,7 +259,9 @@ private final class AtomicCounter: @unchecked Sendable {
     private var _value: Int
     private let lock = NSLock()
 
-    init(_ initial: Int = 0) { _value = initial }
+    init(_ initial: Int = 0) {
+        self._value = initial
+    }
 
     var value: Int {
         lock.lock()
@@ -281,9 +278,7 @@ private final class AtomicCounter: @unchecked Sendable {
     }
 }
 
-@Suite("RetryPolicy")
 struct RetryPolicyTests {
-
     @Test("Standard policy has 3 max retries")
     func standardMaxRetries() {
         #expect(RetryPolicy.standard.maxRetries == 3)
@@ -392,9 +387,7 @@ struct RetryPolicyTests {
 
 // MARK: - ChatErrorState Tests
 
-@Suite("ChatErrorState")
 struct ChatErrorStateTests {
-
     @Test("Initial state shows no error")
     @MainActor
     func initialState() {

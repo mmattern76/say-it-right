@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("TextDifficultyCalibrator Tests")
 struct TextDifficultyCalibratorTests {
-
     // MARK: - Quality Level Filtering
 
     @Test("L1 users see only well-structured and buried-lead texts")
@@ -26,7 +24,7 @@ struct TextDifficultyCalibratorTests {
         var profile = makeProfile(level: 2)
         // Record high scores (8/10 = 0.8 > 0.75 threshold) across all break dimensions
         for dimension in TextDifficultyCalibrator.breakDimensions {
-            for _ in 0..<5 {
+            for _ in 0 ..< 5 {
                 profile.recordScore(8, for: dimension)
             }
         }
@@ -39,7 +37,7 @@ struct TextDifficultyCalibratorTests {
         var profile = makeProfile(level: 2)
         // Record low scores (5/10 = 0.5 < 0.75 threshold)
         for dimension in TextDifficultyCalibrator.breakDimensions {
-            for _ in 0..<5 {
+            for _ in 0 ..< 5 {
                 profile.recordScore(5, for: dimension)
             }
         }
@@ -51,7 +49,7 @@ struct TextDifficultyCalibratorTests {
     func l2IncompleteDimensionsNoAdversarial() {
         var profile = makeProfile(level: 2)
         // Only record scores for one dimension
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             profile.recordScore(9, for: "governing_thought")
         }
         let allowed = TextDifficultyCalibrator.allowedQualityLevels(for: profile)
@@ -247,16 +245,18 @@ struct TextDifficultyCalibratorTests {
 
     @Test("Interleave produces approximately 60/40 ratio")
     func interleaveRatio() {
-        let primary = Array(0..<6)
-        let secondary = Array(100..<104)
+        let primary = Array(0 ..< 6)
+        let secondary = Array(100 ..< 104)
         let result = TextDifficultyCalibrator.interleave(
             primary: primary, secondary: secondary, primaryRatio: 0.6
         )
         #expect(result.count == 10)
         // First 5 items should contain ~3 primary
-        let firstFivePrimary = result.prefix(5).filter { $0 < 100 }.count
-        #expect(firstFivePrimary >= 2 && firstFivePrimary <= 4,
-                "Expected ~3 primary in first 5, got \(firstFivePrimary)")
+        let firstFivePrimary = result.prefix(5).count(where: { $0 < 100 })
+        #expect(
+            firstFivePrimary >= 2 && firstFivePrimary <= 4,
+            "Expected ~3 primary in first 5, got \(firstFivePrimary)"
+        )
     }
 
     @Test("Interleave with empty secondary returns primary")
@@ -285,7 +285,7 @@ struct TextDifficultyCalibratorTests {
         // 7.5/10 = 0.75 — but scores are integers, so we need avg of exactly 7.5
         // Use alternating 7 and 8 to get 7.5 average
         for dimension in TextDifficultyCalibrator.breakDimensions {
-            for i in 0..<10 {
+            for i in 0 ..< 10 {
                 profile.recordScore(i % 2 == 0 ? 8 : 7, for: dimension)
             }
         }
@@ -298,7 +298,7 @@ struct TextDifficultyCalibratorTests {
         var profile = makeProfile(level: 2)
         // Score of 7/10 = 0.70 < 0.75
         for dimension in TextDifficultyCalibrator.breakDimensions {
-            for _ in 0..<5 {
+            for _ in 0 ..< 5 {
                 profile.recordScore(7, for: dimension)
             }
         }
@@ -311,8 +311,8 @@ struct TextDifficultyCalibratorTests {
     func seededRNGDeterministic() {
         var rng1 = SeededRandomNumberGenerator(seed: 42)
         var rng2 = SeededRandomNumberGenerator(seed: 42)
-        let values1 = (0..<10).map { _ in rng1.next() }
-        let values2 = (0..<10).map { _ in rng2.next() }
+        let values1 = (0 ..< 10).map { _ in rng1.next() }
+        let values2 = (0 ..< 10).map { _ in rng2.next() }
         #expect(values1 == values2)
     }
 
@@ -320,8 +320,8 @@ struct TextDifficultyCalibratorTests {
     func seededRNGDifferentSeeds() {
         var rng1 = SeededRandomNumberGenerator(seed: 42)
         var rng2 = SeededRandomNumberGenerator(seed: 43)
-        let values1 = (0..<10).map { _ in rng1.next() }
-        let values2 = (0..<10).map { _ in rng2.next() }
+        let values1 = (0 ..< 10).map { _ in rng1.next() }
+        let values2 = (0 ..< 10).map { _ in rng2.next() }
         #expect(values1 != values2)
     }
 

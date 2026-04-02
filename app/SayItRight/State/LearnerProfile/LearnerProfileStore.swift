@@ -10,14 +10,17 @@ actor LearnerProfileStore {
         self.fileURL = dir.appendingPathComponent("learner-profile.json")
 
         if let data = try? Data(contentsOf: fileURL),
-           let loaded = try? JSONDecoder.iso8601.decode(LearnerProfile.self, from: data) {
+           let loaded = try? JSONDecoder.iso8601.decode(LearnerProfile.self, from: data)
+        {
             self.profile = loaded
         } else {
             self.profile = LearnerProfile.createDefault()
         }
     }
 
-    var current: LearnerProfile { profile }
+    var current: LearnerProfile {
+        profile
+    }
 
     func update(_ transform: (inout LearnerProfile) -> Void) async throws {
         transform(&profile)

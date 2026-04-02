@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Data model: `{ sessionType: { textID: dateSeen } }`.
 /// The date is stored to enable future cooldown logic (re-show after N days).
-struct SeenTextsRecord: Codable, Sendable, Equatable {
+struct SeenTextsRecord: Codable, Equatable {
     /// Map from session type raw value to a dictionary of text ID → date seen.
     var entries: [String: [String: Date]]
 
@@ -58,7 +58,7 @@ struct SeenTextsRecord: Codable, Sendable, Equatable {
             .filter { $0.metadata.targetLevel == level }
         let seen = seenIDs(for: sessionType)
         let unseen = candidates.filter { !seen.contains($0.id) }
-        if unseen.isEmpty && !candidates.isEmpty {
+        if unseen.isEmpty, !candidates.isEmpty {
             return nil // signals exhaustion
         }
         return unseen

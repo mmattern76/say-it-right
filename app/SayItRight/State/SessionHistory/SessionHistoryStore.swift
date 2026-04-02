@@ -12,7 +12,8 @@ actor SessionHistoryStore {
         self.fileURL = dir.appendingPathComponent("session-history.json")
 
         if let data = try? Data(contentsOf: fileURL),
-           let loaded = try? JSONDecoder.iso8601.decode([SessionSummary].self, from: data) {
+           let loaded = try? JSONDecoder.iso8601.decode([SessionSummary].self, from: data)
+        {
             self.sessions = loaded
         } else {
             self.sessions = []
@@ -30,7 +31,9 @@ actor SessionHistoryStore {
     }
 
     /// Total number of stored sessions.
-    var count: Int { sessions.count }
+    var count: Int {
+        sessions.count
+    }
 
     /// Append a new session summary. Prunes oldest if over limit.
     func append(_ summary: SessionSummary) async throws {

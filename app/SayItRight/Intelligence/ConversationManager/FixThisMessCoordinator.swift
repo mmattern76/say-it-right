@@ -7,7 +7,6 @@ import Foundation
 @MainActor
 @Observable
 final class FixThisMessCoordinator {
-
     var recentTextIDs: Set<String> = []
 
     private let library: PracticeTextLibrary

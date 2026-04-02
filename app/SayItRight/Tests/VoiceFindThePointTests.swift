@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Voice Find the Point")
 struct VoiceFindThePointTests {
-
     // MARK: - Voice Mode Directive
 
     @Test("Voice directive applied for find-the-point session")

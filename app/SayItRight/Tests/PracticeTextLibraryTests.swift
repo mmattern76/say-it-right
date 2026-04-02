@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("PracticeTextLibrary Tests")
 struct PracticeTextLibraryTests {
-
     // MARK: - JSON Parsing (Container Format)
 
     @Test("English practice texts parse from container format")
@@ -69,28 +67,28 @@ struct PracticeTextLibraryTests {
     @Test("At least 10 well-structured texts total")
     func wellStructuredDistribution() throws {
         let allTexts = try loadAllTexts()
-        let count = allTexts.filter { $0.metadata.qualityLevel == .wellStructured }.count
+        let count = allTexts.count(where: { $0.metadata.qualityLevel == .wellStructured })
         #expect(count >= 10, "Expected at least 10 well-structured, got \(count)")
     }
 
     @Test("At least 10 buried-lead texts total")
     func buriedLeadDistribution() throws {
         let allTexts = try loadAllTexts()
-        let count = allTexts.filter { $0.metadata.qualityLevel == .buriedLead }.count
+        let count = allTexts.count(where: { $0.metadata.qualityLevel == .buriedLead })
         #expect(count >= 10, "Expected at least 10 buried-lead, got \(count)")
     }
 
     @Test("At least 8 rambling texts total")
     func ramblingDistribution() throws {
         let allTexts = try loadAllTexts()
-        let count = allTexts.filter { $0.metadata.qualityLevel == .rambling }.count
+        let count = allTexts.count(where: { $0.metadata.qualityLevel == .rambling })
         #expect(count >= 8, "Expected at least 8 rambling, got \(count)")
     }
 
     @Test("At least 8 adversarial texts total")
     func adversarialDistribution() throws {
         let allTexts = try loadAllTexts()
-        let count = allTexts.filter { $0.metadata.qualityLevel == .adversarial }.count
+        let count = allTexts.count(where: { $0.metadata.qualityLevel == .adversarial })
         #expect(count >= 8, "Expected at least 8 adversarial, got \(count)")
     }
 
@@ -104,9 +102,9 @@ struct PracticeTextLibraryTests {
 
         for language in languages {
             for domain in domains {
-                let count = allTexts.filter {
+                let count = allTexts.count(where: {
                     $0.metadata.topicDomain == domain && $0.metadata.language == language
-                }.count
+                })
                 #expect(count >= 3, "Expected at least 3 \(domain) texts for \(language), got \(count)")
             }
         }
@@ -126,10 +124,14 @@ struct PracticeTextLibraryTests {
             #expect(!text.metadata.topicDomain.isEmpty, "Text \(text.id) has empty topic domain")
             #expect(!text.metadata.language.isEmpty, "Text \(text.id) has empty language")
             #expect(text.metadata.wordCount > 0, "Text \(text.id) has zero word count")
-            #expect(text.metadata.difficultyRating >= 1 && text.metadata.difficultyRating <= 5,
-                    "Text \(text.id) has invalid difficulty rating: \(text.metadata.difficultyRating)")
-            #expect(text.metadata.targetLevel >= 1 && text.metadata.targetLevel <= 4,
-                    "Text \(text.id) has invalid target level: \(text.metadata.targetLevel)")
+            #expect(
+                text.metadata.difficultyRating >= 1 && text.metadata.difficultyRating <= 5,
+                "Text \(text.id) has invalid difficulty rating: \(text.metadata.difficultyRating)"
+            )
+            #expect(
+                text.metadata.targetLevel >= 1 && text.metadata.targetLevel <= 4,
+                "Text \(text.id) has invalid target level: \(text.metadata.targetLevel)"
+            )
         }
     }
 
@@ -138,8 +140,10 @@ struct PracticeTextLibraryTests {
         let allTexts = try loadAllTexts()
         let adversarial = allTexts.filter { $0.metadata.qualityLevel == .adversarial }
         for text in adversarial {
-            #expect(text.answerKey.structuralFlaw != nil,
-                    "Adversarial text \(text.id) is missing structural flaw")
+            #expect(
+                text.answerKey.structuralFlaw != nil,
+                "Adversarial text \(text.id) is missing structural flaw"
+            )
         }
     }
 
@@ -148,8 +152,10 @@ struct PracticeTextLibraryTests {
         let allTexts = try loadAllTexts()
         let rambling = allTexts.filter { $0.metadata.qualityLevel == .rambling }
         for text in rambling {
-            #expect(text.answerKey.proposedRestructure != nil,
-                    "Rambling text \(text.id) is missing proposed restructure")
+            #expect(
+                text.answerKey.proposedRestructure != nil,
+                "Rambling text \(text.id) is missing proposed restructure"
+            )
         }
     }
 
@@ -299,7 +305,7 @@ struct PracticeTextLibraryTests {
         let lib2 = PracticeTextLibrary(
             texts: [
                 makeSampleText(id: "a", language: "en"),
-                makeSampleText(id: "b", language: "en")
+                makeSampleText(id: "b", language: "en"),
             ],
             contentVersion: "1.1.0"
         )
@@ -332,7 +338,7 @@ struct PracticeTextLibraryTests {
         let lib = PracticeTextLibrary(texts: [
             makeSampleText(id: "dup-1", language: "en"),
             makeSampleText(id: "dup-1", language: "en"),
-            makeSampleText(id: "unique", language: "en")
+            makeSampleText(id: "unique", language: "en"),
         ])
         let duplicates = lib.validateUniqueIDs()
         #expect(duplicates == ["dup-1"])
@@ -369,7 +375,7 @@ struct PracticeTextLibraryTests {
         let newTexts = [
             makeSampleText(id: "pt-new-001-en", language: "en"),
             makeSampleText(id: "pt-new-002-en", language: "en"),
-            makeSampleText(id: "pt-new-003-de", language: "de")
+            makeSampleText(id: "pt-new-003-de", language: "de"),
         ]
 
         let original = PracticeTextLibrary(texts: allTexts, contentVersion: "1.0.0")
@@ -449,7 +455,7 @@ struct PracticeTextLibraryTests {
                         wordCount: 5,
                         targetLevel: 2
                     )
-                )
+                ),
             ],
             contentVersion: "1.0.0"
         )

@@ -1,12 +1,10 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - SayItClearlySession Tests
 
-@Suite("SayItClearlySession")
 struct SayItClearlySessionTests {
-
     private static func makeTopic(id: String = "test-topic") -> Topic {
         Topic(
             id: id,
@@ -37,7 +35,7 @@ struct SayItClearlySessionTests {
     }
 
     @Test("recordResponse captures text and timestamp")
-    func recordResponse() {
+    func recordResponse() throws {
         let topic = Self.makeTopic()
         var session = SayItClearlySession(topic: topic)
         let before = Date.now
@@ -47,7 +45,7 @@ struct SayItClearlySessionTests {
         #expect(session.hasResponse)
         #expect(session.responseText == "Schools should switch because...")
         #expect(session.respondedAt != nil)
-        #expect(session.respondedAt! >= before)
+        #expect(try #require(session.respondedAt) >= before)
     }
 
     @Test("recordAttempt tracks multiple attempts")
@@ -148,9 +146,7 @@ struct SayItClearlySessionTests {
 
 // MARK: - SayItClearlyCoordinator Tests
 
-@Suite("SayItClearlyCoordinator")
 struct SayItClearlyCoordinatorTests {
-
     private static let testTopics: [Topic] = [
         Topic(
             id: "topic-1",
@@ -186,11 +182,11 @@ struct SayItClearlyCoordinatorTests {
 
     @Test("selectTopic returns a topic for matching level")
     @MainActor
-    func selectTopicForLevel() {
+    func selectTopicForLevel() throws {
         let coordinator = SayItClearlyCoordinator(topics: Self.testTopics)
         let topic = coordinator.selectTopic(for: 1, language: "en")
         #expect(topic != nil)
-        #expect(topic!.level <= 1)
+        #expect(try #require(topic?.level) <= 1)
     }
 
     @Test("selectTopic returns level 2 topics for level 2 learner")
@@ -199,7 +195,7 @@ struct SayItClearlyCoordinatorTests {
         let coordinator = SayItClearlyCoordinator(topics: Self.testTopics)
         // Level 2 learner can see level 1 and level 2 topics
         var seenIDs: Set<String> = []
-        for _ in 0..<50 {
+        for _ in 0 ..< 50 {
             if let topic = coordinator.selectTopic(for: 2, language: "en") {
                 seenIDs.insert(topic.id)
                 coordinator.clearRecentTopics()
@@ -219,7 +215,7 @@ struct SayItClearlyCoordinatorTests {
 
     @Test("selectTopic avoids recently seen topics")
     @MainActor
-    func avoidsRecentTopics() {
+    func avoidsRecentTopics() throws {
         // Only two level-1 topics available
         let twoTopics = Array(Self.testTopics.prefix(2))
         let coordinator = SayItClearlyCoordinator(topics: twoTopics)
@@ -234,12 +230,12 @@ struct SayItClearlyCoordinatorTests {
 
         let second = coordinator.selectTopic(for: 1, language: "en")
         #expect(second != nil)
-        #expect(second!.id != first!.id)
+        #expect(try #require(second?.id) != first!.id)
     }
 
     @Test("selectTopic resets when all topics have been seen")
     @MainActor
-    func resetsWhenAllSeen() {
+    func resetsWhenAllSeen() throws {
         let singleTopic = [Self.testTopics[0]]
         let coordinator = SayItClearlyCoordinator(topics: singleTopic)
 
@@ -248,12 +244,12 @@ struct SayItClearlyCoordinatorTests {
         #expect(first != nil)
 
         // Mark it as seen — manually insert
-        coordinator.recentTopicIDs.insert(first!.id)
+        try coordinator.recentTopicIDs.insert(#require(first?.id))
 
         // Should still return a topic after resetting
         let again = coordinator.selectTopic(for: 1, language: "en")
         #expect(again != nil)
-        #expect(again!.id == first!.id)
+        #expect(again?.id == first!.id)
         #expect(coordinator.recentTopicIDs.isEmpty)
     }
 
@@ -269,9 +265,7 @@ struct SayItClearlyCoordinatorTests {
 
 // MARK: - SessionManager Say It Clearly Integration
 
-@Suite("SessionManager — Say it clearly")
 struct SessionManagerSayItClearlyTests {
-
     private static func makeTopic() -> Topic {
         Topic(
             id: "test-school",
@@ -307,16 +301,38 @@ struct SessionManagerSayItClearlyTests {
 
 // MARK: - TopicBank Tests
 
-@Suite("TopicBank — topic selection")
 struct TopicBankSelectionTests {
-
     private static let topics: [Topic] = [
-        Topic(id: "a", titleEN: "A", titleDE: "A", promptEN: "A?", promptDE: "A?",
-              domain: .school, level: 1, barbaraFavorite: false),
-        Topic(id: "b", titleEN: "B", titleDE: "B", promptEN: "B?", promptDE: "B?",
-              domain: .technology, level: 2, barbaraFavorite: true),
-        Topic(id: "c", titleEN: "C", titleDE: "C", promptEN: "C?", promptDE: "C?",
-              domain: .society, level: 3, barbaraFavorite: false),
+        Topic(
+            id: "a",
+            titleEN: "A",
+            titleDE: "A",
+            promptEN: "A?",
+            promptDE: "A?",
+            domain: .school,
+            level: 1,
+            barbaraFavorite: false
+        ),
+        Topic(
+            id: "b",
+            titleEN: "B",
+            titleDE: "B",
+            promptEN: "B?",
+            promptDE: "B?",
+            domain: .technology,
+            level: 2,
+            barbaraFavorite: true
+        ),
+        Topic(
+            id: "c",
+            titleEN: "C",
+            titleDE: "C",
+            promptEN: "C?",
+            promptDE: "C?",
+            domain: .society,
+            level: 3,
+            barbaraFavorite: false
+        ),
     ]
 
     @Test("topics(for:) filters by level")
@@ -335,7 +351,7 @@ struct TopicBankSelectionTests {
         let bank = TopicBank(topics: Self.topics)
         let topic = bank.randomTopic(for: 2, excluding: ["a"])
         #expect(topic != nil)
-        #expect(topic!.id == "b")
+        #expect(topic?.id == "b")
     }
 
     @Test("randomTopic returns nil when all excluded")

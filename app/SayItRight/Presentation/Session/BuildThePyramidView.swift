@@ -59,38 +59,37 @@ struct BuildThePyramidView: View {
         }
         .navigationTitle(SessionType.buildThePyramid.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-            let ex = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if let ex {
-                exercise = ex
-                setupExercise(ex)
-            } else {
-                noExercisesAvailable = true
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+                let ex = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if let ex {
+                    exercise = ex
+                    setupExercise(ex)
+                } else {
+                    noExercisesAvailable = true
+                }
             }
-        }
     }
 
     // MARK: - Session Content
 
-    @ViewBuilder
     private var sessionContent: some View {
         AdaptivePyramidLayout {
             pyramidCanvas
@@ -120,7 +119,8 @@ struct BuildThePyramidView: View {
                 ZStack {
                     // Connection lines
                     if let rootID = treeState.rootBlockID,
-                       let rootNode = treeState.buildTreeNode(from: rootID) {
+                       let rootNode = treeState.buildTreeNode(from: rootID)
+                    {
                         ConnectionLinesView(
                             nodeLayouts: treeState.nodeLayouts,
                             connections: rootNode.extractConnections(),
@@ -146,7 +146,11 @@ struct BuildThePyramidView: View {
                                 },
                                 onDragEnded: { value in
                                     if let zone = treeState.endDrag(position: value.location) {
-                                        treeState.reparentBlock(placed.id, toParent: UUID(uuidString: zone.parentID)!, atIndex: zone.childIndex)
+                                        treeState.reparentBlock(
+                                            placed.id,
+                                            toParent: UUID(uuidString: zone.parentID)!,
+                                            atIndex: zone.childIndex
+                                        )
                                     }
                                 }
                             )
@@ -312,7 +316,7 @@ struct BuildThePyramidView: View {
 
     private func buildArrangementDescription(result: PyramidValidationResult) -> String {
         let score = Int(result.score * 100)
-        let correct = result.blockStatuses.values.filter { if case .correct = $0 { return true } else { return false } }.count
+        let correct = result.blockStatuses.values.count(where: { if case .correct = $0 { true } else { false } })
         let total = result.blockStatuses.count
         let govCorrect = result.governingThoughtCorrect ? "yes" : "no"
 
@@ -329,8 +333,10 @@ struct BuildThePyramidView: View {
         }
 
         // Red herring tracking
-        let redHerringPlaced = result.blockStatuses.values.filter { if case .redHerringPlaced = $0 { return true } else { return false } }.count
-        let redHerringDiscarded = result.blockStatuses.values.filter { if case .redHerringDiscarded = $0 { return true } else { return false } }.count
+        let redHerringPlaced = result.blockStatuses.values
+            .count(where: { if case .redHerringPlaced = $0 { true } else { false } })
+        let redHerringDiscarded = result.blockStatuses.values
+            .count(where: { if case .redHerringDiscarded = $0 { true } else { false } })
         if redHerringPlaced > 0 {
             desc += "RED HERRINGS: \(redHerringPlaced) red herring(s) incorrectly placed in the pyramid\n"
         }
@@ -338,7 +344,7 @@ struct BuildThePyramidView: View {
             desc += "GOOD: \(redHerringDiscarded) red herring(s) correctly discarded\n"
         }
 
-        if result.score >= 1.0 && redHerringPlaced == 0 {
+        if result.score >= 1.0, redHerringPlaced == 0 {
             desc += "PYRAMID COMPLETE — all blocks correctly placed."
         }
 
@@ -363,14 +369,14 @@ struct BuildThePyramidView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine \u{00DC}bungen verf\u{00FC}gbar"
-                 : "No exercises available")
+                ? "Keine \u{00DC}bungen verf\u{00FC}gbar"
+                : "No exercises available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden \u{00DC}bungen f\u{00FC}r dein Level."
-                 : "There are no matching exercises for your current level.")
+                ? "Es gibt aktuell keine passenden \u{00DC}bungen f\u{00FC}r dein Level."
+                : "There are no matching exercises for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

@@ -1,11 +1,9 @@
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - EvaluationResult Tests
 
-@Suite("EvaluationResult")
 struct EvaluationResultTests {
-
     private static func sampleMetadata(
         scores: [String: Int] = ["governingThought": 3, "supportGrouping": 2, "redundancy": 1, "clarity": 3],
         totalScore: Int = 9,
@@ -129,9 +127,7 @@ struct EvaluationResultTests {
 
 // MARK: - StructuralEvaluator Tests
 
-@Suite("StructuralEvaluator")
 struct StructuralEvaluatorTests {
-
     private static func makeProfile() -> LearnerProfile {
         LearnerProfile.createDefault(displayName: "Test Learner", language: "en")
     }
@@ -202,7 +198,7 @@ struct StructuralEvaluatorTests {
             _ = try await evaluator.evaluate(conversationMessages: [])
             Issue.record("Expected rateLimitExceeded error")
         } catch let error as EvaluationError {
-            if case .rateLimitExceeded(let limit) = error {
+            if case let .rateLimitExceeded(limit) = error {
                 #expect(limit == 0)
             } else {
                 Issue.record("Expected rateLimitExceeded, got \(error)")
@@ -231,9 +227,7 @@ struct StructuralEvaluatorTests {
 
 // MARK: - EvaluationError Tests
 
-@Suite("EvaluationError")
 struct EvaluationErrorTests {
-
     @Test("missingMetadata has descriptive message")
     func missingMetadataDescription() {
         let error = EvaluationError.missingMetadata
@@ -270,9 +264,7 @@ struct EvaluationErrorTests {
 
 // MARK: - StreamingEvaluation Tests
 
-@Suite("StreamingEvaluation - collect")
 struct StreamingEvaluationTests {
-
     @Test("collect parses response with metadata into EvaluationResult")
     func collectWithMetadata() async throws {
         let visibleText = "Your conclusion leads clearly. Good structure!"
@@ -370,9 +362,7 @@ struct StreamingEvaluationTests {
 
 // MARK: - SessionManager Evaluation Integration Tests
 
-@Suite("SessionManager - evaluation integration")
 struct SessionManagerEvaluationTests {
-
     @Test("SessionManager initialises with structural evaluator")
     @MainActor
     func hasEvaluator() {

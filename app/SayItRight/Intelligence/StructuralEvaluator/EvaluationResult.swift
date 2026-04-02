@@ -5,8 +5,7 @@ import Foundation
 /// Contains Barbara's visible feedback text and the parsed scoring data
 /// extracted from the hidden `BARBARA_META` block. The scoring data maps
 /// to the L1/L2 rubric dimensions defined in the prompt blocks.
-struct EvaluationResult: Sendable {
-
+struct EvaluationResult {
     /// Barbara's visible feedback text (metadata stripped).
     let feedbackText: String
 

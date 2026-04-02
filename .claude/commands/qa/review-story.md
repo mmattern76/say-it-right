@@ -68,7 +68,17 @@ For each criterion: PASS / CONCERN / FAIL
 - Does keyboard navigation work on Mac?
 - Is the layout adaptive (not just scaled)?
 
-### Step 5: Build verification
+### Step 5: Lint verification
+
+Before beginning the code quality review, run linting. If it fails, fix all
+violations first. The QA review does not begin until linting passes. Report
+linting results at the top of the QA review output.
+
+```bash
+scripts/lint.sh 2>&1
+```
+
+### Step 6: Build verification
 
 ```bash
 swift build 2>&1 | tail -30

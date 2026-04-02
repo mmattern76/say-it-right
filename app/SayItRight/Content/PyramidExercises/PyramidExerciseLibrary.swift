@@ -1,22 +1,18 @@
 import Foundation
 
 /// Library of pyramid builder exercises, loaded from bundled JSON.
-struct PyramidExerciseLibrary: Sendable {
+struct PyramidExerciseLibrary {
     let exercises: [PyramidExercise]
 
     /// Load exercises from the app bundle.
-    static func loadFromBundle() -> PyramidExerciseLibrary {
+    static func loadFromBundle() -> Self {
         guard let url = Bundle.main.url(forResource: "pyramid-exercises", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let exercises = try? JSONDecoder().decode([PyramidExercise].self, from: data)
         else {
-            return PyramidExerciseLibrary(exercises: [])
+            return Self(exercises: [])
         }
-        return PyramidExerciseLibrary(exercises: exercises)
-    }
-
-    init(exercises: [PyramidExercise]) {
-        self.exercises = exercises
+        return Self(exercises: exercises)
     }
 
     /// Filter exercises by level and language.

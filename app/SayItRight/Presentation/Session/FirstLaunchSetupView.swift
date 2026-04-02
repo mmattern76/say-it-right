@@ -23,14 +23,14 @@ struct FirstLaunchSetupView: View {
     var body: some View {
         Group {
             switch step {
-            case .apiKey:
-                apiKeyStep
-            case .language:
-                languageStep
-            case .onboarding:
-                OnboardingView(settings: settings) {
-                    onComplete()
-                }
+                case .apiKey:
+                    apiKeyStep
+                case .language:
+                    languageStep
+                case .onboarding:
+                    OnboardingView(settings: settings) {
+                        onComplete()
+                    }
             }
         }
         .animation(.easeInOut(duration: 0.3), value: step)
@@ -54,23 +54,24 @@ struct FirstLaunchSetupView: View {
 
             VStack(spacing: 16) {
                 Text("Say it right!")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    .font(.barbaraLargeTitle)
 
-                Text("To get started, enter your Anthropic API key. This key is stored securely on your device and never leaves it.")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
+                Text(
+                    "To get started, enter your Anthropic API key. This key is stored securely on your device and never leaves it."
+                )
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
 
                 HStack {
                     Group {
                         if showKey {
                             TextField("sk-ant-...", text: $apiKeyInput)
                                 .textContentType(.password)
-                                #if os(iOS)
+                            #if os(iOS)
                                 .autocapitalization(.none)
-                                #endif
+                            #endif
                         } else {
                             SecureField("sk-ant-...", text: $apiKeyInput)
                         }
@@ -113,11 +114,7 @@ struct FirstLaunchSetupView: View {
         }
         .padding()
         .background(
-            LinearGradient(
-                colors: [Color.clear, Color.blue.opacity(0.05)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            Color.warmBackground
         )
     }
 
@@ -139,8 +136,7 @@ struct FirstLaunchSetupView: View {
 
             VStack(spacing: 24) {
                 Text("Choose Your Language")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .font(.barbaraTitle)
 
                 Text("Barbara speaks both English and German. You can change this later in settings.")
                     .font(.body)
@@ -173,11 +169,7 @@ struct FirstLaunchSetupView: View {
         }
         .padding()
         .background(
-            LinearGradient(
-                colors: [Color.clear, Color.blue.opacity(0.05)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            Color.warmBackground
         )
     }
 
@@ -199,7 +191,10 @@ struct FirstLaunchSetupView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(settings.language == code ? Color.accentColor : Color.secondary.opacity(0.3), lineWidth: settings.language == code ? 2 : 1)
+                    .stroke(
+                        settings.language == code ? Color.accentColor : Color.secondary.opacity(0.3),
+                        lineWidth: settings.language == code ? 2 : 1
+                    )
             )
         }
         .buttonStyle(.plain)
@@ -233,7 +228,7 @@ enum SetupStep: Int, Comparable {
     case language = 1
     case onboarding = 2
 
-    static func < (lhs: SetupStep, rhs: SetupStep) -> Bool {
+    static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
 }
@@ -241,13 +236,15 @@ enum SetupStep: Int, Comparable {
 // MARK: - Previews
 
 #Preview("API Key Step") {
-    FirstLaunchSetupView(settings: .shared) { }
+    FirstLaunchSetupView(settings: .shared) {
+    }
 }
 
 #Preview("Language Step") {
     let settings = AppSettings.shared
-    FirstLaunchSetupView(settings: settings) { }
-        .onAppear {
-            settings.apiKeyOverride = "sk-ant-test"
-        }
+    FirstLaunchSetupView(settings: settings) {
+    }
+    .onAppear {
+        settings.apiKeyOverride = "sk-ant-test"
+    }
 }

@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("SpotTheGapSession — Hints")
 struct SpotTheGapHintTests {
-
     private static func makeFlawWithHints() -> StructuralFlaw {
         StructuralFlaw(
             type: "misaligned_evidence",
@@ -97,9 +95,7 @@ struct SpotTheGapHintTests {
     }
 }
 
-@Suite("HintTiers")
 struct HintTiersTests {
-
     @Test("HintTiers is Codable")
     func codableRoundTrip() throws {
         let hints = HintTiers(

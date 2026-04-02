@@ -43,18 +43,25 @@ struct FeedbackBubbleView: View {
     // MARK: - Feedback Text
 
     private var feedbackContent: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            FormattedFeedbackText(text: message.text)
-                .font(.body)
-                .foregroundStyle(.primary)
+        HStack(spacing: 0) {
+            RoundedRectangle(cornerRadius: 1.5)
+                .fill(Color.barbaraBorder)
+                .frame(width: 3)
+                .padding(.vertical, 6)
 
-            if message.isStreaming {
-                TypingIndicatorView()
-                    .padding(.leading, 8)
+            VStack(alignment: .leading, spacing: 4) {
+                FormattedFeedbackText(text: message.text)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+
+                if message.isStreaming {
+                    TypingIndicatorView()
+                        .padding(.leading, 8)
+                }
             }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
         .background(bubbleColor, in: bubbleShape)
     }
 
@@ -84,9 +91,7 @@ struct FeedbackBubbleView: View {
     }
 
     private var bubbleColor: Color {
-        colorScheme == .dark
-            ? Color.gray.opacity(0.3)
-            : Color.gray.opacity(0.12)
+        .barbaraBubble
     }
 
     private var bubbleShape: some Shape {
@@ -115,12 +120,12 @@ struct FormattedFeedbackText: View {
         let segments = parseQuotedSegments(text)
         return segments.reduce(Text("")) { result, segment in
             switch segment {
-            case .plain(let str):
-                return result + Text(str)
-            case .quoted(let str):
-                return result + Text("\"\(str)\"")
-                    .italic()
-                    .foregroundColor(.accentColor)
+                case let .plain(str):
+                    result + Text(str)
+                case let .quoted(str):
+                    result + Text("\"\(str)\"")
+                        .italic()
+                        .foregroundColor(.accentColor)
             }
         }
     }
@@ -136,7 +141,7 @@ struct FormattedFeedbackText: View {
 
         while let openQuote = remaining.firstIndex(of: "\u{201C}") ?? remaining.firstIndex(of: "\"") {
             // Add text before the quote
-            let before = remaining[remaining.startIndex..<openQuote]
+            let before = remaining[remaining.startIndex ..< openQuote]
             if !before.isEmpty {
                 segments.append(.plain(String(before)))
             }
@@ -149,7 +154,7 @@ struct FormattedFeedbackText: View {
 
             let searchChar: Character = remaining[openQuote] == "\u{201C}" ? "\u{201D}" : "\""
             if let closeQuote = remaining[afterOpen...].firstIndex(of: searchChar) {
-                let quoted = remaining[afterOpen..<closeQuote]
+                let quoted = remaining[afterOpen ..< closeQuote]
                 segments.append(.quoted(String(quoted)))
                 remaining = remaining[remaining.index(after: closeQuote)...]
             } else {
@@ -180,7 +185,7 @@ struct StructuralScorecardView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text("Structural Analysis")
-                    .font(.caption.bold())
+                    .font(.system(.caption, design: .serif).bold())
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text("\(metadata.totalScore) pts")
@@ -223,30 +228,30 @@ struct StructuralScorecardView: View {
 
     private var progressionIcon: String {
         switch metadata.progressionSignal {
-        case .improving: "arrow.up.right"
-        case .readyForLevelUp: "star.fill"
-        case .struggling: "arrow.down.right"
-        case .regression: "exclamationmark.triangle"
-        case .none: "minus"
+            case .improving: "arrow.up.right"
+            case .readyForLevelUp: "star.fill"
+            case .struggling: "arrow.down.right"
+            case .regression: "exclamationmark.triangle"
+            case .none: "minus"
         }
     }
 
     private var progressionLabel: String {
         switch metadata.progressionSignal {
-        case .improving: "Improving"
-        case .readyForLevelUp: "Ready for next level"
-        case .struggling: "Needs practice"
-        case .regression: "Regression detected"
-        case .none: ""
+            case .improving: "Improving"
+            case .readyForLevelUp: "Ready for next level"
+            case .struggling: "Needs practice"
+            case .regression: "Regression detected"
+            case .none: ""
         }
     }
 
     private var progressionColor: Color {
         switch metadata.progressionSignal {
-        case .improving, .readyForLevelUp: .green
-        case .struggling: .orange
-        case .regression: .red
-        case .none: .secondary
+            case .improving, .readyForLevelUp: .green
+            case .struggling: .orange
+            case .regression: .red
+            case .none: .secondary
         }
     }
 
@@ -259,12 +264,12 @@ struct StructuralScorecardView: View {
         // L1 rubric: clarity(3), governingThought(3), supportGrouping(2), redundancy(2) = 10
         // L2 rubric: l1Gate(3), meceQuality(3), orderingLogic(3), scqApplication(2), horizontalLogic(2) = 13
         switch key {
-        case "clarity", "governingThought", "l1Gate", "meceQuality", "orderingLogic":
-            return 3
-        case "supportGrouping", "redundancy", "scqApplication", "horizontalLogic":
-            return 2
-        default:
-            return 3
+            case "clarity", "governingThought", "l1Gate", "meceQuality", "orderingLogic":
+                3
+            case "supportGrouping", "redundancy", "scqApplication", "horizontalLogic":
+                2
+            default:
+                3
         }
     }
 
@@ -315,9 +320,9 @@ struct DimensionScoreRow: View {
 
     private var scoreColor: Color {
         let ratio = fillRatio
-        if ratio >= 0.8 { return .green }
-        if ratio >= 0.5 { return .orange }
-        return .red
+        if ratio >= 0.8 { return .scoreStrong }
+        if ratio >= 0.5 { return .scoreMid }
+        return .scoreWeak
     }
 }
 

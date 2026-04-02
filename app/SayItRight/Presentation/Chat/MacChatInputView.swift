@@ -1,6 +1,6 @@
 #if os(macOS)
-import SwiftUI
 import AppKit
+import SwiftUI
 
 /// A multi-line text input for macOS that sends on Enter and inserts
 /// a newline on Shift+Enter.
@@ -40,7 +40,7 @@ struct MacChatInputView: NSViewRepresentable {
         return scrollView
     }
 
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+    func updateNSView(_ scrollView: NSScrollView, context _: Context) {
         guard let textView = scrollView.documentView as? NSTextView else { return }
         // Only update if the text has changed externally (e.g. cleared after send)
         if textView.string != text {
@@ -92,15 +92,17 @@ struct MacChatInputView: NSViewRepresentable {
 // MARK: - Previews
 
 #Preview("Mac Chat Input — Empty") {
-    MacChatInputView(text: .constant(""), onSend: {})
-        .frame(width: 400, height: 60)
-        .padding()
+    MacChatInputView(text: .constant(""), onSend: {
+    })
+    .frame(width: 400, height: 60)
+    .padding()
 }
 
 #Preview("Mac Chat Input — With Text") {
     MacChatInputView(
         text: .constant("I think the main argument is that renewable energy reduces long-term costs."),
-        onSend: {}
+        onSend: {
+        }
     )
     .frame(width: 400, height: 60)
     .padding()
@@ -108,8 +110,11 @@ struct MacChatInputView: NSViewRepresentable {
 
 #Preview("Mac Chat Input — Multi-line") {
     MacChatInputView(
-        text: .constant("First point: cost reduction.\nSecond point: environmental impact.\nThird point: energy independence."),
-        onSend: {}
+        text: .constant(
+            "First point: cost reduction.\nSecond point: environmental impact.\nThird point: energy independence."
+        ),
+        onSend: {
+        }
     )
     .frame(width: 400, height: 100)
     .padding()

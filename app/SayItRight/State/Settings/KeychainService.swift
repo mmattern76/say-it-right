@@ -7,7 +7,6 @@ import Security
 /// The bundled Config.plist key is read by ConfigProvider; this stores
 /// the optional runtime override only.
 actor KeychainService {
-
     static let shared = KeychainService()
 
     private let service = "com.sayitright.app"
@@ -26,6 +25,22 @@ actor KeychainService {
 
     func deleteAPIKey() throws {
         try delete(account: apiKeyAccount)
+    }
+
+    // MARK: - ElevenLabs API Key
+
+    private let elevenLabsAccount = "elevenlabs-api-key"
+
+    func saveElevenLabsKey(_ key: String) throws {
+        try save(key, account: elevenLabsAccount)
+    }
+
+    func retrieveElevenLabsKey() -> String? {
+        retrieve(account: elevenLabsAccount)
+    }
+
+    func deleteElevenLabsKey() throws {
+        try delete(account: elevenLabsAccount)
     }
 
     // MARK: - Parent PIN
@@ -53,7 +68,7 @@ actor KeychainService {
         let deleteQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account
+            kSecAttrAccount as String: account,
         ]
         SecItemDelete(deleteQuery as CFDictionary)
 
@@ -62,7 +77,7 @@ actor KeychainService {
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
             kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
         ]
         let status = SecItemAdd(addQuery as CFDictionary, nil)
         guard status == errSecSuccess else {
@@ -76,7 +91,7 @@ actor KeychainService {
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
+            kSecMatchLimit as String: kSecMatchLimitOne,
         ]
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
@@ -88,7 +103,7 @@ actor KeychainService {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account
+            kSecAttrAccount as String: account,
         ]
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
@@ -103,8 +118,8 @@ enum KeychainError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .saveFailed(let s):  "Keychain save failed (status \(s))"
-        case .deleteFailed(let s): "Keychain delete failed (status \(s))"
+            case let .saveFailed(s): "Keychain save failed (status \(s))"
+            case let .deleteFailed(s): "Keychain delete failed (status \(s))"
         }
     }
 }

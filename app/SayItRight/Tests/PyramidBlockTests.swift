@@ -1,13 +1,12 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
-@Suite("PyramidBlock")
 struct PyramidBlockTests {
-
     // MARK: - Block Creation
 
-    @Test func blockCreatedWithDefaults() {
+    @Test
+    func blockCreatedWithDefaults() {
         let block = PyramidBlock(text: "Test claim", type: .governingThought)
 
         #expect(block.text == "Test claim")
@@ -15,21 +14,24 @@ struct PyramidBlockTests {
         #expect(block.level == nil)
     }
 
-    @Test func blockCreatedWithLevel() {
+    @Test
+    func blockCreatedWithLevel() {
         let block = PyramidBlock(text: "Evidence", type: .evidence, level: 2)
 
         #expect(block.level == 2)
         #expect(block.type == .evidence)
     }
 
-    @Test func blockHasUniqueId() {
+    @Test
+    func blockHasUniqueId() {
         let a = PyramidBlock(text: "A", type: .supportPoint)
         let b = PyramidBlock(text: "A", type: .supportPoint)
 
         #expect(a.id != b.id)
     }
 
-    @Test func blockWithExplicitId() {
+    @Test
+    func blockWithExplicitId() {
         let id = UUID()
         let block = PyramidBlock(id: id, text: "Custom ID", type: .evidence)
 
@@ -38,14 +40,16 @@ struct PyramidBlockTests {
 
     // MARK: - Block Type
 
-    @Test func allBlockTypesHaveDistinctLabels() {
+    @Test
+    func allBlockTypesHaveDistinctLabels() {
         let labels = BlockType.allCases.map(\.label)
         let uniqueLabels = Set(labels)
 
         #expect(labels.count == uniqueLabels.count)
     }
 
-    @Test func allBlockTypesExist() {
+    @Test
+    func allBlockTypesExist() {
         #expect(BlockType.allCases.count == 3)
         #expect(BlockType.allCases.contains(.governingThought))
         #expect(BlockType.allCases.contains(.supportPoint))
@@ -54,7 +58,8 @@ struct PyramidBlockTests {
 
     // MARK: - Equatable
 
-    @Test func blocksWithSameIdAreEqual() {
+    @Test
+    func blocksWithSameIdAreEqual() {
         let id = UUID()
         let a = PyramidBlock(id: id, text: "Same", type: .supportPoint)
         let b = PyramidBlock(id: id, text: "Same", type: .supportPoint)
@@ -62,7 +67,8 @@ struct PyramidBlockTests {
         #expect(a == b)
     }
 
-    @Test func blocksWithDifferentIdsAreNotEqual() {
+    @Test
+    func blocksWithDifferentIdsAreNotEqual() {
         let a = PyramidBlock(text: "Same text", type: .supportPoint)
         let b = PyramidBlock(text: "Same text", type: .supportPoint)
 
@@ -71,7 +77,8 @@ struct PyramidBlockTests {
 
     // MARK: - Codable
 
-    @Test func blockRoundTripsThroughJSON() throws {
+    @Test
+    func blockRoundTripsThroughJSON() throws {
         let original = PyramidBlock(text: "Encode me", type: .governingThought, level: 0)
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(PyramidBlock.self, from: data)
@@ -82,7 +89,8 @@ struct PyramidBlockTests {
         #expect(decoded.level == 0)
     }
 
-    @Test func blockTypeRoundTripsThroughJSON() throws {
+    @Test
+    func blockTypeRoundTripsThroughJSON() throws {
         for blockType in BlockType.allCases {
             let data = try JSONEncoder().encode(blockType)
             let decoded = try JSONDecoder().decode(BlockType.self, from: data)
@@ -92,7 +100,8 @@ struct PyramidBlockTests {
 
     // MARK: - Block Dimensions
 
-    @Test func dimensionConstraintsAreReasonable() {
+    @Test
+    func dimensionConstraintsAreReasonable() {
         #expect(BlockDimensions.minWidth > 0)
         #expect(BlockDimensions.maxWidth > BlockDimensions.minWidth)
         #expect(BlockDimensions.minHeight > 0)
@@ -102,10 +111,11 @@ struct PyramidBlockTests {
 
     // MARK: - Visual State
 
-    @Test func allVisualStatesAreDistinct() {
+    @Test
+    func allVisualStatesAreDistinct() {
         let states: [BlockVisualState] = [.idle, .hovering, .dragging, .placed, .error]
-        for i in 0..<states.count {
-            for j in (i + 1)..<states.count {
+        for i in 0 ..< states.count {
+            for j in (i + 1) ..< states.count {
                 #expect(states[i] != states[j])
             }
         }

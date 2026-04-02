@@ -1,7 +1,7 @@
 import Foundation
 
 /// Loads and filters the bundled practice text library for Break mode exercises.
-struct PracticeTextLibrary: Sendable {
+struct PracticeTextLibrary {
     let texts: [PracticeText]
 
     /// Content version string from the library JSON metadata.
@@ -16,7 +16,7 @@ struct PracticeTextLibrary: Sendable {
     /// Loads practice texts from the app bundle JSON files.
     /// Texts are split by language: PracticeTextLibrary_en.json and PracticeTextLibrary_de.json.
     /// Each file uses the versioned container format with `contentVersion` metadata.
-    static func loadFromBundle() -> PracticeTextLibrary {
+    static func loadFromBundle() -> Self {
         let decoder = JSONDecoder()
         var allTexts: [PracticeText] = []
         var latestVersion = "0.0.0"
@@ -44,33 +44,33 @@ struct PracticeTextLibrary: Sendable {
             }
         }
 
-        return PracticeTextLibrary(texts: allTexts, contentVersion: latestVersion)
+        return Self(texts: allTexts, contentVersion: latestVersion)
     }
 
     /// Loads practice texts from JSON data (for testing or custom sources).
     /// Supports both the versioned container format and flat arrays.
-    static func load(from data: Data) throws -> PracticeTextLibrary {
+    static func load(from data: Data) throws -> Self {
         let decoder = JSONDecoder()
 
         if let container = try? decoder.decode(PracticeTextLibraryContainer.self, from: data) {
-            return PracticeTextLibrary(
+            return Self(
                 texts: container.texts,
                 contentVersion: container.contentVersion
             )
         }
 
         let texts = try decoder.decode([PracticeText].self, from: data)
-        return PracticeTextLibrary(texts: texts)
+        return Self(texts: texts)
     }
 
     /// Merges another library into this one, appending new texts (by ID).
     /// Returns a new library with the higher content version.
-    func merging(_ other: PracticeTextLibrary) -> PracticeTextLibrary {
+    func merging(_ other: Self) -> Self {
         let existingIDs = Set(texts.map(\.id))
         let newTexts = other.texts.filter { !existingIDs.contains($0.id) }
         let mergedVersion = contentVersion >= other.contentVersion
             ? contentVersion : other.contentVersion
-        return PracticeTextLibrary(
+        return Self(
             texts: texts + newTexts,
             contentVersion: mergedVersion
         )

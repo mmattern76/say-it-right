@@ -30,8 +30,14 @@ struct SayItRightApp: App {
                 ContentView()
                     .environment(settings)
                 #if os(macOS)
-                .frame(minWidth: 500, minHeight: 400)
+                    .frame(minWidth: 500, minHeight: 400)
                 #endif
+                    .task {
+                        // Refresh model catalog from Anthropic API on launch
+                        if let apiKey = settings.effectiveAPIKey {
+                            await ModelCatalog.shared.refreshFromAPI(apiKey: apiKey)
+                        }
+                    }
             }
         }
         #if os(macOS)
@@ -71,7 +77,9 @@ struct ContentView: View {
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    private var language: String { settings.language }
+    private var language: String {
+        settings.language
+    }
 
     private var profile: LearnerProfile {
         var p = LearnerProfile.createDefault(
@@ -93,54 +101,54 @@ struct ContentView: View {
                 sayItClearlyCoordinator: coordinator
             ) { sessionType in
                 switch sessionType {
-                case .sayItClearly:
-                    #if os(iOS)
-                    if horizontalSizeClass == .compact {
-                        showVoiceSayItClearly = true
-                    } else {
+                    case .sayItClearly:
+                        #if os(iOS)
+                        if horizontalSizeClass == .compact {
+                            showVoiceSayItClearly = true
+                        } else {
+                            showSayItClearly = true
+                        }
+                        #else
                         showSayItClearly = true
-                    }
-                    #else
-                    showSayItClearly = true
-                    #endif
-                case .findThePoint:
-                    #if os(iOS)
-                    if horizontalSizeClass == .compact {
-                        showVoiceFindThePoint = true
-                    } else {
+                        #endif
+                    case .findThePoint:
+                        #if os(iOS)
+                        if horizontalSizeClass == .compact {
+                            showVoiceFindThePoint = true
+                        } else {
+                            showFindThePoint = true
+                        }
+                        #else
                         showFindThePoint = true
-                    }
-                    #else
-                    showFindThePoint = true
-                    #endif
-                case .elevatorPitch:
-                    #if os(iOS)
-                    if horizontalSizeClass == .compact {
-                        showVoiceElevatorPitch = true
-                    } else {
+                        #endif
+                    case .elevatorPitch:
+                        #if os(iOS)
+                        if horizontalSizeClass == .compact {
+                            showVoiceElevatorPitch = true
+                        } else {
+                            showElevatorPitch = true
+                        }
+                        #else
                         showElevatorPitch = true
-                    }
-                    #else
-                    showElevatorPitch = true
-                    #endif
-                case .buildThePyramid:
-                    showBuildThePyramid = true
-                case .analyseMyText:
-                    showAnalyseMyText = true
-                case .fixThisMess:
-                    #if os(iOS)
-                    if horizontalSizeClass == .regular {
+                        #endif
+                    case .buildThePyramid:
+                        showBuildThePyramid = true
+                    case .analyseMyText:
+                        showAnalyseMyText = true
+                    case .fixThisMess:
+                        #if os(iOS)
+                        if horizontalSizeClass == .regular {
+                            showFixThisMessVisual = true
+                        } else {
+                            showFixThisMess = true
+                        }
+                        #else
                         showFixThisMessVisual = true
-                    } else {
-                        showFixThisMess = true
-                    }
-                    #else
-                    showFixThisMessVisual = true
-                    #endif
-                case .spotTheGap:
-                    showSpotTheGap = true
-                case .decodeAndRebuild:
-                    showDecodeAndRebuild = true
+                        #endif
+                    case .spotTheGap:
+                        showSpotTheGap = true
+                    case .decodeAndRebuild:
+                        showDecodeAndRebuild = true
                 }
             }
             .navigationDestination(isPresented: $showSayItClearly) {

@@ -32,7 +32,7 @@ struct ProgressDashboardView: View {
         }
         .navigationTitle(language == "de" ? "Fortschritt" : "Progress")
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.large)
         #endif
     }
 
@@ -48,8 +48,7 @@ struct ProgressDashboardView: View {
             Text(language == "de"
                 ? "Noch keine Sitzungen abgeschlossen"
                 : "No sessions completed yet")
-                .font(.title3)
-                .fontWeight(.semibold)
+                .font(.barbaraTitle)
 
             Text(language == "de"
                 ? "Starte deine erste Übung und dein Fortschritt erscheint hier."
@@ -104,10 +103,10 @@ struct ProgressDashboardView: View {
 
             Text("\(profile.currentLevel)")
                 .font(.system(size: 42, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(Color.barbaraAccent)
 
             Text(levelName(for: profile.currentLevel))
-                .font(.headline)
+                .font(.levelName)
         }
         .frame(maxWidth: .infinity)
         .padding(20)
@@ -174,7 +173,7 @@ struct ProgressDashboardView: View {
     private var dimensionSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(language == "de" ? "Strukturelle Fähigkeiten" : "Structural Skills")
-                .font(.headline)
+                .font(.barbaraHeadline)
 
             if profile.dimensionScores.isEmpty {
                 Text(language == "de"
@@ -204,7 +203,7 @@ struct ProgressDashboardView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(language == "de" ? "Letzte Sitzungen" : "Recent Sessions")
-                    .font(.headline)
+                    .font(.barbaraHeadline)
                 Spacer()
                 if recentSessions.count > 5 {
                     NavigationLink {
@@ -252,11 +251,11 @@ struct ProgressDashboardView: View {
 
     private func levelName(for level: Int) -> String {
         switch level {
-        case 1: language == "de" ? "Klartext" : "Plain Talk"
-        case 2: language == "de" ? "Ordnung" : "Order"
-        case 3: language == "de" ? "Architektur" : "Architecture"
-        case 4: language == "de" ? "Meisterschaft" : "Mastery"
-        default: ""
+            case 1: language == "de" ? "Klartext" : "Plain Talk"
+            case 2: language == "de" ? "Ordnung" : "Order"
+            case 3: language == "de" ? "Architektur" : "Architecture"
+            case 4: language == "de" ? "Meisterschaft" : "Mastery"
+            default: ""
         }
     }
 }
@@ -311,7 +310,7 @@ extension LearnerProfile {
         profile.longestStreak = 7
 
         // Simulate some dimension scores
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             profile.recordScore(2, for: "governingThought")
             profile.recordScore(1, for: "supportGrouping")
             profile.recordScore(2, for: "clarity")

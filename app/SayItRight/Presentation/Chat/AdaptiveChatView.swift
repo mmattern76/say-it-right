@@ -18,7 +18,7 @@ struct AdaptiveChatView: View {
     @State private var showSettings = false
     @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
 
-    var language: String = "en"
+    var language = "en"
 
     var body: some View {
         Group {
@@ -35,21 +35,21 @@ struct AdaptiveChatView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: horizontalSizeClass)
         #if os(macOS)
-        .onChange(of: selectedSessionType) { _, newValue in
-            if let sessionType = newValue {
-                viewModel.sessionType = sessionType.id
+            .onChange(of: selectedSessionType) { _, newValue in
+                if let sessionType = newValue {
+                    viewModel.sessionType = sessionType.id
+                }
             }
-        }
         #else
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-                .environment(AppSettings.shared)
-        }
-        .onChange(of: selectedSessionType) { _, newValue in
-            if let sessionType = newValue {
-                viewModel.sessionType = sessionType.id
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+                    .environment(AppSettings.shared)
             }
-        }
+            .onChange(of: selectedSessionType) { _, newValue in
+                if let sessionType = newValue {
+                    viewModel.sessionType = sessionType.id
+                }
+            }
         #endif
     }
 
@@ -92,9 +92,9 @@ struct AdaptiveChatView: View {
     private var chatDetail: some View {
         ChatView(viewModel: viewModel)
             .navigationTitle(detailTitle)
-            #if !os(macOS)
+        #if !os(macOS)
             .navigationBarTitleDisplayMode(.inline)
-            #endif
+        #endif
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     Button(action: { viewModel.clearConversation() }) {

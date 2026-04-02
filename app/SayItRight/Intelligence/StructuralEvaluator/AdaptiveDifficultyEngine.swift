@@ -9,31 +9,30 @@ import Foundation
 /// - **consolidating**: Stay at current level. < 60% of dimensions are strong.
 /// - **stretching**: Mix in next-level topics (70/30 current/stretch). >= 60% strong.
 /// - **readyForPromotion**: All key dimensions are strong. Level-up candidate.
-struct AdaptiveDifficultyEngine: Sendable {
-
+enum AdaptiveDifficultyEngine {
     // MARK: - Configuration
 
     /// Minimum rolling average (normalised 0-1) to consider a dimension "strong".
-    static let strongThreshold: Double = 0.7
+    static let strongThreshold = 0.7
 
     /// Minimum rolling average (normalised 0-1) below which a dimension is "weak".
-    static let weakThreshold: Double = 0.4
+    static let weakThreshold = 0.4
 
     /// Fraction of dimensions that must be strong to start stretching.
-    static let stretchFraction: Double = 0.6
+    static let stretchFraction = 0.6
 
     /// Minimum sessions before stretch can begin.
-    static let minSessionsForStretch: Int = 5
+    static let minSessionsForStretch = 5
 
     /// Minimum sessions before promotion can be considered.
-    static let minSessionsForPromotion: Int = 10
+    static let minSessionsForPromotion = 10
 
     /// Ratio of current-level topics when stretching.
-    static let stretchCurrentRatio: Double = 0.7
+    static let stretchCurrentRatio = 0.7
 
     // MARK: - Difficulty State
 
-    enum DifficultyState: String, Sendable {
+    enum DifficultyState: String {
         case consolidating
         case stretching
         case readyForPromotion
@@ -46,13 +45,13 @@ struct AdaptiveDifficultyEngine: Sendable {
         let dimensions = dimensionsForLevel(profile.currentLevel)
         guard !dimensions.isEmpty else { return .consolidating }
 
-        let strongCount = dimensions.filter { dim in
+        let strongCount = dimensions.count(where: { dim in
             isStrong(dim, in: profile)
-        }.count
+        })
 
-        let weakCount = dimensions.filter { dim in
+        let weakCount = dimensions.count(where: { dim in
             isWeak(dim, in: profile)
-        }.count
+        })
 
         let strongFraction = Double(strongCount) / Double(dimensions.count)
 
@@ -62,9 +61,10 @@ struct AdaptiveDifficultyEngine: Sendable {
         }
 
         // All key dimensions strong, no weak ones, enough sessions
-        if strongCount == dimensions.count
-            && weakCount == 0
-            && profile.sessionCount >= minSessionsForPromotion {
+        if strongCount == dimensions.count,
+           weakCount == 0,
+           profile.sessionCount >= minSessionsForPromotion
+        {
             return .readyForPromotion
         }
 
@@ -89,15 +89,15 @@ struct AdaptiveDifficultyEngine: Sendable {
         let index = sessionIndex ?? profile.sessionCount
 
         switch state {
-        case .consolidating:
-            return currentLevel
-        case .stretching:
-            // 70% current, 30% stretch — deterministic pattern
-            let isStretchSlot = (index % 10) >= Int(stretchCurrentRatio * 10)
-            return isStretchSlot ? min(currentLevel + 1, 4) : currentLevel
-        case .readyForPromotion:
-            // Mix evenly between current and next to prepare for transition
-            return (index % 2 == 0) ? currentLevel : min(currentLevel + 1, 4)
+            case .consolidating:
+                return currentLevel
+            case .stretching:
+                // 70% current, 30% stretch — deterministic pattern
+                let isStretchSlot = (index % 10) >= Int(stretchCurrentRatio * 10)
+                return isStretchSlot ? min(currentLevel + 1, 4) : currentLevel
+            case .readyForPromotion:
+                // Mix evenly between current and next to prepare for transition
+                return (index % 2 == 0) ? currentLevel : min(currentLevel + 1, 4)
         }
     }
 
@@ -130,12 +130,12 @@ struct AdaptiveDifficultyEngine: Sendable {
         }
 
         switch state {
-        case .consolidating:
-            lines.append("Coaching approach: Patient, encouraging. Focus on fundamentals.")
-        case .stretching:
-            lines.append("Coaching approach: More demanding. Introduce higher-level concepts.")
-        case .readyForPromotion:
-            lines.append("Coaching approach: Challenge-oriented. The learner is close to leveling up.")
+            case .consolidating:
+                lines.append("Coaching approach: Patient, encouraging. Focus on fundamentals.")
+            case .stretching:
+                lines.append("Coaching approach: More demanding. Introduce higher-level concepts.")
+            case .readyForPromotion:
+                lines.append("Coaching approach: Challenge-oriented. The learner is close to leveling up.")
         }
 
         return lines.joined(separator: "\n")
@@ -146,20 +146,21 @@ struct AdaptiveDifficultyEngine: Sendable {
     /// Key dimensions evaluated at each level (Build + Break).
     static func dimensionsForLevel(_ level: Int) -> [String] {
         switch level {
-        case 1:
-            return ProfileUpdater.buildDimensionsL1
-        case 2:
-            return ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
-        default:
-            // L3+ includes all L2 Build + Break dimensions
-            return ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
+            case 1:
+                ProfileUpdater.buildDimensionsL1
+            case 2:
+                ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
+            default:
+                // L3+ includes all L2 Build + Break dimensions
+                ProfileUpdater.buildDimensionsL2 + ProfileUpdater.breakDimensions
         }
     }
 
     private static func isStrong(_ dimension: String, in profile: LearnerProfile) -> Bool {
         guard let avg = profile.rollingAverage(for: dimension),
               let maxScore = ProfileUpdater.maxScores[dimension],
-              maxScore > 0 else {
+              maxScore > 0
+        else {
             return false
         }
         return (avg / Double(maxScore)) >= strongThreshold
@@ -168,7 +169,8 @@ struct AdaptiveDifficultyEngine: Sendable {
     private static func isWeak(_ dimension: String, in profile: LearnerProfile) -> Bool {
         guard let avg = profile.rollingAverage(for: dimension),
               let maxScore = ProfileUpdater.maxScores[dimension],
-              maxScore > 0 else {
+              maxScore > 0
+        else {
             // No data = weak by default (needs practice)
             return true
         }

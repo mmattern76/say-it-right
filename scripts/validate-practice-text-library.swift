@@ -1,20 +1,5 @@
 #!/usr/bin/env swift
 
-// validate-practice-text-library.swift
-//
-// CI-ready validation script for practice text library JSON files.
-// Checks schema conformance, ID uniqueness, metadata completeness,
-// and content version consistency.
-//
-// Usage:
-//   swift scripts/validate-practice-text-library.swift [path-to-library-dir]
-//
-// Default path: app/SayItRight/Content/PracticeTexts/
-//
-// Exit codes:
-//   0 — all checks passed
-//   1 — validation errors found
-
 import Foundation
 
 // MARK: - Expected Schema Types
@@ -65,13 +50,15 @@ struct ValidatedMetadata: Codable {
 struct ValidationResult {
     var errors: [String] = []
     var warnings: [String] = []
-    var textCount: Int = 0
-    var contentVersion: String = ""
-    var passed: Bool { errors.isEmpty }
+    var textCount = 0
+    var contentVersion = ""
+    var passed: Bool {
+        errors.isEmpty
+    }
 }
 
-let validQualityLevels: Set<String> = ["well-structured", "buried-lead", "rambling", "adversarial"]
-let validDomains: Set<String> = ["everyday", "school", "society", "technology"]
+let validQualityLevels: Set = ["well-structured", "buried-lead", "rambling", "adversarial"]
+let validDomains: Set = ["everyday", "school", "society", "technology"]
 
 func validateFile(at path: String, language: String) -> ValidationResult {
     var result = ValidationResult()
@@ -141,10 +128,10 @@ func validateFile(at path: String, language: String) -> ValidationResult {
         if text.metadata.wordCount <= 0 {
             result.errors.append("Text '\(text.id)' has invalid word count: \(text.metadata.wordCount)")
         }
-        if text.metadata.qualityLevel == "adversarial" && text.answerKey.structuralFlaw == nil {
+        if text.metadata.qualityLevel == "adversarial", text.answerKey.structuralFlaw == nil {
             result.errors.append("Adversarial text '\(text.id)' missing structural flaw")
         }
-        if text.metadata.qualityLevel == "rambling" && text.answerKey.proposedRestructure == nil {
+        if text.metadata.qualityLevel == "rambling", text.answerKey.proposedRestructure == nil {
             result.errors.append("Rambling text '\(text.id)' missing proposed restructure")
         }
     }
@@ -176,14 +163,19 @@ for language in ["en", "de"] {
     if !result.contentVersion.isEmpty { print("  Content version: \(result.contentVersion)") }
     print("  Texts: \(result.textCount)")
     print("  Errors: \(result.errors.count), Warnings: \(result.warnings.count)")
-    for e in result.errors { print("  ERROR: \(e)") }
-    for w in result.warnings { print("  WARN: \(w)") }
+    for e in result.errors {
+        print("  ERROR: \(e)")
+    }
+    for w in result.warnings {
+        print("  WARN: \(w)")
+    }
 
     allErrors.append(contentsOf: result.errors)
     allWarnings.append(contentsOf: result.warnings)
 
     if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-       let container = try? JSONDecoder().decode(ValidatedContainer.self, from: data) {
+       let container = try? JSONDecoder().decode(ValidatedContainer.self, from: data)
+    {
         for text in container.texts {
             if allIDs.contains(text.id) { crossFileDuplicates.append(text.id) }
             allIDs.insert(text.id)

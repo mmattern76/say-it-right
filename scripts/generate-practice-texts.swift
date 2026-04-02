@@ -35,14 +35,14 @@ enum ScriptQualityLevel: String, CaseIterable {
 struct ScriptConfig {
     var qualityLevels: [ScriptQualityLevel] = ScriptQualityLevel.allCases
     var languages: [String] = ["en", "de"]
-    var targetLevel: Int = 1
+    var targetLevel = 1
     var domains: [String] = ["technology", "school", "society", "everyday"]
-    var countPerCombination: Int = 2
-    var idStart: Int = 100
-    var useUUID: Bool = true
-    var outputDir: String = "content/practice-texts/staging"
-    var model: String = "claude-sonnet-4-5-20250514"
-    var apiKey: String = ""
+    var countPerCombination = 2
+    var idStart = 100
+    var useUUID = true
+    var outputDir = "content/practice-texts/staging"
+    var model = "claude-sonnet-4-5-20250514"
+    var apiKey = ""
 }
 
 func parseArgs() -> ScriptConfig {
@@ -52,53 +52,53 @@ func parseArgs() -> ScriptConfig {
     var i = 1
     while i < args.count {
         switch args[i] {
-        case "--quality":
-            i += 1
-            if i < args.count {
-                if args[i] == "all" {
-                    config.qualityLevels = ScriptQualityLevel.allCases
-                } else {
-                    config.qualityLevels = args[i].split(separator: ",").compactMap {
-                        ScriptQualityLevel(rawValue: String($0))
+            case "--quality":
+                i += 1
+                if i < args.count {
+                    if args[i] == "all" {
+                        config.qualityLevels = ScriptQualityLevel.allCases
+                    } else {
+                        config.qualityLevels = args[i].split(separator: ",").compactMap {
+                            ScriptQualityLevel(rawValue: String($0))
+                        }
                     }
                 }
-            }
-        case "--language":
-            i += 1
-            if i < args.count {
-                config.languages = args[i] == "both" ? ["en", "de"] : [args[i]]
-            }
-        case "--level":
-            i += 1
-            if i < args.count { config.targetLevel = Int(args[i]) ?? 1 }
-        case "--domain":
-            i += 1
-            if i < args.count {
-                config.domains = args[i] == "all"
-                    ? ["technology", "school", "society", "everyday"]
-                    : args[i].split(separator: ",").map(String.init)
-            }
-        case "--count":
-            i += 1
-            if i < args.count { config.countPerCombination = Int(args[i]) ?? 2 }
-        case "--id-start":
-            i += 1
-            if i < args.count { config.idStart = Int(args[i]) ?? 100 }
-        case "--uuid":
-            config.useUUID = true
-        case "--no-uuid":
-            config.useUUID = false
-        case "--output":
-            i += 1
-            if i < args.count { config.outputDir = args[i] }
-        case "--model":
-            i += 1
-            if i < args.count { config.model = args[i] }
-        case "--help", "-h":
-            printUsage()
-            exit(0)
-        default:
-            break
+            case "--language":
+                i += 1
+                if i < args.count {
+                    config.languages = args[i] == "both" ? ["en", "de"] : [args[i]]
+                }
+            case "--level":
+                i += 1
+                if i < args.count { config.targetLevel = Int(args[i]) ?? 1 }
+            case "--domain":
+                i += 1
+                if i < args.count {
+                    config.domains = args[i] == "all"
+                        ? ["technology", "school", "society", "everyday"]
+                        : args[i].split(separator: ",").map(String.init)
+                }
+            case "--count":
+                i += 1
+                if i < args.count { config.countPerCombination = Int(args[i]) ?? 2 }
+            case "--id-start":
+                i += 1
+                if i < args.count { config.idStart = Int(args[i]) ?? 100 }
+            case "--uuid":
+                config.useUUID = true
+            case "--no-uuid":
+                config.useUUID = false
+            case "--output":
+                i += 1
+                if i < args.count { config.outputDir = args[i] }
+            case "--model":
+                i += 1
+                if i < args.count { config.model = args[i] }
+            case "--help", "-h":
+                printUsage()
+                exit(0)
+            default:
+                break
         }
         i += 1
     }
@@ -131,7 +131,7 @@ func printUsage() {
 
 // MARK: - Generation Prompt
 
-func systemPrompt(qualityLevel: ScriptQualityLevel, language: String, wordRange: ClosedRange<Int>) -> String {
+func systemPrompt(qualityLevel _: ScriptQualityLevel, language: String, wordRange: ClosedRange<Int>) -> String {
     let languageName = language == "de" ? "German" : "English"
     return """
     You are a practice text generator for an educational app that teaches \
@@ -155,52 +155,52 @@ func systemPrompt(qualityLevel: ScriptQualityLevel, language: String, wordRange:
 
 func qualityInstructions(for level: ScriptQualityLevel) -> String {
     switch level {
-    case .wellStructured:
-        return """
-        INSTRUCTIONS: Create a text with clean pyramid structure.
-        - Lead with the governing thought (conclusion first)
-        - Follow with 2-4 distinct support pillars, each with specific evidence
-        - Each support should be mutually exclusive and collectively exhaustive (MECE)
-        - The structure should be easy to extract — this is a model text
-        - Include a brief counterargument that is acknowledged and dismissed
-        """
-    case .buriedLead:
-        return """
-        INSTRUCTIONS: Create a text where the conclusion EXISTS but is BURIED.
-        - Start with background, context, statistics, or a story (1-2 paragraphs)
-        - Place the actual governing thought in paragraph 2 or 3
-        - The supporting arguments should be solid once the reader finds the thesis
-        - The text should feel like a newspaper feature or essay that builds up to its point
-        """
-    case .rambling:
-        return """
-        INSTRUCTIONS: Create a text with NO clear organizing structure.
-        - Good individual points but scattered without hierarchy
-        - Jump between subtopics without clear transitions
-        - Split related arguments across non-adjacent paragraphs
-        - Weak or non-committal conclusion
-        - Conversational, stream-of-consciousness style
-        """
-    case .adversarial:
-        return """
-        INSTRUCTIONS: Create a text that APPEARS well-structured but has a HIDDEN logical flaw.
-        - Surface structure should look like a clean pyramid
-        - Embed ONE subtle flaw: false_dichotomy, circular_reasoning, non_sequitur, \
-        hasty_generalization, straw_man, false_equivalence, appeal_to_authority, \
-        or correlation_as_causation
-        - The flaw should require careful reading to spot
-        - The text should be convincing on first read
-        """
+        case .wellStructured:
+            """
+            INSTRUCTIONS: Create a text with clean pyramid structure.
+            - Lead with the governing thought (conclusion first)
+            - Follow with 2-4 distinct support pillars, each with specific evidence
+            - Each support should be mutually exclusive and collectively exhaustive (MECE)
+            - The structure should be easy to extract — this is a model text
+            - Include a brief counterargument that is acknowledged and dismissed
+            """
+        case .buriedLead:
+            """
+            INSTRUCTIONS: Create a text where the conclusion EXISTS but is BURIED.
+            - Start with background, context, statistics, or a story (1-2 paragraphs)
+            - Place the actual governing thought in paragraph 2 or 3
+            - The supporting arguments should be solid once the reader finds the thesis
+            - The text should feel like a newspaper feature or essay that builds up to its point
+            """
+        case .rambling:
+            """
+            INSTRUCTIONS: Create a text with NO clear organizing structure.
+            - Good individual points but scattered without hierarchy
+            - Jump between subtopics without clear transitions
+            - Split related arguments across non-adjacent paragraphs
+            - Weak or non-committal conclusion
+            - Conversational, stream-of-consciousness style
+            """
+        case .adversarial:
+            """
+            INSTRUCTIONS: Create a text that APPEARS well-structured but has a HIDDEN logical flaw.
+            - Surface structure should look like a clean pyramid
+            - Embed ONE subtle flaw: false_dichotomy, circular_reasoning, non_sequitur, \
+            hasty_generalization, straw_man, false_equivalence, appeal_to_authority, \
+            or correlation_as_causation
+            - The flaw should require careful reading to spot
+            - The text should be convincing on first read
+            """
     }
 }
 
 func levelContext(for level: Int) -> String {
     switch level {
-    case 1: return "LEVEL: L1 Plain Talk — simple language, 13-15 year olds."
-    case 2: return "LEVEL: L2 Order — moderate complexity, MECE grouping, 15-17 year olds."
-    case 3: return "LEVEL: L3 Architecture — complex arguments, university-level."
-    case 4: return "LEVEL: L4 Mastery — professional-grade complexity."
-    default: return "LEVEL: General audience."
+        case 1: "LEVEL: L1 Plain Talk — simple language, 13-15 year olds."
+        case 2: "LEVEL: L2 Order — moderate complexity, MECE grouping, 15-17 year olds."
+        case 3: "LEVEL: L3 Architecture — complex arguments, university-level."
+        case 4: "LEVEL: L4 Mastery — professional-grade complexity."
+        default: "LEVEL: General audience."
     }
 }
 
@@ -260,9 +260,9 @@ func callClaudeAPI(apiKey: String, model: String, systemPrompt: String, userProm
 
     let body: [String: Any] = [
         "model": model,
-        "max_tokens": 4096,
+        "max_tokens": 4_096,
         "system": systemPrompt,
-        "messages": [["role": "user", "content": userPrompt]]
+        "messages": [["role": "user", "content": userPrompt]],
     ]
 
     request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -325,10 +325,10 @@ func writeOutput(_ jsonString: String, id: String, language: String, outputDir: 
                 "supports": (answerKey?["supports"] as? [[String: Any]])?.map { s in
                     [
                         "label": s["label"] ?? "",
-                        "evidence": s["evidence"] ?? []
+                        "evidence": s["evidence"] ?? [],
                     ] as [String: Any]
                 } ?? [],
-                "structuralAssessment": answerKey?["structural_assessment"] ?? ""
+                "structuralAssessment": answerKey?["structural_assessment"] ?? "",
             ] as [String: Any],
             "metadata": [
                 "qualityLevel": parsed["quality_level"] ?? parsed["topic_domain"].map { _ in "" } ?? "",
@@ -336,8 +336,8 @@ func writeOutput(_ jsonString: String, id: String, language: String, outputDir: 
                 "topicDomain": parsed["topic_domain"] ?? "",
                 "language": language,
                 "wordCount": wordCount,
-                "targetLevel": 1
-            ] as [String: Any]
+                "targetLevel": 1,
+            ] as [String: Any],
         ]
 
         // Add optional fields to answer key
@@ -401,20 +401,22 @@ func main() async {
     for quality in config.qualityLevels {
         for domain in config.domains {
             for language in config.languages {
-                for n in 1...config.countPerCombination {
-                    let id: String
-                    if config.useUUID {
-                        id = "pt-\(UUID().uuidString.lowercased())-\(language)"
+                for n in 1 ... config.countPerCombination {
+                    let id = if config.useUUID {
+                        "pt-\(UUID().uuidString.lowercased())-\(language)"
                     } else {
-                        id = String(format: "pt-%03d-%@", currentID, language)
+                        String(format: "pt-%03d-%@", currentID, language)
                     }
-                    print("[\(currentID)] Generating \(quality.rawValue) / \(domain) / \(language) (\(n)/\(config.countPerCombination))...", terminator: " ")
+                    print(
+                        "[\(currentID)] Generating \(quality.rawValue) / \(domain) / \(language) (\(n)/\(config.countPerCombination))...",
+                        terminator: " "
+                    )
 
                     do {
                         let sysPrompt = systemPrompt(
                             qualityLevel: quality,
                             language: language,
-                            wordRange: 100...400
+                            wordRange: 100 ... 400
                         )
                         let userPrompt = buildUserPrompt(
                             quality: quality,

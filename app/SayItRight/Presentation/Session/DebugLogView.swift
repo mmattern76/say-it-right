@@ -91,13 +91,13 @@ struct DebugLogView: View {
 
     private func badgeColor(_ kind: DebugLogger.EntryKind) -> Color {
         switch kind {
-        case .apiRequest:       .blue
-        case .apiResponse:      .green
-        case .apiError:         .red
-        case .metadataParsed:   .purple
-        case .sessionEvent:     .orange
-        case .evaluationResult: .teal
-        case .configChange:     .gray
+            case .apiRequest: .blue
+            case .apiResponse: .green
+            case .apiError: .red
+            case .metadataParsed: .purple
+            case .sessionEvent: .orange
+            case .evaluationResult: .teal
+            case .configChange: .gray
         }
     }
 

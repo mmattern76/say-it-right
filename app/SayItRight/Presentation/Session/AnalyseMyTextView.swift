@@ -34,9 +34,9 @@ struct AnalyseMyTextView: View {
     var body: some View {
         ChatView(viewModel: viewModel)
             .navigationTitle(SessionType.analyseMyText.displayName(language: language))
-            #if !os(macOS)
+        #if !os(macOS)
             .navigationBarTitleDisplayMode(.inline)
-            #endif
+        #endif
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     Button(action: endSessionAndDismiss) {

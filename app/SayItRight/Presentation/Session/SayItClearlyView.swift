@@ -44,7 +44,7 @@ struct SayItClearlyView: View {
                 VStack(spacing: 0) {
                     ChatView(viewModel: viewModel)
 
-                    if viewModel.isRevisionComplete && !viewModel.isSummaryRequested {
+                    if viewModel.isRevisionComplete, !viewModel.isSummaryRequested {
                         summaryPromptBar
                     }
                 }
@@ -52,30 +52,30 @@ struct SayItClearlyView: View {
         }
         .navigationTitle(SessionType.sayItClearly.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-            let topic = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if topic == nil {
-                noTopicsAvailable = true
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+                let topic = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if topic == nil {
+                    noTopicsAvailable = true
+                }
             }
-        }
     }
 
     // MARK: - Summary Prompt
@@ -84,8 +84,8 @@ struct SayItClearlyView: View {
         VStack(spacing: 8) {
             Divider()
             Text(language == "de"
-                 ? "Revision abgeschlossen"
-                 : "Revision complete")
+                ? "Revision abgeschlossen"
+                : "Revision complete")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -111,14 +111,14 @@ struct SayItClearlyView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine Themen verf\u{00FC}gbar"
-                 : "No topics available")
+                ? "Keine Themen verf\u{00FC}gbar"
+                : "No topics available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
-                 : "There are no matching topics for your current level.")
+                ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
+                : "There are no matching topics for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -158,7 +158,7 @@ struct SayItClearlyView: View {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: true
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Alex"),
             language: "en"
@@ -191,7 +191,7 @@ struct SayItClearlyView: View {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: false
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Maxi", language: "de"),
             language: "de"
@@ -213,7 +213,7 @@ struct SayItClearlyView: View {
                     domain: .society,
                     level: 1,
                     barbaraFavorite: true
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Alex"),
             language: "en"

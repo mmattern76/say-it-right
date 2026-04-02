@@ -11,7 +11,7 @@ import SwiftUI
 struct FeedbackGlowModifier: ViewModifier {
     let feedbackState: BlockFeedbackState
 
-    @State private var isPulsing: Bool = false
+    @State private var isPulsing = false
 
     func body(content: Content) -> some View {
         content
@@ -31,25 +31,25 @@ struct FeedbackGlowModifier: ViewModifier {
     @ViewBuilder
     private var borderOverlay: some View {
         switch feedbackState {
-        case .correct:
-            RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
-                .strokeBorder(FeedbackPalette.correct, lineWidth: 2.5)
-                .shadow(color: FeedbackPalette.correct.opacity(0.5), radius: 6)
-        case .misplaced:
-            RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
-                .strokeBorder(FeedbackPalette.misplaced, lineWidth: 2.5)
-        case .meceOverlap:
-            RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
-                .strokeBorder(FeedbackPalette.overlap, lineWidth: 3)
-                .opacity(shouldReduceMotion ? 1.0 : (isPulsing ? 0.6 : 1.0))
-                .animation(
-                    shouldReduceMotion
-                        ? nil
-                        : .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
-                    value: isPulsing
-                )
-        case .none:
-            EmptyView()
+            case .correct:
+                RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
+                    .strokeBorder(FeedbackPalette.correct, lineWidth: 2.5)
+                    .shadow(color: FeedbackPalette.correct.opacity(0.5), radius: 6)
+            case .misplaced:
+                RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
+                    .strokeBorder(FeedbackPalette.misplaced, lineWidth: 2.5)
+            case .meceOverlap:
+                RoundedRectangle(cornerRadius: BlockDimensions.cornerRadius)
+                    .strokeBorder(FeedbackPalette.overlap, lineWidth: 3)
+                    .opacity(shouldReduceMotion ? 1.0 : (isPulsing ? 0.6 : 1.0))
+                    .animation(
+                        shouldReduceMotion
+                            ? nil
+                            : .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                        value: isPulsing
+                    )
+            case .none:
+                EmptyView()
         }
     }
 
@@ -59,23 +59,23 @@ struct FeedbackGlowModifier: ViewModifier {
     @ViewBuilder
     private var iconOverlay: some View {
         switch feedbackState {
-        case .correct:
-            Image(systemName: "checkmark.circle.fill")
-                .font(.caption2)
-                .foregroundStyle(FeedbackPalette.correct)
-                .padding(4)
-        case .misplaced:
-            Image(systemName: "exclamationmark.triangle.fill")
-                .font(.caption2)
-                .foregroundStyle(FeedbackPalette.misplaced)
-                .padding(4)
-        case .meceOverlap:
-            Image(systemName: "xmark.circle.fill")
-                .font(.caption2)
-                .foregroundStyle(FeedbackPalette.overlap)
-                .padding(4)
-        case .none:
-            EmptyView()
+            case .correct:
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(FeedbackPalette.correct)
+                    .padding(4)
+            case .misplaced:
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(FeedbackPalette.misplaced)
+                    .padding(4)
+            case .meceOverlap:
+                Image(systemName: "xmark.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(FeedbackPalette.overlap)
+                    .padding(4)
+            case .none:
+                EmptyView()
         }
     }
 }
@@ -94,14 +94,14 @@ struct ShakeModifier: ViewModifier {
         content
             .offset(x: shakeOffset)
             .onChange(of: feedbackState) { _, newValue in
-                if newValue == .misplaced && !shouldReduceMotion {
+                if newValue == .misplaced, !shouldReduceMotion {
                     triggerShake()
                 }
             }
     }
 
     private func triggerShake() {
-        let duration: Double = 0.08
+        let duration = 0.08
         // Three oscillations: right, left, right, left, center.
         withAnimation(.easeInOut(duration: duration)) {
             shakeOffset = 6
@@ -136,8 +136,7 @@ extension View {
     ///
     /// Combines glow border, accessibility icon, and shake animation.
     func validationFeedback(_ state: BlockFeedbackState) -> some View {
-        self
-            .modifier(FeedbackGlowModifier(feedbackState: state))
+        modifier(FeedbackGlowModifier(feedbackState: state))
             .modifier(ShakeModifier(feedbackState: state))
     }
 }

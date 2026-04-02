@@ -4,7 +4,7 @@ import Foundation
 ///
 /// The exercise provides a governing thought (fixed at pyramid top) and a set
 /// of scrambled blocks that the user must arrange into the correct tree structure.
-struct PyramidExercise: Codable, Sendable, Identifiable {
+struct PyramidExercise: Codable, Identifiable {
     let id: String
     let titleEN: String
     let titleDE: String
@@ -26,26 +26,26 @@ struct PyramidExercise: Codable, Sendable, Identifiable {
 }
 
 /// A single block in a pyramid exercise.
-struct ExerciseBlock: Codable, Sendable, Identifiable {
+struct ExerciseBlock: Codable, Identifiable {
     let id: String
     let text: String
     let type: ExerciseBlockType
 }
 
 /// Block type in exercise data.
-enum ExerciseBlockType: String, Codable, Sendable {
+enum ExerciseBlockType: String, Codable {
     case governingThought = "governing_thought"
     case supportPoint = "support_point"
-    case evidence = "evidence"
+    case evidence
     case redHerring = "red_herring"
 
     /// Convert to the presentation-layer BlockType.
     var blockType: BlockType {
         switch self {
-        case .governingThought: .governingThought
-        case .supportPoint: .supportPoint
-        case .evidence: .evidence
-        case .redHerring: .redHerring
+            case .governingThought: .governingThought
+            case .supportPoint: .supportPoint
+            case .evidence: .evidence
+            case .redHerring: .redHerring
         }
     }
 }

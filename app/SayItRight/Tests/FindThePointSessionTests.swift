@@ -1,12 +1,10 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - FindThePointSession Tests
 
-@Suite("FindThePointSession")
 struct FindThePointSessionTests {
-
     private static func makeText(id: String = "test-text") -> PracticeText {
         PracticeText(
             id: id,
@@ -144,9 +142,7 @@ struct FindThePointSessionTests {
 
 // MARK: - FindThePointCoordinator Tests
 
-@Suite("FindThePointCoordinator")
 struct FindThePointCoordinatorTests {
-
     private static func makeTexts() -> [PracticeText] {
         [
             PracticeText(
@@ -205,9 +201,7 @@ struct FindThePointCoordinatorTests {
 
 // MARK: - SessionManager Find the Point Integration
 
-@Suite("SessionManager -- Find the point")
 struct SessionManagerFindThePointTests {
-
     private static func makeText() -> PracticeText {
         PracticeText(
             id: "test-pt",

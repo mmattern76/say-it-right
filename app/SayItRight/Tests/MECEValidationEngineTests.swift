@@ -1,5 +1,5 @@
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - Test Helpers
 
@@ -33,9 +33,7 @@ private func makeUserTree(
 
 // MARK: - Tests
 
-@Suite("MECE Validation Engine")
 struct MECEValidationEngineTests {
-
     let engine = MECEValidationEngine()
 
     // MARK: - Test 1: Perfect arrangement
@@ -115,8 +113,8 @@ struct MECEValidationEngineTests {
             root: "GT",
             parentToChildren: [
                 "GT": ["SP1", "SP2"],
-                "SP1": ["E1", "E3"],  // E3 should be under SP2
-                "SP2": ["E2", "E4"],  // E2 should be under SP1
+                "SP1": ["E1", "E3"], // E3 should be under SP2
+                "SP2": ["E2", "E4"], // E2 should be under SP1
             ]
         )
 
@@ -126,14 +124,14 @@ struct MECEValidationEngineTests {
         #expect(result.score < 1.0)
 
         // E3 is in wrong group — should be under SP2.
-        if case .wrongGroup(let expected) = result.blockStatuses["E3"] {
+        if case let .wrongGroup(expected) = result.blockStatuses["E3"] {
             #expect(expected == "SP2")
         } else {
             Issue.record("E3 should be wrongGroup")
         }
 
         // E2 is in wrong group — should be under SP1.
-        if case .wrongGroup(let expected) = result.blockStatuses["E2"] {
+        if case let .wrongGroup(expected) = result.blockStatuses["E2"] {
             #expect(expected == "SP1")
         } else {
             Issue.record("E2 should be wrongGroup")
@@ -197,7 +195,7 @@ struct MECEValidationEngineTests {
             root: "GT",
             parentToChildren: [
                 "GT": ["SP1", "SP2"],
-                "SP1": ["E1", "E2", "E3"],  // E3 overlaps — belongs in SP2
+                "SP1": ["E1", "E2", "E3"], // E3 overlaps — belongs in SP2
                 "SP2": [],
             ]
         )
@@ -264,7 +262,7 @@ struct MECEValidationEngineTests {
 
         // User placed a block "EXTRA" that isn't in any valid group.
         // It's placed in the tree but under no recognised parent.
-        var allPlaced: Set<String> = ["GT", "SP1", "E1", "EXTRA"]
+        var allPlaced: Set = ["GT", "SP1", "E1", "EXTRA"]
 
         let userTree = UserPyramidTree(
             rootBlockID: "GT",
@@ -361,10 +359,10 @@ struct MECEValidationEngineTests {
         #expect(result.score == 1.0)
 
         // All 10 blocks should be correct.
-        let correctCount = result.blockStatuses.values.filter {
+        let correctCount = result.blockStatuses.values.count(where: {
             if case .correct = $0 { return true }
             return false
-        }.count
+        })
         #expect(correctCount == 10)
     }
 }

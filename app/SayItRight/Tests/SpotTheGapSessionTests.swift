@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("SpotTheGapSession")
 struct SpotTheGapSessionTests {
-
     private static func makePracticeText() -> PracticeText {
         PracticeText(
             id: "pt-adversarial",
@@ -75,9 +73,7 @@ struct SpotTheGapSessionTests {
     }
 }
 
-@Suite("SessionType — Spot The Gap")
 struct SessionTypeSpotTheGapTests {
-
     @Test("spotTheGap raw value")
     func rawValue() {
         #expect(SessionType.spotTheGap.rawValue == "spot-the-gap")

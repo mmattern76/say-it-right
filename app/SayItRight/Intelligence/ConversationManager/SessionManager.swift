@@ -12,7 +12,6 @@ import Foundation
 @MainActor
 @Observable
 final class SessionManager {
-
     // MARK: - Observable State
 
     /// All messages in the current session.
@@ -29,7 +28,6 @@ final class SessionManager {
 
     /// The active "Say it clearly" session state, if any.
     private(set) var sayItClearlySession: SayItClearlySession?
-
 
     /// The active "Find the point" session state, if any.
     private(set) var findThePointSession: FindThePointSession?
@@ -72,7 +70,7 @@ final class SessionManager {
     static let contextWindowThreshold = 50
 
     /// The assembled system prompt for the current session.
-    private var systemPrompt: String = ""
+    private var systemPrompt = ""
 
     // MARK: - Init
 
@@ -277,7 +275,7 @@ final class SessionManager {
     ///
     /// Instructs Barbara to keep feedback concise for spoken delivery:
     /// 2-3 sentences max per turn, punchier phrasing.
-    func voiceModeDirective(language: String) -> String {
+    func voiceModeDirective(language _: String) -> String {
         """
         # Voice Mode
 
@@ -313,18 +311,17 @@ final class SessionManager {
     /// for "Find the point" sessions.
     private func practiceTextDirectiveBlock(
         practiceText: PracticeText,
-        language: String
+        language _: String
     ) -> String {
-        let qualityNote: String
-        switch practiceText.metadata.qualityLevel {
-        case .wellStructured:
-            qualityNote = "This text is well-structured. The governing thought should be identifiable."
-        case .buriedLead:
-            qualityNote = "This text has a buried lead. The governing thought is hidden deeper in the text."
-        case .rambling:
-            qualityNote = "This text is rambling. The learner may correctly identify that there is no clear governing thought."
-        case .adversarial:
-            qualityNote = "This text appears structured but contains a hidden structural flaw."
+        let qualityNote = switch practiceText.metadata.qualityLevel {
+            case .wellStructured:
+                "This text is well-structured. The governing thought should be identifiable."
+            case .buriedLead:
+                "This text has a buried lead. The governing thought is hidden deeper in the text."
+            case .rambling:
+                "This text is rambling. The learner may correctly identify that there is no clear governing thought."
+            case .adversarial:
+                "This text appears structured but contains a hidden structural flaw."
         }
 
         return """
@@ -472,7 +469,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for "Analyse my text" sessions.
-    private func analyseMyTextDirectiveBlock(language: String) -> String {
+    private func analyseMyTextDirectiveBlock(language _: String) -> String {
         """
         # Analyse My Text Session
 
@@ -549,7 +546,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for "Fix this mess" sessions.
-    private func fixThisMessDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+    private func fixThisMessDirectiveBlock(practiceText: PracticeText, language _: String) -> String {
         let answerKey = practiceText.answerKey
         return """
         # Fix This Mess Session
@@ -562,7 +559,8 @@ final class SessionManager {
 
         ## Answer Key (hidden from learner)
         Governing thought: \(answerKey.governingThought)
-        Support groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }.joined(separator: "; "))
+        Support groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }
+            .joined(separator: "; "))
         \(answerKey.proposedRestructure.map { "Proposed restructure: \($0)" } ?? "")
 
         ## Evaluation Guidelines
@@ -621,7 +619,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for "Spot the gap" sessions.
-    private func spotTheGapDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+    private func spotTheGapDirectiveBlock(practiceText: PracticeText, language _: String) -> String {
         let flaw = practiceText.answerKey.structuralFlaw
         return """
         # Spot The Gap Session
@@ -641,13 +639,18 @@ final class SessionManager {
         When the learner misidentifies the flaw, provide progressively specific hints:
 
         ### After attempt 1 (Tier 1 — general area):
-        \(flaw?.hints?.tier1 ?? "Hint: identify the general structural area (grouping, evidence, conclusion) where the problem lies. Do NOT name the specific flaw.")
+        \(flaw?.hints?
+            .tier1 ??
+            "Hint: identify the general structural area (grouping, evidence, conclusion) where the problem lies. Do NOT name the specific flaw.")
 
         ### After attempt 2 (Tier 2 — specific element):
-        \(flaw?.hints?.tier2 ?? "Hint: narrow to the specific support group or evidence item. Compare specific elements.")
+        \(flaw?.hints?
+            .tier2 ?? "Hint: narrow to the specific support group or evidence item. Compare specific elements.")
 
         ### After attempt 3 (Tier 3 — full reveal):
-        \(flaw?.hints?.tier3 ?? "Reveal the flaw with a full structural explanation. Explain WHY it's a flaw and what correct structure would look like.")
+        \(flaw?.hints?
+            .tier3 ??
+            "Reveal the flaw with a full structural explanation. Explain WHY it's a flaw and what correct structure would look like.")
 
         ## Evaluation Guidelines
         - The learner has up to 3 attempts to identify the flaw.
@@ -722,7 +725,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for pyramid exercises.
-    private func pyramidDirectiveBlock(exercise: PyramidExercise, language: String) -> String {
+    private func pyramidDirectiveBlock(exercise: PyramidExercise, language _: String) -> String {
         let blockList = exercise.blocks.map { "- [\($0.id)] \($0.text) (\($0.type.rawValue))" }.joined(separator: "\n")
         let answerKey = exercise.answerKey
         let groupsDesc = answerKey.validGroupings.first.map { grouping in
@@ -795,7 +798,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for visual fix-this-mess exercises.
-    private func fixThisMessVisualDirectiveBlock(exercise: FixThisMessExercise, language: String) -> String {
+    private func fixThisMessVisualDirectiveBlock(exercise: FixThisMessExercise, language _: String) -> String {
         let blockList = exercise.blocks.map { "- [\($0.id)] \($0.text) (\($0.type.rawValue))" }.joined(separator: "\n")
         let answerKey = exercise.answerKey
         let groupsDesc = answerKey.validGroupings.first.map { grouping in
@@ -877,7 +880,7 @@ final class SessionManager {
     }
 
     /// Build the directive block for "Decode and rebuild" sessions.
-    private func decodeAndRebuildDirectiveBlock(practiceText: PracticeText, language: String) -> String {
+    private func decodeAndRebuildDirectiveBlock(practiceText: PracticeText, language _: String) -> String {
         let answerKey = practiceText.answerKey
         return """
         # Decode and Rebuild Session
@@ -893,7 +896,8 @@ final class SessionManager {
 
         ### Answer Key (HIDDEN — do not reveal)
         Governing Thought: \(answerKey.governingThought)
-        Support Groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }.joined(separator: "; "))
+        Support Groups: \(answerKey.supports.map { "\($0.label): \($0.evidence.joined(separator: ", "))" }
+            .joined(separator: "; "))
         Structural Assessment: \(answerKey.structuralAssessment)
 
         ### Phase 1 Evaluation
@@ -954,7 +958,7 @@ final class SessionManager {
         }
 
         // Track extraction attempts in "Find the point" session
-        if findThePointSession != nil && !findThePointSession!.hasUsedRetry {
+        if findThePointSession != nil, !findThePointSession!.hasUsedRetry {
             findThePointSession?.recordAttempt(trimmed)
         }
 
@@ -1146,7 +1150,7 @@ final class SessionManager {
 
         do {
             // Build API messages from conversation history (exclude empty streaming placeholder)
-            let apiMessages = messages
+            var apiMessages = messages
                 .filter { !$0.text.isEmpty }
                 .map { message in
                     APIMessage(
@@ -1155,10 +1159,26 @@ final class SessionManager {
                     )
                 }
 
+            // Anthropic API requires at least one message. On the first call
+            // (no prior conversation), send a minimal user turn so the system
+            // prompt drives Barbara's opening response.
+            if apiMessages.isEmpty {
+                apiMessages = [APIMessage(role: "user", content: "Begin.")]
+            }
+
+            // Resolve the model ID (transparently migrates retired models)
+            let catalog = ModelCatalog.shared
+            let settings = AppSettings.shared
+            let (resolvedModelID, didMigrate) = catalog.resolveModelID(settings.selectedModelID)
+            if didMigrate {
+                settings.selectedModelID = resolvedModelID
+            }
+
             // Stream response from Anthropic
             let stream = await anthropicService.sendMessage(
                 systemPrompt: systemPrompt,
-                messages: apiMessages
+                messages: apiMessages,
+                model: resolvedModelID
             )
 
             var fullText = ""
@@ -1186,7 +1206,6 @@ final class SessionManager {
             }
 
             sessionState = .active
-
         } catch {
             // Remove the empty streaming message on error
             if messages[streamingIndex].text.isEmpty {
@@ -1196,6 +1215,16 @@ final class SessionManager {
             }
             sessionState = .error(error.localizedDescription)
         }
+    }
+
+    // MARK: - Retry
+
+    /// Retry the last failed streaming response.
+    ///
+    /// Only retries if the session is in an error state and a system prompt is set.
+    func retryLastResponse() async {
+        guard case .error = sessionState, !systemPrompt.isEmpty else { return }
+        await streamBarbaraResponse()
     }
 
     // MARK: - Private: Context Window Management

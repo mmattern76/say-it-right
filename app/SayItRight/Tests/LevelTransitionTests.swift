@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("LevelTransitionEngine")
 struct LevelTransitionTests {
-
     private let engine = LevelTransitionEngine()
 
     private func makeProfile(
@@ -124,9 +122,7 @@ struct LevelTransitionTests {
     }
 }
 
-@Suite("ProgressionCriteria")
 struct ProgressionCriteriaTests {
-
     @Test("Default criteria exist for L1, L2, L3")
     func defaultCriteria() {
         let criteria = ProgressionCriteria.default
@@ -137,8 +133,8 @@ struct ProgressionCriteriaTests {
     }
 
     @Test("L1 criteria require 4 dimensions")
-    func l1Dimensions() {
-        let c = ProgressionCriteria.default.criteria(fromLevel: 1)!
+    func l1Dimensions() throws {
+        let c = try #require(ProgressionCriteria.default.criteria(fromLevel: 1))
         #expect(c.requiredDimensions.count == 4)
         #expect(c.minTotalSessions == 10)
         #expect(c.minDimensionAverage == 0.75)

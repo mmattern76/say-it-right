@@ -12,7 +12,6 @@ import Foundation
 @MainActor
 @Observable
 final class SayItClearlyCoordinator {
-
     /// Topics the learner has seen recently (simple dedup, not persistent).
     /// Internal setter for testability; production code uses `trackSeen(_:)`.
     var recentTopicIDs: Set<String> = []
@@ -65,7 +64,7 @@ final class SayItClearlyCoordinator {
     ///
     /// Filters out recently seen topics. If all topics have been seen,
     /// resets the recent list and picks from the full set.
-    func selectTopic(for level: Int, language: String) -> Topic? {
+    func selectTopic(for level: Int, language _: String) -> Topic? {
         // First try excluding recently seen topics
         if let topic = topicBank.randomTopic(for: level, excluding: recentTopicIDs) {
             return topic

@@ -22,7 +22,7 @@ final class FirstLaunchUITests: XCTestCase {
         super.tearDown()
     }
 
-    func testFirstLaunchShowsAPIKeyScreen() throws {
+    func testFirstLaunchShowsAPIKeyScreen() {
         app.launch()
 
         // Should show the API key entry screen
@@ -34,7 +34,7 @@ final class FirstLaunchUITests: XCTestCase {
         XCTAssertTrue(textField.exists, "API key secure field should be visible")
     }
 
-    func testAPIKeyValidation() throws {
+    func testAPIKeyValidation() {
         app.launch()
 
         // Enter an invalid key (no sk-ant- prefix)
@@ -53,7 +53,7 @@ final class FirstLaunchUITests: XCTestCase {
         XCTAssertTrue(errorText.waitForExistence(timeout: 3), "Should show API key format error")
     }
 
-    func testValidAPIKeyAdvancesToLanguage() throws {
+    func testValidAPIKeyAdvancesToLanguage() {
         app.launch()
 
         let textField = app.secureTextFields.firstMatch
@@ -73,7 +73,7 @@ final class FirstLaunchUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Deutsch"].exists)
     }
 
-    func testLanguageSelectionAdvancesToOnboarding() throws {
+    func testLanguageSelectionAdvancesToOnboarding() {
         app.launch()
 
         // Enter valid API key

@@ -37,33 +37,33 @@ struct DropZoneView: View {
 
     private var borderColor: Color {
         switch visualState {
-        case .available:
-            Color.secondary.opacity(0.5)
-        case .highlighted:
-            Color.accentColor
+            case .available:
+                Color.secondary.opacity(0.5)
+            case .highlighted:
+                Color.accentColor
         }
     }
 
     private var fillColor: Color {
         switch visualState {
-        case .available:
-            Color.secondary.opacity(0.05)
-        case .highlighted:
-            Color.accentColor.opacity(0.15)
+            case .available:
+                Color.secondary.opacity(0.05)
+            case .highlighted:
+                Color.accentColor.opacity(0.15)
         }
     }
 
     private var borderWidth: CGFloat {
         switch visualState {
-        case .available: 1.5
-        case .highlighted: 2.5
+            case .available: 1.5
+            case .highlighted: 2.5
         }
     }
 
     private var opacity: Double {
         switch visualState {
-        case .available: 0.6
-        case .highlighted: 1.0
+            case .available: 0.6
+            case .highlighted: 1.0
         }
     }
 }

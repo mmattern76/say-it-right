@@ -8,7 +8,7 @@ import Foundation
 /// concrete visual effects (colour, animation, accessibility label).
 /// Colour-blind-safe: each state uses a distinct shape/pattern
 /// in addition to colour.
-enum BlockFeedbackState: Sendable, Equatable {
+enum BlockFeedbackState: Equatable {
     /// Block is correctly placed — green glow, checkmark pattern.
     case correct
     /// Block is in the wrong position — amber border, shake animation.
@@ -21,10 +21,10 @@ enum BlockFeedbackState: Sendable, Equatable {
     /// Accessibility description for VoiceOver.
     var accessibilityLabel: String {
         switch self {
-        case .correct: "Correctly placed"
-        case .misplaced: "Misplaced — needs to be moved"
-        case .meceOverlap: "MECE overlap — this block overlaps with another group"
-        case .none: ""
+            case .correct: "Correctly placed"
+            case .misplaced: "Misplaced — needs to be moved"
+            case .meceOverlap: "MECE overlap — this block overlaps with another group"
+            case .none: ""
         }
     }
 }
@@ -32,22 +32,21 @@ enum BlockFeedbackState: Sendable, Equatable {
 // MARK: - Feedback Configuration
 
 /// Controls how validation feedback is displayed.
-struct FeedbackConfiguration: Sendable, Equatable {
+struct FeedbackConfiguration: Equatable {
     /// Whether feedback is currently visible.
-    var isEnabled: Bool = false
+    var isEnabled = false
     /// Whether feedback updates automatically on each drop,
     /// or only when the user presses "Check my work".
-    var isAutomatic: Bool = false
+    var isAutomatic = false
 
-    static let `default` = FeedbackConfiguration()
+    static let `default` = Self()
 }
 
 // MARK: - Feedback Mapping
 
 /// Maps a ``PyramidValidationResult`` into per-block feedback states
 /// and gap placeholder positions.
-struct ValidationFeedbackMapper: Sendable {
-
+enum ValidationFeedbackMapper {
     /// Derive per-block feedback states from a validation result.
     ///
     /// - Parameter result: The validation result from ``MECEValidationEngine``.
@@ -71,7 +70,8 @@ struct ValidationFeedbackMapper: Sendable {
         var confirmedGroupParents: Set<String> = []
         for assessment in result.groupAssessments {
             if let matchedID = assessment.matchedAnswerGroupParentID,
-               matchedID == assessment.userParentBlockID {
+               matchedID == assessment.userParentBlockID
+            {
                 confirmedGroupParents.insert(matchedID)
             }
         }
@@ -84,28 +84,28 @@ struct ValidationFeedbackMapper: Sendable {
             }
 
             switch status {
-            case .correct:
-                states[blockID] = .correct
-            case .wrongParent, .wrongGroup:
-                if overlappingBlockIDs.contains(blockID) {
-                    states[blockID] = .meceOverlap
-                } else {
+                case .correct:
+                    states[blockID] = .correct
+                case .wrongParent, .wrongGroup:
+                    if overlappingBlockIDs.contains(blockID) {
+                        states[blockID] = .meceOverlap
+                    } else {
+                        states[blockID] = .misplaced
+                    }
+                case .ungrouped:
+                    if overlappingBlockIDs.contains(blockID) {
+                        states[blockID] = .meceOverlap
+                    } else {
+                        states[blockID] = .misplaced
+                    }
+                case .missing:
+                    // Missing blocks are shown as gap placeholders, not block feedback.
+                    break
+                case .redHerringPlaced:
                     states[blockID] = .misplaced
-                }
-            case .ungrouped:
-                if overlappingBlockIDs.contains(blockID) {
-                    states[blockID] = .meceOverlap
-                } else {
-                    states[blockID] = .misplaced
-                }
-            case .missing:
-                // Missing blocks are shown as gap placeholders, not block feedback.
-                break
-            case .redHerringPlaced:
-                states[blockID] = .misplaced
-            case .redHerringDiscarded:
-                // Correctly discarded — no visual feedback on the canvas.
-                break
+                case .redHerringDiscarded:
+                    // Correctly discarded — no visual feedback on the canvas.
+                    break
             }
         }
 
@@ -172,8 +172,11 @@ struct ValidationFeedbackMapper: Sendable {
 // MARK: - Gap Placement
 
 /// Describes where a gap placeholder should appear in the pyramid.
-struct GapPlacement: Sendable, Equatable, Identifiable {
-    var id: String { "\(parentBlockID)-gap-\(missingBlockID)" }
+struct GapPlacement: Equatable, Identifiable {
+    var id: String {
+        "\(parentBlockID)-gap-\(missingBlockID)"
+    }
+
     /// The parent block under which the gap exists.
     let parentBlockID: String
     /// The ID of the missing block from the answer key.

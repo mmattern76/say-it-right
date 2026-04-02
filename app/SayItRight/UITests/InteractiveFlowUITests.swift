@@ -20,7 +20,7 @@ final class InteractiveFlowUITests: XCTestCase {
 
     // MARK: - First Launch: Full API Key → Language → Onboarding Flow
 
-    func testFullFirstLaunchFlow() throws {
+    func testFullFirstLaunchFlow() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "NO",
             "-appLanguage", "en",
@@ -44,8 +44,10 @@ final class InteractiveFlowUITests: XCTestCase {
 
         // Step 2: Language selection screen
         let languageTitle = app.staticTexts["Choose Your Language"]
-        XCTAssertTrue(languageTitle.waitForExistence(timeout: 5),
-                     "Should advance to language selection after valid API key")
+        XCTAssertTrue(
+            languageTitle.waitForExistence(timeout: 5),
+            "Should advance to language selection after valid API key"
+        )
 
         // Both languages should be visible
         XCTAssertTrue(app.staticTexts["English"].exists)
@@ -61,11 +63,13 @@ final class InteractiveFlowUITests: XCTestCase {
 
         // Step 3: Onboarding with Barbara
         let barbaraLabel = app.staticTexts["Barbara"]
-        XCTAssertTrue(barbaraLabel.waitForExistence(timeout: 5),
-                     "Should reach Barbara's onboarding after language selection")
+        XCTAssertTrue(
+            barbaraLabel.waitForExistence(timeout: 5),
+            "Should reach Barbara's onboarding after language selection"
+        )
     }
 
-    func testInvalidAPIKeyShowsError() throws {
+    func testInvalidAPIKeyShowsError() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "NO",
             "-appLanguage", "en",
@@ -86,16 +90,20 @@ final class InteractiveFlowUITests: XCTestCase {
         let errorText = app.staticTexts.containing(
             NSPredicate(format: "label CONTAINS 'sk-ant-'")
         ).firstMatch
-        XCTAssertTrue(errorText.waitForExistence(timeout: 3),
-                     "Should show validation error for invalid key format")
+        XCTAssertTrue(
+            errorText.waitForExistence(timeout: 3),
+            "Should show validation error for invalid key format"
+        )
 
         // Should NOT have advanced to language screen
         let languageTitle = app.staticTexts["Choose Your Language"]
-        XCTAssertFalse(languageTitle.exists,
-                      "Should not advance past API key with invalid key")
+        XCTAssertFalse(
+            languageTitle.exists,
+            "Should not advance past API key with invalid key"
+        )
     }
 
-    func testContinueButtonDisabledWhenEmpty() throws {
+    func testContinueButtonDisabledWhenEmpty() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "NO",
             "-appLanguage", "en",
@@ -106,13 +114,15 @@ final class InteractiveFlowUITests: XCTestCase {
         XCTAssertTrue(continueButton.waitForExistence(timeout: 5))
 
         // Continue button should be disabled when no text entered
-        XCTAssertFalse(continueButton.isEnabled,
-                      "Continue button should be disabled with empty API key field")
+        XCTAssertFalse(
+            continueButton.isEnabled,
+            "Continue button should be disabled with empty API key field"
+        )
     }
 
     // MARK: - Onboarding: Avatar + Name Flow
 
-    func testOnboardingAvatarAndNameFlow() throws {
+    func testOnboardingAvatarAndNameFlow() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "NO",
             "-appLanguage", "en",
@@ -126,8 +136,10 @@ final class InteractiveFlowUITests: XCTestCase {
 
         // Wait for "Let's go!" button (after typing animation)
         let letsGoButton = app.buttons["letsGoButton"]
-        XCTAssertTrue(letsGoButton.waitForExistence(timeout: 15),
-                     "Let's go button should appear after welcome typing")
+        XCTAssertTrue(
+            letsGoButton.waitForExistence(timeout: 15),
+            "Let's go button should appear after welcome typing"
+        )
         letsGoButton.tap()
 
         // Should show avatar picker with name field
@@ -136,8 +148,10 @@ final class InteractiveFlowUITests: XCTestCase {
 
         // Continue button should NOT exist yet
         let avatarContinue = app.buttons["avatarContinueButton"]
-        XCTAssertFalse(avatarContinue.exists,
-                      "Continue should not appear without name and avatar")
+        XCTAssertFalse(
+            avatarContinue.exists,
+            "Continue should not appear without name and avatar"
+        )
 
         // Type a name
         nameField.tap()
@@ -157,14 +171,16 @@ final class InteractiveFlowUITests: XCTestCase {
             // Should advance to pep talk phase
             // "Let's start!" button should eventually appear
             let letsStartButton = app.buttons["letsStartButton"]
-            XCTAssertTrue(letsStartButton.waitForExistence(timeout: 15),
-                         "Let's start button should appear after pep talk")
+            XCTAssertTrue(
+                letsStartButton.waitForExistence(timeout: 15),
+                "Let's start button should appear after pep talk"
+            )
         }
     }
 
     // MARK: - Session Picker: Navigate and Return
 
-    func testNavigateToSessionAndBack() throws {
+    func testNavigateToSessionAndBack() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -190,8 +206,10 @@ final class InteractiveFlowUITests: XCTestCase {
         endButton.tap()
 
         // Should be back at session picker
-        XCTAssertTrue(header.waitForExistence(timeout: 5),
-                     "Should return to session picker after End Session")
+        XCTAssertTrue(
+            header.waitForExistence(timeout: 5),
+            "Should return to session picker after End Session"
+        )
 
         // Navigate to a different session
         let findCard = app.buttons["sessionCard_find-the-point"]
@@ -199,13 +217,15 @@ final class InteractiveFlowUITests: XCTestCase {
         findCard.tap()
 
         let findNav = app.navigationBars["Find the point"]
-        XCTAssertTrue(findNav.waitForExistence(timeout: 5),
-                     "Should navigate to Find the point after returning from Say it clearly")
+        XCTAssertTrue(
+            findNav.waitForExistence(timeout: 5),
+            "Should navigate to Find the point after returning from Say it clearly"
+        )
     }
 
     // MARK: - Chat: Type Message and Verify Send Button
 
-    func testChatTypingEnablesSendButton() throws {
+    func testChatTypingEnablesSendButton() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -228,8 +248,10 @@ final class InteractiveFlowUITests: XCTestCase {
         // Send button should be disabled initially
         let sendButton = app.buttons["sendButton"]
         XCTAssertTrue(sendButton.waitForExistence(timeout: 3))
-        XCTAssertFalse(sendButton.isEnabled,
-                      "Send button should be disabled with empty input")
+        XCTAssertFalse(
+            sendButton.isEnabled,
+            "Send button should be disabled with empty input"
+        )
 
         // Type a message
         let inputField = app.textFields["chatInputField"]
@@ -238,11 +260,13 @@ final class InteractiveFlowUITests: XCTestCase {
         inputField.typeText("Schools should adopt a four-day week because students learn better with rest days.")
 
         // Send button should now be enabled
-        XCTAssertTrue(sendButton.isEnabled,
-                     "Send button should be enabled after typing text")
+        XCTAssertTrue(
+            sendButton.isEnabled,
+            "Send button should be enabled after typing text"
+        )
     }
 
-    func testChatClearInputAfterTyping() throws {
+    func testChatClearInputAfterTyping() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -267,8 +291,11 @@ final class InteractiveFlowUITests: XCTestCase {
         inputField.typeText("Test message")
 
         // Verify text is in the field
-        XCTAssertEqual(inputField.value as? String, "Test message",
-                      "Input field should contain typed text")
+        XCTAssertEqual(
+            inputField.value as? String,
+            "Test message",
+            "Input field should contain typed text"
+        )
 
         // Clear it
         inputField.tap()
@@ -293,7 +320,7 @@ final class InteractiveFlowUITests: XCTestCase {
 
     // MARK: - Dashboard: Navigate and Verify Empty State
 
-    func testDashboardShowsEmptyState() throws {
+    func testDashboardShowsEmptyState() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -312,17 +339,21 @@ final class InteractiveFlowUITests: XCTestCase {
 
         // Dashboard should show empty state for a fresh user
         let emptyText = app.staticTexts["No sessions completed yet"]
-        XCTAssertTrue(emptyText.waitForExistence(timeout: 5),
-                     "Fresh user should see empty state on dashboard")
+        XCTAssertTrue(
+            emptyText.waitForExistence(timeout: 5),
+            "Fresh user should see empty state on dashboard"
+        )
 
         let startText = app.staticTexts.containing(
             NSPredicate(format: "label CONTAINS 'Start your first exercise'")
         ).firstMatch
-        XCTAssertTrue(startText.exists,
-                     "Should show prompt to start first exercise")
+        XCTAssertTrue(
+            startText.exists,
+            "Should show prompt to start first exercise"
+        )
     }
 
-    func testDashboardNavigateBackToPickerThenToSession() throws {
+    func testDashboardNavigateBackToPickerThenToSession() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -353,13 +384,15 @@ final class InteractiveFlowUITests: XCTestCase {
         card.tap()
 
         let navTitle = app.navigationBars["The elevator pitch"]
-        XCTAssertTrue(navTitle.waitForExistence(timeout: 5),
-                     "Should navigate to session after returning from dashboard")
+        XCTAssertTrue(
+            navTitle.waitForExistence(timeout: 5),
+            "Should navigate to session after returning from dashboard"
+        )
     }
 
     // MARK: - Multiple Session Navigation (stress test nav stack)
 
-    func testNavigateMultipleSessionsSequentially() throws {
+    func testNavigateMultipleSessionsSequentially() {
         app.launchArguments += [
             "-hasCompletedOnboarding", "YES",
             "-appLanguage", "en",
@@ -383,21 +416,27 @@ final class InteractiveFlowUITests: XCTestCase {
             if !card.exists {
                 app.scrollViews.firstMatch.swipeUp()
             }
-            XCTAssertTrue(card.waitForExistence(timeout: 3),
-                         "Card for \(session.rawValue) should exist")
+            XCTAssertTrue(
+                card.waitForExistence(timeout: 3),
+                "Card for \(session.rawValue) should exist"
+            )
             card.tap()
 
             let navTitle = app.navigationBars[session.title]
-            XCTAssertTrue(navTitle.waitForExistence(timeout: 5),
-                         "Should navigate to \(session.title)")
+            XCTAssertTrue(
+                navTitle.waitForExistence(timeout: 5),
+                "Should navigate to \(session.title)"
+            )
 
             // End session
             let endButton = app.buttons["End Session"]
             XCTAssertTrue(endButton.waitForExistence(timeout: 3))
             endButton.tap()
 
-            XCTAssertTrue(header.waitForExistence(timeout: 5),
-                         "Should return to picker after ending \(session.title)")
+            XCTAssertTrue(
+                header.waitForExistence(timeout: 5),
+                "Should return to picker after ending \(session.title)"
+            )
         }
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Contains a pyramid exercise with an intentionally wrong initial arrangement.
 /// The user must diagnose and fix the structural problems.
-struct FixThisMessExercise: Codable, Sendable, Identifiable {
+struct FixThisMessExercise: Codable, Identifiable {
     let id: String
     let titleEN: String
     let titleDE: String
@@ -33,13 +33,13 @@ struct FixThisMessExercise: Codable, Sendable, Identifiable {
 }
 
 /// Describes a wrong initial arrangement of blocks in the pyramid.
-struct WrongArrangement: Codable, Sendable, Equatable {
+struct WrongArrangement: Codable, Equatable {
     /// Parent-to-children mapping. Keys are block IDs from the exercise.
     let groups: [WrongGroup]
 }
 
 /// A single wrong grouping in the initial arrangement.
-struct WrongGroup: Codable, Sendable, Equatable {
+struct WrongGroup: Codable, Equatable {
     /// The parent block ID.
     let parentBlockID: String
     /// The child block IDs placed under this parent (in wrong order/grouping).

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Quality level of a practice text, defining how well-structured it is.
-enum QualityLevel: String, Codable, Sendable, CaseIterable {
+enum QualityLevel: String, Codable, CaseIterable {
     /// Clean pyramid structure, easy to extract governing thought and supports.
     case wellStructured = "well-structured"
     /// Conclusion exists but is buried in paragraph 2-3 instead of leading.
@@ -13,7 +13,7 @@ enum QualityLevel: String, Codable, Sendable, CaseIterable {
 }
 
 /// A structural flaw embedded in an adversarial practice text.
-struct StructuralFlaw: Codable, Sendable, Equatable {
+struct StructuralFlaw: Codable, Equatable {
     /// The type of flaw (e.g. "false_dichotomy", "circular_reasoning", "non_sequitur").
     let type: String
     /// Human-readable description of the flaw.
@@ -32,7 +32,7 @@ struct StructuralFlaw: Codable, Sendable, Equatable {
 }
 
 /// 3-tier progressive hints for structural flaw identification.
-struct HintTiers: Codable, Sendable, Equatable {
+struct HintTiers: Codable, Equatable {
     /// Tier 1: General area hint (e.g., "Look at the grouping").
     let tier1: String
     /// Tier 2: Specific element hint (e.g., "Compare support B and C").
@@ -42,7 +42,7 @@ struct HintTiers: Codable, Sendable, Equatable {
 }
 
 /// Answer key for a practice text, describing its pyramid structure.
-struct AnswerKey: Codable, Sendable, Equatable {
+struct AnswerKey: Codable, Equatable {
     /// The main conclusion / governing thought of the text.
     let governingThought: String
     /// Support groups with labels and evidence nodes.
@@ -70,7 +70,7 @@ struct AnswerKey: Codable, Sendable, Equatable {
 }
 
 /// A labeled support group with evidence nodes.
-struct SupportGroup: Codable, Sendable, Equatable {
+struct SupportGroup: Codable, Equatable {
     /// Label for this support pillar (e.g. "Health impact", "Economic argument").
     let label: String
     /// Evidence nodes supporting this pillar.
@@ -78,7 +78,7 @@ struct SupportGroup: Codable, Sendable, Equatable {
 }
 
 /// Metadata about a generated practice text.
-struct PracticeTextMetadata: Codable, Sendable, Equatable {
+struct PracticeTextMetadata: Codable, Equatable {
     let qualityLevel: QualityLevel
     let difficultyRating: Int
     let topicDomain: String
@@ -88,7 +88,7 @@ struct PracticeTextMetadata: Codable, Sendable, Equatable {
 }
 
 /// A practice text with its answer key and metadata, used in Break mode exercises.
-struct PracticeText: Codable, Sendable, Identifiable, Equatable {
+struct PracticeText: Codable, Identifiable, Equatable {
     let id: String
     let text: String
     let answerKey: AnswerKey

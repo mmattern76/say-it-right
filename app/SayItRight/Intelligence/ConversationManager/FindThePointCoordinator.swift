@@ -12,7 +12,6 @@ import Foundation
 @MainActor
 @Observable
 final class FindThePointCoordinator {
-
     /// The practice text library used for selection.
     private let library: PracticeTextLibrary
 
@@ -88,13 +87,13 @@ final class FindThePointCoordinator {
     /// - Level 2+: mix including rambling texts
     private func qualityForLevel(_ level: Int) -> QualityLevel? {
         switch level {
-        case 1:
-            return .wellStructured
-        case 2:
-            // Level 2 can handle buried-lead; nil = any quality
-            return nil
-        default:
-            return nil
+            case 1:
+                .wellStructured
+            case 2:
+                // Level 2 can handle buried-lead; nil = any quality
+                nil
+            default:
+                nil
         }
     }
 }

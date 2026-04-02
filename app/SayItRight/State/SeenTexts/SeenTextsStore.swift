@@ -13,14 +13,17 @@ actor SeenTextsStore {
         self.fileURL = dir.appendingPathComponent("seen-texts.json")
 
         if let data = try? Data(contentsOf: fileURL),
-           let loaded = try? JSONDecoder.seenTexts.decode(SeenTextsRecord.self, from: data) {
+           let loaded = try? JSONDecoder.seenTexts.decode(SeenTextsRecord.self, from: data)
+        {
             self.record = loaded
         } else {
             self.record = SeenTextsRecord()
         }
     }
 
-    var current: SeenTextsRecord { record }
+    var current: SeenTextsRecord {
+        record
+    }
 
     /// Mark a text as seen for a session type, persisting immediately.
     func markSeen(textID: String, sessionType: String, date: Date = .now) async throws {
@@ -105,9 +108,9 @@ actor SeenTextsStore {
     /// Barbara's acknowledgment message when all texts at a level have been exhausted.
     static func exhaustionMessage(language: String) -> String {
         if language == "de" {
-            return "Du hast meine gesamte Sammlung auf diesem Level durchgearbeitet. Lass uns einige nochmal ansehen \u{2014} du wirst sie jetzt mit anderen Augen sehen."
+            "Du hast meine gesamte Sammlung auf diesem Level durchgearbeitet. Lass uns einige nochmal ansehen \u{2014} du wirst sie jetzt mit anderen Augen sehen."
         } else {
-            return "You\u{2019}ve worked through my entire collection at this level. Let\u{2019}s revisit some \u{2014} you\u{2019}ll see them differently now."
+            "You\u{2019}ve worked through my entire collection at this level. Let\u{2019}s revisit some \u{2014} you\u{2019}ll see them differently now."
         }
     }
 }

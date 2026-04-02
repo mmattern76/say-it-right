@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("AnalyseMyTextSession")
 struct AnalyseMyTextSessionTests {
-
     @Test("Session initialises with defaults")
     func initialisation() {
         let session = AnalyseMyTextSession()
@@ -78,11 +76,11 @@ struct AnalyseMyTextSessionTests {
 
     @Test("Very long text is rejected")
     func validateTooLong() {
-        let words = (0..<2100).map { "word\($0)" }.joined(separator: " ")
+        let words = (0 ..< 2_100).map { "word\($0)" }.joined(separator: " ")
         let text = words + ". Another sentence here."
         let result = AnalyseMyTextSession.validate(text)
-        if case .tooLong(let count) = result {
-            #expect(count > 2000)
+        if case let .tooLong(count) = result {
+            #expect(count > 2_000)
         } else {
             Issue.record("Expected .tooLong but got \(result)")
         }
@@ -91,9 +89,7 @@ struct AnalyseMyTextSessionTests {
 
 // MARK: - SessionType Tests
 
-@Suite("SessionType — Analyse My Text")
 struct SessionTypeAnalyseMyTextTests {
-
     @Test("analyseMyText raw value")
     func rawValue() {
         #expect(SessionType.analyseMyText.rawValue == "analyse-my-text")

@@ -9,7 +9,6 @@ import SwiftUI
 @MainActor
 @Observable
 final class ParentGate {
-
     var isUnlocked = false
 
     private let settings: AppSettings

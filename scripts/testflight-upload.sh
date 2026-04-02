@@ -23,6 +23,20 @@ EXPORT_PATH="${BUILD_DIR}/export"
 EXPORT_OPTIONS="${APP_DIR}/ExportOptions.plist"
 SKIP_UPLOAD=false
 
+# App Store Connect API Key authentication (avoids session token expiry)
+ASC_KEY_ID="94Z62J84D6"
+ASC_ISSUER_ID="143cfbf9-85ca-492d-b495-b2198624d957"
+ASC_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+
+ASC_AUTH_FLAGS=()
+if [ -f "$ASC_KEY_PATH" ]; then
+    ASC_AUTH_FLAGS=(
+        -authenticationKeyID "$ASC_KEY_ID"
+        -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+        -authenticationKeyPath "$ASC_KEY_PATH"
+    )
+fi
+
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -67,6 +81,7 @@ if [ "$SKIP_UPLOAD" = true ]; then
         -exportPath "$EXPORT_PATH" \
         -exportOptionsPlist "$EXPORT_OPTIONS" \
         -allowProvisioningUpdates \
+        "${ASC_AUTH_FLAGS[@]}" \
         -quiet
     echo "    Archive exported to $EXPORT_PATH (not uploaded)"
 else
@@ -76,6 +91,7 @@ else
         -exportPath "$EXPORT_PATH" \
         -exportOptionsPlist "$EXPORT_OPTIONS" \
         -allowProvisioningUpdates \
+        "${ASC_AUTH_FLAGS[@]}" \
         -quiet
     echo "    Upload complete! Build ${NEW_BUILD} submitted to TestFlight."
 fi

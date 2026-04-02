@@ -6,7 +6,7 @@ import SwiftUI
 /// removed from play (but can be retrieved from the discarded pile).
 struct DiscardZoneView: View {
     /// Whether a block is currently being dragged near the zone.
-    var isHighlighted: Bool = false
+    var isHighlighted = false
     /// Blocks that have been discarded.
     let discardedBlocks: [PyramidBlock]
     /// Called when the user taps a discarded block to retrieve it.

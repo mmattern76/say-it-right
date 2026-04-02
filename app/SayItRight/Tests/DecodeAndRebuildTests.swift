@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("DecodeAndRebuildSession")
 struct DecodeAndRebuildSessionTests {
-
     private static func makePracticeText() -> PracticeText {
         PracticeText(
             id: "pt-decode-test",
@@ -109,9 +107,7 @@ struct DecodeAndRebuildSessionTests {
     }
 }
 
-@Suite("DecodeAndRebuildCoordinator")
 struct DecodeAndRebuildCoordinatorTests {
-
     @Test("Unlock requires L2+ and sufficient sessions")
     @MainActor
     func unlockGate() {
@@ -124,7 +120,7 @@ struct DecodeAndRebuildCoordinatorTests {
         // L2 user with enough sessions: unlocked
         var l2Profile = LearnerProfile.createDefault(displayName: "Learner")
         l2Profile.currentLevel = 2
-        l2Profile.sessionCount = 6  // 3 Break + 3 Build
+        l2Profile.sessionCount = 6 // 3 Break + 3 Build
         #expect(coordinator.isUnlocked(for: l2Profile))
 
         // L2 user with too few sessions: locked
@@ -143,7 +139,7 @@ struct DecodeAndRebuildCoordinatorTests {
 
         // selectText may return nil if the library has no matching texts
         // for this test profile — that's expected behavior
-        let _ = coordinator.selectText(for: profile)
+        _ = coordinator.selectText(for: profile)
     }
 
     @Test("Recent text tracking prevents repeats")
@@ -157,9 +153,7 @@ struct DecodeAndRebuildCoordinatorTests {
     }
 }
 
-@Suite("SessionType — Decode and Rebuild")
 struct SessionTypeDecodeAndRebuildTests {
-
     @Test("decodeAndRebuild raw value")
     func rawValue() {
         #expect(SessionType.decodeAndRebuild.rawValue == "decode-and-rebuild")

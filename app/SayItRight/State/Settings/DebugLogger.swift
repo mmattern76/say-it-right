@@ -6,11 +6,10 @@ import Foundation
 /// Viewable and exportable from the parent settings section.
 /// Automatically disabled in release builds unless explicitly toggled on.
 actor DebugLogger {
-
     static let shared = DebugLogger()
 
     private let fileManager = FileManager.default
-    private let maxFileSize: Int = 5_000_000 // 5 MB rotation threshold
+    private let maxFileSize = 5_000_000 // 5 MB rotation threshold
 
     private var fileHandle: FileHandle?
     private var currentFilePath: URL?
@@ -69,7 +68,7 @@ actor DebugLogger {
         log(.apiRequest, data: [
             "model": model,
             "system_prompt_tokens": "\(systemPromptTokens)",
-            "message_count": "\(messageCount)"
+            "message_count": "\(messageCount)",
         ])
     }
 
@@ -77,7 +76,7 @@ actor DebugLogger {
         log(.apiResponse, data: [
             "latency_ms": "\(latencyMs)",
             "tokens_used": "\(tokensUsed)",
-            "has_metadata": "\(hasMetadata)"
+            "has_metadata": "\(hasMetadata)",
         ])
     }
 
@@ -144,7 +143,8 @@ actor DebugLogger {
 
         // Rotate if too large
         if let attrs = try? fileManager.attributesOfItem(atPath: path.path),
-           let size = attrs[.size] as? Int, size > maxFileSize {
+           let size = attrs[.size] as? Int, size > maxFileSize
+        {
             try? fileManager.removeItem(at: path)
             fileManager.createFile(atPath: path.path, contents: nil)
         }

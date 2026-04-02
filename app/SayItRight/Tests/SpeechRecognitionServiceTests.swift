@@ -1,13 +1,10 @@
 import Foundation
-import Testing
-
 @testable import SayItRight
+import Testing
 
 // MARK: - SpeechLocale Tests
 
-@Suite("SpeechLocale")
 struct SpeechLocaleTests {
-
     @Test("German language maps to de-DE locale")
     func germanLocale() {
         let locale = SpeechLocale(appLanguage: "de")
@@ -33,9 +30,7 @@ struct SpeechLocaleTests {
 
 // MARK: - Mock Service Tests
 
-@Suite("MockSpeechRecognitionService")
 struct MockSpeechRecognitionServiceTests {
-
     @Test("Default mock is authorized and available")
     func defaultState() {
         let mock = MockSpeechRecognitionService()
@@ -155,9 +150,7 @@ struct MockSpeechRecognitionServiceTests {
 
 // MARK: - SpeechRecognitionError Tests
 
-@Suite("SpeechRecognitionError")
 struct SpeechRecognitionErrorTests {
-
     @Test("Errors are equatable")
     func errorsAreEquatable() {
         #expect(SpeechRecognitionError.permissionDenied == .permissionDenied)
@@ -172,9 +165,7 @@ struct SpeechRecognitionErrorTests {
 
 // MARK: - SpeechTranscription Tests
 
-@Suite("SpeechTranscription")
 struct SpeechTranscriptionTests {
-
     @Test("Transcription stores all fields")
     func transcriptionFields() {
         let t = SpeechTranscription(text: "Test", isFinal: true, confidence: 0.95)

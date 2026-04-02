@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Session type descriptor for the sidebar picker.
-struct SessionTypeItem: Identifiable, Hashable, Sendable {
+struct SessionTypeItem: Identifiable, Hashable {
     let id: String
     let titleEN: String
     let titleDE: String
@@ -77,8 +77,9 @@ extension SessionTypeItem {
 /// directly to `ChatView`.
 struct SidebarView: View {
     @Binding var selectedSessionType: SessionTypeItem?
-    var language: String = "en"
-    var onSettingsTapped: () -> Void = {}
+    var language = "en"
+    var onSettingsTapped: () -> Void = {
+    }
 
     var body: some View {
         List(selection: $selectedSessionType) {
@@ -102,8 +103,8 @@ struct SidebarView: View {
                         .font(.headline)
 
                     Text(language == "de"
-                         ? "Bereit loszulegen."
-                         : "Ready when you are.")
+                        ? "Bereit loszulegen."
+                        : "Ready when you are.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

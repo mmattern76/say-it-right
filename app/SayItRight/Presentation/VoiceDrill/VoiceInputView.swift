@@ -15,7 +15,6 @@ import SwiftUI
 /// }
 /// ```
 struct VoiceInputView: View {
-
     @Bindable var viewModel: VoiceInputViewModel
     @Environment(AppSettings.self) private var settings
 
@@ -30,7 +29,7 @@ struct VoiceInputView: View {
             transcriptionArea
 
             // Error display
-            if case .error(let error) = viewModel.state {
+            if case let .error(error) = viewModel.state {
                 errorBanner(for: error)
             }
 
@@ -46,81 +45,81 @@ struct VoiceInputView: View {
     @ViewBuilder
     private var transcriptionArea: some View {
         switch viewModel.state {
-        case .idle:
-            // Show hint text
-            Text(isGerman ? "Tippe auf das Mikrofon und sprich" : "Tap the microphone and speak")
-                .font(.subheadline)
-                .foregroundStyle(.tertiary)
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 60)
+            case .idle:
+                // Show hint text
+                Text(isGerman ? "Tippe auf das Mikrofon und sprich" : "Tap the microphone and speak")
+                    .font(.subheadline)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 60)
 
-        case .recording:
-            // Live transcription with recording indicator
-            VStack(spacing: 8) {
-                recordingIndicator
+            case .recording:
+                // Live transcription with recording indicator
+                VStack(spacing: 8) {
+                    recordingIndicator
 
-                if viewModel.transcriptionText.isEmpty {
-                    Text(isGerman ? "Ich höre zu ..." : "Listening ...")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .italic()
-                } else {
-                    Text(viewModel.transcriptionText)
-                        .font(.body)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-            }
-            .frame(minHeight: 60)
-            .padding()
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-
-        case .review:
-            // Editable text field for corrections
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(isGerman ? "Überprüfe deinen Text" : "Review your text")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    Button {
-                        isEditing.toggle()
-                    } label: {
-                        Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle")
-                            .foregroundStyle(Color.accentColor)
+                    if viewModel.transcriptionText.isEmpty {
+                        Text(isGerman ? "Ich höre zu ..." : "Listening ...")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                    } else {
+                        Text(viewModel.transcriptionText)
+                            .font(.body)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(.leading)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(isEditing
-                        ? (isGerman ? "Bearbeitung beenden" : "Done editing")
-                        : (isGerman ? "Text bearbeiten" : "Edit text"))
                 }
+                .frame(minHeight: 60)
+                .padding()
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
 
-                if isEditing {
-                    TextField(
-                        isGerman ? "Text bearbeiten..." : "Edit text...",
-                        text: $viewModel.editableText,
-                        axis: .vertical
-                    )
-                    .textFieldStyle(.plain)
-                    .font(.body)
-                    .lineLimit(1...10)
-                    .focused($isEditing)
-                } else {
-                    Text(viewModel.editableText)
-                        .font(.body)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .onTapGesture {
-                            isEditing = true
+            case .review:
+                // Editable text field for corrections
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(isGerman ? "Überprüfe deinen Text" : "Review your text")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button {
+                            isEditing.toggle()
+                        } label: {
+                            Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle")
+                                .foregroundStyle(Color.accentColor)
                         }
-                }
-            }
-            .frame(minHeight: 60)
-            .padding()
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(isEditing
+                            ? (isGerman ? "Bearbeitung beenden" : "Done editing")
+                            : (isGerman ? "Text bearbeiten" : "Edit text"))
+                    }
 
-        case .error:
-            EmptyView()
+                    if isEditing {
+                        TextField(
+                            isGerman ? "Text bearbeiten..." : "Edit text...",
+                            text: $viewModel.editableText,
+                            axis: .vertical
+                        )
+                        .textFieldStyle(.plain)
+                        .font(.body)
+                        .lineLimit(1 ... 10)
+                        .focused($isEditing)
+                    } else {
+                        Text(viewModel.editableText)
+                            .font(.body)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .onTapGesture {
+                                isEditing = true
+                            }
+                    }
+                }
+                .frame(minHeight: 60)
+                .padding()
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+
+            case .error:
+                EmptyView()
         }
     }
 
@@ -230,7 +229,7 @@ private struct PulsingModifier: ViewModifier {
             .onAppear {
                 withAnimation(
                     .easeInOut(duration: 0.8)
-                    .repeatForever(autoreverses: true)
+                        .repeatForever(autoreverses: true)
                 ) {
                     isAnimating = true
                 }
@@ -334,7 +333,7 @@ private struct VoiceInputReviewPreview: View {
                     text: "The main reason we should restructure the team is improved efficiency.",
                     isFinal: true,
                     confidence: 0.9
-                )
+                ),
             ]
             let vm = VoiceInputViewModel(speechService: mock)
             viewModel = vm

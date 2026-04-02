@@ -1,24 +1,24 @@
 import Foundation
 
 /// Manages the library of "Fix this mess" visual exercises.
-struct FixThisMessExerciseLibrary: Sendable {
+struct FixThisMessExerciseLibrary {
     let exercises: [FixThisMessExercise]
 
     /// Load exercises from the bundled JSON file.
-    static func loadFromBundle() -> FixThisMessExerciseLibrary {
+    static func loadFromBundle() -> Self {
         guard let url = Bundle.main.url(
             forResource: "fix-this-mess-exercises",
             withExtension: "json"
         ) else {
-            return FixThisMessExerciseLibrary(exercises: [])
+            return Self(exercises: [])
         }
 
         do {
             let data = try Data(contentsOf: url)
             let exercises = try JSONDecoder().decode([FixThisMessExercise].self, from: data)
-            return FixThisMessExerciseLibrary(exercises: exercises)
+            return Self(exercises: exercises)
         } catch {
-            return FixThisMessExerciseLibrary(exercises: [])
+            return Self(exercises: [])
         }
     }
 

@@ -12,7 +12,7 @@ struct MessageBubbleView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        if message.role == .barbara && hasFeedbackScores {
+        if message.role == .barbara, hasFeedbackScores {
             FeedbackBubbleView(
                 message: message,
                 barbaraMood: barbaraMood
@@ -46,12 +46,21 @@ struct MessageBubbleView: View {
 
     private var bubbleContent: some View {
         VStack(alignment: message.role == .barbara ? .leading : .trailing, spacing: 4) {
-            Text(message.text)
-                .font(.body)
-                .foregroundStyle(textColor)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(bubbleColor, in: bubbleShape)
+            HStack(spacing: 0) {
+                if message.role == .barbara {
+                    RoundedRectangle(cornerRadius: 1.5)
+                        .fill(Color.barbaraBorder)
+                        .frame(width: 3)
+                        .padding(.vertical, 6)
+                }
+
+                Text(message.text)
+                    .font(.body)
+                    .foregroundStyle(textColor)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+            }
+            .background(bubbleColor, in: bubbleShape)
 
             if message.isStreaming {
                 TypingIndicatorView()
@@ -72,21 +81,19 @@ struct MessageBubbleView: View {
 
     private var bubbleColor: Color {
         switch message.role {
-        case .barbara:
-            colorScheme == .dark
-                ? Color.gray.opacity(0.3)
-                : Color.gray.opacity(0.12)
-        case .learner:
-            Color.accentColor
+            case .barbara:
+                .barbaraBubble
+            case .learner:
+                .learnerBubble
         }
     }
 
     private var textColor: Color {
         switch message.role {
-        case .barbara:
-            .primary
-        case .learner:
-            .white
+            case .barbara:
+                .primary
+            case .learner:
+                .white
         }
     }
 }
@@ -99,7 +106,7 @@ struct TypingIndicatorView: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            ForEach(0..<3, id: \.self) { index in
+            ForEach(0 ..< 3, id: \.self) { index in
                 Circle()
                     .fill(Color.secondary)
                     .frame(width: 6, height: 6)

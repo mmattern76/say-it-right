@@ -5,15 +5,14 @@ import Foundation
 /// Bridges individual session results to long-term skill tracking by
 /// extracting dimension scores from Barbara's hidden metadata, computing
 /// rolling averages, and identifying structural strengths and development areas.
-struct ProfileUpdater: Sendable {
-
+struct ProfileUpdater {
     // MARK: - Thresholds
 
     /// Rolling average above this marks a dimension as a strength.
-    static let strengthThreshold: Double = 0.8
+    static let strengthThreshold = 0.8
 
     /// Rolling average below this marks a dimension as a development area.
-    static let developmentThreshold: Double = 0.5
+    static let developmentThreshold = 0.5
 
     /// Maximum scores per dimension (Build + Break rubrics).
     static let maxScores: [String: Int] = [
@@ -36,17 +35,17 @@ struct ProfileUpdater: Sendable {
 
     /// Break mode dimension keys.
     static let breakDimensions: [String] = [
-        "extractionAccuracy", "flawIdentification", "restructuringQuality"
+        "extractionAccuracy", "flawIdentification", "restructuringQuality",
     ]
 
     /// Build mode dimension keys (L1).
     static let buildDimensionsL1: [String] = [
-        "governingThought", "supportGrouping", "redundancy", "clarity"
+        "governingThought", "supportGrouping", "redundancy", "clarity",
     ]
 
     /// Build mode dimension keys (L2+).
     static let buildDimensionsL2: [String] = [
-        "l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"
+        "l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
     ]
 
     // MARK: - Public API
@@ -60,7 +59,7 @@ struct ProfileUpdater: Sendable {
     func updateProfile(
         _ profile: inout LearnerProfile,
         from metadataList: [BarbaraMetadata],
-        sessionType: String
+        sessionType _: String
     ) {
         // Extract the last evaluation metadata with scores
         let scoredMetadata = metadataList.filter { !$0.scores.isEmpty }
@@ -102,7 +101,7 @@ struct ProfileUpdater: Sendable {
         guard !scoredMetadata.isEmpty else { return }
 
         try await store.update { profile in
-            self.updateProfile(&profile, from: scoredMetadata, sessionType: sessionType)
+            updateProfile(&profile, from: scoredMetadata, sessionType: sessionType)
         }
     }
 

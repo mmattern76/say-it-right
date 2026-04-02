@@ -5,8 +5,7 @@ import Foundation
 /// Captures the selected topic, the learner's response attempts, and timestamps
 /// for the session lifecycle. Supports a revision loop where the learner
 /// revises their response after Barbara's structural feedback.
-struct SayItClearlySession: Sendable {
-
+struct SayItClearlySession {
     /// The topic Barbara selected for this session.
     let topic: Topic
 
@@ -20,10 +19,10 @@ struct SayItClearlySession: Sendable {
     let maxRevisions: Int
 
     /// Whether the session summary has been requested.
-    private(set) var summaryRequested: Bool = false
+    private(set) var summaryRequested = false
 
     /// The session type identifier for downstream processing.
-    let sessionTypeID: String = "say-it-clearly"
+    let sessionTypeID = "say-it-clearly"
 
     init(topic: Topic, startedAt: Date = .now, maxRevisions: Int = 2) {
         self.topic = topic
@@ -32,7 +31,7 @@ struct SayItClearlySession: Sendable {
     }
 
     /// A single learner attempt (first draft or revision).
-    struct Attempt: Sendable, Equatable {
+    struct Attempt: Equatable {
         let text: String
         let submittedAt: Date
     }

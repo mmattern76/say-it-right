@@ -6,8 +6,11 @@ import SwiftUI
 ///
 /// Stores the node IDs so the view can look up current positions
 /// from the layout dictionary, enabling real-time updates during drag.
-struct PyramidConnection: Identifiable, Sendable, Equatable {
-    var id: String { "\(parentID)->\(childID)" }
+struct PyramidConnection: Identifiable, Equatable {
+    var id: String {
+        "\(parentID)->\(childID)"
+    }
+
     let parentID: String
     let childID: String
 }
@@ -23,15 +26,15 @@ enum ConnectionLineStyle {
 
     var lineWidth: CGFloat {
         switch self {
-        case .normal: 1.5
-        case .highlighted: 2.0
+            case .normal: 1.5
+            case .highlighted: 2.0
         }
     }
 
     var color: Color {
         switch self {
-        case .normal: Color.secondary.opacity(0.35)
-        case .highlighted: Color.secondary.opacity(0.55)
+            case .normal: Color.secondary.opacity(0.35)
+            case .highlighted: Color.secondary.opacity(0.55)
         }
     }
 }
@@ -65,10 +68,11 @@ struct ConnectionLinesView: View {
     var dragOverrides: [String: CGPoint] = [:]
 
     var body: some View {
-        Canvas { context, size in
+        Canvas { context, _ in
             for connection in connections {
                 guard let parentLayout = nodeLayouts[connection.parentID],
-                      let childLayout = nodeLayouts[connection.childID] else {
+                      let childLayout = nodeLayouts[connection.childID]
+                else {
                     continue
                 }
 
@@ -143,7 +147,8 @@ struct AnimatedConnectionLinesView: View {
             // Draw each connection individually for per-line trim animation.
             ForEach(connections) { connection in
                 if let parentLayout = nodeLayouts[connection.parentID],
-                   let childLayout = nodeLayouts[connection.childID] {
+                   let childLayout = nodeLayouts[connection.childID]
+                {
                     let parentCenter = dragOverrides[connection.parentID] ?? parentLayout.center
                     let childCenter = dragOverrides[connection.childID] ?? childLayout.center
 
@@ -386,14 +391,14 @@ private struct DragOverridePreview: View {
                             .position(position)
                             .gesture(
                                 nodeID == "child-a"
-                                ? DragGesture()
+                                    ? DragGesture()
                                     .onChanged { value in dragOffset = value.translation }
                                     .onEnded { _ in
                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                             dragOffset = .zero
                                         }
                                     }
-                                : nil
+                                    : nil
                             )
                     }
                 }

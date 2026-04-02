@@ -4,7 +4,7 @@ import SwiftUI
 // MARK: - Voice Input State
 
 /// The current state of the voice input flow.
-enum VoiceInputState: Sendable, Equatable {
+enum VoiceInputState: Equatable {
     /// Ready to record. Microphone button is idle.
     case idle
     /// Actively listening and transcribing speech.
@@ -16,7 +16,7 @@ enum VoiceInputState: Sendable, Equatable {
 }
 
 /// Errors surfaced to the voice input UI.
-enum VoiceInputError: Sendable, Equatable {
+enum VoiceInputError: Equatable {
     case microphonePermissionDenied
     case speechPermissionDenied
     case recognizerUnavailable
@@ -25,61 +25,61 @@ enum VoiceInputError: Sendable, Equatable {
 
     var localizedTitle: String {
         switch self {
-        case .microphonePermissionDenied:
-            return "Microphone Access Denied"
-        case .speechPermissionDenied:
-            return "Speech Recognition Denied"
-        case .recognizerUnavailable:
-            return "Speech Recognizer Unavailable"
-        case .noSpeechDetected:
-            return "No Speech Detected"
-        case .recognitionFailed:
-            return "Recognition Failed"
+            case .microphonePermissionDenied:
+                "Microphone Access Denied"
+            case .speechPermissionDenied:
+                "Speech Recognition Denied"
+            case .recognizerUnavailable:
+                "Speech Recognizer Unavailable"
+            case .noSpeechDetected:
+                "No Speech Detected"
+            case .recognitionFailed:
+                "Recognition Failed"
         }
     }
 
     var localizedMessage: String {
         switch self {
-        case .microphonePermissionDenied:
-            return "Please enable microphone access in Settings to use voice input."
-        case .speechPermissionDenied:
-            return "Please enable speech recognition in Settings to use voice input."
-        case .recognizerUnavailable:
-            return "Speech recognition is not available right now. Please try again later."
-        case .noSpeechDetected:
-            return "No speech was detected. Tap the microphone and try speaking again."
-        case .recognitionFailed:
-            return "Something went wrong with speech recognition. Please try again."
+            case .microphonePermissionDenied:
+                "Please enable microphone access in Settings to use voice input."
+            case .speechPermissionDenied:
+                "Please enable speech recognition in Settings to use voice input."
+            case .recognizerUnavailable:
+                "Speech recognition is not available right now. Please try again later."
+            case .noSpeechDetected:
+                "No speech was detected. Tap the microphone and try speaking again."
+            case .recognitionFailed:
+                "Something went wrong with speech recognition. Please try again."
         }
     }
 
     var localizedTitleDE: String {
         switch self {
-        case .microphonePermissionDenied:
-            return "Mikrofonzugriff verweigert"
-        case .speechPermissionDenied:
-            return "Spracherkennung verweigert"
-        case .recognizerUnavailable:
-            return "Spracherkennung nicht verfügbar"
-        case .noSpeechDetected:
-            return "Keine Sprache erkannt"
-        case .recognitionFailed:
-            return "Erkennung fehlgeschlagen"
+            case .microphonePermissionDenied:
+                "Mikrofonzugriff verweigert"
+            case .speechPermissionDenied:
+                "Spracherkennung verweigert"
+            case .recognizerUnavailable:
+                "Spracherkennung nicht verfügbar"
+            case .noSpeechDetected:
+                "Keine Sprache erkannt"
+            case .recognitionFailed:
+                "Erkennung fehlgeschlagen"
         }
     }
 
     var localizedMessageDE: String {
         switch self {
-        case .microphonePermissionDenied:
-            return "Bitte aktiviere den Mikrofonzugriff in den Einstellungen."
-        case .speechPermissionDenied:
-            return "Bitte aktiviere die Spracherkennung in den Einstellungen."
-        case .recognizerUnavailable:
-            return "Die Spracherkennung ist gerade nicht verfügbar. Bitte versuche es später."
-        case .noSpeechDetected:
-            return "Es wurde keine Sprache erkannt. Tippe auf das Mikrofon und sprich erneut."
-        case .recognitionFailed:
-            return "Bei der Spracherkennung ist etwas schiefgelaufen. Bitte versuche es erneut."
+            case .microphonePermissionDenied:
+                "Bitte aktiviere den Mikrofonzugriff in den Einstellungen."
+            case .speechPermissionDenied:
+                "Bitte aktiviere die Spracherkennung in den Einstellungen."
+            case .recognizerUnavailable:
+                "Die Spracherkennung ist gerade nicht verfügbar. Bitte versuche es später."
+            case .noSpeechDetected:
+                "Es wurde keine Sprache erkannt. Tippe auf das Mikrofon und sprich erneut."
+            case .recognitionFailed:
+                "Bei der Spracherkennung ist etwas schiefgelaufen. Bitte versuche es erneut."
         }
     }
 }
@@ -96,17 +96,16 @@ enum VoiceInputError: Sendable, Equatable {
 @Observable
 @MainActor
 final class VoiceInputViewModel {
-
     // MARK: - Published State
 
     /// Current state of the voice input flow.
     private(set) var state: VoiceInputState = .idle
 
     /// The live transcription text, updated as the user speaks.
-    private(set) var transcriptionText: String = ""
+    private(set) var transcriptionText = ""
 
     /// Editable text for review phase. User can correct before submitting.
-    var editableText: String = ""
+    var editableText = ""
 
     /// Audio level for visual feedback (0.0-1.0), updated during recording.
     private(set) var audioLevel: Float = 0.0
@@ -142,13 +141,13 @@ final class VoiceInputViewModel {
     /// Toggle recording on/off. Main entry point for the microphone button.
     func toggleRecording() {
         switch state {
-        case .idle, .error:
-            Task { await startRecording() }
-        case .recording:
-            stopRecording()
-        case .review:
-            // In review state, tapping mic starts a new recording
-            discardAndRestart()
+            case .idle, .error:
+                Task { await startRecording() }
+            case .recording:
+                stopRecording()
+            case .review:
+                // In review state, tapping mic starts a new recording
+                discardAndRestart()
         }
     }
 
@@ -189,12 +188,12 @@ final class VoiceInputViewModel {
                 let stream = try await speechService.startRecognition()
                 for await transcription in stream {
                     guard !Task.isCancelled else { break }
-                    await self.handleTranscription(transcription)
+                    await handleTranscription(transcription)
                 }
                 // Stream ended naturally
-                await self.handleStreamEnd()
+                await handleStreamEnd()
             } catch {
-                await self.handleRecognitionError(error)
+                await handleRecognitionError(error)
             }
         }
 
@@ -290,16 +289,16 @@ final class VoiceInputViewModel {
 
         if let sttError = error as? SpeechRecognitionError {
             switch sttError {
-            case .permissionDenied:
-                state = .error(.speechPermissionDenied)
-            case .recognizerUnavailable:
-                state = .error(.recognizerUnavailable)
-            case .noSpeechDetected:
-                state = .error(.noSpeechDetected)
-            case .recognitionFailed:
-                state = .error(.recognitionFailed)
-            case .audioEngineError:
-                state = .error(.recognitionFailed)
+                case .permissionDenied:
+                    state = .error(.speechPermissionDenied)
+                case .recognizerUnavailable:
+                    state = .error(.recognizerUnavailable)
+                case .noSpeechDetected:
+                    state = .error(.noSpeechDetected)
+                case .recognitionFailed:
+                    state = .error(.recognitionFailed)
+                case .audioEngineError:
+                    state = .error(.recognitionFailed)
             }
         } else {
             state = .error(.recognitionFailed)
@@ -308,12 +307,12 @@ final class VoiceInputViewModel {
 
     private func mapAuthError(_ status: SpeechAuthorizationStatus) -> VoiceInputError {
         switch status {
-        case .denied, .restricted:
-            return .speechPermissionDenied
-        case .notDetermined:
-            return .speechPermissionDenied
-        case .authorized:
-            return .recognitionFailed // Should not happen
+            case .denied, .restricted:
+                .speechPermissionDenied
+            case .notDetermined:
+                .speechPermissionDenied
+            case .authorized:
+                .recognitionFailed // Should not happen
         }
     }
 
@@ -326,11 +325,11 @@ final class VoiceInputViewModel {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(500))
                 guard !Task.isCancelled else { break }
-                let elapsed = Date.now.timeIntervalSince(self.lastTranscriptionTime)
-                if elapsed >= self.silenceTimeoutDuration && self.state == .recording {
+                let elapsed = Date.now.timeIntervalSince(lastTranscriptionTime)
+                if elapsed >= silenceTimeoutDuration, state == .recording {
                     // Only auto-stop if we have some transcription
-                    if !self.transcriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        self.stopRecording()
+                    if !transcriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        stopRecording()
                         break
                     }
                 }

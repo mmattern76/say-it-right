@@ -5,8 +5,7 @@ import Foundation
 /// Output files follow the naming convention: `{id}.json`
 /// Files are written to a configurable staging directory for human review
 /// before being moved to the final `content/practice-texts/` directory.
-struct PracticeTextFileWriter: Sendable {
-
+struct PracticeTextFileWriter {
     private let outputDirectory: URL
 
     init(outputDirectory: URL) {

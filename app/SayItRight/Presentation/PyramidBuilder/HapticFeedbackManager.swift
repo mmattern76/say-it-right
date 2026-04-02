@@ -7,7 +7,7 @@ import SwiftUI
 /// Provides platform-aware haptic feedback using `sensoryFeedback()` modifiers
 /// on iOS 17+ and guards against Mac (no haptic hardware).
 /// All haptics are silenced when `UIAccessibility.isReduceMotionEnabled` is true.
-enum PyramidHaptic: Sendable {
+enum PyramidHaptic {
     /// Light tap when picking up a block.
     case blockPickup
     /// Medium impact when a block snaps into a valid drop zone.
@@ -25,31 +25,31 @@ enum PyramidHaptic: Sendable {
 /// Uses the iOS 17+ `sensoryFeedback()` API. On macOS this is a no-op.
 struct PyramidHapticModifier: ViewModifier {
     let trigger: PyramidHaptic?
-    @State private var hapticTrigger: Int = 0
+    @State private var hapticTrigger = 0
 
     func body(content: Content) -> some View {
         content
+        #if os(iOS)
+        .sensoryFeedback(feedback, trigger: hapticTrigger)
+        #endif
+        .onChange(of: trigger) { _, newValue in
+            guard newValue != nil else { return }
             #if os(iOS)
-            .sensoryFeedback(feedback, trigger: hapticTrigger)
-            #endif
-            .onChange(of: trigger) { _, newValue in
-                guard newValue != nil else { return }
-                #if os(iOS)
-                if !UIAccessibility.isReduceMotionEnabled {
-                    hapticTrigger += 1
-                }
-                #endif
+            if !UIAccessibility.isReduceMotionEnabled {
+                hapticTrigger += 1
             }
+            #endif
+        }
     }
 
     #if os(iOS)
     private var feedback: SensoryFeedback {
         switch trigger {
-        case .blockPickup: .impact(flexibility: .soft, intensity: 0.5)
-        case .validDrop: .impact(flexibility: .rigid, intensity: 0.7)
-        case .invalidDrop: .error
-        case .pyramidComplete: .success
-        case .none: .impact(flexibility: .soft, intensity: 0.0)
+            case .blockPickup: .impact(flexibility: .soft, intensity: 0.5)
+            case .validDrop: .impact(flexibility: .rigid, intensity: 0.7)
+            case .invalidDrop: .error
+            case .pyramidComplete: .success
+            case .none: .impact(flexibility: .soft, intensity: 0.0)
         }
     }
     #endif

@@ -7,7 +7,6 @@ import Foundation
 @MainActor
 @Observable
 final class BuildThePyramidCoordinator {
-
     var recentExerciseIDs: Set<String> = []
 
     private let library: PyramidExerciseLibrary

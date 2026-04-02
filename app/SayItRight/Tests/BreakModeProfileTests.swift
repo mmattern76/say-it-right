@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Break Mode Profile Integration")
 struct BreakModeProfileTests {
-
     // MARK: - Dimension Definitions
 
     @Test("Break mode dimensions defined in ProfileUpdater")
@@ -17,11 +15,11 @@ struct BreakModeProfileTests {
     }
 
     @Test("Break dimensions have max scores")
-    func breakDimensionMaxScores() {
+    func breakDimensionMaxScores() throws {
         for dim in ProfileUpdater.breakDimensions {
             let maxScore = ProfileUpdater.maxScores[dim]
             #expect(maxScore != nil, "Missing max score for \(dim)")
-            #expect(maxScore! > 0, "Max score for \(dim) must be > 0")
+            #expect(try #require(maxScore) > 0, "Max score for \(dim) must be > 0")
         }
     }
 
@@ -89,12 +87,12 @@ struct BreakModeProfileTests {
         var profile = LearnerProfile.createDefault(displayName: "Test")
 
         // Strong extraction (max 3, scores avg 3.0 → 100%)
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             profile.recordScore(3, for: "extractionAccuracy")
         }
 
         // Weak flaw identification (max 3, scores avg 1.0 → 33%)
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             profile.recordScore(1, for: "flawIdentification")
         }
 
@@ -138,19 +136,19 @@ struct BreakModeProfileTests {
     // MARK: - Level Transition
 
     @Test("L2 progression requires Break dimensions")
-    func l2ProgressionRequiresBreak() {
+    func l2ProgressionRequiresBreak() throws {
         let criteria = ProgressionCriteria.default.criteria(fromLevel: 2)
         #expect(criteria != nil)
-        #expect(criteria!.requiredDimensions.contains("extractionAccuracy"))
-        #expect(criteria!.requiredDimensions.contains("flawIdentification"))
-        #expect(criteria!.requiredDimensions.contains("restructuringQuality"))
+        #expect(try #require(criteria?.requiredDimensions.contains("extractionAccuracy")))
+        #expect(try #require(criteria?.requiredDimensions.contains("flawIdentification")))
+        #expect(try #require(criteria?.requiredDimensions.contains("restructuringQuality")))
     }
 
     @Test("L1 progression does not require Break dimensions")
-    func l1ProgressionNoBreak() {
+    func l1ProgressionNoBreak() throws {
         let criteria = ProgressionCriteria.default.criteria(fromLevel: 1)
         #expect(criteria != nil)
-        #expect(!criteria!.requiredDimensions.contains("extractionAccuracy"))
+        #expect(try !#require(criteria?.requiredDimensions.contains("extractionAccuracy")))
     }
 
     // MARK: - Dashboard Display Names

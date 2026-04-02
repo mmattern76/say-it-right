@@ -1,0 +1,168 @@
+# Diamond Age Portfolio — SwiftLint Configuration
+# This is the shared baseline. Project-specific overrides go in
+# a `- path/to/file.swift` entry under excluded, not by weakening rules.
+
+disabled_rules:
+  - todo  # We use TODO/FIXME as legitimate markers
+  - trailing_whitespace  # SwiftFormat handles this
+  - switch_case_alignment  # Conflicts with SwiftFormat --indentcase true
+  - trailing_comma  # SwiftFormat manages this (--commas always)
+  - opening_brace  # Conflicts with SwiftFormat brace wrapping rules
+  - modifier_order  # SwiftFormat manages this (--modifierorder)
+
+opt_in_rules:
+  - closure_body_length
+  - closure_end_indentation
+  - collection_alignment
+  - contains_over_filter_count
+  - contains_over_first_not_nil
+  - discouraged_optional_boolean
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - enum_case_associated_values_count
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - file_name_no_space
+  - first_where
+  - flatmap_over_map_reduce
+  - force_unwrapping
+  - identical_operands
+  - implicit_return
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - lower_acl_than_parent
+  - modifier_order
+  - multiline_arguments
+  - multiline_function_chains
+  - overridden_super_call
+  - pattern_matching_keywords
+  - prefer_self_in_static_references
+  - prefer_self_type_over_type_of_self
+  - private_action
+  - private_outlet
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - sorted_first_last
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - yoda_condition
+
+# === COMPLEXITY LIMITS (the article's core insight) ===
+# These force decomposition. Start strict, loosen only when a rule
+# actively hurts — not when it's merely inconvenient.
+
+function_body_length:
+  warning: 40
+  error: 60
+
+type_body_length:
+  warning: 200
+  error: 300
+
+file_length:
+  warning: 400
+  error: 500
+
+cyclomatic_complexity:
+  warning: 8
+  error: 12
+
+nesting:
+  type_level:
+    warning: 2
+  function_level:
+    warning: 3
+    error: 4
+
+function_parameter_count:
+  warning: 5
+  error: 7
+
+closure_body_length:
+  warning: 25
+  error: 40
+
+large_tuple:
+  warning: 3
+  error: 4
+
+# === LINE LENGTH ===
+line_length:
+  warning: 120
+  error: 150
+  ignores_urls: true
+  ignores_function_declarations: false
+  ignores_comments: false
+
+# === NAMING ===
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - id
+    - x
+    - y
+    - i
+    - j
+    - k
+
+type_name:
+  min_length:
+    warning: 3
+    error: 2
+  max_length:
+    warning: 50
+    error: 60
+
+# === CUSTOM RULES (Portfolio Conventions) ===
+custom_rules:
+  # Enforce local JSON persistence pattern — no UserDefaults for data
+  no_userdefaults_for_data:
+    name: "No UserDefaults for App Data"
+    regex: 'UserDefaults\.(standard|suiteName|init)'
+    message: "Use local JSON file persistence, not UserDefaults. UserDefaults is only for simple preferences (e.g., hasSeenOnboarding). See CLAUDE.md."
+    severity: warning
+
+  # Forbid print() in non-debug code
+  no_print_statements:
+    name: "No print() in Production"
+    regex: '(?<!\.)print\s*\('
+    match_kinds:
+      - identifier
+    message: "Use os.log or Logger instead of print() for production logging."
+    severity: warning
+
+  # Flag hardcoded English UI strings (basic heuristic)
+  german_first_strings:
+    name: "German-First UI Strings"
+    regex: '(?:Text|Label|title|message|placeholder)\s*[:=]\s*"[A-Z][a-z]+'
+    message: "Check: Is this a user-facing string? Portfolio apps are German-first. Use Localizable.strings or verify this is intentional."
+    severity: warning
+
+  # Enforce structured error handling — no bare try?
+  no_bare_optional_try:
+    name: "No Bare Optional Try"
+    regex: 'try\?(?!\s*await)'
+    message: "Avoid bare try? — handle errors explicitly or document why silent failure is acceptable."
+    severity: warning
+
+# === PATHS ===
+included:
+  - app/SayItRight
+
+excluded:
+  - app/SayItRight/SayItRight.xcodeproj
+  - app/SayItRight/Tests
+  - app/SayItRight/UITests
+  - DerivedData
+  - .build

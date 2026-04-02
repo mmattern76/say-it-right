@@ -94,7 +94,8 @@ struct LevelUpCelebrationView: View {
         fromLevel: 1,
         toLevel: 2,
         language: "en"
-    ) {}
+    ) {
+    }
 }
 
 #Preview("L1 → L2 — DE") {
@@ -102,7 +103,8 @@ struct LevelUpCelebrationView: View {
         fromLevel: 1,
         toLevel: 2,
         language: "de"
-    ) {}
+    ) {
+    }
 }
 
 #Preview("L2 → L3") {
@@ -110,7 +112,8 @@ struct LevelUpCelebrationView: View {
         fromLevel: 2,
         toLevel: 3,
         language: "en"
-    ) {}
+    ) {
+    }
 }
 
 #Preview("L3 → L4") {
@@ -118,5 +121,6 @@ struct LevelUpCelebrationView: View {
         fromLevel: 3,
         toLevel: 4,
         language: "en"
-    ) {}
+    ) {
+    }
 }

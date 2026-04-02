@@ -17,7 +17,7 @@ struct VoiceElevatorPitchView: View {
 
     @State private var viewModel: ChatViewModel
     @State private var voiceInputVM: VoiceInputViewModel
-    @State private var ttsService: AppleTTSPlaybackService
+    @State private var ttsService: TTSServiceBox
     @State private var audioSessionManager = AudioSessionManager()
     @State private var sessionStarted = false
     @State private var noTopicsAvailable = false
@@ -50,7 +50,7 @@ struct VoiceElevatorPitchView: View {
             speechService: speechService,
             audioSessionManager: audioMgr
         ))
-        self._ttsService = State(initialValue: AppleTTSPlaybackService())
+        self._ttsService = State(initialValue: TTSServiceFactory.makeService())
     }
 
     var body: some View {
@@ -75,50 +75,53 @@ struct VoiceElevatorPitchView: View {
         }
         .navigationTitle(SessionType.elevatorPitch.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                TTSToggleButton(isEnabled: $ttsEnabled, language: language)
-            }
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    TTSToggleButton(isEnabled: $ttsEnabled, language: language)
+                }
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-
-            ttsService.prewarm()
-            configureTTSVoice()
-
-            // Select topic via coordinator, then start voice session directly
-            guard let topic = coordinator.selectTopic(
-                for: profile.currentLevel,
-                language: language
-            ) else {
-                noTopicsAvailable = true
-                return
+            .onDisappear {
+                ttsService.stop()
             }
-            await sessionManager.startVoiceElevatorPitchSession(
-                topic: topic,
-                profile: profile,
-                language: language
-            )
-        }
-        .onChange(of: viewModel.messages.count) { _, _ in
-            speakLatestBarbaraMessage()
-        }
-        .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
-            if isStreaming == false {
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+
+                ttsService.prewarm()
+                configureTTSVoice()
+
+                // Select topic via coordinator, then start voice session directly
+                guard let topic = coordinator.selectTopic(
+                    for: profile.currentLevel,
+                    language: language
+                ) else {
+                    noTopicsAvailable = true
+                    return
+                }
+                await sessionManager.startVoiceElevatorPitchSession(
+                    topic: topic,
+                    profile: profile,
+                    language: language
+                )
+            }
+            .onChange(of: viewModel.messages.count) { _, _ in
                 speakLatestBarbaraMessage()
             }
-        }
+            .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
+                if isStreaming == false {
+                    speakLatestBarbaraMessage()
+                }
+            }
     }
 
     // MARK: - Timer Bar
@@ -198,7 +201,7 @@ struct VoiceElevatorPitchView: View {
         }
 
         timerState.timerTask = Task { @MainActor in
-            while timerState.remainingSeconds > 0 && !Task.isCancelled {
+            while timerState.remainingSeconds > 0, !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(1))
                 guard !Task.isCancelled else { return }
                 timerState.remainingSeconds -= 1
@@ -211,7 +214,7 @@ struct VoiceElevatorPitchView: View {
                 #endif
             }
 
-            if !Task.isCancelled && timerState.remainingSeconds <= 0 {
+            if !Task.isCancelled, timerState.remainingSeconds <= 0 {
                 timerState.isRunning = false
                 autoSubmitVoice()
             }
@@ -222,11 +225,10 @@ struct VoiceElevatorPitchView: View {
         voiceInputVM.stopRecording()
 
         // Grab whatever was transcribed
-        let text: String
-        if voiceInputVM.state == .review {
-            text = voiceInputVM.editableText
+        let text: String = if voiceInputVM.state == .review {
+            voiceInputVM.editableText
         } else {
-            text = voiceInputVM.transcriptionText
+            voiceInputVM.transcriptionText
         }
 
         voiceInputVM.reset()
@@ -238,11 +240,10 @@ struct VoiceElevatorPitchView: View {
         timerState.timerTask?.cancel()
         voiceInputVM.stopRecording()
 
-        let text: String
-        if voiceInputVM.state == .review {
-            text = voiceInputVM.editableText
+        let text: String = if voiceInputVM.state == .review {
+            voiceInputVM.editableText
         } else {
-            text = voiceInputVM.transcriptionText
+            voiceInputVM.transcriptionText
         }
 
         voiceInputVM.reset()
@@ -286,7 +287,8 @@ struct VoiceElevatorPitchView: View {
 
                     // Start timer after Barbara's initial greeting finishes
                     if !timerStartedAfterTTS,
-                       let session = sessionManager.elevatorPitchSession {
+                       let session = sessionManager.elevatorPitchSession
+                    {
                         timerStartedAfterTTS = true
                         startTimer(duration: session.durationSeconds)
                     }
@@ -304,14 +306,14 @@ struct VoiceElevatorPitchView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine Themen verf\u{00FC}gbar"
-                 : "No topics available")
+                ? "Keine Themen verf\u{00FC}gbar"
+                : "No topics available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
-                 : "There are no matching topics for your current level.")
+                ? "Es gibt aktuell keine passenden Themen f\u{00FC}r dein Level."
+                : "There are no matching topics for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -343,10 +345,10 @@ struct VoiceElevatorPitchView: View {
 
 @MainActor
 private struct VoiceTimerState {
-    var totalSeconds: Int = 0
-    var remainingSeconds: Int = 0
-    var isRunning: Bool = false
-    var hasStarted: Bool = false
+    var totalSeconds = 0
+    var remainingSeconds = 0
+    var isRunning = false
+    var hasStarted = false
     var timerTask: Task<Void, Never>?
 }
 
@@ -366,7 +368,7 @@ private struct VoiceTimerState {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: true
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Alex"),
             language: "en"
@@ -389,7 +391,7 @@ private struct VoiceTimerState {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: false
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Maxi", language: "de"),
             language: "de"

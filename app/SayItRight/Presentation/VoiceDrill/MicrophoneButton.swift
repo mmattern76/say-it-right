@@ -8,7 +8,6 @@ import SwiftUI
 /// on state transitions. The button adapts its appearance based on the
 /// current `VoiceInputState`.
 struct MicrophoneButton: View {
-
     /// The current voice input state driving the button's appearance.
     let state: VoiceInputState
 
@@ -88,7 +87,7 @@ struct MicrophoneButton: View {
         .onAppear {
             withAnimation(
                 .easeInOut(duration: 1.0)
-                .repeatForever(autoreverses: true)
+                    .repeatForever(autoreverses: true)
             ) {
                 pulseScale = 1.15
             }
@@ -102,36 +101,36 @@ struct MicrophoneButton: View {
 
     private var backgroundColor: Color {
         switch state {
-        case .idle:
-            return .accentColor
-        case .recording:
-            return .red
-        case .review:
-            return .accentColor.opacity(0.8)
-        case .error:
-            return .orange
+            case .idle:
+                .accentColor
+            case .recording:
+                .red
+            case .review:
+                .accentColor.opacity(0.8)
+            case .error:
+                .orange
         }
     }
 
     private var shadowColor: Color {
         switch state {
-        case .recording:
-            return .red.opacity(0.4)
-        default:
-            return .black.opacity(0.15)
+            case .recording:
+                .red.opacity(0.4)
+            default:
+                .black.opacity(0.15)
         }
     }
 
     private var iconName: String {
         switch state {
-        case .idle:
-            return "mic.fill"
-        case .recording:
-            return "stop.fill"
-        case .review:
-            return "mic.fill"
-        case .error:
-            return "mic.slash.fill"
+            case .idle:
+                "mic.fill"
+            case .recording:
+                "stop.fill"
+            case .review:
+                "mic.fill"
+            case .error:
+                "mic.slash.fill"
         }
     }
 
@@ -143,27 +142,27 @@ struct MicrophoneButton: View {
 
     private var accessibilityLabel: String {
         switch state {
-        case .idle:
-            return "Start recording"
-        case .recording:
-            return "Stop recording"
-        case .review:
-            return "Record again"
-        case .error:
-            return "Retry recording"
+            case .idle:
+                "Start recording"
+            case .recording:
+                "Stop recording"
+            case .review:
+                "Record again"
+            case .error:
+                "Retry recording"
         }
     }
 
     private var accessibilityHint: String {
         switch state {
-        case .idle:
-            return "Tap to start voice input"
-        case .recording:
-            return "Tap to stop recording"
-        case .review:
-            return "Tap to discard and record again"
-        case .error:
-            return "Tap to try recording again"
+            case .idle:
+                "Tap to start voice input"
+            case .recording:
+                "Tap to stop recording"
+            case .review:
+                "Tap to discard and record again"
+            case .error:
+                "Tap to try recording again"
         }
     }
 
@@ -181,31 +180,39 @@ struct MicrophoneButton: View {
 // MARK: - Previews
 
 #Preview("Idle") {
-    MicrophoneButton(state: .idle) { }
-        .padding()
+    MicrophoneButton(state: .idle) {
+    }
+    .padding()
 }
 
 #Preview("Recording") {
-    MicrophoneButton(state: .recording, audioLevel: 0.6) { }
-        .padding()
+    MicrophoneButton(state: .recording, audioLevel: 0.6) {
+    }
+    .padding()
 }
 
 #Preview("Review") {
-    MicrophoneButton(state: .review) { }
-        .padding()
+    MicrophoneButton(state: .review) {
+    }
+    .padding()
 }
 
 #Preview("Error") {
-    MicrophoneButton(state: .error(.noSpeechDetected)) { }
-        .padding()
+    MicrophoneButton(state: .error(.noSpeechDetected)) {
+    }
+    .padding()
 }
 
 #Preview("All States") {
     VStack(spacing: 32) {
-        MicrophoneButton(state: .idle) { }
-        MicrophoneButton(state: .recording, audioLevel: 0.7) { }
-        MicrophoneButton(state: .review) { }
-        MicrophoneButton(state: .error(.microphonePermissionDenied)) { }
+        MicrophoneButton(state: .idle) {
+        }
+        MicrophoneButton(state: .recording, audioLevel: 0.7) {
+        }
+        MicrophoneButton(state: .review) {
+        }
+        MicrophoneButton(state: .error(.microphonePermissionDenied)) {
+        }
     }
     .padding()
 }

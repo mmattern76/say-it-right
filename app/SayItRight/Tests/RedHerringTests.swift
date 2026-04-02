@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Red Herring Blocks")
 struct RedHerringTests {
-
     // MARK: - Block Type
 
     @Test("RedHerring block type exists")
@@ -55,8 +53,8 @@ struct RedHerringTests {
             governingThoughtID: "gt",
             validGroupings: [
                 ValidGrouping(groups: [
-                    ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"])
-                ])
+                    ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"]),
+                ]),
             ],
             redHerringBlockIDs: ["rh"]
         )
@@ -65,7 +63,7 @@ struct RedHerringTests {
             rootBlockID: "gt",
             parentToChildren: [
                 "gt": ["sp"],
-                "sp": ["ev", "rh"]
+                "sp": ["ev", "rh"],
             ],
             allPlacedBlockIDs: ["gt", "sp", "ev", "rh"]
         )
@@ -75,7 +73,10 @@ struct RedHerringTests {
         if case .redHerringPlaced = result.blockStatuses["rh"] {
             // Expected
         } else {
-            Issue.record("Expected red herring to be flagged as redHerringPlaced, got \(String(describing: result.blockStatuses["rh"]))")
+            Issue
+                .record(
+                    "Expected red herring to be flagged as redHerringPlaced, got \(String(describing: result.blockStatuses["rh"]))"
+                )
         }
     }
 
@@ -86,8 +87,8 @@ struct RedHerringTests {
             governingThoughtID: "gt",
             validGroupings: [
                 ValidGrouping(groups: [
-                    ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"])
-                ])
+                    ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"]),
+                ]),
             ],
             redHerringBlockIDs: ["rh"]
         )
@@ -97,7 +98,7 @@ struct RedHerringTests {
             rootBlockID: "gt",
             parentToChildren: [
                 "gt": ["sp"],
-                "sp": ["ev"]
+                "sp": ["ev"],
             ],
             allPlacedBlockIDs: ["gt", "sp", "ev"]
         )
@@ -107,7 +108,10 @@ struct RedHerringTests {
         if case .redHerringDiscarded = result.blockStatuses["rh"] {
             // Expected
         } else {
-            Issue.record("Expected red herring to be flagged as redHerringDiscarded, got \(String(describing: result.blockStatuses["rh"]))")
+            Issue
+                .record(
+                    "Expected red herring to be flagged as redHerringDiscarded, got \(String(describing: result.blockStatuses["rh"]))"
+                )
         }
     }
 

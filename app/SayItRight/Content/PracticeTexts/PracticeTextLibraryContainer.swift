@@ -5,7 +5,7 @@ import Foundation
 /// Wraps the flat array of `PracticeText` with metadata that tracks
 /// content version independently of the app version, enabling additive
 /// updates without breaking existing functionality.
-struct PracticeTextLibraryContainer: Codable, Sendable, Equatable {
+struct PracticeTextLibraryContainer: Codable, Equatable {
     /// Semantic version string for the content (e.g. "1.0.0").
     /// Tracks content updates independently of the app version.
     let contentVersion: String
@@ -15,14 +15,4 @@ struct PracticeTextLibraryContainer: Codable, Sendable, Equatable {
 
     /// The practice texts in this library file.
     let texts: [PracticeText]
-
-    init(
-        contentVersion: String,
-        generatedDate: String,
-        texts: [PracticeText]
-    ) {
-        self.contentVersion = contentVersion
-        self.generatedDate = generatedDate
-        self.texts = texts
-    }
 }

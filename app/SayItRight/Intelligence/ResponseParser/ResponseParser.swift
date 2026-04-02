@@ -10,7 +10,7 @@ struct ParsedResponse {
 ///
 /// Barbara's system prompt instructs her to end each reply with
 /// `<!-- BARBARA_META: { … } -->`. This struct captures that JSON payload.
-struct BarbaraMetadata: Codable, Sendable {
+struct BarbaraMetadata: Codable {
     let scores: [String: Int]
     let totalScore: Int
     let mood: BarbaraMood
@@ -24,7 +24,7 @@ struct BarbaraMetadata: Codable, Sendable {
 // MARK: - Supporting Enums
 
 /// Signal indicating the learner's trajectory within the current level.
-enum ProgressionSignal: String, Codable, Sendable {
+enum ProgressionSignal: String, Codable {
     case none
     case improving
     case struggling
@@ -33,7 +33,7 @@ enum ProgressionSignal: String, Codable, Sendable {
 }
 
 /// Phase of a coaching session, used to adapt Barbara's behaviour.
-enum SessionPhase: String, Codable, Sendable {
+enum SessionPhase: String, Codable {
     case greeting
     case topicPresentation = "topic_presentation"
     case evaluation
@@ -58,7 +58,6 @@ enum SessionPhase: String, Codable, Sendable {
 /// `ResponseParser` strips that block from the user-visible text and
 /// decodes its JSON payload into a `BarbaraMetadata` value.
 struct ResponseParser {
-
     /// Parse a complete response from Barbara.
     ///
     /// - Parameter fullResponse: The raw text returned by the LLM,

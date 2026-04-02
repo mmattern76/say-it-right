@@ -52,34 +52,34 @@ struct SpotTheGapView: View {
         }
         .navigationTitle(SessionType.spotTheGap.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
 
-            guard let text = coordinator.selectText(for: profile) else {
-                noTextsAvailable = true
-                return
+                guard let text = coordinator.selectText(for: profile) else {
+                    noTextsAvailable = true
+                    return
+                }
+                selectedText = text
+
+                await sessionManager.startSpotTheGapSession(
+                    practiceText: text,
+                    profile: profile,
+                    language: language
+                )
             }
-            selectedText = text
-
-            await sessionManager.startSpotTheGapSession(
-                practiceText: text,
-                profile: profile,
-                language: language
-            )
-        }
     }
 
     // MARK: - No Texts Available

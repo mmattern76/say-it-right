@@ -13,12 +13,12 @@ struct PyramidKeyboardShortcuts: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            #if os(macOS)
-            .onKeyPress(.delete) {
-                // Delete key — handled by parent for selected block discard
-                return .ignored
-            }
-            #endif
+        #if os(macOS)
+        .onKeyPress(.delete) {
+            // Delete key — handled by parent for selected block discard
+            .ignored
+        }
+        #endif
     }
 }
 

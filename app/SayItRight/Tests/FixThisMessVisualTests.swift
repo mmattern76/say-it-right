@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Fix This Mess Visual")
 struct FixThisMessVisualTests {
-
     // MARK: - Data Model
 
     @Test("FixThisMessExercise is decodable from JSON")
@@ -123,12 +121,12 @@ struct FixThisMessVisualTests {
                 governingThoughtID: "gt",
                 validGroupings: [
                     ValidGrouping(groups: [
-                        ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"])
-                    ])
+                        ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"]),
+                    ]),
                 ]
             ),
             wrongArrangement: WrongArrangement(groups: [
-                WrongGroup(parentBlockID: "sp", childBlockIDs: ["ev"])
+                WrongGroup(parentBlockID: "sp", childBlockIDs: ["ev"]),
             ]),
             structuralFlawDescription: "Test flaw"
         )

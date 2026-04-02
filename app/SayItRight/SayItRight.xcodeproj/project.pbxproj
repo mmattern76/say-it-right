@@ -110,6 +110,7 @@
 		465D99D2F607EE3A29C71228 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188F1F9BBC0111EE4F4EB660 /* Topic.swift */; };
 		469976D5DF124503DE6E5F7C /* FindThePointSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5FB097A1FAE84E286F0F1F6 /* FindThePointSession.swift */; };
 		46A6335BD38DF3D1EEC54EE9 /* DimensionBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F1F5B0738E60E8163A2FDB /* DimensionBarChartView.swift */; };
+		46D0A6478C51F53B3B441744 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D1893048FC9BF83208728 /* DesignSystem.swift */; };
 		4754932F6E5805C72ADB45E2 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCBA23B5D640E11325097D0 /* KeychainService.swift */; };
 		47C7C7989C398B701DD14049 /* SpotTheGapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F23A39D61653C0FB1CBB47 /* SpotTheGapView.swift */; };
 		487820CDB3AB1F86C7D41CD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2679A39DC09E233E6C5FB8DC /* Assets.xcassets */; };
@@ -224,7 +225,9 @@
 		94BD55EA2659D676E06DEAAE /* MacChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C051275C85D1D1ED1778AC59 /* MacChatInputView.swift */; };
 		95A50EEDFAC1BC4B1996DF6D /* ProfileUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EED07035F76FC2168D236A /* ProfileUpdater.swift */; };
 		96D63E6451B239809823E6EA /* VoiceElevatorPitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9A6BF1241D474DACAAE762 /* VoiceElevatorPitchTests.swift */; };
+		971E0EAE1A3EAD039F69C0AA /* sessions in Resources */ = {isa = PBXBuildFile; fileRef = 975A8CF03A08E44C83C973A0 /* sessions */; };
 		9737407A667AA231AF72F475 /* ChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252179F898FB39D52A3DD9B7 /* ChatUITests.swift */; };
+		9ABD70FDC34E092837054FE2 /* sessions in Resources */ = {isa = PBXBuildFile; fileRef = 975A8CF03A08E44C83C973A0 /* sessions */; };
 		9B75A691D0F56293D7AF2B2B /* ComparisonPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C98EBC60AB392AA8868374 /* ComparisonPromptBuilder.swift */; };
 		9C6C847EC9BCCD14AE067A8A /* TTSPlaybackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1964D965458CCC6A3A747B0 /* TTSPlaybackServiceTests.swift */; };
 		9C781F5BC09396E0F44BBFCB /* StructuralEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A375822F278D205A1F9090 /* StructuralEvaluator.swift */; };
@@ -257,7 +260,9 @@
 		A9C54D9E4FC609C3A85D553B /* DimensionBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F1F5B0738E60E8163A2FDB /* DimensionBarChartView.swift */; };
 		AA09CFCB0A0FFE69AB641706 /* BuildThePyramidSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CDCE119B56BA8E0B338AF9 /* BuildThePyramidSession.swift */; };
 		AA84EBC9B2E3A2AEE4D24AEE /* VoiceElevatorPitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF554DE2E568F5716D89DD7 /* VoiceElevatorPitchView.swift */; };
+		AADEEE19BAB3EBB855345BA9 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D1893048FC9BF83208728 /* DesignSystem.swift */; };
 		AB8E0712827B692367EFA3F7 /* HapticAnimationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854A70E536D055C3D8D8667F /* HapticAnimationTests.swift */; };
+		ABC50590FB9548105EFE3251 /* TTSServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83348E60EAD2AC64FBF67601 /* TTSServiceFactory.swift */; };
 		AC885E581926E54467460CCE /* HapticFeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7F0DA129D49EFFBBF4AEE /* HapticFeedbackManager.swift */; };
 		AD8F19056F59A9446FB10082 /* SpotTheGapHintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5356B054475EC18A358C6 /* SpotTheGapHintTests.swift */; };
 		AD9D198E44358F88EF30E30B /* StructuralEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A375822F278D205A1F9090 /* StructuralEvaluator.swift */; };
@@ -288,6 +293,7 @@
 		BC6395CBB992EB5D23FEB685 /* SidebarViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1161CE00FACCF6715D7034A1 /* SidebarViewTests.swift */; };
 		BCAED56CECCA608E8B82DEA3 /* AdaptiveDifficultyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076FD5273952AC72498F002F /* AdaptiveDifficultyTests.swift */; };
 		BD554B0C8D8008CC7A7BF9BD /* SayItRightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 733BB20C0BD2FB42B93C9EB2 /* SayItRightUITests.swift */; };
+		BD77F4173D779AE2BCBB8130 /* blocks in Resources */ = {isa = PBXBuildFile; fileRef = D0FD2F6A16B3067B4DFD319E /* blocks */; };
 		BDF08178D405ECC24953BC24 /* SayItRight.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = 3FAF495135EB918BBBE3A021 /* SayItRight.xcodeproj */; };
 		BE27D9D3A47875F43F2CB6FC /* ElevatorPitchSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D104D20992358220CF516 /* ElevatorPitchSession.swift */; };
 		BF7E68D87F7FE0DDCF4867D1 /* SystemPromptAssemblerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A78B634A6D6F9D4CD57BC7 /* SystemPromptAssemblerTests.swift */; };
@@ -297,6 +303,7 @@
 		C00B6CA5143A309F86D4D506 /* BlockFeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA32E530E1641F627E7C5970 /* BlockFeedbackState.swift */; };
 		C04A2190D8A20EA7838C2282 /* FixThisMessSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023A980330BA11476479AC6 /* FixThisMessSessionTests.swift */; };
 		C15605E88266D05B8736AB18 /* BarbaraMood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942B7D62D7DC6CDF6EE5C3AD /* BarbaraMood.swift */; };
+		C2B1B67FC35062C24769D8BB /* ElevenLabsTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783E94BB4937DFD66540DC5A /* ElevenLabsTTSService.swift */; };
 		C372EDF597BB3E75358D1121 /* BarbaraVoiceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4D31053E77ACAC3D6E7D2 /* BarbaraVoiceProfile.swift */; };
 		C37CC4D67FE88C69E19D6FF4 /* PyramidBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70EF3120BD198913EAEE0A2 /* PyramidBlockTests.swift */; };
 		C3D6237CFE9553D6515E743A /* ElevatorPitchSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D104D20992358220CF516 /* ElevatorPitchSession.swift */; };
@@ -336,6 +343,7 @@
 		D6CD1F94E1C2E57A0888230E /* FirstLaunchSetupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C278322C149174D648ECF14 /* FirstLaunchSetupTests.swift */; };
 		D6E46973E64FECEFF0A906BD /* DecodeAndRebuildView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0CFE1578A9BD9153E4098D /* DecodeAndRebuildView.swift */; };
 		D74B3E49DCE283F274B0FAE0 /* SentenceDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F5A6679EC9EA0FDF699347 /* SentenceDiff.swift */; };
+		D7BD221ADF4C2158AA2E004B /* blocks in Resources */ = {isa = PBXBuildFile; fileRef = D0FD2F6A16B3067B4DFD319E /* blocks */; };
 		D7E47290ACA62619DE4AA077 /* FixThisMessVisualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9108B9D961EB9E8254EA37 /* FixThisMessVisualTests.swift */; };
 		D895EB4DE625E96EF1AC8F4F /* RevisionDiffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92030535097EE61AEB0991D5 /* RevisionDiffView.swift */; };
 		DA23A8FB8AF9AE1560E396D6 /* FixThisMessExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A5179DE93BEAFE6F829A3F /* FixThisMessExercise.swift */; };
@@ -384,6 +392,7 @@
 		F0CC71F3229103F04C025A33 /* PracticeTextLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD6B8D5C586B0C9ADEEBA5 /* PracticeTextLibrary.swift */; };
 		F138325B5D79C1F7D86FD19F /* ErrorBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E27CEE853747DCC27BA168 /* ErrorBannerView.swift */; };
 		F179332F2979B527404C9CDC /* TTSToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADB7696408FCD1220CF6CE5 /* TTSToggleButton.swift */; };
+		F1E99651C23D2F819F0DB512 /* ElevenLabsTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783E94BB4937DFD66540DC5A /* ElevenLabsTTSService.swift */; };
 		F1F057BADCA87A05AF322BC6 /* LearnerProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1C0B31006940A2DBFE5E41 /* LearnerProfileTests.swift */; };
 		F346F9FB9821471D106B15A5 /* SpotTheGapSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D017723020F6F34961708FA5 /* SpotTheGapSession.swift */; };
 		F3616A8DCCA1C03700E986ED /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87C3E174CED5835D593C922D /* Config.plist */; };
@@ -403,6 +412,7 @@
 		FE257861E0534A71924297C3 /* ChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252179F898FB39D52A3DD9B7 /* ChatUITests.swift */; };
 		FEA6E6E26B1F513C393C1444 /* SessionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A466760C86E7CBA8E140814 /* SessionPickerView.swift */; };
 		FF71C89423AE71ED46EE2B27 /* NetworkErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ECF5F1EF7623373F5BBD2C /* NetworkErrorHandler.swift */; };
+		FFBF895C29FC61343922E0A0 /* TTSServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83348E60EAD2AC64FBF67601 /* TTSServiceFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -542,6 +552,7 @@
 		761B9E06D45D03688B09D463 /* PracticeTextGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeTextGeneratorTests.swift; sourceTree = "<group>"; };
 		76F67E39596D4AD4CCEAE6BB /* ElevatorPitchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevatorPitchCoordinator.swift; sourceTree = "<group>"; };
 		77DAD2008EC8FEA09E753E5D /* VoiceFindThePointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceFindThePointView.swift; sourceTree = "<group>"; };
+		783E94BB4937DFD66540DC5A /* ElevenLabsTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenLabsTTSService.swift; sourceTree = "<group>"; };
 		79103E672E97A7B33767ED30 /* SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryView.swift; sourceTree = "<group>"; };
 		793A8B950E0FD6822E2346F2 /* RedHerringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedHerringTests.swift; sourceTree = "<group>"; };
 		7A6659848CFB393F442C3B61 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -553,6 +564,7 @@
 		81A11E691EB3DEE60B339B16 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		81A63E61EA4ABC850E93CB2E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8309BF4EE774FABE588555F4 /* MicrophoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneButton.swift; sourceTree = "<group>"; };
+		83348E60EAD2AC64FBF67601 /* TTSServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSServiceFactory.swift; sourceTree = "<group>"; };
 		854A70E536D055C3D8D8667F /* HapticAnimationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticAnimationTests.swift; sourceTree = "<group>"; };
 		86E2D821520E6552AE4B65B7 /* SayItRightTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SayItRightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C3E174CED5835D593C922D /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Config.plist; sourceTree = "<group>"; };
@@ -567,6 +579,7 @@
 		942B7D62D7DC6CDF6EE5C3AD /* BarbaraMood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbaraMood.swift; sourceTree = "<group>"; };
 		95D3FAF0967C63A54E2C6E51 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		96CDCE119B56BA8E0B338AF9 /* BuildThePyramidSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildThePyramidSession.swift; sourceTree = "<group>"; };
+		975A8CF03A08E44C83C973A0 /* sessions */ = {isa = PBXFileReference; path = sessions; sourceTree = "<group>"; };
 		98CBB6A6B6FD6628BB30BA6D /* ProfileUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUpdaterTests.swift; sourceTree = "<group>"; };
 		99F23A39D61653C0FB1CBB47 /* SpotTheGapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTheGapView.swift; sourceTree = "<group>"; };
 		9A0B8EDE7E53601DCAC1DB42 /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
@@ -578,6 +591,7 @@
 		9D07B7B9E84CD6DF8BC6ACCF /* MECEValidationEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MECEValidationEngineTests.swift; sourceTree = "<group>"; };
 		A1964D965458CCC6A3A747B0 /* TTSPlaybackServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSPlaybackServiceTests.swift; sourceTree = "<group>"; };
 		A3C3798349D47FE3497CC587 /* ProgressDashboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardTests.swift; sourceTree = "<group>"; };
+		A40D1893048FC9BF83208728 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		A553A59D04C7ABFA86CF117E /* BarbaraAvatarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbaraAvatarTests.swift; sourceTree = "<group>"; };
 		A7139C00F03FBFAD7BA4FAD8 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		AA8D4F615BD301FC609D050A /* TreeLayoutEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeLayoutEngineTests.swift; sourceTree = "<group>"; };
@@ -617,6 +631,7 @@
 		CE528A4BB6F7C58BD0CC3708 /* LearnerAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnerAvatar.swift; sourceTree = "<group>"; };
 		D017723020F6F34961708FA5 /* SpotTheGapSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTheGapSession.swift; sourceTree = "<group>"; };
 		D08BE80207F27A8208D3CCB2 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		D0FD2F6A16B3067B4DFD319E /* blocks */ = {isa = PBXFileReference; path = blocks; sourceTree = "<group>"; };
 		D1A734FF80156849AAC5CD69 /* MockSpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSpeechRecognitionService.swift; sourceTree = "<group>"; };
 		D1E18573A8B8C49ABAA910FF /* SpotTheGapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTheGapCoordinator.swift; sourceTree = "<group>"; };
 		D24253A3138E22C5ED601F03 /* CelebrationEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationEffectView.swift; sourceTree = "<group>"; };
@@ -669,12 +684,23 @@
 				19A0C4A8DC752BFC15EC076C /* Content */,
 				54070B6192B7153DF81595AF /* Intelligence */,
 				6B1E2466DBEBA9149752A060 /* Presentation */,
+				1720A4086BAFAE2A19BD493E /* prompts */,
 				EF7379D2D22B82FC184E13DE /* SayItRight */,
 				D9AB2705E698B2C8687397BE /* State */,
 				9CA9825E2539A59A51BE06B7 /* Tests */,
 				F86B5D2A9962165AF0328224 /* UITests */,
 				846E2C3E2728C9623C5C60CD /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		1720A4086BAFAE2A19BD493E /* prompts */ = {
+			isa = PBXGroup;
+			children = (
+				D0FD2F6A16B3067B4DFD319E /* blocks */,
+				975A8CF03A08E44C83C973A0 /* sessions */,
+			);
+			name = prompts;
+			path = ../../prompts;
 			sourceTree = "<group>";
 		};
 		19A0C4A8DC752BFC15EC076C /* Content */ = {
@@ -762,9 +788,11 @@
 			children = (
 				D6C50086B3A681AE4B706D0B /* .gitkeep */,
 				D2F4D31053E77ACAC3D6E7D2 /* BarbaraVoiceProfile.swift */,
+				783E94BB4937DFD66540DC5A /* ElevenLabsTTSService.swift */,
 				8309BF4EE774FABE588555F4 /* MicrophoneButton.swift */,
 				FF9D188FA8779E14011857FD /* ThinkingIndicatorView.swift */,
 				E4F296F432E8A069994E5167 /* TTSPlaybackService.swift */,
+				83348E60EAD2AC64FBF67601 /* TTSServiceFactory.swift */,
 				9ADB7696408FCD1220CF6CE5 /* TTSToggleButton.swift */,
 				DBF554DE2E568F5716D89DD7 /* VoiceElevatorPitchView.swift */,
 				77DAD2008EC8FEA09E753E5D /* VoiceFindThePointView.swift */,
@@ -1001,6 +1029,7 @@
 				87C3E174CED5835D593C922D /* Config.plist */,
 				E040537D24996C58EBA537D8 /* Config.template.plist */,
 				2927967CBDF0913F5EDD0EC7 /* ConfigProvider.swift */,
+				A40D1893048FC9BF83208728 /* DesignSystem.swift */,
 				DE9990EFFDBC213F3F1D0B19 /* SayItRightApp.swift */,
 				3C1AC30B697C39AA5507C643 /* Audio */,
 				6E44ACD681AF0B0656DE8BAE /* SpeechRecognition */,
@@ -1308,8 +1337,10 @@
 				5E86220B69F94E1D80BE6E21 /* PracticeTextLibrary_en.json in Resources */,
 				496007D2A4A26B62F5B29D3D /* SayItRight.xcodeproj in Resources */,
 				7917EA24942281486B8ACB77 /* TopicBank.json in Resources */,
+				BD77F4173D779AE2BCBB8130 /* blocks in Resources */,
 				EBC0F4FD745B185D9413416D /* fix-this-mess-exercises.json in Resources */,
 				4AA8887DDA05E2D04B8FDDDD /* pyramid-exercises.json in Resources */,
+				9ABD70FDC34E092837054FE2 /* sessions in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1324,8 +1355,10 @@
 				C7E44A72C5785F58432FD35D /* PracticeTextLibrary_en.json in Resources */,
 				BDF08178D405ECC24953BC24 /* SayItRight.xcodeproj in Resources */,
 				CD51EBAE3FC9894B5D3F4501 /* TopicBank.json in Resources */,
+				D7BD221ADF4C2158AA2E004B /* blocks in Resources */,
 				CE956B898080AFC0ADA1730A /* fix-this-mess-exercises.json in Resources */,
 				1617BEA120790071FB69172C /* pyramid-exercises.json in Resources */,
+				971E0EAE1A3EAD039F69C0AA /* sessions in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1492,6 +1525,7 @@
 				A14921A5A09F6F75BE93E7DD /* DecodeAndRebuildCoordinator.swift in Sources */,
 				5A4BFD9F1E7358B998E599E9 /* DecodeAndRebuildSession.swift in Sources */,
 				69AE8809D5B4FD31A2EFC38F /* DecodeAndRebuildView.swift in Sources */,
+				46D0A6478C51F53B3B441744 /* DesignSystem.swift in Sources */,
 				A9C54D9E4FC609C3A85D553B /* DimensionBarChartView.swift in Sources */,
 				A1C987C11E9C50B647D8B005 /* DiscardZoneView.swift in Sources */,
 				901D104DC385EA8F6044D909 /* DraggableBlockView.swift in Sources */,
@@ -1500,6 +1534,7 @@
 				9D25E26FB942070B61F6E54D /* ElevatorPitchCoordinator.swift in Sources */,
 				BE27D9D3A47875F43F2CB6FC /* ElevatorPitchSession.swift in Sources */,
 				AE1A15A7E561DB90F19FF361 /* ElevatorPitchView.swift in Sources */,
+				C2B1B67FC35062C24769D8BB /* ElevenLabsTTSService.swift in Sources */,
 				C68A1A0B560C01274838748E /* ErrorBannerView.swift in Sources */,
 				6C7096189A52A789768C7042 /* EvaluationResult.swift in Sources */,
 				A5F6092C5DBADDBDC55A732F /* FeedbackBubbleView.swift in Sources */,
@@ -1574,6 +1609,7 @@
 				9C781F5BC09396E0F44BBFCB /* StructuralEvaluator.swift in Sources */,
 				BFEC1C8AE1C77FC5D94AB5B6 /* SystemPromptAssembler.swift in Sources */,
 				0EB7A9CA948A196FA81EBD88 /* TTSPlaybackService.swift in Sources */,
+				FFBF895C29FC61343922E0A0 /* TTSServiceFactory.swift in Sources */,
 				F179332F2979B527404C9CDC /* TTSToggleButton.swift in Sources */,
 				5DBDDDE558A97B0071AA74AE /* TextDifficultyCalibrator.swift in Sources */,
 				60E3C43BE15EA0EBE21C942A /* ThinkingIndicatorView.swift in Sources */,
@@ -1640,6 +1676,7 @@
 				00EE83F0F978628C903321F6 /* DecodeAndRebuildCoordinator.swift in Sources */,
 				A0BC2607510CD45A0EB77F83 /* DecodeAndRebuildSession.swift in Sources */,
 				D6E46973E64FECEFF0A906BD /* DecodeAndRebuildView.swift in Sources */,
+				AADEEE19BAB3EBB855345BA9 /* DesignSystem.swift in Sources */,
 				46A6335BD38DF3D1EEC54EE9 /* DimensionBarChartView.swift in Sources */,
 				DE00EC52070DADD840C639DA /* DiscardZoneView.swift in Sources */,
 				F9F35AAB16261DE9156AFA81 /* DraggableBlockView.swift in Sources */,
@@ -1648,6 +1685,7 @@
 				8728021A5019601223697286 /* ElevatorPitchCoordinator.swift in Sources */,
 				C3D6237CFE9553D6515E743A /* ElevatorPitchSession.swift in Sources */,
 				42C2A1A109BB746F35591B2E /* ElevatorPitchView.swift in Sources */,
+				F1E99651C23D2F819F0DB512 /* ElevenLabsTTSService.swift in Sources */,
 				F138325B5D79C1F7D86FD19F /* ErrorBannerView.swift in Sources */,
 				2D80A3F94A0B23AF02D04401 /* EvaluationResult.swift in Sources */,
 				450B437F71624F37AA4EB50F /* FeedbackBubbleView.swift in Sources */,
@@ -1722,6 +1760,7 @@
 				AD9D198E44358F88EF30E30B /* StructuralEvaluator.swift in Sources */,
 				3663C29466AF276F1C5289C7 /* SystemPromptAssembler.swift in Sources */,
 				8E8D202555A73B2756F2EBB0 /* TTSPlaybackService.swift in Sources */,
+				ABC50590FB9548105EFE3251 /* TTSServiceFactory.swift in Sources */,
 				E6028FF9CD99BFB2D71A1EE0 /* TTSToggleButton.swift in Sources */,
 				D694E416EBC8627305D26DF2 /* TextDifficultyCalibrator.swift in Sources */,
 				180A80A7954F7CD067B7C8DB /* ThinkingIndicatorView.swift in Sources */,
@@ -1998,7 +2037,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = LC9HD3YWNR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2050,7 +2089,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = LC9HD3YWNR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2084,7 +2123,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = LC9HD3YWNR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2136,7 +2175,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = LC9HD3YWNR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

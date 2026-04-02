@@ -4,8 +4,7 @@ import Foundation
 ///
 /// Each session type gets a tailored comparison rubric that instructs Claude
 /// to evaluate structural similarity rather than exact textual match.
-struct ComparisonPromptBuilder: Sendable {
-
+struct ComparisonPromptBuilder {
     // MARK: - Public API
 
     /// Build the system prompt for a comparison request.
@@ -55,14 +54,14 @@ struct ComparisonPromptBuilder: Sendable {
 
     private func rubricBlock(for sessionType: ComparisonSessionType, language: String) -> String {
         switch sessionType {
-        case .findThePoint:
-            return findThePointRubric(language: language)
-        case .fixThisMess:
-            return fixThisMessRubric(language: language)
-        case .spotTheGap:
-            return spotTheGapRubric(language: language)
-        case .decodeAndRebuild:
-            return decodeAndRebuildRubric(language: language)
+            case .findThePoint:
+                findThePointRubric(language: language)
+            case .fixThisMess:
+                fixThisMessRubric(language: language)
+            case .spotTheGap:
+                spotTheGapRubric(language: language)
+            case .decodeAndRebuild:
+                decodeAndRebuildRubric(language: language)
         }
     }
 
@@ -246,7 +245,9 @@ struct ComparisonPromptBuilder: Sendable {
             2. **Versteckte Metadaten**: Ein einzelner HTML-Kommentar am Ende:
 
             ```
-            <!-- COMPARISON_META: {"matchQuality":"high|partial|low","dimensionScores":{\(dimensionJSON)},"mood":"<mood>","progressionSignal":"<signal>","sessionPhase":"evaluation","feedbackFocus":"<focus>","language":"de"} -->
+            <!-- COMPARISON_META: {"matchQuality":"high|partial|low","dimensionScores":{\(
+                dimensionJSON
+            )},"mood":"<mood>","progressionSignal":"<signal>","sessionPhase":"evaluation","feedbackFocus":"<focus>","language":"de"} -->
             ```
 
             Gültige Stimmungen: attentive, skeptical, approving, waiting, proud, evaluating, teaching, disappointed
@@ -264,7 +265,9 @@ struct ComparisonPromptBuilder: Sendable {
         2. **Hidden metadata**: A single HTML comment at the end:
 
         ```
-        <!-- COMPARISON_META: {"matchQuality":"high|partial|low","dimensionScores":{\(dimensionJSON)},"mood":"<mood>","progressionSignal":"<signal>","sessionPhase":"evaluation","feedbackFocus":"<focus>","language":"en"} -->
+        <!-- COMPARISON_META: {"matchQuality":"high|partial|low","dimensionScores":{\(
+            dimensionJSON
+        )},"mood":"<mood>","progressionSignal":"<signal>","sessionPhase":"evaluation","feedbackFocus":"<focus>","language":"en"} -->
         ```
 
         Valid moods: attentive, skeptical, approving, waiting, proud, evaluating, teaching, disappointed
@@ -274,14 +277,14 @@ struct ComparisonPromptBuilder: Sendable {
 
     private func dimensionNames(for sessionType: ComparisonSessionType) -> [String] {
         switch sessionType {
-        case .findThePoint:
-            return ["governingThoughtAccuracy", "specificity", "supportAwareness"]
-        case .fixThisMess:
-            return ["pyramidValidity", "groupingQuality", "orderingLogic", "completeness"]
-        case .spotTheGap:
-            return ["flawIdentification", "locationAccuracy", "explanationClarity"]
-        case .decodeAndRebuild:
-            return ["governingThoughtAccuracy", "supportIdentification", "structuralImprovement"]
+            case .findThePoint:
+                ["governingThoughtAccuracy", "specificity", "supportAwareness"]
+            case .fixThisMess:
+                ["pyramidValidity", "groupingQuality", "orderingLogic", "completeness"]
+            case .spotTheGap:
+                ["flawIdentification", "locationAccuracy", "explanationClarity"]
+            case .decodeAndRebuild:
+                ["governingThoughtAccuracy", "supportIdentification", "structuralImprovement"]
         }
     }
 

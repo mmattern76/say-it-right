@@ -91,11 +91,37 @@ app/SayItRight/
     └── ProgressionCriteria/ # Level-up thresholds and signals
 ```
 
+## Code Quality Enforcement
+
+### Linting (mandatory before story completion)
+- Run `scripts/lint.sh` before declaring any story complete
+- Run `scripts/format.sh` to auto-fix formatting issues
+- SwiftLint violations with severity `error` are blocking — the story cannot be completed
+- SwiftLint violations with severity `warning` should be fixed; if truly unfixable, add a targeted `// swiftlint:disable:next rule_name` with a comment explaining why
+- NEVER disable a rule file-wide or globally — only per-line with justification
+
+### Complexity rules
+- Functions: max 40 lines (warning), 60 (error)
+- Types: max 200 lines (warning), 300 (error)
+- Files: max 400 lines (warning), 500 (error)
+- Cyclomatic complexity: max 8 (warning), 12 (error)
+- Nesting: max 3 levels in functions (warning), 4 (error)
+- If you hit a complexity limit, decompose — extract helpers, use early returns, split types
+
 ## Git Workflow
 - Branch: `feat/{issue-number}-{slug}`
 - Commit: conventional commits (`feat:`, `fix:`, `chore:`, `content:`)
 - Always run `swift build` before pushing
+- Always run `scripts/lint.sh` before pushing
 - PR title references the issue number
+
+## Test Documentation Maintenance
+After completing a story or implementing a fix that changes screens, navigation,
+or UI behavior, update the test documentation:
+- `docs/testing/01-screen-map.md` — if screens or transitions changed
+- `docs/testing/02-test-cases.md` — if new test cases needed or existing ones affected
+- `docs/testing/03-test-automation.md` — if new accessibility identifiers added
+- UI test files in `app/SayItRight/UITests/` — update tests to match new behavior
 
 ## Key Design Rules
 - **Structural evaluation, not content critique** — Barbara never judges whether
@@ -164,6 +190,9 @@ story appends a summary there, and each new story reads it.
 ### QA (in .claude/commands/qa/)
 
 ```bash
+/qa:run-tests                      # run UI tests, file bugs for failures
+/qa:run-tests --tier smoke         # smoke tests only (pre-TestFlight)
+/qa:run-tests --group G3 --ipad   # specific group on iPad
 /qa:review-story SIR-007           # adopt QA persona, review story against acceptance criteria
 /qa:safety-audit                   # full codebase pedagogy & safety sweep
 ```
@@ -207,3 +236,14 @@ Story SIR-008 starts
   │    │    └─ reads .claude/MEMORY.md → knows SIR-007 patterns
   │    └─ ... continues with full project context
 ```
+
+## 🔴 NEVER Switch to API Key Mode
+
+> **NEVER switch to API key billing mode. Michael uses a Claude Max subscription.**
+
+If authentication fails or `/usage` is unavailable:
+- Tell the user immediately
+- Ask them to run `/login`
+- Do NOT silently fall back to API key billing
+
+Switching to API key mode without explicit user instruction is **forbidden**.

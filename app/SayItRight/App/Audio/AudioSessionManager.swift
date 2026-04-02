@@ -9,7 +9,7 @@ import UIKit
 // MARK: - Audio Session State
 
 /// Tracks which voice features are currently active.
-enum AudioUsageMode: Sendable, Equatable {
+enum AudioUsageMode: Equatable {
     /// No voice features active — audio session should be deactivated.
     case idle
     /// TTS playback only (no microphone needed).
@@ -21,7 +21,7 @@ enum AudioUsageMode: Sendable, Equatable {
 }
 
 /// Events published by the audio session manager for consumers to react to.
-enum AudioSessionEvent: Sendable, Equatable {
+enum AudioSessionEvent: Equatable {
     /// An interruption began (phone call, Siri, etc.). Voice features should pause.
     case interruptionBegan
     /// An interruption ended. If `shouldResume` is true, voice features may restart.
@@ -31,7 +31,7 @@ enum AudioSessionEvent: Sendable, Equatable {
 }
 
 /// Simplified route change reasons for consumers.
-enum RouteChangeReason: Sendable, Equatable {
+enum RouteChangeReason: Equatable {
     case newDeviceAvailable
     case oldDeviceUnavailable
     case categoryChange
@@ -52,17 +52,16 @@ enum RouteChangeReason: Sendable, Equatable {
 /// implementation that still tracks usage mode for coordination purposes.
 @Observable
 final class AudioSessionManager: @unchecked Sendable {
-
     // MARK: - Published State
 
     /// The current usage mode reflecting active voice features.
     private(set) var currentMode: AudioUsageMode = .idle
 
     /// Whether the audio session is currently active.
-    private(set) var isSessionActive: Bool = false
+    private(set) var isSessionActive = false
 
     /// Whether an interruption is currently in progress.
-    private(set) var isInterrupted: Bool = false
+    private(set) var isInterrupted = false
 
     /// The most recent event, for consumers to observe.
     private(set) var lastEvent: AudioSessionEvent?
@@ -122,16 +121,15 @@ final class AudioSessionManager: @unchecked Sendable {
     // MARK: - Mode Resolution
 
     private func updateMode(addingPlayback: Bool, addingRecord: Bool) {
-        let newMode: AudioUsageMode
-        switch (addingPlayback, addingRecord) {
-        case (true, true):
-            newMode = .playAndRecord
-        case (true, false):
-            newMode = .playbackOnly
-        case (false, true):
-            newMode = .recordOnly
-        case (false, false):
-            newMode = .idle
+        let newMode: AudioUsageMode = switch (addingPlayback, addingRecord) {
+            case (true, true):
+                .playAndRecord
+            case (true, false):
+                .playbackOnly
+            case (false, true):
+                .recordOnly
+            case (false, false):
+                .idle
         }
 
         guard newMode != currentMode else { return }
@@ -167,25 +165,25 @@ final class AudioSessionManager: @unchecked Sendable {
             let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 
             switch mode {
-            case .playbackOnly:
-                if isPhone {
-                    // iPhone always uses .playAndRecord to allow quick switch to STT
+                case .playbackOnly:
+                    if isPhone {
+                        // iPhone always uses .playAndRecord to allow quick switch to STT
+                        category = .playAndRecord
+                        categoryOptions = [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP]
+                    } else {
+                        // iPad uses .playback when only doing TTS
+                        category = .playback
+                        categoryOptions = [.mixWithOthers]
+                    }
+                    sessionMode = .default
+
+                case .recordOnly, .playAndRecord:
                     category = .playAndRecord
                     categoryOptions = [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP]
-                } else {
-                    // iPad uses .playback when only doing TTS
-                    category = .playback
-                    categoryOptions = [.mixWithOthers]
-                }
-                sessionMode = .default
+                    sessionMode = .default
 
-            case .recordOnly, .playAndRecord:
-                category = .playAndRecord
-                categoryOptions = [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP]
-                sessionMode = .default
-
-            case .idle:
-                return // handled above
+                case .idle:
+                    return // handled above
             }
 
             try session.setCategory(category, mode: sessionMode, options: categoryOptions)
@@ -258,39 +256,39 @@ final class AudioSessionManager: @unchecked Sendable {
         else { return }
 
         switch type {
-        case .began:
-            modeBeforeInterruption = currentMode
-            isInterrupted = true
-            lastEvent = .interruptionBegan
-            #if DEBUG
-            print("[AudioSessionManager] Interruption began (was \(currentMode))")
-            #endif
+            case .began:
+                modeBeforeInterruption = currentMode
+                isInterrupted = true
+                lastEvent = .interruptionBegan
+                #if DEBUG
+                print("[AudioSessionManager] Interruption began (was \(currentMode))")
+                #endif
 
         case .ended:
-            isInterrupted = false
-            let shouldResume: Bool
-            if let optionsRaw = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSession.InterruptionOptions(rawValue: optionsRaw)
-                shouldResume = options.contains(.shouldResume)
-            } else {
-                shouldResume = false
-            }
+                isInterrupted = false
+                let shouldResume: Bool
+                if let optionsRaw = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                    let options = AVAudioSession.InterruptionOptions(rawValue: optionsRaw)
+                    shouldResume = options.contains(.shouldResume)
+                } else {
+                    shouldResume = false
+                }
 
-            if shouldResume && modeBeforeInterruption != .idle {
-                // Re-activate with the previous mode
-                currentMode = modeBeforeInterruption
-                configureAndActivate(for: modeBeforeInterruption)
-            }
+                if shouldResume, modeBeforeInterruption != .idle {
+                    // Re-activate with the previous mode
+                    currentMode = modeBeforeInterruption
+                    configureAndActivate(for: modeBeforeInterruption)
+                }
 
-            lastEvent = .interruptionEnded(shouldResume: shouldResume)
-            modeBeforeInterruption = .idle
+                lastEvent = .interruptionEnded(shouldResume: shouldResume)
+                modeBeforeInterruption = .idle
 
-            #if DEBUG
-            print("[AudioSessionManager] Interruption ended (shouldResume=\(shouldResume))")
-            #endif
+                #if DEBUG
+                print("[AudioSessionManager] Interruption ended (shouldResume=\(shouldResume))")
+                #endif
 
-        @unknown default:
-            break
+            @unknown default:
+                break
         }
     }
 
@@ -302,18 +300,18 @@ final class AudioSessionManager: @unchecked Sendable {
 
         let reason: RouteChangeReason
         switch avReason {
-        case .newDeviceAvailable:
-            reason = .newDeviceAvailable
-        case .oldDeviceUnavailable:
-            reason = .oldDeviceUnavailable
-            // When a device is removed, reconfigure to ensure audio continues
-            if currentMode != .idle {
-                configureAndActivate(for: currentMode)
-            }
-        case .categoryChange:
-            reason = .categoryChange
-        default:
-            reason = .other
+            case .newDeviceAvailable:
+                reason = .newDeviceAvailable
+            case .oldDeviceUnavailable:
+                reason = .oldDeviceUnavailable
+                // When a device is removed, reconfigure to ensure audio continues
+                if currentMode != .idle {
+                    configureAndActivate(for: currentMode)
+                }
+            case .categoryChange:
+                reason = .categoryChange
+            default:
+                reason = .other
         }
 
         lastEvent = .routeChanged(reason: reason)

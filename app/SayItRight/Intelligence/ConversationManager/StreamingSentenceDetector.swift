@@ -17,13 +17,12 @@ import Foundation
 /// - Abbreviation handling: common abbreviations (e.g., "Dr.", "Mr.", "z.B.")
 ///   are not treated as sentence endings.
 /// - Thread-safe: all mutation is protected by `NSLock`.
-struct StreamingSentenceDetector: Sendable {
-
+struct StreamingSentenceDetector {
     // MARK: - Abbreviations
 
     /// Common abbreviations that should not trigger sentence splits.
     /// Covers English and German patterns.
-    private static let abbreviations: Set<String> = [
+    private static let abbreviations: Set = [
         // English
         "mr", "mrs", "ms", "dr", "prof", "sr", "jr",
         "st", "ave", "blvd", "dept", "est", "govt",
@@ -40,7 +39,7 @@ struct StreamingSentenceDetector: Sendable {
     // MARK: - Result
 
     /// A detected complete sentence ready for TTS.
-    struct Sentence: Sendable, Equatable {
+    struct Sentence: Equatable {
         let text: String
     }
 
@@ -63,7 +62,7 @@ struct StreamingSentenceDetector: Sendable {
         // Look for `<!--` which signals the start of the BARBARA_META block.
         if let metaRange = buffer.range(of: "<!--") {
             // Everything before the marker may contain sentences.
-            let beforeMeta = String(buffer[buffer.startIndex..<metaRange.lowerBound])
+            let beforeMeta = String(buffer[buffer.startIndex ..< metaRange.lowerBound])
             metadataStarted = true
 
             // Extract any complete sentences from the pre-metadata text.
@@ -107,7 +106,7 @@ struct StreamingSentenceDetector: Sendable {
     /// and extracts complete sentences.
     private func extractSentences(
         from buffer: inout String,
-        metadataStarted: inout Bool
+        metadataStarted _: inout Bool
     ) -> [Sentence] {
         var sentences: [Sentence] = []
         let terminators: Set<Character> = [".", "!", "?"]
@@ -120,7 +119,7 @@ struct StreamingSentenceDetector: Sendable {
                 break
             }
 
-            let sentenceText = String(buffer[buffer.startIndex...endIndex])
+            let sentenceText = String(buffer[buffer.startIndex ... endIndex])
                 .trimmingCharacters(in: .whitespacesAndNewlines)
 
             if !sentenceText.isEmpty {
@@ -155,7 +154,7 @@ struct StreamingSentenceDetector: Sendable {
                 // Handle consecutive terminators (e.g., "!!", "?!", "...")
                 var finalTerminator = index
                 var scanIndex = afterTerminator
-                while scanIndex < text.endIndex && terminators.contains(text[scanIndex]) {
+                while scanIndex < text.endIndex, terminators.contains(text[scanIndex]) {
                     finalTerminator = scanIndex
                     scanIndex = text.index(after: scanIndex)
                 }
@@ -168,11 +167,11 @@ struct StreamingSentenceDetector: Sendable {
                     // Closing quote after punctuation: include it and check what follows
                     if nextChar == "\"" || nextChar == "\u{201D}" || nextChar == "'" {
                         let afterQuote = text.index(after: afterFinal)
-                        if afterQuote < text.endIndex && text[afterQuote].isWhitespace {
+                        if afterQuote < text.endIndex, text[afterQuote].isWhitespace {
                             if !isAbbreviation(before: index, in: text) {
                                 // Skip whitespace after quote
                                 var nextNonSpace = afterQuote
-                                while nextNonSpace < text.endIndex && text[nextNonSpace].isWhitespace {
+                                while nextNonSpace < text.endIndex, text[nextNonSpace].isWhitespace {
                                     nextNonSpace = text.index(after: nextNonSpace)
                                 }
                                 return (afterFinal, nextNonSpace)
@@ -182,7 +181,7 @@ struct StreamingSentenceDetector: Sendable {
                         if !isAbbreviation(before: index, in: text) {
                             // Skip whitespace
                             var nextNonSpace = afterFinal
-                            while nextNonSpace < text.endIndex && text[nextNonSpace].isWhitespace {
+                            while nextNonSpace < text.endIndex, text[nextNonSpace].isWhitespace {
                                 nextNonSpace = text.index(after: nextNonSpace)
                             }
                             return (finalTerminator, nextNonSpace)
@@ -218,7 +217,7 @@ struct StreamingSentenceDetector: Sendable {
 
         guard wordStart < wordEnd else { return false }
 
-        let word = String(text[wordStart..<wordEnd]).lowercased()
+        let word = String(text[wordStart ..< wordEnd]).lowercased()
         return Self.abbreviations.contains(word)
     }
 }

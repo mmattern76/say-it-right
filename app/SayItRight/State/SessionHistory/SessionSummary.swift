@@ -1,7 +1,7 @@
 import Foundation
 
 /// Summary of a completed coaching session, stored for history and progress tracking.
-struct SessionSummary: Codable, Sendable, Identifiable {
+struct SessionSummary: Codable, Identifiable {
     let id: String
     let date: Date
     let sessionType: String

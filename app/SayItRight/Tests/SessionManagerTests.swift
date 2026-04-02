@@ -1,11 +1,9 @@
-import Testing
 @testable import SayItRight
+import Testing
 
 // MARK: - SessionType Tests
 
-@Suite("SessionType")
 struct SessionTypeTests {
-
     @Test("English display names")
     func englishDisplayNames() {
         #expect(SessionType.sayItClearly.displayName(language: "en") == "Say it clearly")
@@ -42,9 +40,7 @@ struct SessionTypeTests {
 
 // MARK: - SessionState Tests
 
-@Suite("SessionState")
 struct SessionStateTests {
-
     @Test("Idle equals idle")
     func idleEquality() {
         #expect(SessionState.idle == SessionState.idle)
@@ -69,9 +65,7 @@ struct SessionStateTests {
 
 // MARK: - SessionManager Tests
 
-@Suite("SessionManager")
 struct SessionManagerTests {
-
     @Test("Initial state is idle with no messages")
     @MainActor
     func initialState() {
@@ -121,9 +115,7 @@ struct SessionManagerTests {
 
 // MARK: - ChatViewModel Integration Tests
 
-@Suite("ChatViewModel with SessionManager")
 struct ChatViewModelSessionTests {
-
     @Test("ViewModel in standalone mode has no active session")
     @MainActor
     func standaloneMode() {

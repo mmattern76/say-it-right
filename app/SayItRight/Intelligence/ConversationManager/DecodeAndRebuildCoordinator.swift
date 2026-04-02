@@ -8,7 +8,6 @@ import Foundation
 @MainActor
 @Observable
 final class DecodeAndRebuildCoordinator {
-
     var recentTextIDs: Set<String> = []
 
     private let library: PracticeTextLibrary

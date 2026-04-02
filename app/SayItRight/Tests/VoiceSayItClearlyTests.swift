@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Voice Say It Clearly")
 struct VoiceSayItClearlyTests {
-
     // MARK: - Voice Mode Directive
 
     @Test("Voice mode directive is non-empty")
@@ -63,7 +61,7 @@ struct VoiceSayItClearlyTests {
 
     @Test("Voice input text forwarded to session manager via send")
     @MainActor
-    func voiceInputForwardedToSend() async {
+    func voiceInputForwardedToSend() {
         let sm = SessionManager()
         let vm = ChatViewModel(sessionManager: sm)
 

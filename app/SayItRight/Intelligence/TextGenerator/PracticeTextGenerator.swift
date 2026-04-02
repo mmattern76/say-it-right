@@ -1,7 +1,7 @@
 import Foundation
 
 /// Configuration for generating a batch of practice texts.
-struct GenerationConfig: Sendable {
+struct GenerationConfig {
     let qualityLevel: QualityLevel
     let language: String
     let targetLevel: Int
@@ -14,7 +14,7 @@ struct GenerationConfig: Sendable {
         language: String = "en",
         targetLevel: Int = 1,
         topicDomain: String = "technology",
-        targetWordCount: ClosedRange<Int> = 100...400,
+        targetWordCount: ClosedRange<Int> = 100 ... 400,
         count: Int = 1
     ) {
         self.qualityLevel = qualityLevel
@@ -31,8 +31,7 @@ struct GenerationConfig: Sendable {
 /// This is a pipeline tool for content creation — it generates texts with
 /// structured answer keys that are reviewed by a human before being bundled
 /// into the app. Output goes to a staging directory for review.
-struct PracticeTextGenerator: Sendable {
-
+struct PracticeTextGenerator {
     private let apiKey: String
     private let model: String
     private let apiURL: URL
@@ -54,8 +53,7 @@ struct PracticeTextGenerator: Sendable {
         let idPrefix = idPrefix ?? "pt-\(UUID().uuidString.lowercased())"
         let prompt = buildPrompt(for: config)
         let responseJSON = try await callAPI(systemPrompt: systemPrompt(for: config), userPrompt: prompt)
-        let practiceText = try parseResponse(responseJSON, config: config, idPrefix: idPrefix)
-        return practiceText
+        return try parseResponse(responseJSON, config: config, idPrefix: idPrefix)
     }
 
     /// Generate a batch of practice texts, respecting rate limits.
@@ -68,7 +66,7 @@ struct PracticeTextGenerator: Sendable {
         var currentID = idStart
 
         for config in configs {
-            for _ in 0..<config.count {
+            for _ in 0 ..< config.count {
                 let idPrefix = String(format: "pt-%03d", currentID)
                 let text = try await generate(config: config, idPrefix: idPrefix)
                 results.append(text)
@@ -139,7 +137,12 @@ struct PracticeTextGenerator: Sendable {
                 "evidence": ["<evidence node 1>", "<evidence node 2>"]
               }
             ],
-            "structural_assessment": "<explanation of the text's structural quality>"\(config.qualityLevel == .adversarial ? ",\n    \"structural_flaw\": {\n      \"type\": \"<flaw type: false_dichotomy | circular_reasoning | non_sequitur | hasty_generalization | straw_man | false_equivalence | appeal_to_authority | correlation_as_causation>\",\n      \"description\": \"<what the flaw is and why it's problematic>\",\n      \"location\": \"<where in the text the flaw occurs>\"\n    }" : "")\(config.qualityLevel == .rambling ? ",\n    \"proposed_restructure\": \"<how this text should be restructured into a proper pyramid>\"" : "")
+            "structural_assessment": "<explanation of the text's structural quality>"\(config
+            .qualityLevel == .adversarial ?
+            ",\n    \"structural_flaw\": {\n      \"type\": \"<flaw type: false_dichotomy | circular_reasoning | non_sequitur | hasty_generalization | straw_man | false_equivalence | appeal_to_authority | correlation_as_causation>\",\n      \"description\": \"<what the flaw is and why it's problematic>\",\n      \"location\": \"<where in the text the flaw occurs>\"\n    }" :
+            "")\(config
+            .qualityLevel == .rambling ?
+            ",\n    \"proposed_restructure\": \"<how this text should be restructured into a proper pyramid>\"" : "")
           },
           "topic_domain": "\(config.topicDomain)",
           "difficulty_rating": <1-5 integer>
@@ -151,61 +154,61 @@ struct PracticeTextGenerator: Sendable {
 
     private func qualityLevelInstructions(for level: QualityLevel) -> String {
         switch level {
-        case .wellStructured:
-            return """
-            INSTRUCTIONS: Create a text with clean pyramid structure.
-            - Lead with the governing thought (conclusion first)
-            - Follow with 2-4 distinct support pillars, each with specific evidence
-            - Each support should be mutually exclusive and collectively exhaustive (MECE)
-            - The structure should be easy to extract — this is a model text
-            - Include a brief counterargument that is acknowledged and dismissed
-            """
+            case .wellStructured:
+                """
+                INSTRUCTIONS: Create a text with clean pyramid structure.
+                - Lead with the governing thought (conclusion first)
+                - Follow with 2-4 distinct support pillars, each with specific evidence
+                - Each support should be mutually exclusive and collectively exhaustive (MECE)
+                - The structure should be easy to extract — this is a model text
+                - Include a brief counterargument that is acknowledged and dismissed
+                """
 
-        case .buriedLead:
-            return """
-            INSTRUCTIONS: Create a text where the conclusion EXISTS but is BURIED.
-            - Start with background, context, statistics, or a story (1-2 paragraphs)
-            - Place the actual governing thought in paragraph 2 or 3, often after \
-            a transitional phrase like "Yet...", "However...", "The real issue is..."
-            - The supporting arguments should be solid once the reader finds the thesis
-            - The text should feel like a newspaper feature article or an essay that \
-            "builds up" to its point instead of leading with it
-            - Common real-world pattern: the writer knows their point but buries it \
-            under preamble
-            """
+            case .buriedLead:
+                """
+                INSTRUCTIONS: Create a text where the conclusion EXISTS but is BURIED.
+                - Start with background, context, statistics, or a story (1-2 paragraphs)
+                - Place the actual governing thought in paragraph 2 or 3, often after \
+                a transitional phrase like "Yet...", "However...", "The real issue is..."
+                - The supporting arguments should be solid once the reader finds the thesis
+                - The text should feel like a newspaper feature article or an essay that \
+                "builds up" to its point instead of leading with it
+                - Common real-world pattern: the writer knows their point but buries it \
+                under preamble
+                """
 
-        case .rambling:
-            return """
-            INSTRUCTIONS: Create a text with NO clear organizing structure.
-            - The text should contain good individual points but in scattered order
-            - Jump between subtopics without clear transitions
-            - Split related arguments across non-adjacent paragraphs
-            - Include a weak or non-committal conclusion ("something needs to change")
-            - Use conversational, stream-of-consciousness style
-            - The reader should be able to identify THAT structure is missing
-            - There IS content worth restructuring — the problem is organization, \
-            not substance
-            """
+            case .rambling:
+                """
+                INSTRUCTIONS: Create a text with NO clear organizing structure.
+                - The text should contain good individual points but in scattered order
+                - Jump between subtopics without clear transitions
+                - Split related arguments across non-adjacent paragraphs
+                - Include a weak or non-committal conclusion ("something needs to change")
+                - Use conversational, stream-of-consciousness style
+                - The reader should be able to identify THAT structure is missing
+                - There IS content worth restructuring — the problem is organization, \
+                not substance
+                """
 
-        case .adversarial:
-            return """
-            INSTRUCTIONS: Create a text that APPEARS well-structured but contains \
-            a HIDDEN logical flaw.
-            - Surface structure should look like a clean pyramid (conclusion first, \
-            supports follow)
-            - Embed ONE of these structural flaws:
-              * False dichotomy: presents only two options when more exist
-              * Circular reasoning: conclusion restates a premise as proof
-              * Non sequitur: a support doesn't actually support the conclusion
-              * Hasty generalization: one example treated as universal proof
-              * Straw man: misrepresents an opposing view to dismiss it easily
-              * False equivalence: treats unequal things as equal
-              * Appeal to authority: uses authority instead of evidence
-              * Correlation as causation: mistakes correlation for causation
-            - The flaw should be subtle enough to require careful reading to spot
-            - The text should be convincing on first read — the flaw reveals itself \
-            on analysis
-            """
+            case .adversarial:
+                """
+                INSTRUCTIONS: Create a text that APPEARS well-structured but contains \
+                a HIDDEN logical flaw.
+                - Surface structure should look like a clean pyramid (conclusion first, \
+                supports follow)
+                - Embed ONE of these structural flaws:
+                  * False dichotomy: presents only two options when more exist
+                  * Circular reasoning: conclusion restates a premise as proof
+                  * Non sequitur: a support doesn't actually support the conclusion
+                  * Hasty generalization: one example treated as universal proof
+                  * Straw man: misrepresents an opposing view to dismiss it easily
+                  * False equivalence: treats unequal things as equal
+                  * Appeal to authority: uses authority instead of evidence
+                  * Correlation as causation: mistakes correlation for causation
+                - The flaw should be subtle enough to require careful reading to spot
+                - The text should be convincing on first read — the flaw reveals itself \
+                on analysis
+                """
         }
     }
 
@@ -213,36 +216,36 @@ struct PracticeTextGenerator: Sendable {
 
     private func learnerLevelContext(for level: Int) -> String {
         switch level {
-        case 1:
-            return """
-            LEVEL CONTEXT (L1 "Plain Talk"): Foundations.
-            - Simple, clear language. Short to medium paragraphs.
-            - Focus: lead with answer, one idea per block, "so what?" test.
-            - Vocabulary appropriate for 13-15 year olds.
-            """
-        case 2:
-            return """
-            LEVEL CONTEXT (L2 "Order"): Grouping & logic.
-            - Moderate complexity. MECE grouping, deductive vs. inductive reasoning.
-            - May include SCQ (Situation-Complication-Question) framing.
-            - Vocabulary appropriate for 15-17 year olds.
-            """
-        case 3:
-            return """
-            LEVEL CONTEXT (L3 "Architecture"): Advanced structures.
-            - Complex, multi-layered arguments. Issue trees, vertical/horizontal logic.
-            - May include synthesis of multiple viewpoints.
-            - University-level vocabulary and reasoning complexity.
-            """
-        case 4:
-            return """
-            LEVEL CONTEXT (L4 "Mastery"): Real-world application.
-            - Professional-grade text complexity. Executive summaries, presentations.
-            - Dense argumentation with nuanced evidence.
-            - Professional vocabulary, real-world references.
-            """
-        default:
-            return "LEVEL CONTEXT: General audience, moderate complexity."
+            case 1:
+                """
+                LEVEL CONTEXT (L1 "Plain Talk"): Foundations.
+                - Simple, clear language. Short to medium paragraphs.
+                - Focus: lead with answer, one idea per block, "so what?" test.
+                - Vocabulary appropriate for 13-15 year olds.
+                """
+            case 2:
+                """
+                LEVEL CONTEXT (L2 "Order"): Grouping & logic.
+                - Moderate complexity. MECE grouping, deductive vs. inductive reasoning.
+                - May include SCQ (Situation-Complication-Question) framing.
+                - Vocabulary appropriate for 15-17 year olds.
+                """
+            case 3:
+                """
+                LEVEL CONTEXT (L3 "Architecture"): Advanced structures.
+                - Complex, multi-layered arguments. Issue trees, vertical/horizontal logic.
+                - May include synthesis of multiple viewpoints.
+                - University-level vocabulary and reasoning complexity.
+                """
+            case 4:
+                """
+                LEVEL CONTEXT (L4 "Mastery"): Real-world application.
+                - Professional-grade text complexity. Executive summaries, presentations.
+                - Dense argumentation with nuanced evidence.
+                - Professional vocabulary, real-world references.
+                """
+            default:
+                "LEVEL CONTEXT: General audience, moderate complexity."
         }
     }
 
@@ -258,11 +261,11 @@ struct PracticeTextGenerator: Sendable {
 
         let body: [String: Any] = [
             "model": model,
-            "max_tokens": 4096,
+            "max_tokens": 4_096,
             "system": systemPrompt,
             "messages": [
-                ["role": "user", "content": userPrompt]
-            ]
+                ["role": "user", "content": userPrompt],
+            ],
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -292,7 +295,11 @@ struct PracticeTextGenerator: Sendable {
 
     // MARK: - Response Parsing
 
-    private func parseResponse(_ responseJSON: String, config: GenerationConfig, idPrefix: String) throws -> PracticeText {
+    private func parseResponse(
+        _ responseJSON: String,
+        config: GenerationConfig,
+        idPrefix: String
+    ) throws -> PracticeText {
         // Strip any markdown code fences if the model wrapped the JSON
         let cleaned = responseJSON
             .replacingOccurrences(of: "```json", with: "")
@@ -343,7 +350,8 @@ struct PracticeTextGenerator: Sendable {
         if let flawRaw = answerKeyRaw["structural_flaw"] as? [String: Any],
            let flawType = flawRaw["type"] as? String,
            let flawDesc = flawRaw["description"] as? String,
-           let flawLoc = flawRaw["location"] as? String {
+           let flawLoc = flawRaw["location"] as? String
+        {
             structuralFlaw = StructuralFlaw(type: flawType, description: flawDesc, location: flawLoc)
         }
 
@@ -391,16 +399,16 @@ enum GeneratorError: Error, CustomStringConvertible {
 
     var description: String {
         switch self {
-        case .invalidResponse:
-            return "Invalid HTTP response"
-        case .apiError(let code, let body):
-            return "API error (\(code)): \(body)"
-        case .unexpectedResponseFormat:
-            return "Unexpected response format from Anthropic API"
-        case .invalidJSON(let raw):
-            return "Failed to parse JSON from response: \(raw.prefix(200))"
-        case .missingField(let field):
-            return "Missing required field: \(field)"
+            case .invalidResponse:
+                "Invalid HTTP response"
+            case let .apiError(code, body):
+                "API error (\(code)): \(body)"
+            case .unexpectedResponseFormat:
+                "Unexpected response format from Anthropic API"
+            case let .invalidJSON(raw):
+                "Failed to parse JSON from response: \(raw.prefix(200))"
+            case let .missingField(field):
+                "Missing required field: \(field)"
         }
     }
 }

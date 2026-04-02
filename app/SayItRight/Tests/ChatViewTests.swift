@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("ChatMessage")
 struct ChatMessageTests {
-
     @Test("Creates message with default values")
     func defaultValues() {
         let msg = ChatMessage(role: .barbara, text: "Hello")
@@ -54,9 +52,7 @@ struct ChatMessageTests {
     }
 }
 
-@Suite("ChatViewModel")
 struct ChatViewModelTests {
-
     @MainActor
     @Test("Initial state is empty")
     func initialState() {

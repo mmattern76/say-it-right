@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("macOS Chat Adaptation")
 struct MacOSAdaptationTests {
-
     // MARK: - Window Title
 
     @MainActor
@@ -93,7 +91,7 @@ struct MacOSAdaptationTests {
         let expectedTypes = [
             "say-it-clearly", "find-the-point", "fix-this-mess",
             "build-the-pyramid", "elevator-pitch", "spot-the-gap",
-            "decode-and-rebuild"
+            "decode-and-rebuild",
         ]
         for type in expectedTypes {
             vm.sessionType = type
@@ -102,9 +100,7 @@ struct MacOSAdaptationTests {
     }
 }
 
-@Suite("SettingsView Integration")
 struct SettingsViewIntegrationTests {
-
     @Test("AppSettings language defaults to en")
     func defaultLanguage() {
         // AppSettings.shared may have been modified by other tests,

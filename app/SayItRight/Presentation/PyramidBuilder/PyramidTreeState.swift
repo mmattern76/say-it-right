@@ -4,7 +4,7 @@ import SwiftUI
 // MARK: - Placed Block
 
 /// A block that has been placed in the pyramid tree.
-struct PlacedBlock: Identifiable, Sendable, Equatable {
+struct PlacedBlock: Identifiable, Equatable {
     let id: UUID
     let block: PyramidBlock
     /// The parent block's ID, or nil if this is the root.
@@ -30,7 +30,6 @@ struct PlacedBlock: Identifiable, Sendable, Equatable {
 @MainActor
 @Observable
 final class PyramidTreeState {
-
     // MARK: - Properties
 
     /// Blocks that have been placed in the tree, keyed by ID.
@@ -49,7 +48,7 @@ final class PyramidTreeState {
     private(set) var highlightedZoneID: String?
 
     /// Whether a drag is in progress.
-    private(set) var isDragging: Bool = false
+    private(set) var isDragging = false
 
     /// The ID of the block currently being dragged, if any.
     private(set) var draggedBlockID: UUID?
@@ -58,10 +57,10 @@ final class PyramidTreeState {
     var configuration: DropZoneConfiguration = .default
 
     /// Layout engine for computing positions.
-    var layoutEngine: TreeLayoutEngine = TreeLayoutEngine()
+    var layoutEngine = TreeLayoutEngine()
 
     /// Canvas size for layout computation.
-    var canvasSize: CGSize = CGSize(width: 800, height: 600)
+    var canvasSize = CGSize(width: 800, height: 600)
 
     /// Computed layout for placed blocks.
     private(set) var nodeLayouts: [String: NodeLayout] = [:]
@@ -100,7 +99,8 @@ final class PyramidTreeState {
     /// Recompute layout and drop zones after any tree mutation.
     func recomputeLayout() {
         guard let rootID = rootBlockID,
-              let rootNode = buildTreeNode(from: rootID) else {
+              let rootNode = buildTreeNode(from: rootID)
+        else {
             nodeLayouts = [:]
             dropZones = computeDropZonesForEmptyTree()
             return
@@ -225,7 +225,7 @@ final class PyramidTreeState {
         isDragging = false
         highlightedZoneID = nil
 
-        guard let zone = zone, let draggedID = draggedBlockID else {
+        guard let zone, let draggedID = draggedBlockID else {
             // Dropped outside — handle return to pool if block was placed.
             if let draggedID = draggedBlockID, placedBlocks[draggedID] != nil {
                 removeBlock(draggedID)
@@ -265,7 +265,7 @@ final class PyramidTreeState {
                 childIndex: 0,
                 center: rootCenter,
                 size: configuration.zoneSize
-            )
+            ),
         ]
     }
 
@@ -301,7 +301,8 @@ final class PyramidTreeState {
         } else {
             // Zone after the last child.
             if let lastChildID = placed.childIDs.last,
-               let lastChildLayout = nodeLayouts[lastChildID.uuidString] {
+               let lastChildLayout = nodeLayouts[lastChildID.uuidString]
+            {
                 let newX = lastChildLayout.center.x + lastChildLayout.size.width / 2
                     + layoutEngine.horizontalSpacing + configuration.zoneSize.width / 2
                 let zone = DropZone(
@@ -333,7 +334,7 @@ final class PyramidTreeState {
             let dy = point.y - zone.center.y
             let distance = sqrt(dx * dx + dy * dy)
 
-            if distance < configuration.snapDistance && distance < closestDistance {
+            if distance < configuration.snapDistance, distance < closestDistance {
                 closest = zone
                 closestDistance = distance
             }

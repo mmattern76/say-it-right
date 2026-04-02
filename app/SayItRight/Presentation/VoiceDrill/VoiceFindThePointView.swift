@@ -20,7 +20,7 @@ struct VoiceFindThePointView: View {
 
     @State private var viewModel: ChatViewModel
     @State private var voiceInputVM: VoiceInputViewModel
-    @State private var ttsService: AppleTTSPlaybackService
+    @State private var ttsService: TTSServiceBox
     @State private var audioSessionManager = AudioSessionManager()
     @State private var sessionStarted = false
     @State private var noTextsAvailable = false
@@ -52,7 +52,7 @@ struct VoiceFindThePointView: View {
             speechService: speechService,
             audioSessionManager: audioMgr
         ))
-        self._ttsService = State(initialValue: AppleTTSPlaybackService())
+        self._ttsService = State(initialValue: TTSServiceFactory.makeService())
     }
 
     var body: some View {
@@ -89,49 +89,52 @@ struct VoiceFindThePointView: View {
         }
         .navigationTitle(SessionType.findThePoint.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                TTSToggleButton(isEnabled: $ttsEnabled, language: language)
-            }
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    TTSToggleButton(isEnabled: $ttsEnabled, language: language)
+                }
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-
-            ttsService.prewarm()
-            configureTTSVoice()
-
-            let text = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if let text {
-                selectedText = text
-                // Append voice mode directive
-                sessionManager.appendVoiceDirective(language: language)
-            } else {
-                noTextsAvailable = true
+            .onDisappear {
+                ttsService.stop()
             }
-        }
-        .onChange(of: viewModel.messages.count) { _, _ in
-            speakLatestBarbaraMessage()
-        }
-        .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
-            if isStreaming == false {
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+
+                ttsService.prewarm()
+                configureTTSVoice()
+
+                let text = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if let text {
+                    selectedText = text
+                    // Append voice mode directive
+                    sessionManager.appendVoiceDirective(language: language)
+                } else {
+                    noTextsAvailable = true
+                }
+            }
+            .onChange(of: viewModel.messages.count) { _, _ in
                 speakLatestBarbaraMessage()
             }
-        }
+            .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
+                if isStreaming == false {
+                    speakLatestBarbaraMessage()
+                }
+            }
     }
 
     // MARK: - Voice Submit
@@ -180,14 +183,14 @@ struct VoiceFindThePointView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine Texte verf\u{00FC}gbar"
-                 : "No texts available")
+                ? "Keine Texte verf\u{00FC}gbar"
+                : "No texts available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden Texte f\u{00FC}r dein Level."
-                 : "There are no matching texts for your current level.")
+                ? "Es gibt aktuell keine passenden Texte f\u{00FC}r dein Level."
+                : "There are no matching texts for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -222,8 +225,14 @@ private let voicePreviewText = PracticeText(
     answerKey: AnswerKey(
         governingThought: "School uniforms reduce social pressure but at the cost of individual expression.",
         supports: [
-            SupportGroup(label: "Social equaliser", evidence: ["Eliminates visible economic differences", "23% reduction in bullying"]),
-            SupportGroup(label: "Critics counter", evidence: ["Suppresses individual expression", "Core developmental need"]),
+            SupportGroup(
+                label: "Social equaliser",
+                evidence: ["Eliminates visible economic differences", "23% reduction in bullying"]
+            ),
+            SupportGroup(
+                label: "Critics counter",
+                evidence: ["Suppresses individual expression", "Core developmental need"]
+            ),
         ],
         structuralAssessment: "Well-structured with a clear governing thought in the opening sentence."
     ),

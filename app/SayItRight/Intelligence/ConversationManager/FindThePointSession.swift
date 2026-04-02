@@ -6,8 +6,7 @@ import Foundation
 /// and evaluation results. This is the Break mode counterpart to
 /// `SayItClearlySession` — the learner reads a text and extracts
 /// the governing thought rather than formulating an original response.
-struct FindThePointSession: Sendable {
-
+struct FindThePointSession {
     /// The practice text Barbara selected for this session.
     let practiceText: PracticeText
 
@@ -21,7 +20,7 @@ struct FindThePointSession: Sendable {
     private(set) var evaluationResult: AnswerKeyComparisonResult?
 
     /// The session type identifier for downstream processing.
-    let sessionTypeID: String = "find-the-point"
+    let sessionTypeID = "find-the-point"
 
     init(practiceText: PracticeText, startedAt: Date = .now) {
         self.practiceText = practiceText
@@ -39,16 +38,24 @@ struct FindThePointSession: Sendable {
     }
 
     /// The number of extraction attempts so far.
-    var attemptCount: Int { attempts.count }
+    var attemptCount: Int {
+        attempts.count
+    }
 
     /// Whether the learner has submitted at least one extraction.
-    var hasAttempt: Bool { !attempts.isEmpty }
+    var hasAttempt: Bool {
+        !attempts.isEmpty
+    }
 
     /// Whether the learner has used their retry (max 2 attempts).
-    var hasUsedRetry: Bool { attempts.count >= 2 }
+    var hasUsedRetry: Bool {
+        attempts.count >= 2
+    }
 
     /// The most recent extraction text, if any.
-    var latestExtractionText: String? { attempts.last?.text }
+    var latestExtractionText: String? {
+        attempts.last?.text
+    }
 
     /// Whether the governing thought was correctly identified.
     var wasCorrect: Bool {
@@ -57,7 +64,7 @@ struct FindThePointSession: Sendable {
 }
 
 /// A single extraction attempt by the learner.
-struct ExtractionAttempt: Sendable {
+struct ExtractionAttempt {
     let text: String
     let attemptedAt: Date
 }

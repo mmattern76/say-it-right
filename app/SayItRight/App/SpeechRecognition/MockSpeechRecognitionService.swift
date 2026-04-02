@@ -9,11 +9,10 @@ import Foundation
 /// // Now calls to startRecognition() will throw .permissionDenied
 /// ```
 final class MockSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unchecked Sendable {
-
     // MARK: - Stubbed values
 
     var stubbedAuthorizationStatus: SpeechAuthorizationStatus = .authorized
-    var stubbedIsAvailable: Bool = true
+    var stubbedIsAvailable = true
     var stubbedTranscriptions: [SpeechTranscription] = []
     var stubbedError: SpeechRecognitionError?
 

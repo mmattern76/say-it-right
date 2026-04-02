@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("Build the Pyramid")
 struct BuildThePyramidTests {
-
     // MARK: - Session Type
 
     @Test("SessionType includes buildThePyramid")
@@ -147,8 +145,8 @@ struct BuildThePyramidTests {
                 governingThoughtID: "gt",
                 validGroupings: [
                     ValidGrouping(groups: [
-                        ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"])
-                    ])
+                        ValidGroup(parentBlockID: "sp", memberBlockIDs: ["ev"]),
+                    ]),
                 ]
             )
         )

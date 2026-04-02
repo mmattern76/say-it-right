@@ -3,12 +3,12 @@ import Foundation
 // MARK: - Tree Node
 
 /// A node in the pyramid tree, carrying an ID, a display size, and references to children.
-struct TreeNode: Sendable {
+struct TreeNode {
     let id: String
     let size: CGSize
-    var children: [TreeNode]
+    var children: [Self]
 
-    init(id: String, size: CGSize = CGSize(width: 160, height: 60), children: [TreeNode] = []) {
+    init(id: String, size: CGSize = CGSize(width: 160, height: 60), children: [Self] = []) {
         self.id = id
         self.size = size
         self.children = children
@@ -18,7 +18,7 @@ struct TreeNode: Sendable {
 // MARK: - Layout Result
 
 /// The computed position and size for a single node.
-struct NodeLayout: Sendable, Equatable {
+struct NodeLayout: Equatable {
     /// Centre point of the node in canvas coordinates.
     let center: CGPoint
     /// Size of the node block.
@@ -48,8 +48,7 @@ struct NodeLayout: Sendable, Equatable {
 /// The algorithm is a simplified Reingold-Tilford-style bottom-up
 /// approach: first measure subtree widths, then assign positions
 /// top-down using those widths to allocate horizontal space.
-struct TreeLayoutEngine: Sendable {
-
+struct TreeLayoutEngine {
     // MARK: - Configuration
 
     /// Horizontal gap between sibling nodes.

@@ -5,8 +5,7 @@ import Foundation
 /// The user pastes their own text (essay, email, article draft) and Barbara
 /// provides structural feedback. Supports a revision loop — the user can
 /// revise their text based on feedback.
-struct AnalyseMyTextSession: Sendable {
-
+struct AnalyseMyTextSession {
     /// When the session was started.
     let startedAt: Date
 
@@ -17,16 +16,16 @@ struct AnalyseMyTextSession: Sendable {
     let maxRevisions: Int
 
     /// Whether a content flag was raised for the submitted text.
-    private(set) var contentFlagged: Bool = false
+    private(set) var contentFlagged = false
 
     /// The session type identifier.
-    let sessionTypeID: String = "analyse-my-text"
+    let sessionTypeID = "analyse-my-text"
 
     /// Minimum sentence count for analysis.
     static let minimumSentences = 2
 
     /// Maximum word count for analysis.
-    static let maximumWords = 2000
+    static let maximumWords = 2_000
 
     init(startedAt: Date = .now, maxRevisions: Int = 2) {
         self.startedAt = startedAt
@@ -34,7 +33,7 @@ struct AnalyseMyTextSession: Sendable {
     }
 
     /// A single text submission.
-    struct Submission: Sendable, Equatable {
+    struct Submission: Equatable {
         let text: String
         let submittedAt: Date
         let wordCount: Int
@@ -43,7 +42,7 @@ struct AnalyseMyTextSession: Sendable {
     /// Record a text submission.
     mutating func recordSubmission(_ text: String, at date: Date = .now) {
         let wordCount = text.components(separatedBy: .whitespacesAndNewlines)
-            .filter { !$0.isEmpty }.count
+            .count(where: { !$0.isEmpty })
         submissions.append(Submission(text: text, submittedAt: date, wordCount: wordCount))
     }
 
@@ -87,15 +86,15 @@ struct AnalyseMyTextSession: Sendable {
 
         // Count sentences (rough: split by .!?)
         let sentenceCount = trimmed.components(separatedBy: CharacterSet(charactersIn: ".!?"))
-            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
-            .count
+            .count(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty })
+
         if sentenceCount < minimumSentences {
             return .tooShort
         }
 
         // Count words
         let wordCount = trimmed.components(separatedBy: .whitespacesAndNewlines)
-            .filter { !$0.isEmpty }.count
+            .count(where: { !$0.isEmpty })
         if wordCount > maximumWords {
             return .tooLong(wordCount: wordCount)
         }

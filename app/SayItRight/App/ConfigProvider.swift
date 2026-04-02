@@ -6,12 +6,12 @@ import Foundation
 /// to Config.plist and fill in their API keys. The app settings UI
 /// can override the bundled API key at runtime (stored in Keychain).
 enum ConfigProvider {
-
-    nonisolated(unsafe) private static let values: [String: Any] = {
+    private nonisolated(unsafe) static let values: [String: Any] = {
         guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
               let data = try? Data(contentsOf: url),
               let dict = try? PropertyListSerialization.propertyList(
-                  from: data, format: nil) as? [String: Any]
+                  from: data, format: nil
+              ) as? [String: Any]
         else {
             #if DEBUG
             print("[ConfigProvider] Config.plist not found — copy Config.template.plist to Config.plist")

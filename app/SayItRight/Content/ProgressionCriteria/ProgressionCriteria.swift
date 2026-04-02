@@ -1,7 +1,7 @@
 import Foundation
 
 /// Defines criteria for advancing from one level to the next.
-struct LevelCriteria: Codable, Sendable {
+struct LevelCriteria: Codable {
     /// The level being graduated FROM (e.g., 1 means L1→L2).
     let fromLevel: Int
     /// Minimum normalised rolling average (0-1) per dimension to qualify.
@@ -15,12 +15,11 @@ struct LevelCriteria: Codable, Sendable {
 }
 
 /// All progression criteria, loaded from bundle or defaults.
-struct ProgressionCriteria: Sendable {
-
+struct ProgressionCriteria {
     let criteria: [LevelCriteria]
 
     /// Default criteria for all levels.
-    static let `default` = ProgressionCriteria(criteria: [
+    static let `default` = Self(criteria: [
         LevelCriteria(
             fromLevel: 1,
             minDimensionAverage: 0.75,
@@ -31,16 +30,32 @@ struct ProgressionCriteria: Sendable {
         LevelCriteria(
             fromLevel: 2,
             minDimensionAverage: 0.75,
-            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
-                                 "extractionAccuracy", "flawIdentification", "restructuringQuality"],
+            requiredDimensions: [
+                "l1Gate",
+                "meceQuality",
+                "orderingLogic",
+                "scqApplication",
+                "horizontalLogic",
+                "extractionAccuracy",
+                "flawIdentification",
+                "restructuringQuality",
+            ],
             minConsecutiveQualifying: 5,
             minTotalSessions: 10
         ),
         LevelCriteria(
             fromLevel: 3,
             minDimensionAverage: 0.80,
-            requiredDimensions: ["l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
-                                 "extractionAccuracy", "flawIdentification", "restructuringQuality"],
+            requiredDimensions: [
+                "l1Gate",
+                "meceQuality",
+                "orderingLogic",
+                "scqApplication",
+                "horizontalLogic",
+                "extractionAccuracy",
+                "flawIdentification",
+                "restructuringQuality",
+            ],
             minConsecutiveQualifying: 7,
             minTotalSessions: 15
         ),

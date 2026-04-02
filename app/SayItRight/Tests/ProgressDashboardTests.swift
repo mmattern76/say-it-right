@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("DimensionBarChartView")
 struct DimensionBarChartTests {
-
     @Test("Display name for governingThought in English")
     func displayNameEN() {
         let name = DimensionBarChartView.displayName(for: "governingThought", language: "en")
@@ -27,7 +25,7 @@ struct DimensionBarChartTests {
     func allDimensionsHaveNames() {
         let dimensions = [
             "governingThought", "supportGrouping", "redundancy", "clarity",
-            "l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic"
+            "l1Gate", "meceQuality", "orderingLogic", "scqApplication", "horizontalLogic",
         ]
         for dim in dimensions {
             let nameEN = DimensionBarChartView.displayName(for: dim, language: "en")
@@ -47,9 +45,7 @@ struct DimensionBarChartTests {
     }
 }
 
-@Suite("ProgressDashboard — Preview Data")
 struct ProgressDashboardPreviewTests {
-
     @Test("Preview populated profile has expected values")
     func previewPopulated() {
         let profile = LearnerProfile.previewPopulated

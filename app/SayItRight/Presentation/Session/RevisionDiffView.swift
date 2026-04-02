@@ -42,7 +42,7 @@ struct RevisionDiffView: View {
         }
         .navigationTitle(language == "de" ? "Vergleich" : "Revision Diff")
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
     }
 
@@ -157,19 +157,19 @@ struct RevisionDiffView: View {
 
     private func colorFor(_ status: SentenceDiff.DiffStatus) -> Color {
         switch status {
-        case .kept: .gray
-        case .added: .green
-        case .removed: .red
-        case .moved: .purple
+            case .kept: .gray
+            case .added: .green
+            case .removed: .red
+            case .moved: .purple
         }
     }
 
     private func backgroundFor(_ status: SentenceDiff.DiffStatus) -> some ShapeStyle {
         switch status {
-        case .kept: Color.clear
-        case .added: Color.green.opacity(0.1)
-        case .removed: Color.red.opacity(0.1)
-        case .moved: Color.purple.opacity(0.1)
+            case .kept: Color.clear
+            case .added: Color.green.opacity(0.1)
+            case .removed: Color.red.opacity(0.1)
+            case .moved: Color.purple.opacity(0.1)
         }
     }
 }

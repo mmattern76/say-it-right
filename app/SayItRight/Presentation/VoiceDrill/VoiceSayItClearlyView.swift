@@ -21,7 +21,7 @@ struct VoiceSayItClearlyView: View {
 
     @State private var viewModel: ChatViewModel
     @State private var voiceInputVM: VoiceInputViewModel
-    @State private var ttsService: AppleTTSPlaybackService
+    @State private var ttsService: TTSServiceBox
     @State private var audioSessionManager = AudioSessionManager()
     @State private var sessionStarted = false
     @State private var noTopicsAvailable = false
@@ -52,7 +52,7 @@ struct VoiceSayItClearlyView: View {
             speechService: speechService,
             audioSessionManager: audioMgr
         ))
-        self._ttsService = State(initialValue: AppleTTSPlaybackService())
+        self._ttsService = State(initialValue: TTSServiceFactory.makeService())
     }
 
     var body: some View {
@@ -69,7 +69,7 @@ struct VoiceSayItClearlyView: View {
                         }
                     )
 
-                    if viewModel.isRevisionComplete && !viewModel.isSummaryRequested {
+                    if viewModel.isRevisionComplete, !viewModel.isSummaryRequested {
                         summaryPromptBar
                     }
                 }
@@ -77,48 +77,51 @@ struct VoiceSayItClearlyView: View {
         }
         .navigationTitle(SessionType.sayItClearly.displayName(language: language))
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                TTSToggleButton(isEnabled: $ttsEnabled, language: language)
-            }
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    TTSToggleButton(isEnabled: $ttsEnabled, language: language)
+                }
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-
-            // Prewarm TTS for lower first-utterance latency
-            ttsService.prewarm()
-            configureTTSVoice()
-
-            let topic = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if topic == nil {
-                noTopicsAvailable = true
+            .onDisappear {
+                ttsService.stop()
             }
-        }
-        .onChange(of: viewModel.messages.count) { oldCount, newCount in
-            // When a new Barbara message arrives, speak it
-            speakLatestBarbaraMessage()
-        }
-        .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
-            // When streaming finishes, speak the complete message
-            if isStreaming == false {
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+
+                // Prewarm TTS for lower first-utterance latency
+                ttsService.prewarm()
+                configureTTSVoice()
+
+                let topic = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if topic == nil {
+                    noTopicsAvailable = true
+                }
+            }
+            .onChange(of: viewModel.messages.count) { _, _ in
+                // When a new Barbara message arrives, speak it
                 speakLatestBarbaraMessage()
             }
-        }
+            .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
+                // When streaming finishes, speak the complete message
+                if isStreaming == false {
+                    speakLatestBarbaraMessage()
+                }
+            }
     }
 
     // MARK: - TTS
@@ -165,8 +168,8 @@ struct VoiceSayItClearlyView: View {
         VStack(spacing: 8) {
             Divider()
             Text(language == "de"
-                 ? "Revision abgeschlossen"
-                 : "Revision complete")
+                ? "Revision abgeschlossen"
+                : "Revision complete")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -192,14 +195,14 @@ struct VoiceSayItClearlyView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine Themen verfügbar"
-                 : "No topics available")
+                ? "Keine Themen verfügbar"
+                : "No topics available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden Themen für dein Level."
-                 : "There are no matching topics for your current level.")
+                ? "Es gibt aktuell keine passenden Themen für dein Level."
+                : "There are no matching topics for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -242,7 +245,7 @@ struct VoiceSayItClearlyView: View {
                     domain: .school,
                     level: 1,
                     barbaraFavorite: true
-                )
+                ),
             ]),
             profile: .createDefault(displayName: "Alex"),
             language: "en"

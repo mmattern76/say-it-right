@@ -6,7 +6,7 @@ import Speech
 // MARK: - Protocol
 
 /// Errors that can occur during speech recognition.
-enum SpeechRecognitionError: Error, Sendable, Equatable {
+enum SpeechRecognitionError: Error, Equatable {
     case permissionDenied
     case recognizerUnavailable
     case noSpeechDetected
@@ -15,7 +15,7 @@ enum SpeechRecognitionError: Error, Sendable, Equatable {
 }
 
 /// Authorization status for speech recognition.
-enum SpeechAuthorizationStatus: Sendable {
+enum SpeechAuthorizationStatus {
     case notDetermined
     case denied
     case restricted
@@ -23,7 +23,7 @@ enum SpeechAuthorizationStatus: Sendable {
 }
 
 /// A partial transcription result from the recognizer.
-struct SpeechTranscription: Sendable {
+struct SpeechTranscription {
     /// The current best transcription text.
     let text: String
     /// Whether the recognizer considers this result final.
@@ -56,7 +56,7 @@ protocol SpeechRecognitionServiceProtocol: Sendable {
 }
 
 /// Supported speech recognition locales.
-enum SpeechLocale: String, Sendable {
+enum SpeechLocale: String {
     case german = "de-DE"
     case english = "en-US"
 
@@ -82,7 +82,6 @@ enum SpeechLocale: String, Sendable {
 /// synchronous property access, while the async `startRecognition` method
 /// delegates to a nonisolated helper that sets up the recognition pipeline.
 final class LiveSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unchecked Sendable {
-
     // MARK: - State
 
     /// Internal mutable state protected by the Mutex-like pattern below.
@@ -93,7 +92,7 @@ final class LiveSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unc
         var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
         var recognitionTask: SFSpeechRecognitionTask?
         var audioEngine: AVAudioEngine?
-        var isRecognizing: Bool = false
+        var isRecognizing = false
     }
 
     private let stateLock = NSLock()
@@ -168,7 +167,7 @@ final class LiveSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unc
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
 
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+        inputNode.installTap(onBus: 0, bufferSize: 1_024, format: recordingFormat) { buffer, _ in
             request.append(buffer)
         }
 
@@ -274,11 +273,11 @@ final class LiveSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unc
         _ status: SFSpeechRecognizerAuthorizationStatus
     ) -> SpeechAuthorizationStatus {
         switch status {
-        case .notDetermined: .notDetermined
-        case .denied: .denied
-        case .restricted: .restricted
-        case .authorized: .authorized
-        @unknown default: .denied
+            case .notDetermined: .notDetermined
+            case .denied: .denied
+            case .restricted: .restricted
+            case .authorized: .authorized
+            @unknown default: .denied
         }
     }
 }

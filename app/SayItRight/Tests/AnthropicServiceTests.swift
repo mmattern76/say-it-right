@@ -1,8 +1,7 @@
-import XCTest
 @testable import SayItRight
+import XCTest
 
 final class AnthropicServiceTests: XCTestCase {
-
     private let parser = SSEParser()
 
     // MARK: - SSE Parser: content_block_delta
@@ -12,7 +11,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Hello"}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .contentBlockDelta(let text) = event else {
+        guard case let .contentBlockDelta(text) = event else {
             XCTFail("Expected contentBlockDelta, got \(String(describing: event))")
             return
         }
@@ -24,7 +23,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Grüße! Das ist \\"gut\\"."}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .contentBlockDelta(let text) = event else {
+        guard case let .contentBlockDelta(text) = event else {
             XCTFail("Expected contentBlockDelta, got \(String(describing: event))")
             return
         }
@@ -36,7 +35,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":""}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .contentBlockDelta(let text) = event else {
+        guard case let .contentBlockDelta(text) = event else {
             XCTFail("Expected contentBlockDelta, got \(String(describing: event))")
             return
         }
@@ -128,7 +127,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .error(let message) = event else {
+        guard case let .error(message) = event else {
             XCTFail("Expected error, got \(String(describing: event))")
             return
         }
@@ -140,7 +139,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"error","error":{"type":"overloaded_error"}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .error(let message) = event else {
+        guard case let .error(message) = event else {
             XCTFail("Expected error, got \(String(describing: event))")
             return
         }
@@ -154,7 +153,7 @@ final class AnthropicServiceTests: XCTestCase {
         {"type":"some_future_event","data":{}}
         """
         let event = parser.parse(dataLine: json)
-        guard case .unknown(let type) = event else {
+        guard case let .unknown(type) = event else {
             XCTFail("Expected unknown, got \(String(describing: event))")
             return
         }
@@ -231,7 +230,7 @@ final class AnthropicServiceTests: XCTestCase {
             """,
             """
             {"type":"message_stop"}
-            """
+            """,
         ]
 
         var assembledText = ""
@@ -240,7 +239,7 @@ final class AnthropicServiceTests: XCTestCase {
         for line in lines {
             if let event = parser.parse(dataLine: line) {
                 eventCount += 1
-                if case .contentBlockDelta(let text) = event {
+                if case let .contentBlockDelta(text) = event {
                     assembledText += text
                 }
             }
@@ -262,7 +261,7 @@ final class AnthropicServiceTests: XCTestCase {
 
     // MARK: - AnthropicServiceError descriptions
 
-    func testErrorDescriptions() {
+    func testErrorDescriptions() throws {
         XCTAssertNotNil(AnthropicServiceError.missingAPIKey.errorDescription)
         XCTAssertNotNil(AnthropicServiceError.invalidAPIKey.errorDescription)
         XCTAssertNotNil(AnthropicServiceError.invalidURL.errorDescription)
@@ -275,7 +274,7 @@ final class AnthropicServiceTests: XCTestCase {
         XCTAssertNotNil(AnthropicServiceError.streamingError("oops").errorDescription)
 
         // Verify rate limit includes retry-after value
-        let rateLimitMsg = AnthropicServiceError.rateLimited(retryAfter: "30").errorDescription!
+        let rateLimitMsg = try XCTUnwrap(AnthropicServiceError.rateLimited(retryAfter: "30").errorDescription)
         XCTAssertTrue(rateLimitMsg.contains("30"))
     }
 }

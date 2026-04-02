@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("StreamingSentenceDetector")
 struct StreamingSentenceDetectorTests {
-
     let detector = StreamingSentenceDetector()
 
     // MARK: - Basic Sentence Detection

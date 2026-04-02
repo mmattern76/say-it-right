@@ -1,10 +1,8 @@
 import Foundation
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("PracticeText Model Tests")
 struct PracticeTextModelTests {
-
     // MARK: - QualityLevel
 
     @Test("QualityLevel raw values match expected strings")
@@ -67,7 +65,7 @@ struct PracticeTextModelTests {
             governingThought: "Social media improves democracy",
             supports: [
                 SupportGroup(label: "Access", evidence: ["Everyone can participate"]),
-                SupportGroup(label: "Speed", evidence: ["Instant information sharing"])
+                SupportGroup(label: "Speed", evidence: ["Instant information sharing"]),
             ],
             structuralAssessment: "Appears well-structured but contains a false equivalence",
             structuralFlaw: StructuralFlaw(
@@ -90,7 +88,7 @@ struct PracticeTextModelTests {
         let key = AnswerKey(
             governingThought: "Fast fashion is harmful",
             supports: [
-                SupportGroup(label: "Environment", evidence: ["Pollution", "Waste"])
+                SupportGroup(label: "Environment", evidence: ["Pollution", "Waste"]),
             ],
             structuralAssessment: "No clear organizing principle",
             proposedRestructure: "Lead with thesis, then group by environment, workers, economics"
@@ -133,7 +131,7 @@ struct PracticeTextModelTests {
                 governingThought: "Ban smartphones from classrooms",
                 supports: [
                     SupportGroup(label: "Distraction", evidence: ["Students check phones every 3 minutes"]),
-                    SupportGroup(label: "Cognitive drain", evidence: ["Brain drain effect reduces capacity"])
+                    SupportGroup(label: "Cognitive drain", evidence: ["Brain drain effect reduces capacity"]),
                 ],
                 structuralAssessment: "Clean pyramid with conclusion first"
             ),
@@ -159,9 +157,7 @@ struct PracticeTextModelTests {
     }
 }
 
-@Suite("PracticeTextGenerator Prompt Tests")
 struct PracticeTextGeneratorPromptTests {
-
     private func makeGenerator() -> PracticeTextGenerator {
         PracticeTextGenerator(apiKey: "test-key")
     }
@@ -183,7 +179,7 @@ struct PracticeTextGeneratorPromptTests {
     @Test("System prompt includes word count range")
     func systemPromptWordCount() {
         let generator = makeGenerator()
-        let config = GenerationConfig(qualityLevel: .wellStructured, targetWordCount: 150...350)
+        let config = GenerationConfig(qualityLevel: .wellStructured, targetWordCount: 150 ... 350)
         let prompt = generator.systemPrompt(for: config)
         #expect(prompt.contains("150"))
         #expect(prompt.contains("350"))
@@ -252,16 +248,14 @@ struct PracticeTextGeneratorPromptTests {
     }
 }
 
-@Suite("GenerationConfig Tests")
 struct GenerationConfigTests {
-
     @Test("Default config has sensible defaults")
     func defaultConfig() {
         let config = GenerationConfig(qualityLevel: .wellStructured)
         #expect(config.language == "en")
         #expect(config.targetLevel == 1)
         #expect(config.topicDomain == "technology")
-        #expect(config.targetWordCount == 100...400)
+        #expect(config.targetWordCount == 100 ... 400)
         #expect(config.count == 1)
     }
 
@@ -272,14 +266,14 @@ struct GenerationConfigTests {
             language: "de",
             targetLevel: 3,
             topicDomain: "society",
-            targetWordCount: 200...300,
+            targetWordCount: 200 ... 300,
             count: 5
         )
         #expect(config.qualityLevel == .adversarial)
         #expect(config.language == "de")
         #expect(config.targetLevel == 3)
         #expect(config.topicDomain == "society")
-        #expect(config.targetWordCount == 200...300)
+        #expect(config.targetWordCount == 200 ... 300)
         #expect(config.count == 5)
     }
 }

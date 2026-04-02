@@ -15,7 +15,7 @@ struct PINEntryView: View {
                 .font(.headline)
 
             HStack(spacing: 16) {
-                ForEach(0..<4, id: \.self) { index in
+                ForEach(0 ..< 4, id: \.self) { index in
                     Circle()
                         .fill(index < pin.count ? Color.primary : Color.clear)
                         .frame(width: 16, height: 16)
@@ -33,9 +33,9 @@ struct PINEntryView: View {
 
             // Hidden text field to capture keyboard input
             TextField("", text: $pin)
-                #if os(iOS)
+            #if os(iOS)
                 .keyboardType(.numberPad)
-                #endif
+            #endif
                 .focused($isFocused)
                 .frame(width: 0, height: 0)
                 .opacity(0)

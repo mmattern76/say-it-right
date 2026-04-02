@@ -3,7 +3,7 @@ import Foundation
 // MARK: - StreamingTTSState
 
 /// Observable state of the streaming TTS pipeline.
-enum StreamingTTSState: Sendable, Equatable {
+enum StreamingTTSState: Equatable {
     /// No streaming in progress.
     case idle
     /// Waiting for the first sentence from the API.
@@ -17,7 +17,7 @@ enum StreamingTTSState: Sendable, Equatable {
 // MARK: - LatencyMeasurement
 
 /// Latency data for a single streaming TTS interaction.
-struct LatencyMeasurement: Sendable {
+struct LatencyMeasurement {
     /// Time from request start to first TTS utterance beginning.
     let timeToFirstSpeechMs: Int
     /// Total time from request start to final TTS utterance finishing.
@@ -41,7 +41,6 @@ struct LatencyMeasurement: Sendable {
 /// **Latency logging**: Each interaction records the time from stream start to
 /// first TTS utterance, logged via `DebugLogger`.
 actor StreamingTTSCoordinator {
-
     // MARK: - Dependencies
 
     private let ttsService: TTSPlaybackService
@@ -50,19 +49,21 @@ actor StreamingTTSCoordinator {
     // MARK: - State
 
     private var _state: StreamingTTSState = .idle
-    var state: StreamingTTSState { _state }
+    var state: StreamingTTSState {
+        _state
+    }
 
     /// Accumulated full response text (for ResponseParser after stream completes).
-    private var fullResponseText: String = ""
+    private var fullResponseText = ""
 
     /// Buffer for sentence detection.
-    private var buffer: String = ""
-    private var metadataStarted: Bool = false
+    private var buffer = ""
+    private var metadataStarted = false
 
     /// Latency tracking.
     private var streamStartTime: Date?
     private var firstSpeechTime: Date?
-    private var sentenceCount: Int = 0
+    private var sentenceCount = 0
 
     // MARK: - Init
 
@@ -136,7 +137,6 @@ actor StreamingTTSCoordinator {
             await logLatency(measurement)
 
             onComplete?(fullResponseText, measurement)
-
         } catch {
             _state = .idle
             ttsService.stop()
@@ -181,12 +181,11 @@ actor StreamingTTSCoordinator {
         guard let start = streamStartTime else { return nil }
 
         let now = Date()
-        let totalMs = Int(now.timeIntervalSince(start) * 1000)
-        let firstSpeechMs: Int
-        if let firstSpeech = firstSpeechTime {
-            firstSpeechMs = Int(firstSpeech.timeIntervalSince(start) * 1000)
+        let totalMs = Int(now.timeIntervalSince(start) * 1_000)
+        let firstSpeechMs: Int = if let firstSpeech = firstSpeechTime {
+            Int(firstSpeech.timeIntervalSince(start) * 1_000)
         } else {
-            firstSpeechMs = totalMs
+            totalMs
         }
 
         return LatencyMeasurement(
@@ -203,7 +202,7 @@ actor StreamingTTSCoordinator {
             "event": "streaming_tts_latency",
             "time_to_first_speech_ms": "\(measurement.timeToFirstSpeechMs)",
             "total_duration_ms": "\(measurement.totalDurationMs)",
-            "sentence_count": "\(measurement.sentenceCount)"
+            "sentence_count": "\(measurement.sentenceCount)",
         ])
     }
 }

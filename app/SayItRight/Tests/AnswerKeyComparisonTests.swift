@@ -1,8 +1,7 @@
-import XCTest
 @testable import SayItRight
+import XCTest
 
 final class AnswerKeyComparisonTests: XCTestCase {
-
     // MARK: - Test Fixtures
 
     private let samplePracticeText = PracticeText(
@@ -23,9 +22,9 @@ final class AnswerKeyComparisonTests: XCTestCase {
                     label: "Collaboration challenges",
                     evidence: [
                         "Collaboration suffers without in-person interaction",
-                        "Junior employees miss mentoring opportunities"
+                        "Junior employees miss mentoring opportunities",
                     ]
-                )
+                ),
             ],
             structuralAssessment: "Well-structured argument with clear governing thought and three support pillars balancing benefits against drawbacks."
         ),
@@ -52,7 +51,7 @@ final class AnswerKeyComparisonTests: XCTestCase {
                 SupportGroup(
                     label: "Battery technology",
                     evidence: ["They run on batteries"]
-                )
+                ),
             ],
             structuralAssessment: "Circular reasoning — the conclusion restates the premise without independent evidence.",
             structuralFlaw: StructuralFlaw(
@@ -75,7 +74,7 @@ final class AnswerKeyComparisonTests: XCTestCase {
 
     private let parser = ComparisonResponseParser()
 
-    func testParseHighMatchFindThePoint() {
+    func testParseHighMatchFindThePoint() throws {
         let response = """
         Excellent! You've identified the governing thought precisely. The text argues that remote work has trade-offs, and you captured both the benefits and the challenges.
 
@@ -85,14 +84,14 @@ final class AnswerKeyComparisonTests: XCTestCase {
         let result = parser.parse(fullResponse: response)
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.matchQuality, .high)
-        XCTAssertEqual(result!.dimensionScores["governingThoughtAccuracy"], 3)
-        XCTAssertEqual(result!.dimensionScores["specificity"], 3)
-        XCTAssertEqual(result!.dimensionScores["supportAwareness"], 2)
-        XCTAssertEqual(result!.metadata.mood, "approving")
-        XCTAssertEqual(result!.metadata.progressionSignal, "improving")
-        XCTAssertFalse(result!.feedback.contains("COMPARISON_META"))
-        XCTAssertTrue(result!.feedback.contains("Excellent"))
+        XCTAssertEqual(result?.matchQuality, .high)
+        XCTAssertEqual(result?.dimensionScores["governingThoughtAccuracy"], 3)
+        XCTAssertEqual(result?.dimensionScores["specificity"], 3)
+        XCTAssertEqual(result?.dimensionScores["supportAwareness"], 2)
+        XCTAssertEqual(result?.metadata.mood, "approving")
+        XCTAssertEqual(result?.metadata.progressionSignal, "improving")
+        XCTAssertFalse(try XCTUnwrap(result?.feedback.contains("COMPARISON_META")))
+        XCTAssertTrue(try XCTUnwrap(result?.feedback.contains("Excellent")))
     }
 
     func testParsePartialMatchFixThisMess() {
@@ -105,12 +104,12 @@ final class AnswerKeyComparisonTests: XCTestCase {
         let result = parser.parse(fullResponse: response)
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.matchQuality, .partial)
-        XCTAssertEqual(result!.dimensionScores["pyramidValidity"], 2)
-        XCTAssertEqual(result!.dimensionScores["groupingQuality"], 1)
-        XCTAssertEqual(result!.dimensionScores["orderingLogic"], 2)
-        XCTAssertEqual(result!.dimensionScores["completeness"], 3)
-        XCTAssertEqual(result!.metadata.mood, "teaching")
+        XCTAssertEqual(result?.matchQuality, .partial)
+        XCTAssertEqual(result?.dimensionScores["pyramidValidity"], 2)
+        XCTAssertEqual(result?.dimensionScores["groupingQuality"], 1)
+        XCTAssertEqual(result?.dimensionScores["orderingLogic"], 2)
+        XCTAssertEqual(result?.dimensionScores["completeness"], 3)
+        XCTAssertEqual(result?.metadata.mood, "teaching")
     }
 
     func testParseLowMatchSpotTheGap() {
@@ -123,13 +122,13 @@ final class AnswerKeyComparisonTests: XCTestCase {
         let result = parser.parse(fullResponse: response)
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.matchQuality, .low)
-        XCTAssertEqual(result!.dimensionScores["flawIdentification"], 0)
-        XCTAssertEqual(result!.metadata.mood, "disappointed")
-        XCTAssertEqual(result!.metadata.progressionSignal, "struggling")
+        XCTAssertEqual(result?.matchQuality, .low)
+        XCTAssertEqual(result?.dimensionScores["flawIdentification"], 0)
+        XCTAssertEqual(result?.metadata.mood, "disappointed")
+        XCTAssertEqual(result?.metadata.progressionSignal, "struggling")
     }
 
-    func testParseGermanResponse() {
+    func testParseGermanResponse() throws {
         let response = """
         Gut erkannt! Der Kerngedanke ist klar formuliert. Arbeite jetzt daran, die Stützpfeiler sauber zu benennen.
 
@@ -139,9 +138,9 @@ final class AnswerKeyComparisonTests: XCTestCase {
         let result = parser.parse(fullResponse: response)
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.matchQuality, .high)
-        XCTAssertEqual(result!.metadata.language, "de")
-        XCTAssertTrue(result!.feedback.contains("Gut erkannt"))
+        XCTAssertEqual(result?.matchQuality, .high)
+        XCTAssertEqual(result?.metadata.language, "de")
+        XCTAssertTrue(try XCTUnwrap(result?.feedback.contains("Gut erkannt")))
     }
 
     func testParseMissingMetadataReturnsNil() {
@@ -170,7 +169,7 @@ final class AnswerKeyComparisonTests: XCTestCase {
         XCTAssertNil(result)
     }
 
-    func testParseMultipleMetaBlocksUsesLast() {
+    func testParseMultipleMetaBlocksUsesLast() throws {
         let response = """
         First attempt feedback.
 
@@ -184,10 +183,10 @@ final class AnswerKeyComparisonTests: XCTestCase {
         let result = parser.parse(fullResponse: response)
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result!.matchQuality, .partial)
-        XCTAssertEqual(result!.dimensionScores["governingThoughtAccuracy"], 2)
-        XCTAssertEqual(result!.metadata.mood, "teaching")
-        XCTAssertFalse(result!.feedback.contains("COMPARISON_META"))
+        XCTAssertEqual(result?.matchQuality, .partial)
+        XCTAssertEqual(result?.dimensionScores["governingThoughtAccuracy"], 2)
+        XCTAssertEqual(result?.metadata.mood, "teaching")
+        XCTAssertFalse(try XCTUnwrap(result?.feedback.contains("COMPARISON_META")))
     }
 
     // MARK: - ComparisonPromptBuilder Tests

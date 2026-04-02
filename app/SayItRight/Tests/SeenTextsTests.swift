@@ -1,10 +1,16 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
 // MARK: - Test Helpers
 
-private func makeText(id: String, level: Int = 1, language: String = "en", quality: QualityLevel = .wellStructured, domain: String = "general") -> PracticeText {
+private func makeText(
+    id: String,
+    level: Int = 1,
+    language: String = "en",
+    quality: QualityLevel = .wellStructured,
+    domain: String = "general"
+) -> PracticeText {
     PracticeText(
         id: id,
         text: "Sample text for \(id)",
@@ -30,10 +36,9 @@ private func makeLibrary(_ texts: [PracticeText]) -> PracticeTextLibrary {
 
 // MARK: - SeenTextsRecord Tests
 
-@Suite("SeenTextsRecord")
 struct SeenTextsRecordTests {
-
-    @Test func markSeenAddsEntry() {
+    @Test
+    func markSeenAddsEntry() {
         var record = SeenTextsRecord()
         record.markSeen(textID: "pt-001", sessionType: "find-the-point")
         let seen = record.seenIDs(for: "find-the-point")
@@ -41,7 +46,8 @@ struct SeenTextsRecordTests {
         #expect(seen.count == 1)
     }
 
-    @Test func markSeenMultipleTexts() {
+    @Test
+    func markSeenMultipleTexts() {
         var record = SeenTextsRecord()
         record.markSeen(textID: "pt-001", sessionType: "find-the-point")
         record.markSeen(textID: "pt-002", sessionType: "find-the-point")
@@ -51,7 +57,8 @@ struct SeenTextsRecordTests {
         #expect(seen == Set(["pt-001", "pt-002", "pt-003"]))
     }
 
-    @Test func seenIDsPerSessionType() {
+    @Test
+    func seenIDsPerSessionType() {
         var record = SeenTextsRecord()
         record.markSeen(textID: "pt-001", sessionType: "find-the-point")
         record.markSeen(textID: "pt-002", sessionType: "fix-this-mess")
@@ -63,7 +70,8 @@ struct SeenTextsRecordTests {
         #expect(fixSeen == Set(["pt-002"]))
     }
 
-    @Test func sameTextDifferentSessionTypes() {
+    @Test
+    func sameTextDifferentSessionTypes() {
         var record = SeenTextsRecord()
         record.markSeen(textID: "pt-001", sessionType: "find-the-point")
 
@@ -76,12 +84,14 @@ struct SeenTextsRecordTests {
         #expect(record.seenIDs(for: "fix-this-mess").contains("pt-001"))
     }
 
-    @Test func seenIDsEmptyForUnknownSessionType() {
+    @Test
+    func seenIDsEmptyForUnknownSessionType() {
         let record = SeenTextsRecord()
         #expect(record.seenIDs(for: "nonexistent").isEmpty)
     }
 
-    @Test func markSeenRecordsDate() {
+    @Test
+    func markSeenRecordsDate() {
         var record = SeenTextsRecord()
         let fixedDate = Date(timeIntervalSince1970: 1_700_000_000)
         record.markSeen(textID: "pt-001", sessionType: "find-the-point", date: fixedDate)
@@ -90,7 +100,8 @@ struct SeenTextsRecordTests {
         #expect(storedDate == fixedDate)
     }
 
-    @Test func markSeenUpdatesDate() {
+    @Test
+    func markSeenUpdatesDate() {
         var record = SeenTextsRecord()
         let date1 = Date(timeIntervalSince1970: 1_700_000_000)
         let date2 = Date(timeIntervalSince1970: 1_700_100_000)
@@ -103,7 +114,8 @@ struct SeenTextsRecordTests {
         #expect(record.seenIDs(for: "find-the-point").count == 1)
     }
 
-    @Test func unseenTextsReturnsOnlyUnseen() {
+    @Test
+    func unseenTextsReturnsOnlyUnseen() {
         let texts = [
             makeText(id: "pt-001", level: 1),
             makeText(id: "pt-002", level: 1),
@@ -121,11 +133,12 @@ struct SeenTextsRecordTests {
             library: library
         )
         #expect(unseen != nil)
-        #expect(unseen!.count == 2)
-        #expect(unseen!.map(\.id).sorted() == ["pt-002", "pt-003"])
+        #expect(unseen?.count == 2)
+        #expect(unseen?.map(\.id).sorted() == ["pt-002", "pt-003"])
     }
 
-    @Test func unseenTextsReturnsNilWhenExhausted() {
+    @Test
+    func unseenTextsReturnsNilWhenExhausted() {
         let texts = [
             makeText(id: "pt-001", level: 1),
             makeText(id: "pt-002", level: 1),
@@ -145,7 +158,8 @@ struct SeenTextsRecordTests {
         #expect(unseen == nil)
     }
 
-    @Test func unseenTextsFiltersbyLanguage() {
+    @Test
+    func unseenTextsFiltersbyLanguage() {
         let texts = [
             makeText(id: "pt-001-en", level: 1, language: "en"),
             makeText(id: "pt-001-de", level: 1, language: "de"),
@@ -170,10 +184,11 @@ struct SeenTextsRecordTests {
             library: library
         )
         #expect(unseenDE != nil)
-        #expect(unseenDE!.count == 1)
+        #expect(unseenDE?.count == 1)
     }
 
-    @Test func unseenTextsFiltersByLevel() {
+    @Test
+    func unseenTextsFiltersByLevel() {
         let texts = [
             makeText(id: "pt-001", level: 1),
             makeText(id: "pt-002", level: 2),
@@ -200,10 +215,11 @@ struct SeenTextsRecordTests {
             library: library
         )
         #expect(unseenL2 != nil)
-        #expect(unseenL2!.count == 1)
+        #expect(unseenL2?.count == 1)
     }
 
-    @Test func resetForLevelClearsOnlyThatLevel() {
+    @Test
+    func resetForLevelClearsOnlyThatLevel() {
         let texts = [
             makeText(id: "pt-001", level: 1),
             makeText(id: "pt-002", level: 1),
@@ -224,7 +240,8 @@ struct SeenTextsRecordTests {
         #expect(seen.contains("pt-003")) // Level 2 not reset
     }
 
-    @Test func resetForLevelDoesNotAffectOtherSessionTypes() {
+    @Test
+    func resetForLevelDoesNotAffectOtherSessionTypes() {
         let texts = [makeText(id: "pt-001", level: 1)]
         let library = makeLibrary(texts)
 
@@ -238,7 +255,8 @@ struct SeenTextsRecordTests {
         #expect(record.seenIDs(for: "fix-this-mess").contains("pt-001"))
     }
 
-    @Test func emptyLibraryUnseenTextsReturnsEmptyArray() {
+    @Test
+    func emptyLibraryUnseenTextsReturnsEmptyArray() throws {
         let library = makeLibrary([])
         let record = SeenTextsRecord()
 
@@ -249,10 +267,11 @@ struct SeenTextsRecordTests {
             library: library
         )
         #expect(unseen != nil)
-        #expect(unseen!.isEmpty)
+        #expect(try #require(unseen?.isEmpty))
     }
 
-    @Test func codableRoundTrip() throws {
+    @Test
+    func codableRoundTrip() throws {
         var record = SeenTextsRecord()
         let date = Date(timeIntervalSince1970: 1_700_000_000)
         record.markSeen(textID: "pt-001", sessionType: "find-the-point", date: date)
@@ -274,10 +293,9 @@ struct SeenTextsRecordTests {
 
 // MARK: - SeenTextsStore Tests
 
-@Suite("SeenTextsStore")
 struct SeenTextsStoreTests {
-
-    @Test func createWithEmptyState() async {
+    @Test
+    func createWithEmptyState() async {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try? FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -288,7 +306,8 @@ struct SeenTextsStoreTests {
         #expect(record.entries.isEmpty)
     }
 
-    @Test func markSeenPersists() async throws {
+    @Test
+    func markSeenPersists() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -303,7 +322,8 @@ struct SeenTextsStoreTests {
         #expect(seen.contains("pt-001"))
     }
 
-    @Test func resetClearsAllData() async throws {
+    @Test
+    func resetClearsAllData() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -317,7 +337,8 @@ struct SeenTextsStoreTests {
         #expect(record.entries.isEmpty)
     }
 
-    @Test func selectUnseenTextReturnsText() async throws {
+    @Test
+    func selectUnseenTextReturnsText() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -339,11 +360,12 @@ struct SeenTextsStoreTests {
             library: library
         )
         #expect(result != nil)
-        #expect(result!.text.id == "pt-002")
-        #expect(result!.didReset == false)
+        #expect(result?.text.id == "pt-002")
+        #expect(result?.didReset == false)
     }
 
-    @Test func selectUnseenTextResetsWhenExhausted() async throws {
+    @Test
+    func selectUnseenTextResetsWhenExhausted() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -366,15 +388,16 @@ struct SeenTextsStoreTests {
             library: library
         )
         #expect(result != nil)
-        #expect(result!.didReset == true)
-        #expect(["pt-001", "pt-002"].contains(result!.text.id))
+        #expect(result?.didReset == true)
+        #expect(try ["pt-001", "pt-002"].contains(#require(result?.text.id)))
 
         // After reset, seen IDs for level 1 should be cleared
         let seen = await store.seenIDs(for: "find-the-point")
         #expect(seen.isEmpty)
     }
 
-    @Test func selectUnseenTextReturnsNilForEmptyLibrary() async throws {
+    @Test
+    func selectUnseenTextReturnsNilForEmptyLibrary() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)
@@ -392,19 +415,22 @@ struct SeenTextsStoreTests {
         #expect(result == nil)
     }
 
-    @Test func exhaustionMessageEnglish() {
+    @Test
+    func exhaustionMessageEnglish() {
         let msg = SeenTextsStore.exhaustionMessage(language: "en")
         #expect(msg.contains("entire collection"))
         #expect(msg.contains("revisit"))
     }
 
-    @Test func exhaustionMessageGerman() {
+    @Test
+    func exhaustionMessageGerman() {
         let msg = SeenTextsStore.exhaustionMessage(language: "de")
         #expect(msg.contains("gesamte Sammlung"))
         #expect(msg.contains("nochmal"))
     }
 
-    @Test func persistenceRoundTrip() async throws {
+    @Test
+    func persistenceRoundTrip() async throws {
         let tmpDir = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true)

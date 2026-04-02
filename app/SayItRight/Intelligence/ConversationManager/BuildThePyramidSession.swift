@@ -1,13 +1,13 @@
 import Foundation
 
 /// Tracks the state of a "Build the Pyramid" session.
-struct BuildThePyramidSession: Sendable {
+struct BuildThePyramidSession {
     let exercise: PyramidExercise
     let startedAt: Date
-    private(set) var attempts: Int = 0
+    private(set) var attempts = 0
     private(set) var lastScore: Double?
-    private(set) var isComplete: Bool = false
-    private(set) var showedAnswer: Bool = false
+    private(set) var isComplete = false
+    private(set) var showedAnswer = false
 
     /// Maximum attempts before "show answer" is offered.
     let maxAttempts: Int

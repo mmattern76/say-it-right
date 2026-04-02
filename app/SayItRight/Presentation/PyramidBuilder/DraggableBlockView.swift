@@ -20,8 +20,8 @@ struct DraggableBlockView: View {
     var onDragEnded: ((DragGesture.Value) -> Void)?
 
     @State private var dragOffset: CGSize = .zero
-    @State private var isDragging: Bool = false
-    @State private var isHovering: Bool = false
+    @State private var isDragging = false
+    @State private var isHovering = false
     @State private var currentHaptic: PyramidHaptic?
 
     // MARK: - Body
@@ -36,7 +36,7 @@ struct DraggableBlockView: View {
                 x: 0,
                 y: shadowRadius / 2
             )
-            .zIndex(isDragging ? 1000 : 0)
+            .zIndex(isDragging ? 1_000 : 0)
             .gesture(dragGesture)
             .pyramidHaptic(currentHaptic)
             .animation(
@@ -128,55 +128,55 @@ struct DraggableBlockView: View {
 
     private var currentScale: CGFloat {
         switch effectiveState {
-        case .idle: 1.0
-        case .hovering: 1.02
-        case .dragging: 1.05
-        case .placed: 1.0
-        case .error: 1.0
+            case .idle: 1.0
+            case .hovering: 1.02
+            case .dragging: 1.05
+            case .placed: 1.0
+            case .error: 1.0
         }
     }
 
     private var shadowOpacity: Double {
         switch effectiveState {
-        case .idle: 0.08
-        case .hovering: 0.12
-        case .dragging: 0.25
-        case .placed: 0.06
-        case .error: 0.08
+            case .idle: 0.08
+            case .hovering: 0.12
+            case .dragging: 0.25
+            case .placed: 0.06
+            case .error: 0.08
         }
     }
 
     private var shadowRadius: CGFloat {
         switch effectiveState {
-        case .idle: 2
-        case .hovering: 4
-        case .dragging: 12
-        case .placed: 1
-        case .error: 2
+            case .idle: 2
+            case .hovering: 4
+            case .dragging: 12
+            case .placed: 1
+            case .error: 2
         }
     }
 
     private var blockColor: Color {
         switch effectiveState {
-        case .error: Color.red.opacity(0.7)
-        default: block.type.color
+            case .error: Color.red.opacity(0.7)
+            default: block.type.color
         }
     }
 
     private var borderColor: Color {
         switch effectiveState {
-        case .idle: .white.opacity(0.15)
-        case .hovering: .white.opacity(0.3)
-        case .dragging: .white.opacity(0.4)
-        case .placed: .white.opacity(0.2)
-        case .error: .red
+            case .idle: .white.opacity(0.15)
+            case .hovering: .white.opacity(0.3)
+            case .dragging: .white.opacity(0.4)
+            case .placed: .white.opacity(0.2)
+            case .error: .red
         }
     }
 
     private var borderWidth: CGFloat {
         switch effectiveState {
-        case .error: 2
-        default: 1
+            case .error: 2
+            default: 1
         }
     }
 }

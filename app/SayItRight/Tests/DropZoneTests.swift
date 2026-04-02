@@ -1,12 +1,10 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
 // MARK: - Drop Zone Model Tests
 
-@Suite("DropZone Model")
 struct DropZoneModelTests {
-
     @Test("frame computes correctly from centre and size")
     func frameComputation() {
         let zone = DropZone(
@@ -34,9 +32,7 @@ struct DropZoneModelTests {
 
 // MARK: - Pyramid Tree State Tests
 
-@Suite("PyramidTreeState")
 struct PyramidTreeStateTests {
-
     @MainActor
     private func makeState(blocks: [PyramidBlock] = []) -> PyramidTreeState {
         let state = PyramidTreeState(blocks: blocks)
@@ -257,7 +253,7 @@ struct PyramidTreeStateTests {
         state.recomputeLayout()
 
         // Point far from any zone.
-        let farAway = CGPoint(x: 9999, y: 9999)
+        let farAway = CGPoint(x: 9_999, y: 9_999)
         let result = state.nearestZone(to: farAway)
 
         #expect(result == nil)
@@ -282,7 +278,7 @@ struct PyramidTreeStateTests {
             #expect(state.highlightedZoneID == zone.id)
         }
 
-        state.endDrag(position: CGPoint(x: 9999, y: 9999))
+        state.endDrag(position: CGPoint(x: 9_999, y: 9_999))
         #expect(!state.isDragging)
         #expect(state.draggedBlockID == nil)
         #expect(state.highlightedZoneID == nil)
@@ -321,7 +317,7 @@ struct PyramidTreeStateTests {
 
         // Drag blocks[1] and drop far away.
         state.beginDrag(blockID: blocks[1].id)
-        let result = state.endDrag(position: CGPoint(x: 9999, y: 9999))
+        let result = state.endDrag(position: CGPoint(x: 9_999, y: 9_999))
 
         #expect(result == nil)
         #expect(state.placedBlocks.count == 1) // only root remains

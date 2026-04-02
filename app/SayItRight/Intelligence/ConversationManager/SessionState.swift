@@ -1,7 +1,7 @@
 import Foundation
 
 /// The lifecycle state of a coaching session.
-enum SessionState: Sendable, Equatable {
+enum SessionState: Equatable {
     /// No active session. Ready to start one.
     case idle
 

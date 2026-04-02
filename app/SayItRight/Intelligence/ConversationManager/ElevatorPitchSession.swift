@@ -4,8 +4,7 @@ import Foundation
 ///
 /// The learner writes a structured response under time pressure. No revision
 /// loop — one shot, then Barbara's evaluation and summary.
-struct ElevatorPitchSession: Sendable {
-
+struct ElevatorPitchSession {
     /// The topic for this session.
     let topic: Topic
 
@@ -22,10 +21,10 @@ struct ElevatorPitchSession: Sendable {
     private(set) var submittedAt: Date?
 
     /// Whether the timer expired before the learner submitted.
-    private(set) var timedOut: Bool = false
+    private(set) var timedOut = false
 
     /// The session type identifier for downstream processing.
-    let sessionTypeID: String = "elevator-pitch"
+    let sessionTypeID = "elevator-pitch"
 
     init(topic: Topic, durationSeconds: Int = 60, startedAt: Date = .now) {
         self.topic = topic

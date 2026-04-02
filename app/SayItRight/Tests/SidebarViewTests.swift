@@ -1,9 +1,7 @@
-import Testing
 @testable import SayItRight
+import Testing
 
-@Suite("SessionTypeItem")
 struct SessionTypeItemTests {
-
     @Test("All session types have unique IDs")
     func uniqueIDs() {
         let ids = SessionTypeItem.allTypes.map(\.id)
@@ -66,9 +64,7 @@ struct SessionTypeItemTests {
     }
 }
 
-@Suite("AdaptiveChatView Integration")
 struct AdaptiveChatViewTests {
-
     @MainActor
     @Test("ViewModel session type updates from selection")
     func sessionTypeSync() {

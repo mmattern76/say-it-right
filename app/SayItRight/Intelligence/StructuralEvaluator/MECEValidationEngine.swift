@@ -5,7 +5,7 @@ import Foundation
 /// Defines valid groupings for a pyramid builder exercise.
 /// Multiple valid arrangements are supported — the answer key defines which
 /// blocks belong together, not their exact positions.
-struct PyramidAnswerKey: Sendable, Equatable, Codable {
+struct PyramidAnswerKey: Equatable, Codable {
     /// The block ID that should be the governing thought (root).
     let governingThoughtID: String
     /// Valid group arrangements. Each `ValidGroup` maps a support-point block
@@ -18,13 +18,13 @@ struct PyramidAnswerKey: Sendable, Equatable, Codable {
 }
 
 /// One complete valid arrangement of the pyramid.
-struct ValidGrouping: Sendable, Equatable, Codable {
+struct ValidGrouping: Equatable, Codable {
     /// The groups that make up this arrangement.
     let groups: [ValidGroup]
 }
 
 /// A single support group: a parent block with its expected children.
-struct ValidGroup: Sendable, Equatable, Codable {
+struct ValidGroup: Equatable, Codable {
     /// The block ID for the support point (group parent).
     let parentBlockID: String
     /// The block IDs that belong under this parent (order does not matter).
@@ -34,7 +34,7 @@ struct ValidGroup: Sendable, Equatable, Codable {
 // MARK: - Validation Result Types
 
 /// Overall result of comparing the user's pyramid against the answer key.
-struct PyramidValidationResult: Sendable, Equatable {
+struct PyramidValidationResult: Equatable {
     /// Per-block validation status.
     let blockStatuses: [String: BlockValidationStatus]
     /// Group-level MECE assessment.
@@ -50,7 +50,7 @@ struct PyramidValidationResult: Sendable, Equatable {
 }
 
 /// Validation status for a single block.
-enum BlockValidationStatus: Sendable, Equatable {
+enum BlockValidationStatus: Equatable {
     /// Block is in the correct group under the correct parent.
     case correct
     /// Block is in a valid group but under the wrong parent.
@@ -68,7 +68,7 @@ enum BlockValidationStatus: Sendable, Equatable {
 }
 
 /// MECE assessment for a single group in the user's pyramid.
-struct GroupAssessment: Sendable, Equatable {
+struct GroupAssessment: Equatable {
     /// The user's group parent block ID.
     let userParentBlockID: String
     /// The matched answer-key group parent block ID, if any.
@@ -80,27 +80,22 @@ struct GroupAssessment: Sendable, Equatable {
     /// Blocks that should be in this group but are missing (gap).
     let missingMembers: Set<String>
     /// Whether this group is MECE-compliant (no overlaps, no gaps).
-    var isMECE: Bool { overlappingMembers.isEmpty && missingMembers.isEmpty }
+    var isMECE: Bool {
+        overlappingMembers.isEmpty && missingMembers.isEmpty
+    }
 }
 
 // MARK: - User Tree Representation
 
 /// Lightweight representation of the user's pyramid tree for validation.
 /// Decoupled from the UI-bound PyramidTreeState.
-struct UserPyramidTree: Sendable, Equatable {
+struct UserPyramidTree: Equatable {
     /// The root block ID, if one is placed.
     let rootBlockID: String?
     /// Parent-to-children mapping. Key is parent block ID, value is set of child block IDs.
     let parentToChildren: [String: Set<String>]
     /// All placed block IDs.
     let allPlacedBlockIDs: Set<String>
-
-    /// Extract a UserPyramidTree from a PyramidTreeState's placed blocks.
-    init(rootBlockID: String?, parentToChildren: [String: Set<String>], allPlacedBlockIDs: Set<String>) {
-        self.rootBlockID = rootBlockID
-        self.parentToChildren = parentToChildren
-        self.allPlacedBlockIDs = allPlacedBlockIDs
-    }
 }
 
 // MARK: - MECE Validation Engine
@@ -109,8 +104,7 @@ struct UserPyramidTree: Sendable, Equatable {
 /// an answer key and identifies structural correctness and MECE violations.
 ///
 /// This is Layer 3 (Intelligence) — no UI dependencies.
-struct MECEValidationEngine: Sendable {
-
+struct MECEValidationEngine {
     // MARK: - Public API
 
     /// Validate the user's pyramid tree against the answer key.
@@ -172,16 +166,16 @@ struct MECEValidationEngine: Sendable {
         var accountedBlocks: Set<String> = []
 
         // Track which answer groups have been matched.
-        let matchedAnswerGroups: Set<String> = Set(mapping.values.map { $0.parentBlockID })
+        let matchedAnswerGroups: Set<String> = Set(mapping.values.map(\.parentBlockID))
 
         // Collect all answer-key group parent IDs for quick lookup.
-        let answerGroupParentIDs = Set(grouping.groups.map { $0.parentBlockID })
+        let answerGroupParentIDs = Set(grouping.groups.map(\.parentBlockID))
 
         // Evaluate each user group (each parent node with children).
         for (userParentID, userChildren) in userTree.parentToChildren {
             // If this is the governing thought's entry, its children should be
             // the group parents — not evidence members. Handle separately.
-            if governingThoughtCorrect && userParentID == answerKey.governingThoughtID {
+            if governingThoughtCorrect, userParentID == answerKey.governingThoughtID {
                 for childID in userChildren {
                     if answerGroupParentIDs.contains(childID) {
                         blockStatuses[childID] = .correct
@@ -225,7 +219,7 @@ struct MECEValidationEngine: Sendable {
             }
 
             // Mark the user parent block status.
-            if matchedAnswerGroup != nil && matchedAnswerGroup?.parentBlockID == userParentID {
+            if matchedAnswerGroup != nil, matchedAnswerGroup?.parentBlockID == userParentID {
                 blockStatuses[userParentID] = .correct
             }
             accountedBlocks.insert(userParentID)
@@ -342,7 +336,7 @@ struct MECEValidationEngine: Sendable {
             let answerGroup: ValidGroup
             let score: Double
 
-            static func < (lhs: ScoredPair, rhs: ScoredPair) -> Bool {
+            static func < (lhs: Self, rhs: Self) -> Bool {
                 lhs.score < rhs.score
             }
         }
@@ -386,7 +380,8 @@ struct MECEValidationEngine: Sendable {
 
         for pair in pairs {
             guard !mappedUserParents.contains(pair.userParentID),
-                  !usedAnswerGroups.contains(pair.answerGroup.parentBlockID) else {
+                  !usedAnswerGroups.contains(pair.answerGroup.parentBlockID)
+            else {
                 continue
             }
             mapping[pair.userParentID] = pair.answerGroup
@@ -400,7 +395,7 @@ struct MECEValidationEngine: Sendable {
     /// Compute an overall score (0.0 to 1.0) from validation results.
     private func computeScore(
         blockStatuses: [String: BlockValidationStatus],
-        groupAssessments: [GroupAssessment],
+        groupAssessments _: [GroupAssessment],
         governingThoughtCorrect: Bool,
         answerKey: PyramidAnswerKey,
         grouping: ValidGrouping
@@ -430,7 +425,8 @@ struct MECEValidationEngine: Sendable {
 
         // Subtract 1 if governing thought was already counted in blockStatuses as correct.
         if governingThoughtCorrect, let gtStatus = blockStatuses[answerKey.governingThoughtID],
-           case .correct = gtStatus {
+           case .correct = gtStatus
+        {
             correctCount -= 1 // Avoid double-counting.
         }
 
@@ -444,7 +440,7 @@ extension UserPyramidTree {
     /// Create a UserPyramidTree from a PyramidTreeState's placed blocks.
     @MainActor
     static func from(_ treeState: PyramidTreeState) -> UserPyramidTree {
-        let rootID = treeState.rootBlockID.map { $0.uuidString }
+        let rootID = treeState.rootBlockID.map(\.uuidString)
 
         var parentToChildren: [String: Set<String>] = [:]
         var allPlaced: Set<String> = []
@@ -454,7 +450,7 @@ extension UserPyramidTree {
             allPlaced.insert(idString)
 
             if !placed.childIDs.isEmpty {
-                parentToChildren[idString] = Set(placed.childIDs.map { $0.uuidString })
+                parentToChildren[idString] = Set(placed.childIDs.map(\.uuidString))
             }
         }
 

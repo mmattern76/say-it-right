@@ -1,5 +1,5 @@
-import SwiftUI
 import AVFoundation
+import SwiftUI
 
 /// First-time welcome experience with Barbara introducing herself.
 ///
@@ -47,13 +47,10 @@ struct OnboardingView: View {
             Spacer()
         }
         .padding()
-        .background(
-            LinearGradient(
-                colors: [Color.clear, Color.blue.opacity(0.05)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .background(Color.warmBackground)
+        .onDisappear {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
         .task {
             await startPhase(.welcome)
         }
@@ -64,17 +61,21 @@ struct OnboardingView: View {
     private var speechBubble: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Barbara")
-                .font(.caption)
+                .font(.system(.caption, design: .serif))
                 .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.barbaraAccent)
 
             Text(typedText)
-                .font(.body)
+                .font(.barbaraBody)
                 .lineSpacing(4)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.barbaraAccent.opacity(0.15), lineWidth: 1)
+        )
         .frame(minHeight: 120, alignment: .top)
         .padding(.horizontal)
     }
@@ -84,72 +85,66 @@ struct OnboardingView: View {
     @ViewBuilder
     private var actionArea: some View {
         switch phase {
-        case .welcome:
-            if !isTyping {
-                Button("Let's go!") {
-                    Task { await startPhase(.pickAvatar) }
+            case .welcome:
+                if !isTyping {
+                    Button("Let's go!") {
+                        Task { await startPhase(.pickAvatar) }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .transition(.opacity)
+                    .accessibilityIdentifier("letsGoButton")
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .transition(.opacity)
-                .accessibilityIdentifier("letsGoButton")
-            }
 
-        case .pickAvatar:
-            if !isTyping {
-                VStack(spacing: 16) {
-                    HStack(spacing: 32) {
-                        ForEach(LearnerAvatar.allCases, id: \.self) { avatar in
-                            VStack(spacing: 8) {
-                                LearnerAvatarView(avatar: avatar, size: 80)
-                                    .overlay {
-                                        if selectedAvatar == avatar {
-                                            Circle()
-                                                .stroke(Color.accentColor, lineWidth: 3)
-                                                .frame(width: 84, height: 84)
+            case .pickAvatar:
+                if !isTyping {
+                    VStack(spacing: 16) {
+                        HStack(spacing: 32) {
+                            ForEach(LearnerAvatar.allCases, id: \.self) { avatar in
+                                VStack(spacing: 8) {
+                                    LearnerAvatarView(avatar: avatar, size: 80)
+                                        .overlay {
+                                            if selectedAvatar == avatar {
+                                                Circle()
+                                                    .stroke(Color.accentColor, lineWidth: 3)
+                                                    .frame(width: 84, height: 84)
+                                            }
                                         }
-                                    }
-                                Text(avatar.displayName)
-                                    .font(.subheadline)
+                                    Text(avatar.displayName)
+                                        .font(.subheadline)
+                                }
+                                .onTapGesture {
+                                    selectedAvatar = avatar
+                                    nameInput = avatar.displayName
+                                }
                             }
-                            .onTapGesture {
-                                        selectedAvatar = avatar
-                                        nameInput = avatar.displayName
-                                    }
+                        }
+
+                        if selectedAvatar != nil {
+                            Button(settings.language == "de" ? "Weiter" : "Continue") {
+                                settings.selectedAvatar = selectedAvatar?.rawValue
+                                settings.displayName = nameInput
+                                Task { await startPhase(.pepTalk) }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.large)
+                            .transition(.opacity)
+                            .accessibilityIdentifier("avatarContinueButton")
                         }
                     }
+                }
 
-                    TextField(settings.language == "de" ? "Dein Name" : "Your name", text: $nameInput)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(maxWidth: 200)
-                        .multilineTextAlignment(.center)
-                        .accessibilityIdentifier("nameField")
-
-                    if selectedAvatar != nil && !nameInput.isEmpty {
-                        Button(settings.language == "de" ? "Weiter" : "Continue") {
-                            settings.selectedAvatar = selectedAvatar?.rawValue
-                            settings.displayName = nameInput
-                            Task { await startPhase(.pepTalk) }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .transition(.opacity)
-                        .accessibilityIdentifier("avatarContinueButton")
+            case .pepTalk:
+                if !isTyping {
+                    Button(settings.language == "de" ? "Los geht's!" : "Let's start!") {
+                        settings.hasCompletedOnboarding = true
+                        onComplete()
                     }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .transition(.opacity)
+                    .accessibilityIdentifier("letsStartButton")
                 }
-            }
-
-        case .pepTalk:
-            if !isTyping {
-                Button(settings.language == "de" ? "Los geht's!" : "Let's start!") {
-                    settings.hasCompletedOnboarding = true
-                    onComplete()
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .transition(.opacity)
-                .accessibilityIdentifier("letsStartButton")
-            }
         }
     }
 
@@ -194,21 +189,21 @@ private enum OnboardingPhase {
     func message(language: String, name: String) -> String {
         if language == "de" {
             switch self {
-            case .welcome:
-                return "Hallo! Ich bin Barbara. Ich bringe dir bei, wie du deine Gedanken so strukturierst, dass jeder sie versteht. Klar, logisch, auf den Punkt. Keine langen Reden, kein Drumherum. Bereit?"
-            case .pickAvatar:
-                return "Gut. Bevor wir anfangen: Wer bist du? Such dir einen Avatar aus und sag mir deinen Namen."
-            case .pepTalk:
-                return "Perfekt, \(name)! Ab jetzt lernst du, wie man Argumente baut, die sitzen. Ich bin streng, aber fair. Wenn du Unsinn redest, sag ich's dir. Wenn du's drauf hast, auch. Fangen wir an!"
+                case .welcome:
+                    "Hallo! Ich bin Barbara. Ich bringe dir bei, wie du deine Gedanken so strukturierst, dass jeder sie versteht. Klar, logisch, auf den Punkt. Keine langen Reden, kein Drumherum. Bereit?"
+                case .pickAvatar:
+                    "Gut. Bevor wir anfangen: Wer bist du? Such dir einen Avatar aus."
+                case .pepTalk:
+                    "Perfekt, \(name)! Ab jetzt lernst du, wie man Argumente baut, die sitzen. Ich bin streng, aber fair. Wenn du Unsinn redest, sag ich's dir. Wenn du's drauf hast, auch. Fangen wir an!"
             }
         } else {
             switch self {
-            case .welcome:
-                return "Hello! I'm Barbara. I'll teach you how to structure your thinking so anyone can follow it. Clear, logical, straight to the point. No rambling, no filler. Ready?"
-            case .pickAvatar:
-                return "Good. Before we start: who are you? Pick an avatar and tell me your name."
-            case .pepTalk:
-                return "Perfect, \(name)! From now on, you'll learn how to build arguments that land. I'm strict, but fair. If you're talking nonsense, I'll tell you. If you nail it, I'll tell you that too. Let's go!"
+                case .welcome:
+                    "Hello! I'm Barbara. I'll teach you how to structure your thinking so anyone can follow it. Clear, logical, straight to the point. No rambling, no filler. Ready?"
+                case .pickAvatar:
+                    "Good. Before we start: who are you? Pick an avatar."
+                case .pepTalk:
+                    "Perfect, \(name)! From now on, you'll learn how to build arguments that land. I'm strict, but fair. If you're talking nonsense, I'll tell you. If you nail it, I'll tell you that too. Let's go!"
             }
         }
     }
@@ -276,7 +271,8 @@ struct WelcomeReplayView: View {
 }
 
 #Preview("Onboarding") {
-    OnboardingView(settings: .shared) { }
+    OnboardingView(settings: .shared) {
+    }
 }
 
 #Preview("Welcome Replay") {

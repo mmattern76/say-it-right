@@ -1,12 +1,10 @@
-import Testing
 import Foundation
 @testable import SayItRight
+import Testing
 
 // MARK: - PyramidConnection Tests
 
-@Suite("PyramidConnection")
 struct PyramidConnectionTests {
-
     @Test("Connection ID combines parent and child IDs")
     func connectionID() {
         let connection = PyramidConnection(parentID: "root", childID: "child1")
@@ -30,9 +28,7 @@ struct PyramidConnectionTests {
 
 // MARK: - TreeNode Connection Extraction Tests
 
-@Suite("TreeNode.extractConnections")
 struct TreeNodeConnectionExtractionTests {
-
     @Test("Leaf node has no connections")
     func leafNode() {
         let node = TreeNode(id: "leaf")
@@ -97,9 +93,7 @@ struct TreeNodeConnectionExtractionTests {
 
 // MARK: - Bezier Path Tests
 
-@Suite("ConnectionLinesView.bezierPath")
 struct BezierPathTests {
-
     @Test("Bezier path starts at the start point")
     func pathStartsCorrectly() {
         let start = CGPoint(x: 100, y: 50)
@@ -141,9 +135,7 @@ struct BezierPathTests {
 
 // MARK: - Connection Line Style Tests
 
-@Suite("ConnectionLineStyle")
 struct ConnectionLineStyleTests {
-
     @Test("Normal style has thinner line than highlighted")
     func lineWidthComparison() {
         #expect(ConnectionLineStyle.normal.lineWidth < ConnectionLineStyle.highlighted.lineWidth)

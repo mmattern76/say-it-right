@@ -59,38 +59,37 @@ struct FixThisMessVisualView: View {
         }
         .navigationTitle(language == "de" ? "Räum das auf (visuell)" : "Fix this mess (visual)")
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: endSessionAndDismiss) {
-                    Label(
-                        language == "de" ? "Beenden" : "End Session",
-                        systemImage: "xmark.circle"
-                    )
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: endSessionAndDismiss) {
+                        Label(
+                            language == "de" ? "Beenden" : "End Session",
+                            systemImage: "xmark.circle"
+                        )
+                    }
                 }
             }
-        }
-        .task {
-            guard !sessionStarted else { return }
-            sessionStarted = true
-            let ex = await coordinator.startSession(
-                sessionManager: sessionManager,
-                profile: profile,
-                language: language
-            )
-            if let ex {
-                exercise = ex
-                setupWrongArrangement(ex)
-            } else {
-                noExercisesAvailable = true
+            .task {
+                guard !sessionStarted else { return }
+                sessionStarted = true
+                let ex = await coordinator.startSession(
+                    sessionManager: sessionManager,
+                    profile: profile,
+                    language: language
+                )
+                if let ex {
+                    exercise = ex
+                    setupWrongArrangement(ex)
+                } else {
+                    noExercisesAvailable = true
+                }
             }
-        }
     }
 
     // MARK: - Session Content
 
-    @ViewBuilder
     private var sessionContent: some View {
         AdaptivePyramidLayout {
             pyramidCanvas
@@ -115,8 +114,8 @@ struct FixThisMessVisualView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
 
                     Text(language == "de"
-                         ? "Diese Pyramide ist kaputt. Repariere sie!"
-                         : "This pyramid is broken. Fix it!")
+                        ? "Diese Pyramide ist kaputt. Repariere sie!"
+                        : "This pyramid is broken. Fix it!")
                         .font(.caption)
                         .foregroundStyle(.orange)
                         .fontWeight(.medium)
@@ -125,11 +124,12 @@ struct FixThisMessVisualView: View {
             }
 
             // Pyramid tree area
-            GeometryReader { geo in
+            GeometryReader { _ in
                 ZStack {
                     // Connection lines
                     if let rootID = treeState.rootBlockID,
-                       let rootNode = treeState.buildTreeNode(from: rootID) {
+                       let rootNode = treeState.buildTreeNode(from: rootID)
+                    {
                         ConnectionLinesView(
                             nodeLayouts: treeState.nodeLayouts,
                             connections: rootNode.extractConnections(),
@@ -155,7 +155,11 @@ struct FixThisMessVisualView: View {
                                 },
                                 onDragEnded: { value in
                                     if let zone = treeState.endDrag(position: value.location) {
-                                        treeState.reparentBlock(placed.id, toParent: UUID(uuidString: zone.parentID)!, atIndex: zone.childIndex)
+                                        treeState.reparentBlock(
+                                            placed.id,
+                                            toParent: UUID(uuidString: zone.parentID)!,
+                                            atIndex: zone.childIndex
+                                        )
                                         trackMove(blockID: placed.id.uuidString)
                                         sessionHaptic = .validDrop
                                     }
@@ -235,8 +239,8 @@ struct FixThisMessVisualView: View {
             // Change tracking indicator
             if !movedBlockIDs.isEmpty {
                 Text(language == "de"
-                     ? "\(movedBlockIDs.count) Block(s) verschoben"
-                     : "\(movedBlockIDs.count) block(s) moved")
+                    ? "\(movedBlockIDs.count) Block(s) verschoben"
+                    : "\(movedBlockIDs.count) block(s) moved")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.bottom, 8)
@@ -291,9 +295,9 @@ struct FixThisMessVisualView: View {
         }
 
         // Any blocks not in the wrong arrangement go to unplaced pool
-        let placedIDs = Set(treeState.placedBlocks.keys.map { $0.uuidString })
+        let placedIDs = Set(treeState.placedBlocks.keys.map(\.uuidString))
         for block in exercise.blocks {
-            if blockMap[block.id] != nil && !placedIDs.contains(blockMap[block.id]!.id.uuidString) {
+            if blockMap[block.id] != nil, !placedIDs.contains(blockMap[block.id]!.id.uuidString) {
                 treeState.addToUnplacedPool(blockMap[block.id]!)
             }
         }
@@ -343,7 +347,7 @@ struct FixThisMessVisualView: View {
 
     private func buildArrangementDescription(result: PyramidValidationResult) -> String {
         let score = Int(result.score * 100)
-        let correct = result.blockStatuses.values.filter { if case .correct = $0 { return true } else { return false } }.count
+        let correct = result.blockStatuses.values.count(where: { if case .correct = $0 { true } else { false } })
         let total = result.blockStatuses.count
         let govCorrect = result.governingThoughtCorrect ? "yes" : "no"
 
@@ -386,14 +390,14 @@ struct FixThisMessVisualView: View {
                 .foregroundStyle(.secondary)
 
             Text(language == "de"
-                 ? "Keine \u{00DC}bungen verf\u{00FC}gbar"
-                 : "No exercises available")
+                ? "Keine \u{00DC}bungen verf\u{00FC}gbar"
+                : "No exercises available")
                 .font(.title3)
                 .fontWeight(.semibold)
 
             Text(language == "de"
-                 ? "Es gibt aktuell keine passenden \u{00DC}bungen f\u{00FC}r dein Level."
-                 : "There are no matching exercises for your current level.")
+                ? "Es gibt aktuell keine passenden \u{00DC}bungen f\u{00FC}r dein Level."
+                : "There are no matching exercises for your current level.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
