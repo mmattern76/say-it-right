@@ -287,6 +287,10 @@ final class AppSettings: @unchecked Sendable {
         if status == errSecSuccess, let data = result as? Data {
             _elevenLabsKey = String(data: data, encoding: .utf8)
         }
+        // Fall back to bundled Config.plist if Keychain has no key
+        if _elevenLabsKey == nil {
+            _elevenLabsKey = ConfigProvider.elevenLabsAPIKey
+        }
     }
 
     /// Platform default for TTS auto-play.

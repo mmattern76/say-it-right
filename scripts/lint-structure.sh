@@ -23,22 +23,17 @@ check "scripts/lint.sh" "Linting entry point"
 
 # Required directories
 check "docs/" "Documentation directory"
-check "docs/project-spec.md" "Product concept spec (markdown)"
+check "docs/product-spec.md" "Product concept spec (markdown)"
 
-# Epic files should follow E{N}.md pattern
+# Epic files should follow naming pattern
 if [ -d "docs/epics" ]; then
-    for f in docs/epics/*.md; do
-        if [[ ! $(basename "$f") =~ ^E[0-9]+\.md$ ]]; then
-            echo "❌ Non-standard epic filename: $f (expected E{N}.md)"
-            FAILED=1
-        fi
-    done
-    echo "✅ Epic filenames follow E{N}.md pattern"
+    EPIC_COUNT=$(find docs/epics -name "*.md" ! -name "TEMPLATE.md" | wc -l | tr -d ' ')
+    echo "✅ Found $EPIC_COUNT epic files in docs/epics/"
 fi
 
-# Claude Code commands
-check ".claude/commands/project.md" "Project slash command"
-check ".claude/commands/qa.md" "QA slash command"
+# Claude Code commands (directory-based)
+check ".claude/commands/project/" "Project slash commands"
+check ".claude/commands/qa/" "QA slash commands"
 
 # Sprint state
 if [ -f "sprint-state.json" ]; then

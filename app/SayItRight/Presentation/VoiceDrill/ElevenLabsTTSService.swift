@@ -96,7 +96,9 @@ final class ElevenLabsTTSService: NSObject, TTSPlaybackService, @unchecked Senda
             }
 
             let langCode = language.hasPrefix("de") ? "de" : "en"
-            let voiceID = Self.defaultVoiceIDs[langCode] ?? Self.defaultVoiceIDs["en"]!
+            let voiceID = ConfigProvider.elevenLabsVoiceID(for: langCode)
+                ?? Self.defaultVoiceIDs[langCode]
+                ?? Self.defaultVoiceIDs["en"]!
 
             do {
                 let audioData = try await fetchAudio(
