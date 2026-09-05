@@ -104,7 +104,11 @@ struct VoiceFindThePointView: View {
                     }
                 }
             }
+            .onChange(of: ttsEnabled) { _, _ in
+                configureStreamingSpeech()
+            }
             .onDisappear {
+                sessionManager.streamingTTS = nil
                 ttsService.stop()
             }
             .task {
@@ -113,6 +117,7 @@ struct VoiceFindThePointView: View {
 
                 ttsService.prewarm()
                 configureTTSVoice()
+                configureStreamingSpeech()
 
                 let text = await coordinator.startSession(
                     sessionManager: sessionManager,
@@ -151,7 +156,26 @@ struct VoiceFindThePointView: View {
         ttsService.configuration = voiceProfile.ttsConfiguration(for: .observation)
     }
 
+    // MARK: - Streaming Speech
+
+    /// Hand Barbara's stream to the speech coordinator so she starts talking
+    /// after her first sentence instead of waiting for the whole reply.
+    ///
+    /// Cleared whenever she is muted, which puts the view back on the
+    /// speak-the-whole-message path (and on silence, on no path at all).
+    private func configureStreamingSpeech() {
+        guard ttsEnabled, !AppSettings.shared.effectiveIsTTSDisabled else {
+            sessionManager.streamingTTS = nil
+            ttsService.stop()
+            return
+        }
+        sessionManager.streamingTTS = StreamingTTSCoordinator(ttsService: ttsService)
+    }
+
     private func speakLatestBarbaraMessage() {
+        // Sentences were already spoken as they streamed in.
+        guard sessionManager.streamingTTS == nil else { return }
+
         guard ttsEnabled,
               let lastMessage = viewModel.messages.last,
               lastMessage.role == .barbara,
