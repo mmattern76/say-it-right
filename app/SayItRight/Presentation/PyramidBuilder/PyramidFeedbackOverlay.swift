@@ -57,44 +57,6 @@ struct PyramidFeedbackOverlay: View {
 
 // MARK: - Check My Work Button
 
-/// Button to toggle validation feedback visibility.
-///
-/// Used in manual feedback mode where the learner checks their own work
-/// before revealing the answer.
-struct CheckMyWorkButton: View {
-    @Binding var configuration: FeedbackConfiguration
-    /// Callback invoked when the user requests validation.
-    var onValidate: () -> Void
-
-    var body: some View {
-        Button {
-            if configuration.isEnabled {
-                // Toggle off.
-                configuration.isEnabled = false
-            } else {
-                // Run validation and show.
-                onValidate()
-                configuration.isEnabled = true
-            }
-        } label: {
-            Label(
-                configuration.isEnabled ? "Hide Feedback" : "Check My Work",
-                systemImage: configuration.isEnabled
-                    ? "eye.slash.fill"
-                    : "checkmark.shield.fill"
-            )
-            .font(.subheadline.weight(.medium))
-        }
-        .buttonStyle(.bordered)
-        .tint(configuration.isEnabled ? .secondary : .accentColor)
-        .accessibilityLabel(
-            configuration.isEnabled
-                ? "Hide validation feedback"
-                : "Check my work — show validation feedback"
-        )
-    }
-}
-
 // MARK: - Previews
 
 #Preview("Feedback Overlay — With Gaps") {
@@ -167,26 +129,6 @@ private struct FeedbackOverlayPreview: View {
         }
         .frame(height: 400)
         .padding()
-    }
-}
-
-#Preview("Check My Work Button") {
-    CheckMyWorkButtonPreview()
-}
-
-private struct CheckMyWorkButtonPreview: View {
-    @State private var config = FeedbackConfiguration()
-
-    var body: some View {
-        VStack(spacing: 20) {
-            CheckMyWorkButton(configuration: $config) {
-                // Simulate validation.
-            }
-            Text(config.isEnabled ? "Feedback: ON" : "Feedback: OFF")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding(40)
     }
 }
 

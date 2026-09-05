@@ -19,6 +19,7 @@ struct SayItClearlyView: View {
 
     @State private var viewModel: ChatViewModel
     @State private var sessionStarted = false
+    @State private var showRevisionDiff = false
     @State private var noTopicsAvailable = false
 
     init(
@@ -56,11 +57,49 @@ struct SayItClearlyView: View {
         #endif
             .toolbar {
                 ToolbarItem(placement: .automatic) {
+                    if let session = sessionManager.sayItClearlySession, session.attempts.count > 1 {
+                        Button {
+                            showRevisionDiff = true
+                        } label: {
+                            Label(
+                                language == "de" ? "Was hat sich geändert?" : "What changed?",
+                                systemImage: "arrow.left.arrow.right"
+                            )
+                        }
+                        .accessibilityIdentifier("revisionDiffButton")
+                    }
+                }
+                ToolbarItem(placement: .automatic) {
                     Button(action: endSessionAndDismiss) {
                         Label(
                             language == "de" ? "Beenden" : "End Session",
                             systemImage: "xmark.circle"
                         )
+                    }
+                }
+            }
+            .sheet(isPresented: $showRevisionDiff) {
+                if let session = sessionManager.sayItClearlySession,
+                   let first = session.attempts.first?.text,
+                   let latest = session.latestAttemptText
+                {
+                    NavigationStack {
+                        RevisionDiffView(
+                            originalText: first,
+                            revisedText: latest,
+                            language: language
+                        )
+                        .navigationTitle(language == "de" ? "Deine Überarbeitung" : "Your revision")
+                        #if !os(macOS)
+                            .navigationBarTitleDisplayMode(.inline)
+                        #endif
+                            .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                    Button(language == "de" ? "Fertig" : "Done") {
+                                        showRevisionDiff = false
+                                    }
+                                }
+                            }
                     }
                 }
             }

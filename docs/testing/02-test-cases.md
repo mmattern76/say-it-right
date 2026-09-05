@@ -55,6 +55,8 @@ Each test has a unique ID for traceability in test runs.
 | T-022 | S06 | Type response and send | PRE-01 | Barbara responds with structural feedback. Message appears in chat |
 | T-023 | S06 | Barbara response contains hidden metadata | PRE-01 | `<!-- BARBARA_META: {...} -->` present in raw response (parsed and hidden from UI) |
 | T-023a | S06/S07 | Metadata stays hidden *while streaming* | PRE-01 | The comment never appears in the bubble at any point during streaming, not even partially |
+| T-023b | S06/S07 | Revision diff appears after a second attempt | PRE-01, 2+ attempts | "What changed?" / "Was hat sich geändert?" toolbar button opens the attempt comparison; hidden with fewer than 2 attempts |
+| T-023c | S07 | Barbara starts speaking before the reply is complete | PRE-01, Silent OFF, TTS on | First sentence is spoken while later sentences still stream; debug log records `streaming_tts_latency` |
 | T-024 | S06 | "End Session" button works | PRE-01 | Returns to SessionPickerView (S04) |
 | T-025 | S06 | "No topics available" does NOT appear | PRE-01 | Topic selected and displayed; error view hidden |
 | T-026 | S07 | Voice input: tap mic, speak, submit transcription | PRE-01, PRE-10 | Transcribed text sent as message. Barbara responds |
@@ -187,6 +189,7 @@ Each test has a unique ID for traceability in test runs.
 |----|-----------|-----------|---------------|-----------------|
 | T-140 | S20 | Empty state (no sessions completed) | PRE-01, no sessions | "No sessions yet" or equivalent message |
 | T-141 | S20 | Dashboard with completed sessions | PRE-01, ≥1 session | Level card, streak, dimension chart, recent sessions list |
+| T-148 | S20→S26 | Level-up celebration fires once | 10 sessions, 4 dimensions ≥75% | Celebration sheet shows the new level and Barbara's quote; profile records the transition; it does not fire again on relaunch |
 | T-141a | S20 | A completed session is counted immediately | PRE-01 | Finish a scored session, tap Progress: session count, streak and dimension bars reflect it without relaunching |
 | T-142 | S20 | Recent sessions show ≤5 entries | PRE-01, ≥1 session | Last 5 sessions displayed as rows |
 | T-143 | S20 | "View all" link (if >5 sessions) | PRE-01, >5 sessions | Navigates to SessionHistoryView (S22) |

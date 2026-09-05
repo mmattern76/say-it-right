@@ -315,6 +315,15 @@ struct ContentView: View {
         .task {
             await learnerState.start(sessionManager: sessionManager)
         }
+        .sheet(item: $learnerState.pendingLevelUp) { transition in
+            LevelUpCelebrationView(
+                fromLevel: transition.fromLevel,
+                toLevel: transition.toLevel,
+                language: language
+            ) {
+                learnerState.pendingLevelUp = nil
+            }
+        }
         .onChange(of: sessionManager.activeSessionType) { _, newValue in
             // A session just ended — pick up the streak, level and history it wrote.
             if newValue == nil {
