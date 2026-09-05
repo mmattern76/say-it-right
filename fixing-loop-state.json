@@ -1,0 +1,30 @@
+{
+  "iteration": 3,
+  "started_at": "2026-09-03T23:45:00Z",
+  "ended_at": "2026-09-04T00:45:00Z",
+  "branch": "feat/174-silent-mode-toggle",
+  "devices": [
+    "Geppetto (say-it-right — iPhone 17 Pro) / 72A84808-AE57-4C45-A28A-AEB55F27A34A",
+    "Geppetto (say-it-right — iPad Pro 13 inch M4) / A0F14DB4-FC8D-42CA-8FEE-A464703D9955"
+  ],
+  "launch_env": { "SIR_TTS_DISABLED": "1" },
+  "tier": "full (iPhone + iPad, EN + DE)",
+  "status": "issues_found",
+  "issues_found": [
+    "F1 raw **markdown** rendered literally in every chat bubble (MessageBubbleView:57)",
+    "F2 <!-- BARBARA_META --> visible while streaming (stripped only after the stream ends)",
+    "F5 CRITICAL: State layer unwired — profile is rebuilt from defaults on every access, LearnerProfileStore/SessionHistoryStore never instantiated; no progress, history, streaks or level-up",
+    "F6 silent-mode toggle only reacts to taps on the switch, not the row",
+    "F7 level names hardcoded German in the English UI (ParentSettingsView:324)",
+    "F8 break mode shows the practice text twice (reading card + repeated in Barbara's bubble)",
+    "F9 HIGH: Elevator Pitch timer never starts when Barbara's voice is off (timer is started from the TTS finished callback)",
+    "F10 CRITICAL: pyramid + fix-this-mess exercise JSON never decodes (redHerringBlockIDs default value is still a required Codable key) — Build the pyramid and Fix this mess (visual) are always empty",
+    "F11 Settings partially and ParentSettings entirely untranslated in German",
+    "F12 minor copy/layout nits",
+    "F4 observed once: 100% CPU SwiftUI update loop on the chat screen (not reproduced)"
+  ],
+  "issues_fixed_in_branch": [],
+  "prs_merged": [],
+  "report": "docs/testing/2026-09-04-geppetto-qa-report.md",
+  "note": "Supersedes the earlier iteration-2 clean_pass, which only walked the smoke tier and only checked silent-mode behaviour."
+}
