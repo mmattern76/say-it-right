@@ -41,27 +41,72 @@ if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
   exit 1
 fi
 
-# Find the item ID for this issue in the project
-ITEM_ID=$(gh api graphql -f query='
-  query($projectId: ID!) {
+# Find the item ID for this issue in the project.
+#
+# The board is paged: `items(first: 100)` silently misses everything after the
+# first hundred, which is why newly filed issues used to report "not found".
+# Walk every page until the issue turns up.
+ITEMS_QUERY='
+  query($projectId: ID!, $cursor: String) {
     node(id: $projectId) {
       ... on ProjectV2 {
-        items(first: 100) {
+        items(first: 100, after: $cursor) {
+          pageInfo { hasNextPage endCursor }
           nodes {
             id
             content {
               ... on Issue { number }
+              ... on PullRequest { number }
             }
           }
         }
       }
     }
-  }' -f projectId="$PROJECT_ID" \
-  --jq ".data.node.items.nodes[] | select(.content.number == $ISSUE_NUM) | .id")
+  }'
 
+ITEM_ID=""
+CURSOR=""
+
+while :; do
+  # The first page has no cursor; `-f cursor=""` would send the empty string,
+  # which the API rejects, so the argument is only passed once we have one.
+  if [ -z "$CURSOR" ]; then
+    PAGE=$(gh api graphql -f query="$ITEMS_QUERY" -f projectId="$PROJECT_ID")
+  else
+    PAGE=$(gh api graphql -f query="$ITEMS_QUERY" -f projectId="$PROJECT_ID" -f cursor="$CURSOR")
+  fi
+
+  ITEM_ID=$(echo "$PAGE" | jq -r ".data.node.items.nodes[] | select(.content.number == $ISSUE_NUM) | .id" | head -1)
+  [ -n "$ITEM_ID" ] && [ "$ITEM_ID" != "null" ] && break
+
+  HAS_NEXT=$(echo "$PAGE" | jq -r '.data.node.items.pageInfo.hasNextPage')
+  [ "$HAS_NEXT" = "true" ] || break
+  CURSOR=$(echo "$PAGE" | jq -r '.data.node.items.pageInfo.endCursor')
+done
+
+# Not on the board at all — a freshly filed issue. Add it, then move it.
 if [ -z "$ITEM_ID" ] || [ "$ITEM_ID" = "null" ]; then
-  echo "Issue #$ISSUE_NUM not found on project board"
-  exit 1
+  CONTENT_ID=$(gh issue view "$ISSUE_NUM" --json id -q '.id' 2>/dev/null || true)
+
+  if [ -z "$CONTENT_ID" ] || [ "$CONTENT_ID" = "null" ]; then
+    echo "Issue #$ISSUE_NUM not found in $REPO_OWNER/$REPO_NAME"
+    exit 1
+  fi
+
+  ITEM_ID=$(gh api graphql -f query='
+    mutation($projectId: ID!, $contentId: ID!) {
+      addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+        item { id }
+      }
+    }' -f projectId="$PROJECT_ID" -f contentId="$CONTENT_ID" \
+    --jq '.data.addProjectV2ItemById.item.id')
+
+  if [ -z "$ITEM_ID" ] || [ "$ITEM_ID" = "null" ]; then
+    echo "Could not add issue #$ISSUE_NUM to the project board"
+    exit 1
+  fi
+
+  echo "Added issue #$ISSUE_NUM to the board"
 fi
 
 # Find the Status field ID and the option ID for the target column
