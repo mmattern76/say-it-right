@@ -61,15 +61,6 @@ final class AppSettings: @unchecked Sendable {
         }
     }
 
-    /// Resolve the selected model from the catalog, with automatic fallback.
-    var resolvedModel: AnthropicModelInfo? {
-        let catalog = ModelCatalog.shared
-        if let exact = catalog.models.first(where: { $0.id == selectedModelID }) {
-            return exact
-        }
-        return catalog.bestFallback(for: selectedModelID)
-    }
-
     /// Handle "unknown model" errors from the API by auto-selecting the best fit.
     func handleUnknownModelError() {
         if let fallback = ModelCatalog.shared.bestFallback(for: selectedModelID) {
