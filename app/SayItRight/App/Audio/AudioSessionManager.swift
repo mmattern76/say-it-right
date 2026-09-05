@@ -76,9 +76,17 @@ final class AudioSessionManager: @unchecked Sendable {
     private var routeChangeObserver: (any NSObjectProtocol)?
     #endif
 
+    /// Whether Barbara's voice is currently muted.
+    ///
+    /// Injectable so tests can pin the value — reading `AppSettings.shared`
+    /// directly would make every playback assertion depend on whatever Silent
+    /// Mode happens to be set to on the device running the tests.
+    private let isSilent: @Sendable () -> Bool
+
     // MARK: - Init / Deinit
 
-    init() {
+    init(isSilent: @escaping @Sendable () -> Bool = { AppSettings.shared.effectiveIsTTSDisabled }) {
+        self.isSilent = isSilent
         #if os(iOS)
         registerNotifications()
         #endif
@@ -93,7 +101,12 @@ final class AudioSessionManager: @unchecked Sendable {
     // MARK: - Public API
 
     /// Call when TTS playback begins.
+    ///
+    /// When Silent Mode is active, this is a no-op — we don't activate the
+    /// audio session purely for TTS that won't produce sound. Recording
+    /// activation is unaffected, so voice sessions can still capture mic input.
     func activateForPlayback() {
+        if isSilent() { return }
         updateMode(addingPlayback: true, addingRecord: currentMode == .playAndRecord || currentMode == .recordOnly)
     }
 

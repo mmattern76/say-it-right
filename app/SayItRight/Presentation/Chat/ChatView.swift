@@ -26,6 +26,12 @@ struct ChatView: View {
     /// is provided, `.text` otherwise. Users can toggle mid-session.
     @State private var inputMode: ChatInputMode = .text
 
+    /// When the list was last scrolled for a streaming text update.
+    @State private var lastStreamingScroll = Date.distantPast
+
+    /// Minimum gap between scrolls while a message streams in.
+    private static let streamingScrollInterval: TimeInterval = 0.1
+
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
@@ -55,9 +61,15 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorState.isShowingError)
         .onAppear {
-            // Default input mode based on platform preference
+            // Default input mode based on platform preference.
+            // The SIR_FORCE_TEXT_INPUT launch-env override forces text mode for
+            // automation runs (Geppetto), bypassing the saved voice preference.
             if voiceInputViewModel != nil {
-                inputMode = AppSettings.shared.preferredInputMode == "voice" ? .voice : .text
+                if AppSettings.envForceTextInput {
+                    inputMode = .text
+                } else {
+                    inputMode = AppSettings.shared.preferredInputMode == "voice" ? .voice : .text
+                }
             }
         }
     }
@@ -166,10 +178,15 @@ struct ChatView: View {
                 .padding(.vertical, 12)
             }
             .onChange(of: viewModel.messages.count) { _, _ in
-                scrollToBottom(proxy: proxy)
+                scrollToBottom(proxy: proxy, animated: !isStreaming)
             }
             .onChange(of: viewModel.messages.last?.text) { _, _ in
-                scrollToBottom(proxy: proxy)
+                // Barbara's text grows with every streamed chunk — dozens of times
+                // a second. Animating each of those scrolls starts an animation the
+                // next chunk immediately restarts, and scrolling on every one of
+                // them re-lays out the whole list, so streaming scrolls are
+                // unanimated and coalesced.
+                scrollDuringStreaming(proxy: proxy)
             }
         }
     }
@@ -316,9 +333,26 @@ struct ChatView: View {
         }
     }
 
-    private func scrollToBottom(proxy: ScrollViewProxy) {
+    /// Whether Barbara's latest message is still arriving.
+    private var isStreaming: Bool {
+        viewModel.messages.last?.isStreaming == true
+    }
+
+    /// Scroll while text is streaming in, at most `streamingScrollInterval` apart.
+    private func scrollDuringStreaming(proxy: ScrollViewProxy) {
+        let now = Date.now
+        guard now.timeIntervalSince(lastStreamingScroll) >= Self.streamingScrollInterval else { return }
+        lastStreamingScroll = now
+        scrollToBottom(proxy: proxy, animated: false)
+    }
+
+    private func scrollToBottom(proxy: ScrollViewProxy, animated: Bool = true) {
         guard let lastMessage = viewModel.messages.last else { return }
-        withAnimation(.easeOut(duration: 0.2)) {
+        if animated {
+            withAnimation(.easeOut(duration: 0.2)) {
+                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+            }
+        } else {
             proxy.scrollTo(lastMessage.id, anchor: .bottom)
         }
     }

@@ -162,12 +162,14 @@ struct OnboardingView: View {
         typedText = ""
         isTyping = true
 
-        // Start TTS
-        let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: settings.language == "de" ? "de-DE" : "en-US")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
-        utterance.pitchMultiplier = 1.05
-        synthesizer.speak(utterance)
+        // Start TTS — respect global silent mode (SIR-076).
+        if !AppSettings.shared.effectiveIsTTSDisabled {
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = AVSpeechSynthesisVoice(language: settings.language == "de" ? "de-DE" : "en-US")
+            utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
+            utterance.pitchMultiplier = 1.05
+            synthesizer.speak(utterance)
+        }
 
         // Type out character by character
         for char in text {
@@ -255,11 +257,13 @@ struct WelcomeReplayView: View {
         typedText = ""
         isPlaying = true
 
-        let utterance = AVSpeechUtterance(string: message)
-        utterance.voice = AVSpeechSynthesisVoice(language: settings.language == "de" ? "de-DE" : "en-US")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
-        utterance.pitchMultiplier = 1.05
-        synthesizer.speak(utterance)
+        if !AppSettings.shared.effectiveIsTTSDisabled {
+            let utterance = AVSpeechUtterance(string: message)
+            utterance.voice = AVSpeechSynthesisVoice(language: settings.language == "de" ? "de-DE" : "en-US")
+            utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
+            utterance.pitchMultiplier = 1.05
+            synthesizer.speak(utterance)
+        }
 
         for char in message {
             typedText.append(char)

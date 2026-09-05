@@ -86,8 +86,16 @@ app.launchArguments += ["-skipOnboarding"]          // Jump to main hub
 app.launchArguments += ["-language", "de"]          // Force German
 app.launchArguments += ["-levelOverride", "2"]      // Set level
 app.launchEnvironment["ANTHROPIC_API_KEY_OVERRIDE"] = TestConfig.anthropicAPIKey
+app.launchEnvironment["SIR_TTS_DISABLED"] = "1"     // Mute Barbara during automation
 app.launch()
 ```
+
+**`SIR_TTS_DISABLED`** is the global silent-mode override (SIR-076). When set
+to `1`, `true`, or `yes`, ``TTSServiceFactory`` returns ``NoOpTTSService``
+regardless of the saved Settings value — so audio playback never fights with
+test timing on the simulator. STT (microphone) is unaffected. The
+**Geppetto** UI test automation tool (`../geppetto`) should always pass this
+env var on launch.
 
 **App-side handling** (add to AppSettings.init or app entry):
 ```swift
@@ -220,6 +228,7 @@ These already exist or need to be added to views:
 | PIN entry field | `pinEntryField` | Needs adding |
 | Level override picker | `levelOverridePicker` | Needs adding |
 | Debug mode toggle | `debugModeToggle` | Needs adding |
+| Silent mode toggle (Parent Settings) | `settings.silentMode.toggle` | Exists (SIR-076) |
 
 ---
 

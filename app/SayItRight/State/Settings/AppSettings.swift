@@ -46,6 +46,7 @@ final class AppSettings: @unchecked Sendable {
             self._ttsAutoPlay = Self.platformDefaultTTSAutoPlay
         }
         self._ttsProvider = defaults.string(forKey: "ttsProvider") ?? "apple"
+        self._isTTSDisabled = defaults.bool(forKey: "isTTSDisabled")
         self._elevenLabsKeyLoaded = false
     }
 
@@ -215,6 +216,53 @@ final class AppSettings: @unchecked Sendable {
         set {
             _ttsAutoPlay = newValue
             UserDefaults.standard.set(newValue, forKey: "ttsAutoPlay")
+        }
+    }
+
+    // MARK: - Silent Mode (Disable TTS)
+
+    private var _isTTSDisabled: Bool
+    /// Global kill switch for Barbara's voice. When true, all TTS calls become no-ops.
+    /// STT (microphone) is unaffected.
+    var isTTSDisabled: Bool {
+        get { _isTTSDisabled }
+        set {
+            _isTTSDisabled = newValue
+            // swiftlint:disable:next no_userdefaults_for_data
+            UserDefaults.standard.set(newValue, forKey: "isTTSDisabled")
+        }
+    }
+
+    /// Effective silent flag: respects the `SIR_TTS_DISABLED` launch-environment
+    /// variable so Geppetto / UI tests can force-mute TTS without touching the UI.
+    /// Accepts `1`, `true`, `yes` (case-insensitive).
+    var effectiveIsTTSDisabled: Bool {
+        if Self.envForceTTSDisabled { return true }
+        return _isTTSDisabled
+    }
+
+    /// Whether the `SIR_TTS_DISABLED` launch-environment variable is set to a
+    /// truthy value. `ProcessInfo.environment` is fixed for the process
+    /// lifetime, so this is effectively constant after launch.
+    static var envForceTTSDisabled: Bool {
+        parseEnvDisabledFlag(ProcessInfo.processInfo.environment["SIR_TTS_DISABLED"])
+    }
+
+    /// Whether the `SIR_FORCE_TEXT_INPUT` launch-environment variable is set to
+    /// a truthy value. When true, voice-variant session views (used on iPhone
+    /// compact width) are bypassed in favour of the regular text-input views.
+    /// Companion to `envForceTTSDisabled` for full text-only automation runs.
+    static var envForceTextInput: Bool {
+        parseEnvDisabledFlag(ProcessInfo.processInfo.environment["SIR_FORCE_TEXT_INPUT"])
+    }
+
+    /// Parse a launch-environment-style boolean. Accepts `1`, `true`, `yes`
+    /// (case-insensitive). Exposed for testing.
+    static func parseEnvDisabledFlag(_ raw: String?) -> Bool {
+        guard let raw else { return false }
+        switch raw.lowercased() {
+            case "1", "true", "yes": return true
+            default: return false
         }
     }
 

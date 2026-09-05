@@ -52,6 +52,7 @@ struct SayItRightApp: App {
 struct ContentView: View {
     @Environment(AppSettings.self) private var settings
     @State private var sessionManager = SessionManager()
+    @State private var learnerState = LearnerState()
     @State private var coordinator = SayItClearlyCoordinator()
     @State private var findThePointCoordinator = FindThePointCoordinator()
     @State private var elevatorPitchCoordinator = ElevatorPitchCoordinator()
@@ -81,11 +82,15 @@ struct ContentView: View {
         settings.language
     }
 
+    /// The learner's persisted profile with the current settings applied on top.
+    ///
+    /// Progress (level, streak, session count, dimension scores) comes from disk
+    /// via ``LearnerState``; name and language are owned by settings, and the
+    /// parent-settings level override wins over the earned level when set.
     private var profile: LearnerProfile {
-        var p = LearnerProfile.createDefault(
-            displayName: settings.displayName,
-            language: language
-        )
+        var p = learnerState.profile
+        p.displayName = settings.displayName
+        p.language = language
         if settings.levelOverride > 0 {
             p.currentLevel = settings.levelOverride
         }
@@ -103,7 +108,7 @@ struct ContentView: View {
                 switch sessionType {
                     case .sayItClearly:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceSayItClearly = true
                         } else {
                             showSayItClearly = true
@@ -113,7 +118,7 @@ struct ContentView: View {
                         #endif
                     case .findThePoint:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceFindThePoint = true
                         } else {
                             showFindThePoint = true
@@ -123,7 +128,7 @@ struct ContentView: View {
                         #endif
                     case .elevatorPitch:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceElevatorPitch = true
                         } else {
                             showElevatorPitch = true
@@ -273,8 +278,10 @@ struct ContentView: View {
             .navigationDestination(isPresented: $showDashboard) {
                 ProgressDashboardView(
                     profile: profile,
-                    language: language
+                    language: language,
+                    recentSessions: learnerState.recentSessions
                 )
+                .task { await learnerState.reload(sessionManager: sessionManager) }
             }
             .toolbar {
                 ToolbarItem(placement: .automatic) {
@@ -303,6 +310,15 @@ struct ContentView: View {
             .sheet(isPresented: $showSettings) {
                 SettingsView()
                     .environment(settings)
+            }
+        }
+        .task {
+            await learnerState.start(sessionManager: sessionManager)
+        }
+        .onChange(of: sessionManager.activeSessionType) { _, newValue in
+            // A session just ended — pick up the streak, level and history it wrote.
+            if newValue == nil {
+                Task { await learnerState.reload(sessionManager: sessionManager) }
             }
         }
     }

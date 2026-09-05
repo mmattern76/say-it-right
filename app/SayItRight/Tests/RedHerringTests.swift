@@ -22,6 +22,71 @@ struct RedHerringTests {
         #expect(type.blockType == .redHerring)
     }
 
+    // MARK: - Answer Key Decoding
+
+    @Test("PyramidAnswerKey decodes when redHerringBlockIDs is absent")
+    func answerKeyDecodesWithoutRedHerringKey() throws {
+        // Most exercises have no red herrings and omit the key entirely. A default
+        // value on the property does not make it optional for a synthesized
+        // Codable, so this used to throw and empty the whole exercise library.
+        let json = """
+        {
+            "governingThoughtID": "gt-001",
+            "validGroupings": [
+                { "groups": [ { "parentBlockID": "sp-001", "memberBlockIDs": ["ev-001"] } ] }
+            ]
+        }
+        """
+        let key = try JSONDecoder().decode(PyramidAnswerKey.self, from: Data(json.utf8))
+        #expect(key.governingThoughtID == "gt-001")
+        #expect(key.redHerringBlockIDs.isEmpty)
+    }
+
+    @Test("PyramidAnswerKey decodes redHerringBlockIDs when present")
+    func answerKeyDecodesWithRedHerringKey() throws {
+        let json = """
+        {
+            "governingThoughtID": "gt-001",
+            "validGroupings": [
+                { "groups": [ { "parentBlockID": "sp-001", "memberBlockIDs": ["ev-001"] } ] }
+            ],
+            "redHerringBlockIDs": ["rh-001", "rh-002"]
+        }
+        """
+        let key = try JSONDecoder().decode(PyramidAnswerKey.self, from: Data(json.utf8))
+        #expect(key.redHerringBlockIDs == ["rh-001", "rh-002"])
+    }
+
+    @Test("A whole exercise decodes when its answer key omits redHerringBlockIDs")
+    func exerciseDecodesWithoutRedHerringKey() throws {
+        // The library decodes exercises as one array, so a single throwing element
+        // empties the entire library — which the learner sees as
+        // "No exercises available" at every level.
+        let json = """
+        [{
+            "id": "pe-test-en",
+            "titleEN": "Test",
+            "titleDE": "Test",
+            "level": 1,
+            "language": "en",
+            "governingThought": { "id": "gt-001", "text": "Claim.", "type": "governing_thought" },
+            "blocks": [
+                { "id": "sp-001", "text": "Support.", "type": "support_point" },
+                { "id": "ev-001", "text": "Evidence.", "type": "evidence" }
+            ],
+            "answerKey": {
+                "governingThoughtID": "gt-001",
+                "validGroupings": [
+                    { "groups": [ { "parentBlockID": "sp-001", "memberBlockIDs": ["ev-001"] } ] }
+                ]
+            }
+        }]
+        """
+        let exercises = try JSONDecoder().decode([PyramidExercise].self, from: Data(json.utf8))
+        #expect(exercises.count == 1)
+        #expect(exercises[0].answerKey.redHerringBlockIDs.isEmpty)
+    }
+
     // MARK: - Answer Key
 
     @Test("PyramidAnswerKey supports redHerringBlockIDs")
