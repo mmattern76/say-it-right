@@ -324,6 +324,39 @@ final class SessionManager {
     }
 
     /// Build the topic directive block injected into the system prompt.
+    /// Tells Barbara to score a break-mode evaluation.
+    ///
+    /// The build-mode rubric blocks name their dimensions, so build sessions come
+    /// back scored. Break mode had no such instruction, so its `BARBARA_META`
+    /// arrived with an empty `scores` object — which meant break sessions counted
+    /// for nothing: no profile update, no streak, no history entry, no progress
+    /// toward a level. These are the dimensions `ProfileUpdater.maxScores`
+    /// already defines for break mode.
+    private func breakModeScoringBlock(dimensions: [String]) -> String {
+        let lines = dimensions.map { dimension -> String in
+            let max = ProfileUpdater.maxScores[dimension] ?? 3
+            return "- `\(dimension)` (0-\(max)): \(Self.breakDimensionGuidance[dimension] ?? "")"
+        }.joined(separator: "\n")
+
+        return """
+        ## Scoring
+
+        When you evaluate the learner's answer — not when greeting or presenting the
+        text — include these dimensions in the `BARBARA_META` `scores` object and set
+        `totalScore` to their sum:
+        \(lines)
+
+        Greetings and prompts keep `scores` empty and `totalScore` at 0, as usual.
+        """
+    }
+
+    /// What each break-mode dimension measures, for the scoring instruction.
+    private static let breakDimensionGuidance: [String: String] = [
+        "extractionAccuracy": "did they name the governing thought itself, rather than a summary, a topic, or a supporting detail?",
+        "flawIdentification": "did they locate the actual structural flaw, and can they say why it breaks the argument?",
+        "restructuringQuality": "does their rebuilt version lead with the conclusion and group its support cleanly?",
+    ]
+
     private func topicDirectiveBlock(topic: Topic, language: String) -> String {
         let title = topic.title(for: language)
         let prompt = topic.prompt(for: language)
@@ -369,6 +402,8 @@ final class SessionManager {
         **Answer Key (HIDDEN — do not reveal):**
         Governing Thought: \(practiceText.answerKey.governingThought)
         Structural Assessment: \(practiceText.answerKey.structuralAssessment)
+
+        \(breakModeScoringBlock(dimensions: ["extractionAccuracy"]))
         """
     }
 
@@ -608,6 +643,8 @@ final class SessionManager {
         two ideas — split them."
         - Word count hint: the restructured version should be similar length \
         to the original (\(practiceText.metadata.wordCount) words).
+
+        \(breakModeScoringBlock(dimensions: ["restructuringQuality"]))
         """
     }
 
@@ -699,6 +736,8 @@ final class SessionManager {
         just the structural concept.
         - Hints teach the NARROWING methodology: area → element → specific. \
         This narrowing process IS the skill being taught.
+
+        \(breakModeScoringBlock(dimensions: ["flawIdentification"]))
         """
     }
 
@@ -970,6 +1009,8 @@ final class SessionManager {
         - Phase 2 score: how well they rebuilt it
         - Key insight connecting both phases
         Set sessionPhase to "summary" for the final message.
+
+        \(breakModeScoringBlock(dimensions: ["extractionAccuracy", "restructuringQuality"]))
         """
     }
 
@@ -1089,6 +1130,57 @@ final class SessionManager {
         Task { await structuralEvaluator.reset() }
     }
 
+    // MARK: - Private: Break Mode Evaluation
+
+    /// Record how well the learner read the text, from the metadata Barbara
+    /// already sends.
+    ///
+    /// Break mode used to throw this away: the answer key goes into her system
+    /// prompt, she scores against it, and nothing kept the result. Rather than
+    /// ask her for a second metadata block that repeats `BARBARA_META` field for
+    /// field, the comparison is derived from the scores already in hand.
+    private func recordBreakModeEvaluation(from metadata: BarbaraMetadata, feedback: String) {
+        guard findThePointSession != nil, !metadata.scores.isEmpty else { return }
+
+        let result = AnswerKeyComparisonResult(
+            matchQuality: Self.matchQuality(for: metadata.scores),
+            feedback: feedback,
+            dimensionScores: metadata.scores,
+            metadata: ComparisonMetadata(
+                mood: metadata.mood.rawValue,
+                progressionSignal: metadata.progressionSignal.rawValue,
+                sessionPhase: metadata.sessionPhase.rawValue,
+                feedbackFocus: metadata.feedbackFocus,
+                language: metadata.language
+            )
+        )
+        findThePointSession?.recordEvaluation(result)
+    }
+
+    /// Bucket the scored dimensions into a match quality.
+    ///
+    /// Uses the same 0.75 threshold the progression criteria use for "strong",
+    /// so "correct extraction" and "ready to level up" mean the same thing.
+    nonisolated static func matchQuality(for scores: [String: Int]) -> MatchQuality {
+        var total = 0.0
+        var count = 0.0
+        for (dimension, score) in scores {
+            guard let maxScore = ProfileUpdater.maxScores[dimension], maxScore > 0 else { continue }
+            total += Double(score) / Double(maxScore)
+            count += 1
+        }
+        guard count > 0 else { return .low }
+
+        let normalised = total / count
+        if normalised >= 0.75 {
+            return .high
+        }
+        if normalised >= 0.5 {
+            return .partial
+        }
+        return .low
+    }
+
     // MARK: - Private: Session Persistence
 
     /// Record the level and language a session ran at, for its history entry.
@@ -1115,7 +1207,8 @@ final class SessionManager {
             language: sessionLanguage,
             attemptCount: scored.count,
             dimensionScores: last.scores,
-            overallAssessment: last.progressionSignal.rawValue,
+            overallAssessment: findThePointSession?.evaluationResult?.matchQuality.rawValue
+                ?? last.progressionSignal.rawValue,
             barbaraSummary: messages.last { $0.role == .barbara }?.text ?? "",
             levelAtSession: sessionLevel
         )
@@ -1319,6 +1412,7 @@ final class SessionManager {
             if let metadata = parsed.metadata {
                 messages[streamingIndex].metadata = metadata
                 sessionMetadata.append(metadata)
+                recordBreakModeEvaluation(from: metadata, feedback: parsed.visibleText)
 
                 // Capture evaluation result when the response contains scores
                 if !metadata.scores.isEmpty {

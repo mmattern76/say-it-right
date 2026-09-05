@@ -1,5 +1,10 @@
 import Foundation
 
+// Test scaffolding: compiled into Debug builds only, so it is available to the
+// unit tests and to the SwiftUI previews in VoiceInputView without shipping in
+// a release binary.
+#if DEBUG
+
 /// Mock implementation of SpeechRecognitionServiceProtocol for testing and SwiftUI previews.
 ///
 /// Configure the mock's behavior by setting properties before use:
@@ -72,3 +77,5 @@ final class MockSpeechRecognitionService: SpeechRecognitionServiceProtocol, @unc
         lastSetLocale = locale
     }
 }
+
+#endif
