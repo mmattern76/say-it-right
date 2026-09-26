@@ -55,9 +55,15 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorState.isShowingError)
         .onAppear {
-            // Default input mode based on platform preference
+            // Default input mode based on platform preference.
+            // The SIR_FORCE_TEXT_INPUT launch-env override forces text mode for
+            // automation runs (Geppetto), bypassing the saved voice preference.
             if voiceInputViewModel != nil {
-                inputMode = AppSettings.shared.preferredInputMode == "voice" ? .voice : .text
+                if AppSettings.envForceTextInput {
+                    inputMode = .text
+                } else {
+                    inputMode = AppSettings.shared.preferredInputMode == "voice" ? .voice : .text
+                }
             }
         }
     }

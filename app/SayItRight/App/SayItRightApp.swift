@@ -103,7 +103,7 @@ struct ContentView: View {
                 switch sessionType {
                     case .sayItClearly:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceSayItClearly = true
                         } else {
                             showSayItClearly = true
@@ -113,7 +113,7 @@ struct ContentView: View {
                         #endif
                     case .findThePoint:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceFindThePoint = true
                         } else {
                             showFindThePoint = true
@@ -123,7 +123,7 @@ struct ContentView: View {
                         #endif
                     case .elevatorPitch:
                         #if os(iOS)
-                        if horizontalSizeClass == .compact {
+                        if horizontalSizeClass == .compact, !AppSettings.envForceTextInput {
                             showVoiceElevatorPitch = true
                         } else {
                             showElevatorPitch = true
