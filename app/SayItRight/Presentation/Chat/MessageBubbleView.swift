@@ -54,7 +54,7 @@ struct MessageBubbleView: View {
                         .padding(.vertical, 6)
                 }
 
-                Text(message.text)
+                Text(message.text.barbaraMarkdown)
                     .font(.body)
                     .foregroundStyle(textColor)
                     .padding(.horizontal, 14)

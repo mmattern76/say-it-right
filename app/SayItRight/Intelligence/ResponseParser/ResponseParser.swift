@@ -111,4 +111,52 @@ struct ResponseParser {
 
         return ParsedResponse(visibleText: visibleText, metadata: metadata)
     }
+
+    /// Display text for a response that is still streaming.
+    ///
+    /// ``parse(fullResponse:)`` can only run once the whole reply has arrived,
+    /// so a chat view that shows the raw accumulated text renders the
+    /// `<!-- BARBARA_META: … -->` block character by character while it streams.
+    /// This strips it as it appears: complete blocks are removed, and an opener
+    /// that has no closer yet (down to a partial `<!` at the very end of the
+    /// buffer) hides everything after it until the block completes.
+    ///
+    /// - Parameter partial: The raw text accumulated so far.
+    /// - Returns: The text safe to show the learner right now.
+    func visibleTextWhileStreaming(_ partial: String) -> String {
+        // Drop any metadata blocks that have already closed.
+        var text = partial.replacing(Self.metadataBlock, with: "")
+
+        // Any remaining opener has not closed yet — the rest is still arriving.
+        if let openRange = text.range(of: Self.metadataOpener, options: .backwards) {
+            text = String(text[..<openRange.lowerBound])
+        } else if let partialOpener = Self.trailingPartialOpenerIndex(in: text) {
+            text = String(text[..<partialOpener])
+        }
+
+        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    // MARK: - Private
+
+    /// A closed metadata block, including the surrounding HTML comment markers.
+    ///
+    /// `Regex` is not `Sendable`, but this one is compiled once and only ever
+    /// read, so sharing it across isolation domains is safe.
+    private nonisolated(unsafe) static let metadataBlock = /<!--\s*BARBARA_META:\s*.*?\s*-->/
+        .dotMatchesNewlines()
+
+    private static let metadataOpener = "<!--"
+
+    /// Index at which a truncated `<!--` opener begins at the end of `text`,
+    /// e.g. a buffer ending in `<`, `<!` or `<!-`.
+    private static func trailingPartialOpenerIndex(in text: String) -> String.Index? {
+        for length in stride(from: metadataOpener.count - 1, through: 1, by: -1) {
+            let prefix = String(metadataOpener.prefix(length))
+            if text.hasSuffix(prefix) {
+                return text.index(text.endIndex, offsetBy: -length)
+            }
+        }
+        return nil
+    }
 }

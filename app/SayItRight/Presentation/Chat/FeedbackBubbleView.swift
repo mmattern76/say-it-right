@@ -121,7 +121,7 @@ struct FormattedFeedbackText: View {
         return segments.reduce(Text("")) { result, segment in
             switch segment {
                 case let .plain(str):
-                    result + Text(str)
+                    result + Text(str.barbaraMarkdown)
                 case let .quoted(str):
                     result + Text("\"\(str)\"")
                         .italic()

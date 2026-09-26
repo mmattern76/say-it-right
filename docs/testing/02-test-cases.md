@@ -54,6 +54,7 @@ Each test has a unique ID for traceability in test runs.
 | T-021 | S04→S07 | Tap "Sag's klar" on iPhone | PRE-01, PRE-07, PRE-10 | VoiceSayItClearlyView opens with voice input mode |
 | T-022 | S06 | Type response and send | PRE-01 | Barbara responds with structural feedback. Message appears in chat |
 | T-023 | S06 | Barbara response contains hidden metadata | PRE-01 | `<!-- BARBARA_META: {...} -->` present in raw response (parsed and hidden from UI) |
+| T-023a | S06/S07 | Metadata stays hidden *while streaming* | PRE-01 | The comment never appears in the bubble at any point during streaming, not even partially |
 | T-024 | S06 | "End Session" button works | PRE-01 | Returns to SessionPickerView (S04) |
 | T-025 | S06 | "No topics available" does NOT appear | PRE-01 | Topic selected and displayed; error view hidden |
 | T-026 | S07 | Voice input: tap mic, speak, submit transcription | PRE-01, PRE-10 | Transcribed text sent as message. Barbara responds |
@@ -68,6 +69,7 @@ Each test has a unique ID for traceability in test runs.
 | T-031 | S04→S09 | Tap "30 Sekunden" on iPhone | PRE-01, PRE-10 | VoiceElevatorPitchView opens with timer + voice |
 | T-032 | S08 | Timer counts down from 60s | PRE-01 | Timer displays countdown, color changes green→orange→red |
 | T-033 | S08 | Timer expiry auto-submits | PRE-01 | Input submitted automatically when timer reaches 0 |
+| T-033a | S09 | Timer starts with Barbara muted | PRE-01, Silent ON (or TTS toggle off) | Timer bar appears and counts down as soon as the opening message finishes streaming |
 | T-034 | S08 | Early submit before timer expiry | PRE-01 | Manual submit works. Timer stops |
 | T-035 | S08 | "End Session" returns to hub | PRE-01 | Returns to S04 |
 
@@ -125,6 +127,7 @@ Each test has a unique ID for traceability in test runs.
 |----|-----------|-----------|---------------|-----------------|
 | T-090 | S04→S25 | Tap "Build the pyramid" | PRE-01 | BuildThePyramidView opens. Pyramid canvas + ChatView sidebar |
 | T-091 | S25 | Exercise loaded (governing thought visible, unplaced blocks in pool) | PRE-01 | Exercise content displayed, not "No exercises available" |
+| T-091a | S25 | Exercise library loads at every level and language | PRE-01 | L1 and L2, EN and DE all present an exercise (regression: an answer key without `redHerringBlockIDs` used to empty the whole library) |
 | T-092 | S25 | Drag block from pool to drop zone | PRE-01 | Block snaps to position. Connection line appears |
 | T-093 | S25 | Tap "Check" button | PRE-01 | Validation feedback shown (correct/incorrect indicators) |
 | T-094 | S25 | Discard zone visible for red herring exercises | PRE-01 | Discard area shown when exercise contains distractors |
@@ -171,7 +174,6 @@ Each test has a unique ID for traceability in test runs.
 | T-132 | S18→S21 | Tap "View Debug Log" | PRE-05, PRE-06 | DebugLogView opens |
 | T-133 | S21 | Debug log shows entries (or empty state) | PRE-06 | List of debug entries or "No debug data" |
 | T-134 | S21 | Clear debug log | PRE-06 | Confirmation dialog. Log cleared |
-
 | T-135 | S18 | Silent mode toggle persists | PRE-05 | Toggle ON, close & reopen Settings — toggle still ON |
 | T-136 | S18 | Silent mode disables Voice Engine controls | PRE-05 | With Silent ON: Voice Engine picker and ElevenLabs fields are non-interactive |
 | T-137 | S18 | Silent mode footer text | PRE-05 | Footer reads: "Silent mode is on — Barbara will not speak. STT (your voice input) still works." |
@@ -185,6 +187,7 @@ Each test has a unique ID for traceability in test runs.
 |----|-----------|-----------|---------------|-----------------|
 | T-140 | S20 | Empty state (no sessions completed) | PRE-01, no sessions | "No sessions yet" or equivalent message |
 | T-141 | S20 | Dashboard with completed sessions | PRE-01, ≥1 session | Level card, streak, dimension chart, recent sessions list |
+| T-141a | S20 | A completed session is counted immediately | PRE-01 | Finish a scored session, tap Progress: session count, streak and dimension bars reflect it without relaunching |
 | T-142 | S20 | Recent sessions show ≤5 entries | PRE-01, ≥1 session | Last 5 sessions displayed as rows |
 | T-143 | S20 | "View all" link (if >5 sessions) | PRE-01, >5 sessions | Navigates to SessionHistoryView (S22) |
 | T-144 | S20→S23 | Tap a recent session row | PRE-01, ≥1 session | SessionDetailView opens with full details |

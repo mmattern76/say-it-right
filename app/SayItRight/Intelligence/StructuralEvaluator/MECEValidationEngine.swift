@@ -17,6 +17,25 @@ struct PyramidAnswerKey: Equatable, Codable {
     var redHerringBlockIDs: Set<String> = []
 }
 
+extension PyramidAnswerKey {
+    /// Decodes an answer key, treating `redHerringBlockIDs` as optional.
+    ///
+    /// A default value on a stored property does **not** make its key optional
+    /// for a synthesized `Codable` — the key stays required at decode time.
+    /// Exercises without red herrings omit it, so decoding the whole exercise
+    /// library used to throw and leave the library empty. Declared in an
+    /// extension so the memberwise initialiser is preserved.
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.governingThoughtID = try container.decode(String.self, forKey: .governingThoughtID)
+        self.validGroupings = try container.decode([ValidGrouping].self, forKey: .validGroupings)
+        self.redHerringBlockIDs = try container.decodeIfPresent(
+            Set<String>.self,
+            forKey: .redHerringBlockIDs
+        ) ?? []
+    }
+}
+
 /// One complete valid arrangement of the pyramid.
 struct ValidGrouping: Equatable, Codable {
     /// The groups that make up this arrangement.

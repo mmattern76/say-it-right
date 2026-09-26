@@ -49,6 +49,7 @@
 		180A80A7954F7CD067B7C8DB /* ThinkingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9D188FA8779E14011857FD /* ThinkingIndicatorView.swift */; };
 		183B504D74DDAD2D59703D77 /* RedHerringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793A8B950E0FD6822E2346F2 /* RedHerringTests.swift */; };
 		1851700C174060BC3AC3208C /* SayItClearlySessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9512DE8E01F6C1AB4E4B8C /* SayItClearlySessionTests.swift */; };
+		18A8411C6A79D4FD89C57969 /* BarbaraMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1D5CD23099403B0D0D365D /* BarbaraMarkdown.swift */; };
 		1A0A534D8D6C7F327BD1F572 /* StreamingSentenceDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1615A68359E9BF1E15F1C0 /* StreamingSentenceDetector.swift */; };
 		1CDA6E9592B48813ECDFA8D7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD215422DC5781D0AFDAAEE /* OnboardingView.swift */; };
 		1D25E85F00E77FC00A52206A /* InteractiveFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429373D23F77790C6237EF3D /* InteractiveFlowUITests.swift */; };
@@ -132,6 +133,7 @@
 		5673D8240DB6073E30B4EAF5 /* LearnerProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7340051027E1031862796AD /* LearnerProfileStore.swift */; };
 		56E59D06B02418F6D1057A03 /* ChatViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40319D5211156AC1671570F5 /* ChatViewTests.swift */; };
 		57BFD8048F458724D5220EE4 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F227EDAC8833CE0EA075111 /* SidebarView.swift */; };
+		57E7A80B4EC2674FFF6B9E4D /* LearnerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813DB3E7BBA0BFF9D0AE23EF /* LearnerState.swift */; };
 		588D9CEDFC0028729E9822A4 /* AnalyseMyTextSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA73D30DCB7C56BAA6867CC2 /* AnalyseMyTextSession.swift */; };
 		58C18276239608ABD6F07EBB /* AudioSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5A7EA09817CE62F1FE9796 /* AudioSessionManagerTests.swift */; };
 		591F83147F92DD2B1912ACE5 /* LevelUpCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B180A246925AD77C2C5D73C6 /* LevelUpCelebrationView.swift */; };
@@ -211,6 +213,7 @@
 		8BED3E20F4C909B14BE520AA /* DropZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C05DDD40848A9E59E713026 /* DropZoneView.swift */; };
 		8CE2454D0869BE2E74B38474 /* FindThePointCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19168BF6E4820E37458DAA57 /* FindThePointCoordinator.swift */; };
 		8D0594B48254C2F95AB7F9F3 /* LearnerAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE528A4BB6F7C58BD0CC3708 /* LearnerAvatar.swift */; };
+		8D9BFE348ACF07B814CF5EB6 /* BarbaraMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1D5CD23099403B0D0D365D /* BarbaraMarkdown.swift */; };
 		8DE0054F17D7F85924AFAA02 /* SeenTextsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3D288AEDB1EF42A2CF3455 /* SeenTextsTracker.swift */; };
 		8E704B681025F187D88B0036 /* FixThisMessVisualCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F7A3F7847EA1DF564E3C8E /* FixThisMessVisualCoordinator.swift */; };
 		8E8D202555A73B2756F2EBB0 /* TTSPlaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F296F432E8A069994E5167 /* TTSPlaybackService.swift */; };
@@ -402,6 +405,7 @@
 		F3EA6C9E62178099319F591E /* DebugLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7F67899A791B97B42902B0 /* DebugLogView.swift */; };
 		F489AF2C43E8E5A051F6D164 /* NetworkErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ECF5F1EF7623373F5BBD2C /* NetworkErrorHandler.swift */; };
 		F5A28442A564B05F3EB1CFE0 /* MockSpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A734FF80156849AAC5CD69 /* MockSpeechRecognitionService.swift */; };
+		F5A636258E1D9B80481BCC33 /* LearnerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813DB3E7BBA0BFF9D0AE23EF /* LearnerState.swift */; };
 		F65C548B9D183E16669313BF /* ProfileUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98CBB6A6B6FD6628BB30BA6D /* ProfileUpdaterTests.swift */; };
 		F665752C28731342E3478BD4 /* BuildThePyramidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7324F8468E4DE52E9E5B114F /* BuildThePyramidTests.swift */; };
 		F68A7E82CAC1C17DF3417D14 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2679A39DC09E233E6C5FB8DC /* Assets.xcassets */; };
@@ -565,6 +569,7 @@
 		7D0E72ADDB393F0AF5439B40 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		7D6E766B91AF9A75C1FBD2F7 /* SpotTheGapSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTheGapSessionTests.swift; sourceTree = "<group>"; };
 		7E9108B9D961EB9E8254EA37 /* FixThisMessVisualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixThisMessVisualTests.swift; sourceTree = "<group>"; };
+		813DB3E7BBA0BFF9D0AE23EF /* LearnerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnerState.swift; sourceTree = "<group>"; };
 		8175192283ED8224716BB935 /* pyramid-exercises.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "pyramid-exercises.json"; sourceTree = "<group>"; };
 		81A11E691EB3DEE60B339B16 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		81A63E61EA4ABC850E93CB2E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -600,6 +605,7 @@
 		A553A59D04C7ABFA86CF117E /* BarbaraAvatarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbaraAvatarTests.swift; sourceTree = "<group>"; };
 		A7139C00F03FBFAD7BA4FAD8 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		AA8D4F615BD301FC609D050A /* TreeLayoutEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeLayoutEngineTests.swift; sourceTree = "<group>"; };
+		AB1D5CD23099403B0D0D365D /* BarbaraMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarbaraMarkdown.swift; sourceTree = "<group>"; };
 		ABF4D8A07EE48301BBF12A0C /* SessionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSummary.swift; sourceTree = "<group>"; };
 		AC256E9126646B1262512067 /* ValidationFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationFeedbackTests.swift; sourceTree = "<group>"; };
 		AC3572D84CA72E9A0723635D /* ProgressDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDashboardView.swift; sourceTree = "<group>"; };
@@ -1015,6 +1021,7 @@
 				0F511DE18C0C20C43553C36D /* .gitkeep */,
 				0756AEBC135E6923ED87C8A0 /* AdaptiveChatView.swift */,
 				36C6BF2F47F0B8EFFC2DF98B /* BarbaraAvatarView.swift */,
+				AB1D5CD23099403B0D0D365D /* BarbaraMarkdown.swift */,
 				942B7D62D7DC6CDF6EE5C3AD /* BarbaraMood.swift */,
 				D08BE80207F27A8208D3CCB2 /* ChatMessage.swift */,
 				7A6659848CFB393F442C3B61 /* ChatView.swift */,
@@ -1038,6 +1045,7 @@
 				E040537D24996C58EBA537D8 /* Config.template.plist */,
 				2927967CBDF0913F5EDD0EC7 /* ConfigProvider.swift */,
 				A40D1893048FC9BF83208728 /* DesignSystem.swift */,
+				813DB3E7BBA0BFF9D0AE23EF /* LearnerState.swift */,
 				DE9990EFFDBC213F3F1D0B19 /* SayItRightApp.swift */,
 				3C1AC30B697C39AA5507C643 /* Audio */,
 				6E44ACD681AF0B0656DE8BAE /* SpeechRecognition */,
@@ -1516,6 +1524,7 @@
 				86AC04612F354912B3989863 /* AppVersion.swift in Sources */,
 				537119E6E50C56A7FBE6CF59 /* AudioSessionManager.swift in Sources */,
 				868CC677F0EF47C03E66115E /* BarbaraAvatarView.swift in Sources */,
+				8D9BFE348ACF07B814CF5EB6 /* BarbaraMarkdown.swift in Sources */,
 				C15605E88266D05B8736AB18 /* BarbaraMood.swift in Sources */,
 				7A4E20F4593829C0C31A4AEC /* BarbaraVoiceProfile.swift in Sources */,
 				C00B6CA5143A309F86D4D506 /* BlockFeedbackState.swift in Sources */,
@@ -1565,6 +1574,7 @@
 				A9B7342D214CE45653F5BAB3 /* LearnerAvatar.swift in Sources */,
 				7A274863874522A22D93C22B /* LearnerProfile.swift in Sources */,
 				5673D8240DB6073E30B4EAF5 /* LearnerProfileStore.swift in Sources */,
+				F5A636258E1D9B80481BCC33 /* LearnerState.swift in Sources */,
 				371D9BC157B3A6BABBE6578F /* LevelTransitionEngine.swift in Sources */,
 				723A20280CAAEEC0A61BF110 /* LevelUpCelebrationView.swift in Sources */,
 				BB9EE668B4743B81BF868C9D /* MECEValidationEngine.swift in Sources */,
@@ -1668,6 +1678,7 @@
 				009F14C7F7569D0991BD7BC8 /* AppVersion.swift in Sources */,
 				6F351D5B9B24A9F12D68E3BC /* AudioSessionManager.swift in Sources */,
 				E964ABEE2D1CD7095C2F2CFE /* BarbaraAvatarView.swift in Sources */,
+				18A8411C6A79D4FD89C57969 /* BarbaraMarkdown.swift in Sources */,
 				7043BFA9D8C90767E45A2FD5 /* BarbaraMood.swift in Sources */,
 				C372EDF597BB3E75358D1121 /* BarbaraVoiceProfile.swift in Sources */,
 				CDF1C5AF3C7F3606450C0F8A /* BlockFeedbackState.swift in Sources */,
@@ -1717,6 +1728,7 @@
 				8D0594B48254C2F95AB7F9F3 /* LearnerAvatar.swift in Sources */,
 				E82E1F599E93664105775B47 /* LearnerProfile.swift in Sources */,
 				64E2CA4EDF1673C44CE2300E /* LearnerProfileStore.swift in Sources */,
+				57E7A80B4EC2674FFF6B9E4D /* LearnerState.swift in Sources */,
 				EBE7E901F00FD8C24B464A7F /* LevelTransitionEngine.swift in Sources */,
 				591F83147F92DD2B1912ACE5 /* LevelUpCelebrationView.swift in Sources */,
 				A9313E9BDF1BFC6F4549F9ED /* MECEValidationEngine.swift in Sources */,

@@ -281,7 +281,9 @@ final class ChatViewModel {
                     for try await chunk in stream {
                         await MainActor.run {
                             fullText += chunk
-                            self._localMessages[streamingIndex].text = fullText
+                            // Hide the metadata block while it streams in.
+                            self._localMessages[streamingIndex].text =
+                                self.responseParser.visibleTextWhileStreaming(fullText)
                         }
                     }
                 },

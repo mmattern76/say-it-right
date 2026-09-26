@@ -25,7 +25,7 @@ struct VoiceElevatorPitchView: View {
     @State private var ttsEnabled: Bool = AppSettings.shared.ttsAutoPlay
     @State private var lastSpokenMessageCount = 0
     @State private var timerState = VoiceTimerState()
-    @State private var timerStartedAfterTTS = false
+    @State private var timerStarted = false
 
     init(
         sessionManager: SessionManager,
@@ -120,8 +120,29 @@ struct VoiceElevatorPitchView: View {
             .onChange(of: viewModel.messages.last?.isStreaming) { _, isStreaming in
                 if isStreaming == false {
                     speakLatestBarbaraMessage()
+                    // When Barbara stays silent there is no speech-finished callback
+                    // to start the countdown, so it starts as soon as her prompt is
+                    // fully on screen. Without this the drill has no time limit at all.
+                    if !willSpeakAloud {
+                        startTimerIfNeeded()
+                    }
                 }
             }
+    }
+
+    /// Whether Barbara's next message will actually be spoken.
+    ///
+    /// False when the learner muted her for this session, and false when global
+    /// Silent Mode is on — the no-op TTS service emits no events at all.
+    private var willSpeakAloud: Bool {
+        ttsEnabled && !AppSettings.shared.effectiveIsTTSDisabled
+    }
+
+    /// Start the countdown once, whichever trigger gets there first.
+    private func startTimerIfNeeded() {
+        guard !timerStarted, let session = sessionManager.elevatorPitchSession else { return }
+        timerStarted = true
+        startTimer(duration: session.durationSeconds)
     }
 
     // MARK: - Timer Bar
@@ -285,13 +306,8 @@ struct VoiceElevatorPitchView: View {
                 Task { @MainActor in
                     isTTSSpeaking = false
 
-                    // Start timer after Barbara's initial greeting finishes
-                    if !timerStartedAfterTTS,
-                       let session = sessionManager.elevatorPitchSession
-                    {
-                        timerStartedAfterTTS = true
-                        startTimer(duration: session.durationSeconds)
-                    }
+                    // Start the countdown once Barbara has finished speaking the prompt.
+                    startTimerIfNeeded()
                 }
             }
         }
