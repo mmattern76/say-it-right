@@ -53,12 +53,20 @@ final class TTSServiceBox: NSObject, TTSPlaybackService, @unchecked Sendable {
 
 /// Creates the appropriate TTS service based on user settings.
 enum TTSServiceFactory {
-    /// Returns a boxed TTS service: ElevenLabs if configured, otherwise Apple TTS.
+    /// Returns a boxed TTS service:
+    /// - ``NoOpTTSService`` when Silent Mode is active (settings or
+    ///   `SIR_TTS_DISABLED` launch-environment variable)
+    /// - ``ElevenLabsTTSService`` when the engine is set to ElevenLabs and
+    ///   a key is available
+    /// - ``AppleTTSPlaybackService`` otherwise
     ///
     /// The ElevenLabs service includes automatic fallback to Apple TTS
     /// when the API is unreachable, so this is safe to call unconditionally.
     static func makeService() -> TTSServiceBox {
         let settings = AppSettings.shared
+        if settings.effectiveIsTTSDisabled {
+            return TTSServiceBox(wrapping: NoOpTTSService())
+        }
         if settings.isElevenLabsEnabled, settings.elevenLabsAPIKey != nil {
             return TTSServiceBox(wrapping: ElevenLabsTTSService())
         }

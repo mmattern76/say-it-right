@@ -7,7 +7,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func initialStateIsIdle() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         #expect(manager.currentMode == .idle)
         #expect(manager.isSessionActive == false)
         #expect(manager.isInterrupted == false)
@@ -18,7 +18,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func activateForPlaybackSetsPlaybackOnly() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         #expect(manager.currentMode == .playbackOnly)
         // On macOS, session is active when not idle
@@ -29,7 +29,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func activateForRecordingSetsRecordOnly() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForRecording()
         #expect(manager.currentMode == .recordOnly)
         #if os(macOS)
@@ -39,7 +39,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func activateBothSetsPlayAndRecord() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         manager.activateForRecording()
         #expect(manager.currentMode == .playAndRecord)
@@ -47,7 +47,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func deactivatePlaybackWhileRecordingKeepsRecordOnly() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         manager.activateForRecording()
         #expect(manager.currentMode == .playAndRecord)
@@ -58,7 +58,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func deactivateRecordingWhilePlayingKeepsPlaybackOnly() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         manager.activateForRecording()
         #expect(manager.currentMode == .playAndRecord)
@@ -69,7 +69,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func deactivateBothReturnsToIdle() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         manager.activateForRecording()
         manager.deactivatePlayback()
@@ -82,7 +82,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func deactivateSessionForcesIdle() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         manager.activateForRecording()
         #expect(manager.currentMode == .playAndRecord)
@@ -98,7 +98,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func doubleActivatePlaybackIsIdempotent() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForPlayback()
         let mode1 = manager.currentMode
         manager.activateForPlayback()
@@ -107,7 +107,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func doubleActivateRecordingIsIdempotent() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.activateForRecording()
         let mode1 = manager.currentMode
         manager.activateForRecording()
@@ -118,7 +118,7 @@ struct AudioSessionManagerTests {
 
     @Test
     func deactivateFromIdleIsSafe() {
-        let manager = AudioSessionManager()
+        let manager = AudioSessionManager(isSilent: { false })
         manager.deactivatePlayback()
         #expect(manager.currentMode == .idle)
         manager.deactivateRecording()
@@ -151,6 +151,24 @@ struct AudioSessionManagerTests {
             .routeChanged(reason: .newDeviceAvailable))
         #expect(AudioSessionEvent.routeChanged(reason: .newDeviceAvailable) != AudioSessionEvent
             .routeChanged(reason: .oldDeviceUnavailable))
+    }
+
+    // MARK: - Silent Mode
+
+    @Test
+    func silentModeSkipsPlaybackActivation() {
+        let manager = AudioSessionManager(isSilent: { true })
+        manager.activateForPlayback()
+        #expect(manager.currentMode == .idle)
+    }
+
+    @Test
+    func silentModeStillAllowsRecording() {
+        // STT is unaffected by Silent Mode — the learner can still speak.
+        let manager = AudioSessionManager(isSilent: { true })
+        manager.activateForPlayback()
+        manager.activateForRecording()
+        #expect(manager.currentMode == .recordOnly)
     }
 
     // MARK: - RouteChangeReason Equatable

@@ -172,6 +172,13 @@ Each test has a unique ID for traceability in test runs.
 | T-133 | S21 | Debug log shows entries (or empty state) | PRE-06 | List of debug entries or "No debug data" |
 | T-134 | S21 | Clear debug log | PRE-06 | Confirmation dialog. Log cleared |
 
+| T-135 | S18 | Silent mode toggle persists | PRE-05 | Toggle ON, close & reopen Settings — toggle still ON |
+| T-136 | S18 | Silent mode disables Voice Engine controls | PRE-05 | With Silent ON: Voice Engine picker and ElevenLabs fields are non-interactive |
+| T-137 | S18 | Silent mode footer text | PRE-05 | Footer reads: "Silent mode is on — Barbara will not speak. STT (your voice input) still works." |
+| T-138 | C01 | Silent mode mutes Barbara | PRE-05, Silent ON | Send a message; chat updates with text but no TTS audio plays |
+| T-139 | C01 | Per-session TTSToggleButton disabled when Silent ON | PRE-05, Silent ON, voice session | Toolbar speaker button is greyed out and non-interactive |
+| T-139a | – | `SIR_TTS_DISABLED=1` launch env forces silent | Set env var, Silent OFF in saved settings | Barbara never speaks; saved Silent toggle still shows OFF in Settings |
+
 ## Group 7: Progress Dashboard
 
 | ID | Screen(s) | Test Case | Prerequisites | Expected Result |

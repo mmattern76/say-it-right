@@ -234,12 +234,16 @@ struct ParentSettingsView: View {
             // MARK: Barbara's Voice
 
             Section {
+                Toggle("Silent mode (no voice)", isOn: $settings.isTTSDisabled)
+                    .accessibilityIdentifier("settings.silentMode.toggle")
+
                 Picker("Voice Engine", selection: $settings.ttsProvider) {
                     Text("Apple TTS").tag("apple")
                     Text("ElevenLabs").tag("elevenlabs")
                 }
+                .disabled(settings.isTTSDisabled)
 
-                if settings.isElevenLabsEnabled {
+                if settings.isElevenLabsEnabled, !settings.isTTSDisabled {
                     HStack {
                         Group {
                             if showElevenLabsKey {
@@ -297,7 +301,11 @@ struct ParentSettingsView: View {
             } header: {
                 Text("Barbara's Voice")
             } footer: {
-                if settings.isElevenLabsEnabled {
+                if settings.isTTSDisabled {
+                    Text(
+                        "Silent mode is on — Barbara will not speak. STT (your voice input) still works."
+                    )
+                } else if settings.isElevenLabsEnabled {
                     Text(
                         "ElevenLabs provides a more natural voice. Falls back to Apple TTS if unavailable. Key stored in Keychain."
                     )
