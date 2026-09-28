@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 /// Central coordinator for coaching sessions.
 ///
@@ -18,7 +19,14 @@ final class SessionManager {
     private(set) var messages: [ChatMessage] = []
 
     /// Current session lifecycle state.
-    private(set) var sessionState: SessionState = .idle
+    private(set) var sessionState: SessionState = .idle {
+        didSet {
+            let new = String(describing: sessionState)
+            Self.log.debug("sessionState \(String(describing: oldValue)) -> \(new)")
+        }
+    }
+
+    private static let log = Logger(subsystem: "io.mattern.say-it-right", category: "session")
 
     /// Metadata collected from Barbara's responses during this session.
     private(set) var sessionMetadata: [BarbaraMetadata] = []
@@ -64,6 +72,19 @@ final class SessionManager {
     /// Optional profile store for persisting session results.
     var profileStore: LearnerProfileStore?
 
+    /// Optional history store for persisting a summary of each completed session.
+    var historyStore: SessionHistoryStore?
+
+    /// The write started by the most recent ``endSession()``.
+    ///
+    /// Persistence runs detached so ending a session never blocks the UI;
+    /// awaiting this before reloading avoids reading stale progress.
+    private(set) var persistenceTask: Task<Void, Never>?
+
+    /// Level and language captured when the session started, for its summary.
+    private var sessionLevel = 1
+    private var sessionLanguage = "en"
+
     // MARK: - Configuration
 
     /// Maximum number of messages before older ones are summarized.
@@ -104,6 +125,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = type
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -150,6 +172,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .sayItClearly
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = SayItClearlySession(topic: topic)
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -203,6 +226,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .findThePoint
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = FindThePointSession(practiceText: practiceText)
         elevatorPitchSession = nil
@@ -351,6 +375,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .elevatorPitch
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         analyseMyTextSession = nil
@@ -436,6 +461,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .analyseMyText
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -513,6 +539,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .fixThisMess
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -586,6 +613,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .spotTheGap
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -674,6 +702,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .buildThePyramid
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -767,6 +796,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .fixThisMess
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -848,6 +878,7 @@ final class SessionManager {
         messages = []
         sessionMetadata = []
         activeSessionType = .decodeAndRebuild
+        captureSessionContext(profile: profile, language: language)
         sayItClearlySession = nil
         findThePointSession = nil
         elevatorPitchSession = nil
@@ -1009,16 +1040,26 @@ final class SessionManager {
     /// Clears conversation state and returns to idle. The session summary
     /// (last metadata) remains accessible until a new session starts.
     func endSession() {
-        // Apply profile updates from this session's metadata before clearing
+        // Persist this session's results before the state is cleared.
         let metadata = sessionMetadata
         let sessionType = activeSessionType?.rawValue ?? ""
-        if let store = profileStore, !metadata.isEmpty {
-            Task {
-                try? await profileUpdater.applySessionResults(
-                    store: store,
-                    metadataList: metadata,
-                    sessionType: sessionType
-                )
+        let summary = makeSessionSummary(sessionType: sessionType, metadata: metadata)
+        let profileStore = profileStore
+        let historyStore = historyStore
+        let profileUpdater = profileUpdater
+
+        if !metadata.isEmpty, profileStore != nil || summary != nil {
+            persistenceTask = Task {
+                if let profileStore {
+                    try? await profileUpdater.applySessionResults(
+                        store: profileStore,
+                        metadataList: metadata,
+                        sessionType: sessionType
+                    )
+                }
+                if let historyStore, let summary {
+                    try? await historyStore.append(summary)
+                }
             }
         }
 
@@ -1039,6 +1080,64 @@ final class SessionManager {
         systemPrompt = ""
         // sessionMetadata is preserved until next startSession
         Task { await structuralEvaluator.reset() }
+    }
+
+    // MARK: - Private: Session Persistence
+
+    /// Record the level and language a session ran at, for its history entry.
+    private func captureSessionContext(profile: LearnerProfile, language: String) {
+        sessionLevel = profile.currentLevel
+        sessionLanguage = language
+    }
+
+    /// Build the history entry for the session that is ending.
+    ///
+    /// Returns `nil` when Barbara never scored anything — an exercise the learner
+    /// opened and immediately left is not a completed session, and recording it
+    /// would inflate streaks and level progression.
+    private func makeSessionSummary(
+        sessionType: String,
+        metadata: [BarbaraMetadata]
+    ) -> SessionSummary? {
+        let scored = metadata.filter { !$0.scores.isEmpty }
+        guard let last = scored.last, !sessionType.isEmpty else { return nil }
+
+        return SessionSummary(
+            sessionType: sessionType,
+            topicTitle: currentTopicTitle,
+            language: sessionLanguage,
+            attemptCount: scored.count,
+            dimensionScores: last.scores,
+            overallAssessment: last.progressionSignal.rawValue,
+            barbaraSummary: messages.last { $0.role == .barbara }?.text ?? "",
+            levelAtSession: sessionLevel
+        )
+    }
+
+    /// A human-readable title for whatever the current session is working on.
+    private var currentTopicTitle: String {
+        if let topic = sayItClearlySession?.topic ?? elevatorPitchSession?.topic {
+            return topic.title(for: sessionLanguage)
+        }
+        if let text = findThePointSession?.practiceText
+            ?? fixThisMessSession?.practiceText
+            ?? spotTheGapSession?.practiceText
+            ?? decodeAndRebuildSession?.practiceText
+        {
+            return Self.openingLine(of: text.text)
+        }
+        if let exercise = buildThePyramidSession?.exercise {
+            return exercise.title(for: sessionLanguage)
+        }
+        return ""
+    }
+
+    /// First sentence of a practice text, trimmed to fit a history row.
+    private static func openingLine(of text: String, limit: Int = 60) -> String {
+        let firstSentence = text.split(separator: ".", maxSplits: 1).first.map(String.init) ?? text
+        let trimmed = firstSentence.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count > limit else { return trimmed }
+        return trimmed.prefix(limit).trimmingCharacters(in: .whitespaces) + "…"
     }
 
     /// The number of remaining evaluation calls in this session.
@@ -1148,6 +1247,15 @@ final class SessionManager {
         messages.append(streamingMessage)
         let streamingIndex = messages.count - 1
 
+        // A message left marked as streaming keeps an animated typing indicator
+        // on screen forever, which re-lays out the whole chat every frame.
+        // Whatever path this method leaves by, nothing stays "typing".
+        defer {
+            for index in messages.indices where messages[index].isStreaming {
+                messages[index].isStreaming = false
+            }
+        }
+
         do {
             // Build API messages from conversation history (exclude empty streaming placeholder)
             var apiMessages = messages
@@ -1184,7 +1292,9 @@ final class SessionManager {
             var fullText = ""
             for try await chunk in stream {
                 fullText += chunk
-                messages[streamingIndex].text = fullText
+                // Show the learner the text without the hidden metadata block,
+                // which would otherwise stream into the bubble character by character.
+                messages[streamingIndex].text = responseParser.visibleTextWhileStreaming(fullText)
             }
 
             // Parse the complete response for hidden metadata

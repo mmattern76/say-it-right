@@ -128,4 +128,49 @@ final class ResponseParserTests: XCTestCase {
         XCTAssertEqual(result.visibleText, "")
         XCTAssertNotNil(result.metadata)
     }
+
+    // MARK: - Streaming
+
+    func testStreamingTextWithoutMetadataIsUnchanged() {
+        let partial = "That's not a conclusion, that's a pre"
+        XCTAssertEqual(parser.visibleTextWhileStreaming(partial), partial)
+    }
+
+    func testStreamingHidesCompletedMetadataBlock() {
+        let partial = "Now that is how you make a point.\n\n" + metaBlock()
+        XCTAssertEqual(
+            parser.visibleTextWhileStreaming(partial),
+            "Now that is how you make a point."
+        )
+    }
+
+    func testStreamingHidesMetadataBlockAsItArrives() {
+        let visible = "Start over."
+        // Every prefix of the metadata block must stay hidden while it streams in.
+        let meta = metaBlock()
+        for length in stride(from: 0, through: meta.count, by: 7) {
+            let partial = visible + "\n\n" + String(meta.prefix(length))
+            XCTAssertEqual(
+                parser.visibleTextWhileStreaming(partial),
+                visible,
+                "Metadata leaked into the bubble after \(length) characters"
+            )
+        }
+    }
+
+    func testStreamingHidesTruncatedOpener() {
+        // The opener arrives one character at a time: "<", "<!", "<!-", "<!--".
+        for opener in ["<", "<!", "<!-", "<!--"] {
+            XCTAssertEqual(
+                parser.visibleTextWhileStreaming("Which reasons? Pick your strongest. \(opener)"),
+                "Which reasons? Pick your strongest.",
+                "Leaked partial opener \(opener)"
+            )
+        }
+    }
+
+    func testStreamingKeepsAngleBracketsInProse() {
+        let partial = "Use 3 < 5 as an example."
+        XCTAssertEqual(parser.visibleTextWhileStreaming(partial), partial)
+    }
 }

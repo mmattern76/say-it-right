@@ -1,18 +1,32 @@
 import Foundation
+import OSLog
 
 /// Library of pyramid builder exercises, loaded from bundled JSON.
 struct PyramidExerciseLibrary {
+    private static let log = Logger(subsystem: "io.mattern.say-it-right", category: "content")
+
     let exercises: [PyramidExercise]
 
     /// Load exercises from the app bundle.
+    ///
+    /// A load failure returns an empty library, which surfaces to the learner as
+    /// "No exercises available". That is indistinguishable from a content gap, so
+    /// failures are logged and trap in debug builds rather than passing silently.
     static func loadFromBundle() -> Self {
-        guard let url = Bundle.main.url(forResource: "pyramid-exercises", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let exercises = try? JSONDecoder().decode([PyramidExercise].self, from: data)
-        else {
+        guard let url = Bundle.main.url(forResource: "pyramid-exercises", withExtension: "json") else {
+            log.error("pyramid-exercises.json is missing from the app bundle")
+            assertionFailure("pyramid-exercises.json is missing from the app bundle")
             return Self(exercises: [])
         }
-        return Self(exercises: exercises)
+        do {
+            let data = try Data(contentsOf: url)
+            let exercises = try JSONDecoder().decode([PyramidExercise].self, from: data)
+            return Self(exercises: exercises)
+        } catch {
+            log.error("Failed to load pyramid-exercises.json: \(String(describing: error))")
+            assertionFailure("Failed to load pyramid-exercises.json: \(error)")
+            return Self(exercises: [])
+        }
     }
 
     /// Filter exercises by level and language.
