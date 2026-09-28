@@ -27,6 +27,15 @@ actor LearnerProfileStore {
         try await save()
     }
 
+    /// Replace the stored profile wholesale and persist it.
+    ///
+    /// A value-based alternative to ``update(_:)`` for callers outside the
+    /// actor, which cannot hand it a mutating closure under strict concurrency.
+    func replace(with newProfile: LearnerProfile) async throws {
+        profile = newProfile
+        try await save()
+    }
+
     func save() async throws {
         let data = try JSONEncoder.iso8601.encode(profile)
         let tempURL = fileURL.deletingLastPathComponent()

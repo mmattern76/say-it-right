@@ -144,6 +144,51 @@ actor StreamingTTSCoordinator {
         }
     }
 
+    // MARK: - Incremental API
+
+    /// Begin a streaming turn. Call once before the first ``feed(_:language:)``.
+    ///
+    /// The chunk-at-a-time API exists because `SessionManager` already owns the
+    /// stream iteration (it drives the chat bubble from the same deltas), so it
+    /// forwards chunks here rather than handing the whole stream over.
+    func beginTurn() {
+        reset()
+        _state = .waitingForFirstSentence
+        streamStartTime = Date()
+    }
+
+    /// Feed one streamed delta, speaking any sentence it completes.
+    func feed(_ chunk: String, language: String) {
+        guard _state != .idle else { return }
+        fullResponseText.append(chunk)
+
+        let sentences = sentenceDetector.feed(
+            chunk,
+            into: &buffer,
+            metadataStarted: &metadataStarted
+        )
+        for sentence in sentences {
+            enqueueSentence(sentence, language: language)
+        }
+    }
+
+    /// Speak whatever is left in the buffer and close the turn.
+    ///
+    /// - Returns: The latency of this turn, or nil if nothing was spoken.
+    @discardableResult
+    func endTurn(language: String) async -> LatencyMeasurement? {
+        guard _state != .idle else { return nil }
+
+        if let final = sentenceDetector.flush(buffer: &buffer, metadataStarted: metadataStarted) {
+            enqueueSentence(final, language: language)
+        }
+        _state = .finishing
+
+        let measurement = buildMeasurement()
+        await logLatency(measurement)
+        return measurement
+    }
+
     /// Stop the current streaming TTS session.
     func cancel() {
         ttsService.stop()

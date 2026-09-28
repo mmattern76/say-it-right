@@ -229,6 +229,7 @@ These already exist or need to be added to views:
 | Level override picker | `levelOverridePicker` | Needs adding |
 | Debug mode toggle | `debugModeToggle` | Needs adding |
 | Silent mode toggle (Parent Settings) | `settings.silentMode.toggle` | Exists (SIR-076) |
+| Revision diff button (Say it clearly) | `revisionDiffButton` | Exists |
 
 ---
 

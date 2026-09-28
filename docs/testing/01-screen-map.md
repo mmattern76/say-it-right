@@ -59,6 +59,9 @@ All screens in Say it right! with transitions, platform variants, and story refe
 
 | # | Screen | File | Stories | Transitions Out |
 |---|--------|------|---------|-----------------|
+| S26 | **LevelUpCelebrationView** | `Presentation/Session/LevelUpCelebrationView.swift` | E7 | Sheet from S04 when a completed session earns a promotion. "Los geht's!" → dismiss → S04 |
+| S27 | **RevisionDiffView** | `Presentation/Session/RevisionDiffView.swift` | E7 | Sheet from S06/S07 once a session has 2+ attempts. "Fertig" → dismiss → session |
+
 | S17 | **SettingsView** | `Presentation/Session/SettingsView.swift` | SIR-024, SIR-035 | → S18 (link, Parent Settings). "Replay Onboarding" resets → S02. Sheet dismiss → S04 |
 | S18 | **ParentSettingsView** | `Presentation/Session/ParentSettingsView.swift` | SIR-036 | If locked: → S19 (sheet, PIN entry). If unlocked: → S21 (link, Debug Log). PIN dialogs: → S18a (sheet, Set PIN), → S18b (dialog, Remove PIN) |
 | S18a | **Set PIN Sheet** (inline in ParentSettingsView) | `ParentSettingsView.swift:276` | SIR-036 | Cancel/Save → dismiss → S18 |
