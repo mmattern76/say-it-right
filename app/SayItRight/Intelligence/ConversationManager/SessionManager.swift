@@ -75,6 +75,13 @@ final class SessionManager {
     /// Optional history store for persisting a summary of each completed session.
     var historyStore: SessionHistoryStore?
 
+    /// Optional coordinator that speaks Barbara's sentences as they stream.
+    ///
+    /// Voice sessions set this so Barbara starts talking after her first
+    /// sentence instead of waiting for the whole reply. Nil elsewhere, and the
+    /// chat bubble is driven from the same deltas either way.
+    var streamingTTS: StreamingTTSCoordinator?
+
     /// The write started by the most recent ``endSession()``.
     ///
     /// Persistence runs detached so ending a session never blocks the UI;
@@ -1290,12 +1297,19 @@ final class SessionManager {
             )
 
             var fullText = ""
+            let speaker = streamingTTS
+            let spokenLanguage = sessionLanguage
+            await speaker?.beginTurn()
+
             for try await chunk in stream {
                 fullText += chunk
                 // Show the learner the text without the hidden metadata block,
                 // which would otherwise stream into the bubble character by character.
                 messages[streamingIndex].text = responseParser.visibleTextWhileStreaming(fullText)
+                await speaker?.feed(chunk, language: spokenLanguage)
             }
+
+            await speaker?.endTurn(language: spokenLanguage)
 
             // Parse the complete response for hidden metadata
             let parsed = responseParser.parse(fullResponse: fullText)

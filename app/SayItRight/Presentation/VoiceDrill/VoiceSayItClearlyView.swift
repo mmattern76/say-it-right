@@ -24,6 +24,7 @@ struct VoiceSayItClearlyView: View {
     @State private var ttsService: TTSServiceBox
     @State private var audioSessionManager = AudioSessionManager()
     @State private var sessionStarted = false
+    @State private var showRevisionDiff = false
     @State private var noTopicsAvailable = false
     @State private var isTTSSpeaking = false
     @State private var ttsEnabled: Bool = AppSettings.shared.ttsAutoPlay
@@ -84,6 +85,19 @@ struct VoiceSayItClearlyView: View {
                     TTSToggleButton(isEnabled: $ttsEnabled, language: language)
                 }
                 ToolbarItem(placement: .automatic) {
+                    if let session = sessionManager.sayItClearlySession, session.attempts.count > 1 {
+                        Button {
+                            showRevisionDiff = true
+                        } label: {
+                            Label(
+                                language == "de" ? "Was hat sich geändert?" : "What changed?",
+                                systemImage: "arrow.left.arrow.right"
+                            )
+                        }
+                        .accessibilityIdentifier("revisionDiffButton")
+                    }
+                }
+                ToolbarItem(placement: .automatic) {
                     Button(action: endSessionAndDismiss) {
                         Label(
                             language == "de" ? "Beenden" : "End Session",
@@ -92,7 +106,36 @@ struct VoiceSayItClearlyView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showRevisionDiff) {
+                if let session = sessionManager.sayItClearlySession,
+                   let first = session.attempts.first?.text,
+                   let latest = session.latestAttemptText
+                {
+                    NavigationStack {
+                        RevisionDiffView(
+                            originalText: first,
+                            revisedText: latest,
+                            language: language
+                        )
+                        .navigationTitle(language == "de" ? "Deine Überarbeitung" : "Your revision")
+                        #if !os(macOS)
+                            .navigationBarTitleDisplayMode(.inline)
+                        #endif
+                            .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                    Button(language == "de" ? "Fertig" : "Done") {
+                                        showRevisionDiff = false
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+            .onChange(of: ttsEnabled) { _, _ in
+                configureStreamingSpeech()
+            }
             .onDisappear {
+                sessionManager.streamingTTS = nil
                 ttsService.stop()
             }
             .task {
@@ -102,6 +145,7 @@ struct VoiceSayItClearlyView: View {
                 // Prewarm TTS for lower first-utterance latency
                 ttsService.prewarm()
                 configureTTSVoice()
+                configureStreamingSpeech()
 
                 let topic = await coordinator.startSession(
                     sessionManager: sessionManager,
@@ -131,7 +175,26 @@ struct VoiceSayItClearlyView: View {
         ttsService.configuration = voiceProfile.ttsConfiguration(for: .observation)
     }
 
+    // MARK: - Streaming Speech
+
+    /// Hand Barbara's stream to the speech coordinator so she starts talking
+    /// after her first sentence instead of waiting for the whole reply.
+    ///
+    /// Cleared whenever she is muted, which puts the view back on the
+    /// speak-the-whole-message path (and on silence, on no path at all).
+    private func configureStreamingSpeech() {
+        guard ttsEnabled, !AppSettings.shared.effectiveIsTTSDisabled else {
+            sessionManager.streamingTTS = nil
+            ttsService.stop()
+            return
+        }
+        sessionManager.streamingTTS = StreamingTTSCoordinator(ttsService: ttsService)
+    }
+
     private func speakLatestBarbaraMessage() {
+        // Sentences were already spoken as they streamed in.
+        guard sessionManager.streamingTTS == nil else { return }
+
         guard ttsEnabled,
               let lastMessage = viewModel.messages.last,
               lastMessage.role == .barbara,

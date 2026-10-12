@@ -20,8 +20,15 @@ final class LearnerState {
     /// Whether the first load from disk has finished.
     private(set) var isLoaded = false
 
+    /// A promotion the learner has just earned and not yet seen.
+    ///
+    /// Set when a completed session pushes the profile past its level criteria;
+    /// cleared once the celebration has been shown.
+    var pendingLevelUp: LevelTransitionEngine.LevelTransition?
+
     private var profileStore: LearnerProfileStore?
     private var historyStore: SessionHistoryStore?
+    private let levelEngine = LevelTransitionEngine()
 
     /// How many sessions the dashboard shows without opening the full history.
     static let recentSessionCount = 5
@@ -54,6 +61,23 @@ final class LearnerState {
         if let historyStore {
             recentSessions = await historyStore.recentSessions(Self.recentSessionCount)
         }
+        await promoteIfEarned()
         isLoaded = true
+    }
+
+    /// Promote the learner when the reloaded profile meets its level criteria.
+    ///
+    /// Runs on the stored profile, so the parent-settings level override never
+    /// triggers a promotion. The transition is held in ``pendingLevelUp`` for
+    /// the celebration to present.
+    private func promoteIfEarned() async {
+        guard let profileStore, levelEngine.isReadyForPromotion(profile) else { return }
+
+        var promoted = profile
+        guard let transition = levelEngine.promote(&promoted) else { return }
+
+        try? await profileStore.replace(with: promoted)
+        profile = promoted
+        pendingLevelUp = transition
     }
 }

@@ -166,6 +166,9 @@ struct FixThisMessVisualView: View {
                                 }
                             )
                             .validationFeedback(blockFeedbackStates[placed.id.uuidString] ?? .none)
+                            .pyramidBlockContextMenu(blockID: placed.id) {
+                                treeState.removeBlock(placed.id)
+                            }
                             .overlay(alignment: .topLeading) {
                                 if movedBlockIDs.contains(placed.id.uuidString) {
                                     Image(systemName: "arrow.turn.up.right")

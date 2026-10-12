@@ -106,3 +106,10 @@ struct LevelTransitionEngine {
         }
     }
 }
+
+extension LevelTransitionEngine.LevelTransition: Identifiable {
+    /// Identity for presenting the celebration — one promotion per level pair.
+    var id: String {
+        "\(fromLevel)->\(toLevel)"
+    }
+}
