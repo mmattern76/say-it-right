@@ -239,6 +239,11 @@ private struct PulsingModifier: ViewModifier {
 
 // MARK: - Previews
 
+// Previews are compiled in every configuration, and these build a
+// MockSpeechRecognitionService, which ships only in Debug. Without this guard
+// the Release archive fails to compile even though Debug builds and tests pass.
+#if DEBUG
+
 /// A wrapper that lets us set the ViewModel to a specific state for previews.
 private struct PreviewWrapper: View {
     let previewState: VoiceInputState
@@ -366,3 +371,5 @@ private struct VoiceInputErrorPreview: View {
         }
     }
 }
+
+#endif
