@@ -1,15 +1,5 @@
 import Foundation
 
-// MARK: - Comparison Session Types
-
-/// Break-mode session types that require answer key comparison.
-enum ComparisonSessionType: String {
-    case findThePoint = "find_the_point"
-    case fixThisMess = "fix_this_mess"
-    case spotTheGap = "spot_the_gap"
-    case decodeAndRebuild = "decode_and_rebuild"
-}
-
 // MARK: - Match Quality
 
 /// How closely the user's response matches the answer key structurally.
@@ -40,15 +30,4 @@ struct ComparisonMetadata: Codable, Equatable {
     let sessionPhase: String
     let feedbackFocus: String
     let language: String
-}
-
-// MARK: - Comparison Input
-
-/// All inputs needed for an answer key comparison request.
-struct ComparisonInput {
-    let userResponse: String
-    let practiceText: PracticeText
-    let sessionType: ComparisonSessionType
-    let language: String
-    let learnerLevel: Int
 }

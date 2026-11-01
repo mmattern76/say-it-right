@@ -168,39 +168,80 @@ func qualityInstructions(for level: ScriptQualityLevel) -> String {
             """
             INSTRUCTIONS: Create a text where the conclusion EXISTS but is BURIED.
             - Start with background, context, statistics, or a story (1-2 paragraphs)
-            - Place the actual governing thought in paragraph 2 or 3
+            - Place the actual governing thought in paragraph 2 or 3, often after \
+            a transitional phrase like "Yet...", "However...", "The real issue is..."
             - The supporting arguments should be solid once the reader finds the thesis
-            - The text should feel like a newspaper feature or essay that builds up to its point
+            - The text should feel like a newspaper feature article or an essay that \
+            "builds up" to its point instead of leading with it
+            - Common real-world pattern: the writer knows their point but buries it \
+            under preamble
             """
         case .rambling:
             """
             INSTRUCTIONS: Create a text with NO clear organizing structure.
-            - Good individual points but scattered without hierarchy
+            - The text should contain good individual points but in scattered order
             - Jump between subtopics without clear transitions
             - Split related arguments across non-adjacent paragraphs
-            - Weak or non-committal conclusion
-            - Conversational, stream-of-consciousness style
+            - Include a weak or non-committal conclusion ("something needs to change")
+            - Use conversational, stream-of-consciousness style
+            - The reader should be able to identify THAT structure is missing
+            - There IS content worth restructuring — the problem is organization, \
+            not substance
             """
         case .adversarial:
             """
-            INSTRUCTIONS: Create a text that APPEARS well-structured but has a HIDDEN logical flaw.
-            - Surface structure should look like a clean pyramid
-            - Embed ONE subtle flaw: false_dichotomy, circular_reasoning, non_sequitur, \
-            hasty_generalization, straw_man, false_equivalence, appeal_to_authority, \
-            or correlation_as_causation
-            - The flaw should require careful reading to spot
-            - The text should be convincing on first read
+            INSTRUCTIONS: Create a text that APPEARS well-structured but contains \
+            a HIDDEN logical flaw.
+            - Surface structure should look like a clean pyramid (conclusion first, \
+            supports follow)
+            - Embed ONE of these structural flaws:
+              * False dichotomy: presents only two options when more exist
+              * Circular reasoning: conclusion restates a premise as proof
+              * Non sequitur: a support doesn't actually support the conclusion
+              * Hasty generalization: one example treated as universal proof
+              * Straw man: misrepresents an opposing view to dismiss it easily
+              * False equivalence: treats unequal things as equal
+              * Appeal to authority: uses authority instead of evidence
+              * Correlation as causation: mistakes correlation for causation
+            - The flaw should be subtle enough to require careful reading to spot
+            - The text should be convincing on first read — the flaw reveals itself \
+            on analysis
             """
     }
 }
 
 func levelContext(for level: Int) -> String {
     switch level {
-        case 1: "LEVEL: L1 Plain Talk — simple language, 13-15 year olds."
-        case 2: "LEVEL: L2 Order — moderate complexity, MECE grouping, 15-17 year olds."
-        case 3: "LEVEL: L3 Architecture — complex arguments, university-level."
-        case 4: "LEVEL: L4 Mastery — professional-grade complexity."
-        default: "LEVEL: General audience."
+        case 1:
+            """
+            LEVEL CONTEXT (L1 "Plain Talk"): Foundations.
+            - Simple, clear language. Short to medium paragraphs.
+            - Focus: lead with answer, one idea per block, "so what?" test.
+            - Vocabulary appropriate for 13-15 year olds.
+            """
+        case 2:
+            """
+            LEVEL CONTEXT (L2 "Order"): Grouping & logic.
+            - Moderate complexity. MECE grouping, deductive vs. inductive reasoning.
+            - May include SCQ (Situation-Complication-Question) framing.
+            - Vocabulary appropriate for 15-17 year olds.
+            """
+        case 3:
+            """
+            LEVEL CONTEXT (L3 "Architecture"): Advanced structures.
+            - Complex, multi-layered arguments. Issue trees, vertical/horizontal logic.
+            - May include synthesis of multiple viewpoints.
+            - University-level vocabulary and reasoning complexity.
+            """
+        case 4:
+            """
+            LEVEL CONTEXT (L4 "Mastery"): Real-world application.
+            - Professional-grade text complexity. Executive summaries, presentations.
+            - Dense argumentation with nuanced evidence.
+            - Professional vocabulary, real-world references.
+            """
+        default:
+            "LEVEL CONTEXT: General audience, moderate complexity."
     }
 }
 
@@ -209,7 +250,7 @@ func buildUserPrompt(quality: ScriptQualityLevel, domain: String, language: Stri
     let flawField = quality == .adversarial ? """
     ,
         "structural_flaw": {
-          "type": "<flaw type>",
+          "type": "<false_dichotomy | circular_reasoning | non_sequitur | hasty_generalization | straw_man | false_equivalence | appeal_to_authority | correlation_as_causation>",
           "description": "<what the flaw is>",
           "location": "<where it occurs>"
         }

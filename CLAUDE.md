@@ -91,6 +91,27 @@ app/SayItRight/
     └── ProgressionCriteria/ # Level-up thresholds and signals
 ```
 
+## Settled Design Decisions (do not re-litigate)
+
+These come up in every over-engineering audit. The answers are deliberate:
+
+- **The eight session coordinators stay.** Each has one caller, which reads as a
+  redundant layer, but they are the content-selection seam per session type
+  (topic bank / practice texts / pyramid exercises) and they are independently
+  testable. `SessionManager` is already ~1,390 lines with a ~1,000-line type
+  body — over the 500/300 limits below. Folding them in makes the worst file in
+  the repo worse. If that duplication is worth attacking, attack the eight
+  near-identical `start*Session` bodies *inside* `SessionManager` instead.
+- **`StreamingSentenceDetector` keeps its own sentence splitting.**
+  `String.enumerateSubstrings(in:options:.bySentences)` needs a complete string;
+  this detector is incremental by design — it emits a sentence the moment its
+  boundary arrives mid-stream, which is what lets Barbara start speaking ~2.4s
+  in instead of after the whole reply. It also holds the `<!--` guard that keeps
+  hidden metadata out of speech.
+- **No code lands without a caller.** A production type nothing reaches is
+  either dead weight or a wiring bug; both are defects. Wire it in the same
+  story that builds it, or don't build it yet.
+
 ## Code Quality Enforcement
 
 ### Linting (mandatory before story completion)

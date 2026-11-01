@@ -93,6 +93,7 @@ Each test has a unique ID for traceability in test runs.
 | T-051 | S04→S12 | Tap "Finde den Punkt" on iPhone | PRE-01, PRE-10 | VoiceFindThePointView opens. Scrollable text on top. Voice chat below |
 | T-052 | S11 | Practice text is displayed (not empty) | PRE-01 | Text card shows title + body content |
 | T-053 | S11 | Submit answer identifying governing thought | PRE-01 | Barbara evaluates against answer key |
+| T-053a | S11/S12 | A break session counts toward progress | PRE-01 | After ending it: profile sessionCount +1, `extractionAccuracy` recorded, history row shows match quality (high/partial/low) as its assessment |
 | T-054 | S11 | "End Session" returns to hub | PRE-01 | Returns to S04 |
 
 ### Fix This Mess
