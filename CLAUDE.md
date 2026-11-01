@@ -114,6 +114,17 @@ These come up in every over-engineering audit. The answers are deliberate:
 
 ## Code Quality Enforcement
 
+### Release build (mandatory before story completion)
+- Run `scripts/release-check.sh` before declaring any story complete
+- Everything else the project verifies runs in **Debug**: `swift build`, the
+  test suite, Geppetto. Anything behind `#if DEBUG` compiles there and can
+  still break the Release archive — SwiftUI previews are compiled in every
+  configuration, so a preview that builds a Debug-only type fails only in
+  Release. That is how build 20 broke; the TestFlight upload was the first
+  thing to notice.
+- Takes ~50s for both platforms, unsigned. The signed archive still happens in
+  `scripts/testflight-upload.sh`.
+
 ### Linting (mandatory before story completion)
 - Run `scripts/lint.sh` before declaring any story complete
 - Run `scripts/format.sh` to auto-fix formatting issues
@@ -134,6 +145,8 @@ These come up in every over-engineering audit. The answers are deliberate:
 - Commit: conventional commits (`feat:`, `fix:`, `chore:`, `content:`)
 - Always run `swift build` before pushing
 - Always run `scripts/lint.sh` before pushing
+- Always run `scripts/release-check.sh` before pushing — Debug-only builds hide
+  `#if DEBUG` breakage until the TestFlight upload
 - PR title references the issue number
 
 ## Test Documentation Maintenance
